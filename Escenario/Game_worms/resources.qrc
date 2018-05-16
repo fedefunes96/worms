@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>intro.jpg</file>
+        <file>wwalk_left.png</file>
+        <file>wwalk_right.png</file>
+        <file>wblink1.png</file>
+        <file>wormwait.png</file>
+    </qresource>
+</RCC>
