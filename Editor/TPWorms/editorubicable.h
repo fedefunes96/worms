@@ -9,7 +9,11 @@ protected:
     int posY;
 
 public:
-    EditorUbicable();
+    EditorUbicable(){}
+
+    int getX();
+
+    int getY();
 };
 
 #endif // EDITORUBICABLE_H

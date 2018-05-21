@@ -9,7 +9,9 @@ private:
     int vida;
 
 public:
+    editorWorm();
     editorWorm(int posX, int posY, int vida);
+    int getVida();
 };
 
-#endif // EDITORWORM_H
+#endif

@@ -29,6 +29,7 @@ public:
     QWidget *centralWidget;
     QLabel *label;
     QPushButton *pushButton;
+    QPushButton *load;
     QMenuBar *menuBar;
     QMenu *menuWorms_Editor;
     QToolBar *mainToolBar;
@@ -47,6 +48,9 @@ public:
         pushButton = new QPushButton(centralWidget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
         pushButton->setGeometry(QRect(310, 140, 151, 25));
+        load = new QPushButton(centralWidget);
+        load->setObjectName(QStringLiteral("load"));
+        load->setGeometry(QRect(340, 210, 89, 25));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -73,6 +77,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         label->setText(QApplication::translate("MainWindow", "Worms Editor de mapas", nullptr));
         pushButton->setText(QApplication::translate("MainWindow", "Crear nuevo mapa", nullptr));
+        load->setText(QApplication::translate("MainWindow", "Load", nullptr));
         menuWorms_Editor->setTitle(QApplication::translate("MainWindow", "Worms Editor", nullptr));
     } // retranslateUi
 

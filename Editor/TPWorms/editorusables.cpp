@@ -1,7 +1,11 @@
 #include "editorusables.h"
 
-editorUsables::editorUsables(std::string nombre, int municiones)
+editorUsables::editorUsables(int municiones)
 {
-    this->nombre = nombre;
     this->municiones = municiones;
+}
+
+int editorUsables::getAmmo()
+{
+    return municiones;
 }

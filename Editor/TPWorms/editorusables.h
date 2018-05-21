@@ -6,10 +6,12 @@
 class editorUsables
 {
 private:
-    std::string nombre;
+
     int municiones;
 public:
-    editorUsables(std::string nombre, int municiones);
+    editorUsables(int municiones);
+
+    int getAmmo();
 };
 
 #endif // EDITORUSABLES_H

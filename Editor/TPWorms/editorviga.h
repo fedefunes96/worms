@@ -6,10 +6,15 @@
 class editorViga: public EditorUbicable
 {
 private:
-    int angulo;
+    float angulo;
+    int tam;
 
 public:
-    editorViga(int posX, int posY, int angulo);
+    editorViga();
+    editorViga(int posX, int posY, int tam);
+    virtual void aumentarAngulo(int angulo);
+    float get_angulo();
+    int get_tam();
 };
 
 #endif // EDITORVIGA_H
