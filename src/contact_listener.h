@@ -1,17 +1,18 @@
 #ifndef CONTACT_LISTENER_H
 #define CONTACT_LISTENER_H
 
+#include "ubicable.h"
 #include <Box2D/Box2D.h>
 
 class ContactListener : public b2ContactListener {
 public:
 	void BeginContact(b2Contact* contact) {
-		Ubicable* body_a = (Ubicable*) contact->getFixtureA->GetUserData();
-		Ubicable* body_b = (Ubicable*) contact->getFixtureB->GetUserData();
+		Ubicable* fixt_a = (Ubicable*) contact->GetFixtureA()->GetUserData();
+		Ubicable* fixt_b = (Ubicable*) contact->GetFixtureB()->GetUserData();
 
-		body_a.start_contacting(body_b);
-		body_b.start_contacting(body_a);
+		fixt_a->start_contacting(fixt_b);
+		fixt_b->start_contacting(fixt_a);
 	}
-}
+};
 
 #endif

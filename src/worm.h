@@ -6,6 +6,9 @@
 #include "usable.h"
 #include "movable.h"
 #include <Box2D/Box2D.h>
+#include <string>
+
+#define WORM_TYPE "Worm"
 
 class Worm : public Movable {
 private:
@@ -14,7 +17,10 @@ private:
 	const std::pair<float, float> forw_jump_speed;
 	const std::pair<float, float> back_jump_speed;
 	const float height_dmg;
+	const int longitude;
+	const int height;
 	int actual_health;
+	int owner;
 
 	b2BodyDef body_def;
 	b2PolygonShape body_shape;
@@ -27,7 +33,6 @@ public:
 		, const int angle_rad
 		, const int longitude
 		, const int height
-		, const float density
 		, const float restitution
 		, const int health
 		, const float mov_speed
@@ -35,7 +40,18 @@ public:
 		, const std::pair<float, float> back_jump_speed
 		, const float height_dmg);
 
-	void use(Usable& usable);
+	virtual std::string get_type() override;
+
+	int get_health();
+	void receive_dmg(int damage);
+
+	void move_left();
+	void move_right();
+	void jump_forw();
+	void jump_back();
+
+	void use(Usable& usable, const b2Vec2& dest);	
+	void set_owner(const int player_id);
 };
 
 #endif

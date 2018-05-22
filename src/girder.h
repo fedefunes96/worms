@@ -3,6 +3,9 @@
 
 #include "static.h"
 #include "stage.h"
+#include <string>
+
+#define GIRDER_TYPE "Girder"
 
 class Girder : public Static {
 public:
@@ -12,6 +15,8 @@ public:
 		, const int angle
 		, const int longitude
 		, const int height);
+
+	virtual std::string get_type() override;
 };
 
 #endif
