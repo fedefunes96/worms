@@ -12,3 +12,16 @@
 - 10) Notificar ganadores
 - 11) Manejo de tiempo de turnos
 - 12) Agregar threads al envio de información a cada jugador
+
+
+
+-Modelo cliente/ Escenario
+-1) Finalizar protocolo con servidor
+-2) Finalizar modelo cliente
+-3) Finalizar movimiento projectiles, worms en diagonal
+-4) Hacer animacion worm cargando distintas armas
+-5) Hacer animaicon worm apuntando
+-6) Hacer animacion worm ahogandose + colocar agua
+-7) Interfaz conexion servidor
+-8) Documentacion
+-9) Testings
