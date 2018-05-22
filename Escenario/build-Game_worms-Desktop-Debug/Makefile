@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -m64 -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -m64 -pipe -std=c++0x -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../Game_worms -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -50,13 +50,35 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Game_worms/main.cpp \
 		../Game_worms/game_view.cpp \
-		../Game_worms/worm_view.cpp qrc_resources.cpp \
-		moc_worm_view.cpp
+		../Game_worms/worm_view.cpp \
+		../Game_worms/eventhandler.cpp \
+		../Game_worms/girder_view.cpp \
+		../Game_worms/worm.cpp \
+		../Game_worms/camera.cpp \
+		../Game_worms/mybutton.cpp \
+		../Game_worms/bazooka.cpp \
+		../Game_worms/dialogchooseweapon.cpp qrc_resources.cpp \
+		moc_worm_view.cpp \
+		moc_eventhandler.cpp \
+		moc_worm.cpp \
+		moc_bazooka.cpp \
+		moc_dialogchooseweapon.cpp
 OBJECTS       = main.o \
 		game_view.o \
 		worm_view.o \
+		eventhandler.o \
+		girder_view.o \
+		worm.o \
+		camera.o \
+		mybutton.o \
+		bazooka.o \
+		dialogchooseweapon.o \
 		qrc_resources.o \
-		moc_worm_view.o
+		moc_worm_view.o \
+		moc_eventhandler.o \
+		moc_worm.o \
+		moc_bazooka.o \
+		moc_dialogchooseweapon.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -114,9 +136,23 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../Game_worms/Game_worms.pro ../Game_worms/game_view.h \
-		../Game_worms/worm_view.h ../Game_worms/main.cpp \
+		../Game_worms/worm_view.h \
+		../Game_worms/eventhandler.h \
+		../Game_worms/girder_view.h \
+		../Game_worms/worm.h \
+		../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/bazooka.h \
+		../Game_worms/dialogchooseweapon.h ../Game_worms/main.cpp \
 		../Game_worms/game_view.cpp \
-		../Game_worms/worm_view.cpp
+		../Game_worms/worm_view.cpp \
+		../Game_worms/eventhandler.cpp \
+		../Game_worms/girder_view.cpp \
+		../Game_worms/worm.cpp \
+		../Game_worms/camera.cpp \
+		../Game_worms/mybutton.cpp \
+		../Game_worms/bazooka.cpp \
+		../Game_worms/dialogchooseweapon.cpp
 QMAKE_TARGET  = Game_worms
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Game_worms
@@ -144,7 +180,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_dialogchooseweapon.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Game_worms/Game_worms.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -285,9 +321,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Game_worms/resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../Game_worms/game_view.h ../Game_worms/worm_view.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Game_worms/main.cpp ../Game_worms/game_view.cpp ../Game_worms/worm_view.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Game_worms/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Game_worms/game_view.h ../Game_worms/worm_view.h ../Game_worms/eventhandler.h ../Game_worms/girder_view.h ../Game_worms/worm.h ../Game_worms/camera.h ../Game_worms/mybutton.h ../Game_worms/bazooka.h ../Game_worms/dialogchooseweapon.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Game_worms/main.cpp ../Game_worms/game_view.cpp ../Game_worms/worm_view.cpp ../Game_worms/eventhandler.cpp ../Game_worms/girder_view.cpp ../Game_worms/worm.cpp ../Game_worms/camera.cpp ../Game_worms/mybutton.cpp ../Game_worms/bazooka.cpp ../Game_worms/dialogchooseweapon.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Game_worms/dialogchooseweapon.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -313,25 +349,50 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_resources.cpp
 qrc_resources.cpp: ../Game_worms/resources.qrc \
 		../Game_worms/wwalk_right.png \
+		../Game_worms/shothit.png \
 		../Game_worms/wormwait.png \
-		../Game_worms/wblink1.png \
+		../Game_worms/wwalku_r.png \
+		../Game_worms/missile.png \
 		../Game_worms/intro.jpg \
-		../Game_worms/wwalk_left.png
+		../Game_worms/bazooka.1.png \
+		../Game_worms/intro2.jpg \
+		../Game_worms/wwalku_l.png \
+		../Game_worms/wwalk_left.png \
+		../Game_worms/grds0.png \
+		../Game_worms/grdl0.png
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name resources ../Game_worms/resources.qrc -o qrc_resources.cpp
 
-compiler_moc_header_make_all: moc_worm_view.cpp
+compiler_moc_header_make_all: moc_worm_view.cpp moc_eventhandler.cpp moc_worm.cpp moc_bazooka.cpp moc_dialogchooseweapon.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_worm_view.cpp
+	-$(DEL_FILE) moc_worm_view.cpp moc_eventhandler.cpp moc_worm.cpp moc_bazooka.cpp moc_dialogchooseweapon.cpp
 moc_worm_view.cpp: ../Game_worms/worm_view.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/alejandro/Desktop/QT_Proyects/Game_worms -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Game_worms/worm_view.h -o moc_worm_view.cpp
 
+moc_eventhandler.cpp: ../Game_worms/game_view.h \
+		../Game_worms/worm_view.h \
+		../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/dialogchooseweapon.h \
+		../Game_worms/eventhandler.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/alejandro/Desktop/QT_Proyects/Game_worms -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Game_worms/eventhandler.h -o moc_eventhandler.cpp
+
+moc_worm.cpp: ../Game_worms/worm.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/alejandro/Desktop/QT_Proyects/Game_worms -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Game_worms/worm.h -o moc_worm.cpp
+
+moc_bazooka.cpp: ../Game_worms/worm_view.h \
+		../Game_worms/bazooka.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/alejandro/Desktop/QT_Proyects/Game_worms -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Game_worms/bazooka.h -o moc_bazooka.cpp
+
+moc_dialogchooseweapon.cpp: ../Game_worms/dialogchooseweapon.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/alejandro/Desktop/QT_Proyects/Game_worms -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Game_worms/dialogchooseweapon.h -o moc_dialogchooseweapon.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_dialogchooseweapon.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
-ui_mainwindow.h: ../Game_worms/mainwindow.ui
-	/usr/lib/x86_64-linux-gnu/qt5/bin/uic ../Game_worms/mainwindow.ui -o ui_mainwindow.h
+	-$(DEL_FILE) ui_dialogchooseweapon.h
+ui_dialogchooseweapon.h: ../Game_worms/dialogchooseweapon.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic ../Game_worms/dialogchooseweapon.ui -o ui_dialogchooseweapon.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -344,20 +405,73 @@ compiler_clean: compiler_rcc_clean compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: ../Game_worms/main.cpp ../Game_worms/game_view.h \
-		../Game_worms/worm_view.h
+		../Game_worms/worm_view.h \
+		../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/dialogchooseweapon.h \
+		../Game_worms/eventhandler.h \
+		../Game_worms/girder_view.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Game_worms/main.cpp
 
-game_view.o: ../Game_worms/game_view.cpp ../Game_worms/game_view.h
+game_view.o: ../Game_worms/game_view.cpp ../Game_worms/game_view.h \
+		../Game_worms/worm_view.h \
+		../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/dialogchooseweapon.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game_view.o ../Game_worms/game_view.cpp
 
-worm_view.o: ../Game_worms/worm_view.cpp ../Game_worms/worm_view.h
+worm_view.o: ../Game_worms/worm_view.cpp ../Game_worms/worm_view.h \
+		../Game_worms/girder_view.h \
+		../Game_worms/bazooka.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o worm_view.o ../Game_worms/worm_view.cpp
+
+eventhandler.o: ../Game_worms/eventhandler.cpp ../Game_worms/eventhandler.h \
+		../Game_worms/game_view.h \
+		../Game_worms/worm_view.h \
+		../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/dialogchooseweapon.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o eventhandler.o ../Game_worms/eventhandler.cpp
+
+girder_view.o: ../Game_worms/girder_view.cpp ../Game_worms/girder_view.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o girder_view.o ../Game_worms/girder_view.cpp
+
+worm.o: ../Game_worms/worm.cpp ../Game_worms/worm.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o worm.o ../Game_worms/worm.cpp
+
+camera.o: ../Game_worms/camera.cpp ../Game_worms/camera.h \
+		../Game_worms/mybutton.h \
+		../Game_worms/dialogchooseweapon.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camera.o ../Game_worms/camera.cpp
+
+mybutton.o: ../Game_worms/mybutton.cpp ../Game_worms/mybutton.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mybutton.o ../Game_worms/mybutton.cpp
+
+bazooka.o: ../Game_worms/bazooka.cpp ../Game_worms/bazooka.h \
+		../Game_worms/worm_view.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bazooka.o ../Game_worms/bazooka.cpp
+
+dialogchooseweapon.o: ../Game_worms/dialogchooseweapon.cpp ../Game_worms/dialogchooseweapon.h \
+		ui_dialogchooseweapon.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialogchooseweapon.o ../Game_worms/dialogchooseweapon.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
 
 moc_worm_view.o: moc_worm_view.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_worm_view.o moc_worm_view.cpp
+
+moc_eventhandler.o: moc_eventhandler.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_eventhandler.o moc_eventhandler.cpp
+
+moc_worm.o: moc_worm.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_worm.o moc_worm.cpp
+
+moc_bazooka.o: moc_bazooka.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_bazooka.o moc_bazooka.cpp
+
+moc_dialogchooseweapon.o: moc_dialogchooseweapon.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dialogchooseweapon.o moc_dialogchooseweapon.cpp
 
 ####### Install
 

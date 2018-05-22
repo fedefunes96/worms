@@ -4,16 +4,19 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QGraphicsRectItem>
 #include <QBrush>
 #include <QImage>
 #include <string>
 #include <QObject>
+#include "worm_view.h"
+#include "camera.h"
 
 class Game_View
 {
 private:
     QGraphicsScene* scene;
-    QGraphicsView* view;
+    Camera* camera;
 
 public:
     Game_View();
@@ -21,6 +24,15 @@ public:
     void add_Item(QGraphicsItem* item,int posx, int posy);
     void del_Item(QGraphicsItem* item);
     void setBackground(std::string& path);
+    QGraphicsItem *itemAt(int posx,int posy);
+
+    Camera *getCamera();
+    Worm_View *getWormActive();
+
+    void centerScreen(QRect rect);
+    void maximizateScreen();
+    void minimizateScreen();
+    void addWidget(QWidget *widget);
 };
 
 #endif // GAME_VIEW_H

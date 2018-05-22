@@ -1,9 +1,16 @@
 <RCC>
-    <qresource prefix="/image">
+    <qresource prefix="/images">
+        <file>grdl0.png</file>
+        <file>grds0.png</file>
         <file>intro.jpg</file>
+        <file>missile.png</file>
+        <file>wormwait.png</file>
         <file>wwalk_left.png</file>
         <file>wwalk_right.png</file>
-        <file>wblink1.png</file>
-        <file>wormwait.png</file>
+        <file>intro2.jpg</file>
+        <file>wwalku_l.png</file>
+        <file>wwalku_r.png</file>
+        <file>bazooka.1.png</file>
+        <file>shothit.png</file>
     </qresource>
 </RCC>

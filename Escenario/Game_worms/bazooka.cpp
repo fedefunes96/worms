@@ -1,0 +1,86 @@
+#include "bazooka.h"
+#include "worm_view.h"
+
+Bazooka::Bazooka(Worm_View* w2):QGraphicsItem()
+{
+    w=w2;
+    currentFrame=0;
+    spriteImage = new QPixmap(":/images/bazooka.1.png");
+    timer = new QTimer();   // Create a timer for sprite animation
+    timer->start(2);   // Run the sprite on the signal generation with a frequency of 25 ms
+    update(0,0,30,30);
+}
+
+void Bazooka::nextFameImpact()
+{
+    currentFrame += 60;
+    if(currentFrame >= spriteImage->height())
+    {
+        w->delete_bullet(this);
+        return;
+    }
+    this->update(0,0,60,60);
+}
+
+void Bazooka::move()
+{
+    if(colliding()){
+        explote();
+    }
+    setPos(x()-1,y());
+}
+
+void Bazooka::explote()
+{
+    timer->disconnect();
+    timer->stop();
+    timer->start(40);
+    spriteImage = new QPixmap(":/images/shothit.png");
+    setPos(x()-30,y());
+    currentFrame=0;
+    connect(timer, &QTimer::timeout, this, &Bazooka::nextFameImpact);
+}
+
+void Bazooka::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    /* In the graphic renderer we draw the sprite
+     * The first two arguments - is the X and Y coordinates of where to put QPixmap
+     * The third argument - a pointer to QPixmap
+     * 4 and 5 of the arguments - The coordinates in the image QPixmap, where the image is displayed
+     * By setting the X coordinate with the variable currentFrame we would like to move the camera on the sprite
+     * and the last two arguments - the width and height of the displayed area, that is, the frame
+     * */
+    painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 60,60);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
+}
+
+QRectF Bazooka::boundingRect() const
+{
+   return QRectF(0,0,60,60);
+}
+
+bool Bazooka::colliding()
+{
+    QList<QGraphicsItem*> list = collidingItems();
+    if(list.empty()){
+        return false;
+    }
+    return true;
+}
+
+void Bazooka::setAngle(int x, int y)
+{
+    this->angle.first = x;
+    this->angle.second = y;
+}
+
+void Bazooka::fire()
+{
+    timer->disconnect();
+    connect(timer, &QTimer::timeout, this, &Bazooka::move);
+}
+
+
+
