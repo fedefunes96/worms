@@ -1,5 +1,8 @@
 #include "protocol.h"
 
+#include <arpa/inet.h>
+
+
 Protocol::Protocol(Socket *conexion):conexion(conexion)
 {
 }
@@ -15,10 +18,6 @@ void Protocol::sendMove(int8_t id_worm,int8_t state,int8_t dir)
 }
 
 
-Protocolo::enviar_long(int longitud){
-    int32_t conv = htonl(longitud);
-    conexion->enviar((const char*)&conv,BYTES_4);
-}
 
 
 void Protocol::sendJump(int8_t id_worm, int8_t dir)
@@ -52,7 +51,7 @@ void Protocol::recvObj(int8_t *id, int8_t *vida, int32_t *posX, int32_t *posY, i
     *posX = ntohl(aux);
     conexion->recibir((char*)&aux,4);
     *posY = ntohl(aux);
-    conexion->recibir((char*)angle,1)
+    conexion->recibir((char*)angle,1);
 }
 void Protocol::recvObj(int8_t *id,int32_t *posX, int32_t *posY, int8_t *angle)
 {
@@ -62,7 +61,7 @@ void Protocol::recvObj(int8_t *id,int32_t *posX, int32_t *posY, int8_t *angle)
     *posX = ntohl(aux);
     conexion->recibir((char*)&aux,4);
     *posY = ntohl(aux);
-    conexion->recibir((char*)angle,1)
+    conexion->recibir((char*)angle,1);
 }
 
 int8_t Protocol::recvCmd()

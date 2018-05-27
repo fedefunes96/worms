@@ -15,6 +15,7 @@ public:
     int8_t recvByte();
     int8_t recvId();
 
+    int8_t recvCmd();
 private:
     Socket* conexion;
 
