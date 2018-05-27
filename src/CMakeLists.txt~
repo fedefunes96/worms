@@ -13,5 +13,5 @@ add_compile_options(-std=c++11 -pthread)
 
 file(GLOB SOURCES "*.cpp")
 
-add_executable(Worms ${SOURCES} )
+add_executable(Worms ${SOURCES})
 target_link_libraries(Worms ${PROJECT_LINK_LIBS})

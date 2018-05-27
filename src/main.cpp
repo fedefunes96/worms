@@ -17,19 +17,19 @@ int main(int argc, char* argv[]) {
 	int32 positionIterations = 2;
 	std::vector<Player> players;
 
-	Game game(std::move(players));
+	Game game("hi", std::move(players));
 
 	Stage stage(timeStep, velocityIterations, positionIterations, game);
 
-	b2Vec2 velocity(50.0, 1.0);
+	b2Vec2 velocity(50.0, 10.0);
 
 	Throwable test_mov(stage
 		, 5
 		, 2
 		, 0
 		, velocity
-		, 1
-		, 1
+		, 30.0
+		, 1.0
 		, 0.0
 		, 75.0);
 

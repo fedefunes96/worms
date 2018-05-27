@@ -20,8 +20,6 @@ Stage::Stage(const float32 time_step
 	this->game_over = false;
 	this->something_moving = false;
 	//Create stage by parameter
-
-	this->pre_initialize();
 }
 
 void Stage::remove(b2Body* body) {
@@ -48,7 +46,8 @@ b2Body* Stage::insert(b2BodyDef* body_def) {
 }
 
 void Stage::draw() {
-	//this->pre_initialize();
+	this->pre_initialize();
+
 	//while(!this->game_over) {
 
 		int cant_objects_moving = 0;
@@ -59,15 +58,18 @@ void Stage::draw() {
  				continue;
 
  			b2Vec2 pos = b->GetWorldCenter();
+ 			float angle = b->GetAngle();
+
  			Ubicable* ubic = (Ubicable*) b->GetUserData();
 
  			//Touched water
  			if (pos.y < 0.0) {
  				//Notifying position if necessary
- 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y);
+ 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
  				ubic->delete_myself();
  			} else {
- 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y);	
+ 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);	
+ 				//printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
  			}
 
  			if(b->IsAwake())
@@ -104,8 +106,9 @@ void Stage::pre_initialize() {
 	//in the world (including static ones)
  	for ( b2Body* b = this->world.GetBodyList(); b; b = b->GetNext()) {
  		b2Vec2 pos = b->GetWorldCenter();
-
- 		this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y);
+ 		float angle = b->GetAngle();
+ 		
+ 		this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
   	}
 }
 

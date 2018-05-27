@@ -6,24 +6,80 @@
 #include "common_socket_exception.h"
 #include <algorithm>
 #include <thread>
+#include <string>
 
-Game::Game(std::vector<Player> players) 
+Game::Game(const std::string& stage_file, std::vector<Player> players) 
  : stage(1.0/60.0, 6, 2, *this) 
  , players(std::move(players)) {
  	this->id_actual_player = 0;
 
- 	this->initialize_game();
+ 	this->initialize_players();
+ 	this->initialize_game(stage_file);
+ 	this->start_game();
 
  	//Start drawing the stage
  	//this->stage_t = std::thread(&Stage::draw, &this->stage);
 }
 
-void Game::initialize_game() {
-	/*std::vector<Player>::iterator it;
+void Game::start_game() {
+	this->stage_t = std::thread(&Stage::draw, &this->stage);
+}
 
-	for (it = players.begin(); it != players.end(); ++it) {
+void Game::initialize_players() {
+	//First, set an id to every player
+	//Starting with id = 1
 
-	}*/
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		this->players[i].set_id(i+1);
+	}
+
+	//Start players so they can hear events
+	//this->players.start();
+}
+
+void Game::initialize_game(const std::string& stage_file) {
+	//First, create every object in the stage
+
+	//Read stage and create ubicables
+	//Push them in a list to mantain them
+
+
+	//Reserve a list with a reference to worms & usables
+	//std::vector<Worms&> worms_to_attach
+	//std::vector<std::unique_ptr<Usable&>> usables_to_attach
+
+	//int cant_worms = worms_to_attach.size()
+	//int cant_players = this->players.size()
+
+	// if (cant_players > cant_worms)
+	//		invalid_game
+
+	//int remu_worms = (cant_worms % cant_players);
+	//int worms_per_player = cant_worms / cant_players;
+	//int players_with_less_worms = cant_players - remu_worms
+	/*
+	int i;
+	int j = 0;
+
+	//Attach now to players that will have less worms
+	//Give extra health to the worms
+	for (i = 0; i < players_with_less_worms; i++) {
+		for (; j < worms_per_player*(i+1); j++) {
+			Worm& worm = worms_to_attach[j];
+			worm.add_health(EXTRA_HEALTH);
+			this->players[i].attach_worm(worm.get_id(), std::move(worm));
+		}
+	}
+
+	//Attach now to players that will have more worms
+	for (; i < cant_players; i++) {
+		for (; j < worms_to_attach*(i+1)+1; j++) {
+			Worm& worm = worms_to_attach[j];
+			this->players[i].attach_worm(worm.get_id(), std::move(worm));
+		}		
+	}
+
+	*/
 }
 
 void Game::run() {
@@ -116,11 +172,11 @@ void Game::notify_actual_player(int id) {
 	}
 }
 
-void Game::notify_position(Ubicable* ubicable, float x, float y) {
+void Game::notify_position(Ubicable* ubicable, float x, float y, float angle) {
 	std::vector<Player>::iterator it;
 
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
-		(*it).notify_position(ubicable, x, y);
+		(*it).notify_position(ubicable, x, y, angle);
 	}
 }
 
@@ -133,6 +189,7 @@ void Game::notify_removal(Ubicable* ubicable) {
 }
 
 Game::~Game() {
-	//Must place something to stop drawing
-	//this->stage_t.join();
+	//for (int i = 0; i < this->players.size(); i++)
+	//	this->players.join();
+	this->stage_t.join();
 }
