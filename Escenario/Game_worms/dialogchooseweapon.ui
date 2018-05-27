@@ -26,8 +26,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/airstrke.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/airstrke.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/airstrke.1.png</normaloff>:/images/airstrke.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -49,8 +49,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/banana.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/banana.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/banana.1.png</normaloff>:/images/banana.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -72,8 +72,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/baseball.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/baseball.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/baseball.1.png</normaloff>:/images/baseball.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -95,8 +95,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/bazooka.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/bazooka.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/bazooka.1.png</normaloff>:/images/bazooka.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -118,8 +118,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/cluster.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/cluster.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/cluster.1.png</normaloff>:/images/cluster.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -141,8 +141,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/dynamite.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/dynamite.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/dynamite.1.png</normaloff>:/images/dynamite.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -164,8 +164,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/girder.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/girder.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/girder.1.png</normaloff>:/images/girder.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -187,8 +187,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/grenade.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/grenade.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/grenade.1.png</normaloff>:/images/grenade.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -210,8 +210,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/hgrenade.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/hgrenade.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/hgrenade.1.png</normaloff>:/images/hgrenade.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -233,8 +233,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/teleport.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/teleport.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/teleport.1.png</normaloff>:/images/teleport.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -256,8 +256,31 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/firepnch.1.png</normaloff>../PC Computer - Worms Armageddon - General Sprites/Weapon Icons/firepnch.1.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/firepnch.1.png</normaloff>:/images/firepnch.1.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>30</width>
+     <height>30</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_12">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>50</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/mortar.1.png</normaloff>:/images/mortar.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -267,6 +290,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

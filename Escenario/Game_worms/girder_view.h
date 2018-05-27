@@ -2,7 +2,6 @@
 #define GIRDER_H
 
 #include <QGraphicsPixmapItem>
-#include <QGraphicsItem>
 
 class Girder_View:public QGraphicsPixmapItem
 {

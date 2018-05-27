@@ -1,14 +1,20 @@
 #include "bazooka.h"
 #include "worm_view.h"
+#include <QDebug>
 
-Bazooka::Bazooka(Worm_View* w2):QGraphicsItem()
+Bazooka::Bazooka(Worm_View* w2):MovableItem()
 {
+    setFlag(QGraphicsItem::ItemIsSelectable);
     w=w2;
     currentFrame=0;
     spriteImage = new QPixmap(":/images/bazooka.1.png");
     timer = new QTimer();   // Create a timer for sprite animation
     timer->start(2);   // Run the sprite on the signal generation with a frequency of 25 ms
+    timer2 = new QTimer();   // Create a timer for sprite animation
+    timer2->start(2);   // Run the sprite on the signal generation with a frequency of 25 ms
     update(0,0,30,30);
+    this->id = 700;
+    this->alive=true;
 }
 
 void Bazooka::nextFameImpact()
@@ -16,22 +22,47 @@ void Bazooka::nextFameImpact()
     currentFrame += 60;
     if(currentFrame >= spriteImage->height())
     {
+        qDebug()<<"entre";
+        timer->disconnect();
+        timer2->disconnect();
+        timer->stop();
+        timer2->stop();
+        this->alive=false;
         w->delete_bullet(this);
         return;
     }
     this->update(0,0,60,60);
 }
 
+void Bazooka::moveTo(int posX, int posY, int angle)
+{
+    // ver tema de anulos en la trayectoria... rotar imagen como se hizo para la viga
+}
+
+int Bazooka::getId()
+{
+    return this->id;
+}
+
+bool Bazooka::isMovable()
+{
+    return true;
+}
+
+bool Bazooka::isAlive()
+{
+    return this->alive;
+}
+
 void Bazooka::move()
 {
-    if(colliding()){
-        explote();
-    }
     setPos(x()-1,y());
 }
 
 void Bazooka::explote()
 {
+    timer2->disconnect();
+    timer2->stop();
     timer->disconnect();
     timer->stop();
     timer->start(40);
@@ -78,6 +109,10 @@ void Bazooka::setAngle(int x, int y)
 
 void Bazooka::fire()
 {
+    timer2-disconnect();
+    connect(timer2, &QTimer::timeout, this, &Bazooka::explote);
+    timer2->start(500);
+    //timer2->singleShot(300);
     timer->disconnect();
     connect(timer, &QTimer::timeout, this, &Bazooka::move);
 }

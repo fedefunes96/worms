@@ -8,6 +8,9 @@ Camera::Camera(QGraphicsScene *scene):QGraphicsView()
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    verticalScrollBar()->setValue(scene->height()); // no hace falta chequear, se mueve hasta el maximo
+    qDebug()<<verticalScrollBar()->value();
+    horizontalScrollBar()->setValue(0);
     setFixedSize(1024,768);
     show();
     timer = new QTimer();
@@ -21,9 +24,9 @@ Camera::Camera(QGraphicsScene *scene):QGraphicsView()
 
     this->boton = new MyButton();
 
+    setWindowTitle("Worms Armaggedon");
 
-
-    this->boton->setGeometry(512,710,30,30);
+    this->boton->setGeometry(512,scene->height()-40,30,30);
     boton->setAttribute(Qt::WA_TranslucentBackground);
     connect(boton,&QPushButton::clicked,this,&Camera::handleButton);
     scene->addWidget(this->boton);
@@ -32,15 +35,31 @@ Camera::Camera(QGraphicsScene *scene):QGraphicsView()
 }
 
 
+
 void Camera::handleButton(){
-    qDebug()<<"presione boton";
+    qDebug()<<"presione boton";    
     menuWeapon = new DialogChooseWeapon();
+    menuWeapon->setWindowTitle("Weapons & Tools");
     menuWeapon->setModal(true);
     menuWeapon->exec();
+
 }
 
 void Camera::followObject()
 {
+    //while item alive & moving -> follow
+
+    if(this->itemsToFollow.empty()){
+        return;
+    }
+    MovableItem* item = this->itemsToFollow.top();
+    if(!item->isAlive() || !(item->isSelected())){
+        this->itemsToFollow.pop();
+        return;
+    }
+
+
+    //esta vivo y quiero aun seguirlo..
     if(item->x() >= this->posXcamera_R && horizontalScrollBar()->value()!=2000)
     {
         horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 1 );
@@ -59,25 +78,26 @@ void Camera::followObject()
         this->boton->move(point.x()-1,point.y());
     }
     //subir y bajar camara
-    /*
+/*
     if(item->y() <= this->posYcamera_U && verticalScrollBar()->value() > 0){
         qDebug()<<"subir camara";
         this->posYcamera_U -=1;
         verticalScrollBar()->setValue(verticalScrollBar()->value()-1);
     }
-    if(item->y() >= this->posYcamera_D && verticalScrollBar()->value() != 2000){
+
+    if(item->y() >= this->posYcamera_D && verticalScrollBar()->value() != 0){
         qDebug()<<"bajar camara";
-        this->posYcamera_D -=1;
+        this->posYcamera_D +=1;
         verticalScrollBar()->setValue(verticalScrollBar()->value()+1);
     }
-    */
+*/
 }
 
 
 
-void Camera::addItemToFollow(QGraphicsItem* item2)
+void Camera::addItemToFollow(MovableItem *item)
 {
-    this->item=item2;
+    this->itemsToFollow.push(item);
 }
 
 

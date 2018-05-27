@@ -13,7 +13,7 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++0x
 
-SOURCES += main.cpp\
+SOURCES +=\
     game_view.cpp \
     worm_view.cpp \
     eventhandler.cpp \
@@ -22,7 +22,14 @@ SOURCES += main.cpp\
     camera.cpp \
     mybutton.cpp \
     bazooka.cpp \
-    dialogchooseweapon.cpp
+    dialogchooseweapon.cpp \
+    protocol.cpp \
+    client.cpp \
+    player.cpp \
+    thread.cpp \
+    game.cpp \
+    common_socket.cpp \
+    graphicitem.cpp
 
 HEADERS  += \
     game_view.h \
@@ -33,7 +40,13 @@ HEADERS  += \
     camera.h \
     mybutton.h \
     bazooka.h \
-    dialogchooseweapon.h
+    dialogchooseweapon.h \
+    protocol.h \
+    player.h \
+    thread.h \
+    game.h \
+    socket.h \
+    movable.h
 
 FORMS    += \
     dialogchooseweapon.ui

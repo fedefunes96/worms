@@ -2,6 +2,10 @@
 #include <QDebug>
 #include <QGraphicsView>
 #include <QScrollBar>
+
+
+#include "girder_view.h"
+
 EventHandler::EventHandler(QObject *parent) : QObject(parent)
 {
     this->keyPress=false;
@@ -29,13 +33,13 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
         mouseMoveEvent(static_cast<QMouseEvent*>(event));
         return true;
     }
-
+*/
     if(event->type() == QEvent::MouseButtonPress){
         mouseClickEvent(static_cast<QMouseEvent*>(event));
         return true;
 
     }
-*/
+
     return false;
 }
 
@@ -82,6 +86,7 @@ void EventHandler::mouseClickEvent(QMouseEvent *m_event)
             return;
         }
         //this->view->itemAt() aca me devuelve el QgraphicsItem si yo le paso por parametro las posiciones ..
+
         if((this->game_view->itemAt(m_event->x(),m_event->y()))->type()==Worm_View().type())
         {
             qDebug()<<"toque al worm";
@@ -114,7 +119,8 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
-            this->game_view->getWormActive()->throwProjectile();
+            Worm_View* worm = this->game_view->getWormActive();
+            worm->throwProjectile();
             break;
         }
         case Qt::Key_Left:
@@ -126,9 +132,9 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
-            //this->game_view->getWormActive()->step();
-            //this->game_view->getWormActive()->move_Left();
-
+            Worm_View* worm = this->game_view->getWormActive();
+            worm->moveTo(-180,worm->x()-15,worm->y());
+            //this->protocol->sendMove(worm->getId(),0,0);
             break;
         }
         case Qt::Key_Right:
@@ -138,6 +144,9 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
+            Worm_View* worm = this->game_view->getWormActive();
+            worm->moveTo(0,worm->x()+15,worm->y());
+            //this->protocol->sendMove(worm->getId(),0,1);
             break;
         }
         case Qt::Key_Up:
@@ -179,7 +188,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
             Worm_View* w = this->game_view->getWormActive();
-            w->moveToPos(w->x()-30,w->y());
+            //this->protocol->sendMove(w->getIt(),1,0);
             break;
         }
         case Qt::Key_Right:
@@ -193,24 +202,10 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
             Worm_View* w = this->game_view->getWormActive();
-            w->moveToPos(w->x()+30,w->y());
+            //this->protocol->sendMove(w->getIt(),1,1);
             break;
         }
-        case Qt::Key_Up:
-        {
-            if(k_event->isAutoRepeat()){ // para saber si es repetitiva
-                return;
-            }
-            qDebug()<<"solte tecla up";
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
-                return;
-            }
-            Worm_View* w = this->game_view->getWormActive();
-            //w->moveToPos(w->x()-21,w->y()-7);
-            w->moveToPos(w->x()-30,w->y()-30);
-            break;
-        }
+
         case Qt::Key_Space:
         {
             if(k_event->isAutoRepeat()){ // para saber si es repetitiva

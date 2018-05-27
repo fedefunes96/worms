@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/images">
-        <file>grdl0.png</file>
-        <file>grds0.png</file>
         <file>intro.jpg</file>
         <file>missile.png</file>
         <file>wormwait.png</file>
@@ -12,5 +10,18 @@
         <file>wwalku_r.png</file>
         <file>bazooka.1.png</file>
         <file>shothit.png</file>
+        <file>baseball.1.png</file>
+        <file>banana.1.png</file>
+        <file>airstrke.1.png</file>
+        <file>cluster.1.png</file>
+        <file>dynamite.1.png</file>
+        <file>firepnch.1.png</file>
+        <file>girder.1.png</file>
+        <file>grenade.1.png</file>
+        <file>hgrenade.1.png</file>
+        <file>mortar.1.png</file>
+        <file>teleport.1.png</file>
+        <file>grds4.png</file>
+        <file>grdl4.png</file>
     </qresource>
 </RCC>

@@ -8,6 +8,8 @@
 #include <QKeyEvent>
 #include "camera.h"
 
+#include "protocol.h"
+
 
 class EventHandler : public QObject
 {
@@ -26,6 +28,7 @@ private:
     Worm_View* worm_selected;
     void keyReleaseEvent(QKeyEvent *k_event);
     bool keyPress;
+    Protocol* protocol;
 };
 
 #endif // EVENTHANDLER_H

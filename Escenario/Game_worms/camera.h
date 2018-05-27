@@ -9,12 +9,14 @@
 #include <QScrollBar>
 #include "mybutton.h"
 #include "dialogchooseweapon.h"
+#include "movable.h"
+#include <stack>
 
 class Camera : public QGraphicsView
 {
 public:
     Camera(QGraphicsScene* scene);
-    void addItemToFollow(QGraphicsItem *item);
+    void addItemToFollow(MovableItem *item);
 signals:
 public slots:
 
@@ -30,6 +32,7 @@ private:
     int posYcamera_D;
     MyButton* boton;
     DialogChooseWeapon* menuWeapon;
+    std::stack<MovableItem*> itemsToFollow;
 
 };
 

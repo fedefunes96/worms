@@ -8,8 +8,9 @@
 #include <QPainter>
 
 #include "worm_view.h"
+#include "movable.h"
 
-class Bazooka: public QObject, public QGraphicsItem
+class Bazooka: public QObject, public MovableItem
 {
     Q_OBJECT
 public:
@@ -18,7 +19,10 @@ public:
     void fire();
 private slots:
     void nextFameImpact();
-
+    void moveTo(int posX,int posY, int angle);
+    int getId();
+    bool isMovable();
+    bool isAlive();
     void move();
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -31,7 +35,7 @@ private:
     std::pair<int,int> angle;
     QTimer *timer;      // Timer for turning images into QPixmap
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
-
+    QTimer *timer2;
 
     void explote();
 };

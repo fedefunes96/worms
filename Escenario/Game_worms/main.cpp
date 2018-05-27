@@ -13,6 +13,7 @@
 #include <QLabel>
 
 #include "mybutton.h"
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
 
 
     //ojo que infiere el orden en que los inserto...
-    my_game.add_Item(worm,800,600);
+    my_game.add_Item(worm,600,400);
     worm->add_label(); // solucionar esto, que se agregue o se llame al agregar el worm al scene
     worm->setDir(worm->x(),worm->y());
     //my_game.add_Item(worm2,300,250);
@@ -57,9 +58,14 @@ int main(int argc, char *argv[])
 
     //worm->setZValue(1);
 
-    Girder_View* girder = new Girder_View(0,70);
+    Girder_View* girder = new Girder_View(0,140);
     girder->setZValue(-3);
-    my_game.add_Item(girder,150,200);
+    my_game.add_Item(girder,10,200);
+
+
+    Girder_View* girder2 = new Girder_View(-90,140);
+    girder->setZValue(-3);
+    my_game.add_Item(girder2,10,200);
 
     my_game.getCamera()->addItemToFollow(worm);
 
@@ -67,6 +73,12 @@ int main(int argc, char *argv[])
 
     EventHandler *filter = new EventHandler(&a,&my_game);
     a.installEventFilter(filter);
+
+//convertir float a int con redondeo
+    float x = 4.44444;
+    int32_t asd;
+    asd = (int32_t)(x+0.5);
+    qDebug()<<"valor de a:"<<asd;
 
 
 

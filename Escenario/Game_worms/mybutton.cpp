@@ -2,6 +2,5 @@
 
 MyButton::MyButton()
 {
-
 }
 
