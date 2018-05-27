@@ -8,6 +8,9 @@
 #include <thread>
 #include <string>
 
+#include "girder.h"
+#include "worm.h"
+
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
  : stage(1.0/60.0, 6, 2, *this) 
  , players(std::move(players)) {
@@ -23,6 +26,15 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
 
 void Game::start_game() {
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
+
+	//Wait ten seconds
+	printf("Start the world\n");
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+
+	printf("End of world\n");
+
+	this->stage.stop_drawing();
 }
 
 void Game::initialize_players() {
@@ -37,7 +49,74 @@ void Game::initialize_players() {
 	//this->players.start();
 }
 
+void Game::create_test_world() {
+	//Let's create 2 worms
+
+	Worm worm1(this->stage
+		, 1 //Set player's one id (Useless)
+		, 5 //5 x right
+		, 10 // 10 y up
+		, 0.0 // Angle 0 -> Facing right
+		, 1 //Long 2m long
+		, 1 //Height 2m height
+		, 0.0 //Bouncing null
+		, 100.0 //100 hp
+		, 2.0 //Mov speeed
+		, std::make_pair (10.0,20.0) //Forw jump
+		, std::make_pair (10.0,20.0) //Back jump
+		, 10.0); //Max fall damage
+
+	Worm worm2(this->stage
+		, 1 //Set player's one id (Useless)
+		, 10 //10 x right
+		, 20 // 20 y up
+		, 0.0 // Angle 0 -> Facing right
+		, 1 //Long 2m long
+		, 1 //Height 2m height
+		, 0.0 //Bouncing null
+		, 100.0 //100 hp
+		, 2.0 //Mov speeed
+		, std::make_pair (10.0,20.0) //Forw jump
+		, std::make_pair (10.0,20.0) //Back jump
+		, 10.0); //Max fall damage	
+
+	this->worms.push_back(std::move(worm1));
+	this->worms.push_back(std::move(worm2));
+
+	//Set 2 worms to player 1
+	this->players[0].attach_worm(this->worms[0]);
+	this->players[0].attach_worm(this->worms[1]);
+
+
+	//Create 3 girders
+	Girder girder1(this->stage
+		, 0
+		, 0
+		, 0.0
+		, 20
+		, 1);
+
+	Girder girder2(this->stage
+		, -5
+		, 0
+		, b2_pi //Vertical
+		, 20
+		, 1);
+
+	Girder girder3(this->stage
+		, 20
+		, 0
+		, b2_pi
+		, 20
+		, 1);	
+
+	this->girders.push_back(std::move(girder1));		
+	this->girders.push_back(std::move(girder2));	
+	this->girders.push_back(std::move(girder3));			
+}
+
 void Game::initialize_game(const std::string& stage_file) {
+	this->create_test_world();
 	//First, create every object in the stage
 
 	//Read stage and create ubicables
@@ -67,7 +146,7 @@ void Game::initialize_game(const std::string& stage_file) {
 		for (; j < worms_per_player*(i+1); j++) {
 			Worm& worm = worms_to_attach[j];
 			worm.add_health(EXTRA_HEALTH);
-			this->players[i].attach_worm(worm.get_id(), std::move(worm));
+			this->players[i].attach_worm(std::move(worm));
 		}
 	}
 
@@ -75,7 +154,7 @@ void Game::initialize_game(const std::string& stage_file) {
 	for (; i < cant_players; i++) {
 		for (; j < worms_to_attach*(i+1)+1; j++) {
 			Worm& worm = worms_to_attach[j];
-			this->players[i].attach_worm(worm.get_id(), std::move(worm));
+			this->players[i].attach_worm(std::move(worm));
 		}		
 	}
 

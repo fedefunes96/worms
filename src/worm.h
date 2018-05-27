@@ -46,7 +46,7 @@ public:
 		, const int id
 		, const int x
 		, const int y
-		, const int angle_rad
+		, const float angle_rad
 		, const int longitude
 		, const int height
 		, const float restitution

@@ -19,7 +19,7 @@ public:
 	Girder(Stage& stage
 		, const int x
 		, const int y
-		, const int angle
+		, const float angle
 		, const int longitude
 		, const int height);
 

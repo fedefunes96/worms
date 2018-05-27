@@ -24,7 +24,7 @@ public:
 	Throwable(Stage& stage
 	, const int x
 	, const int y
-	, const int angle_rad
+	, const float angle_rad
 	, const b2Vec2& velocity
 	, const float angular_velocity
 	, const float radius

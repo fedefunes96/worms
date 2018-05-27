@@ -17,7 +17,7 @@ Stage::Stage(const float32 time_step
 	, game(game) {
 
 	this->world.SetContactListener(&this->contact_listener);
-	this->game_over = false;
+	//this->game_over = false;
 	this->something_moving = false;
 	//Create stage by parameter
 }
@@ -47,8 +47,10 @@ b2Body* Stage::insert(b2BodyDef* body_def) {
 
 void Stage::draw() {
 	this->pre_initialize();
+	this->continue_drawing = true;
 
-	//while(!this->game_over) {
+
+	while(this->continue_drawing) {
 
 		int cant_objects_moving = 0;
 
@@ -93,7 +95,7 @@ void Stage::draw() {
 			this->time_step
 			, this->velocity_iterations
 			, this->position_iterations);		
-	//}
+	}
 }
 
 bool Stage::is_something_moving() {
@@ -107,13 +109,14 @@ void Stage::pre_initialize() {
  	for ( b2Body* b = this->world.GetBodyList(); b; b = b->GetNext()) {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
- 		
+
  		this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
   	}
 }
 
 void Stage::stop_drawing() {
-	this->game_over = true;
+	//Need mutex type(4)
+	this->continue_drawing = false;
 }
 
 b2World& Stage::get_world() {
@@ -141,6 +144,6 @@ b2World& Stage::get_world() {
 }*/
 
 Stage::~Stage() {
-	this->game_over=true;
+	//this->game_over=true;
 	//t_world.join();
 }

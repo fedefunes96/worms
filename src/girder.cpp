@@ -5,7 +5,7 @@
 
 int Girder::id_girders = 0;
 
-Girder::Girder(Stage& stage, const int x, const int y, const int angle_rad
+Girder::Girder(Stage& stage, const int x, const int y, const float angle_rad
 , const int longitude, const int height) : stage(stage), id_obj(id_girders++) {
 	b2BodyDef body_def;
 	b2PolygonShape body_shape;

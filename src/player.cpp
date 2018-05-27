@@ -134,8 +134,8 @@ void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) 
 	this->protocol.sendPosition(id_type, id_obj, posX, posY, angle_int);
 }
 
-void Player::attach_worm(int id, Worm& worm) {
-	this->protocol.sendWormId((char) id, worm.get_health());
+void Player::attach_worm(Worm& worm) {
+	this->protocol.sendWormId((char) worm.get_id(), worm.get_health());
 }
 
 void Player::attach_usable(int id, std::unique_ptr<Usable>& usable) {

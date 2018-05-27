@@ -22,7 +22,7 @@ public:
 	void play();
 	bool lost();
 
-	void attach_worm(int id, Worm& worm);
+	void attach_worm(Worm& worm);
 	void attach_usable(int id, std::unique_ptr<Usable>& usable);
 
 	void notify_actual_player(int id);

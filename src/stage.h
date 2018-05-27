@@ -25,7 +25,7 @@ private:
 
 	std::vector<b2Body*> to_remove;
 
-	bool game_over;
+	bool continue_drawing;
 	bool something_moving;
 
 	void remove_deads();

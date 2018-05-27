@@ -8,9 +8,11 @@
 #include <thread>
 #include <string>
 #include "ubicable.h"
-/*#include "girder.h"
+
+
+#include "girder.h"
 #include "worm.h"
-#include "throwable.h"*/
+#include "throwable.h"
 
 class Stage;
 
@@ -24,7 +26,10 @@ class Game : public Thread {
 private:
 	Stage stage;
 	std::vector<Player> players;
-	std::vector<Ubicable> ubicables;
+	std::vector<std::unique_ptr<Ubicable>> ubicables;
+
+	std::vector<Worm> worms;
+	std::vector<Girder> girders;
 
 	int id_actual_player;
 	std::thread stage_t;
@@ -43,6 +48,9 @@ private:
 	void start_game();
 
 	void notify_actual_player(const int id);
+
+
+	void create_test_world();
 public:
 	Game(const std::string& stage_file, std::vector<Player> players);
 	~Game();
