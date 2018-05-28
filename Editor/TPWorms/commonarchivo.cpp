@@ -39,3 +39,8 @@ void commonArchivo::operator<<(std::string &buf)
 {
     this->fs<<buf;
 }
+
+void commonArchivo::operator<<(const char *buf)
+{
+    this->fs<<buf;
+}

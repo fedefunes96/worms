@@ -25,6 +25,8 @@ public:
     bool eof();
 
     void operator<<(std::string &buf);
+
+    void operator<<(const char *buf);
 };
 
 

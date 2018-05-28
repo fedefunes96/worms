@@ -10,8 +10,9 @@ private:
 
 public:
     editorWorm();
-    editorWorm(int posX, int posY, int vida);
+    editorWorm(int posX, int posY);
     int getVida();
+    void setVida(int vida);
 };
 
 #endif

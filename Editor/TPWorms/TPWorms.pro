@@ -22,6 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+LIBS += -lyaml-cpp
 
 SOURCES += \
         main.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
     editor_viga_view.cpp \
     celda.cpp \
     commonarchivo.cpp \
-    commonparser.cpp
+    commonparser.cpp \
+    editorBacgroun.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,9 +52,11 @@ HEADERS += \
     editor_viga_view.h \
     celda.h \
     commonarchivo.h \
-    commonparser.h
+    commonparser.h \
+    editorBacgroun.h
 
 FORMS += \
         mainwindow.ui \
     editorpantalla.ui \
-    editorseleccionarmasherramientas.ui
+    editorseleccionarmasherramientas.ui \
+    editorBacgroun.ui

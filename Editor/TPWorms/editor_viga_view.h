@@ -18,6 +18,7 @@ public:
     void rotar();
 
     bool tam();
+
 private:
     bool grande;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

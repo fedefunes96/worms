@@ -20,7 +20,9 @@ public:
     void pasarMap(EditorPantalla*editor, std::map<int, editorUsables> &usables);
 
 private slots:
-    void on_bazooka_clicked();
+
+
+    void on_Bazookka_clicked();
 
     void on_Mortero_clicked();
 
@@ -40,9 +42,13 @@ private slots:
 
     void on_Teletransportador_clicked();
 
+    void on_buttonBox_accepted();
+
 private:
     Ui::editorSeleccionArmasHerramientas *ui;
     EditorPantalla* editor;
+
+    void mensaje_error();
 };
 
 #endif // EDITORSELECCIONARMASHERRAMIENTAS_H

@@ -6,18 +6,20 @@
 #include <editorworm.h>
 #include <editorusables.h>
 #include <iostream>
+#include <yaml-cpp/yaml.h>
 
-#define angle_rad 0
-#define longitudW 1
-#define alto 1
-#define densidad 1
-#define restitucion 0
-#define velocidad 0.2
-#define velocidadSaltoAX 1
-#define velocidadSaltoAY 0.5
-#define velocidadSaltoRX 0.2
-#define velocidadSaltoRY 1.2
-#define alturaSinDanio 2
+#define angle_rad "0"
+#define longitudW "1"
+#define alto "1"
+#define densidad "1"
+#define restitucion "0"
+#define velocidad "0.2"
+#define velocidadSaltoAX "1"
+#define velocidadSaltoAY "0.5"
+#define velocidadSaltoRX "0.2"
+#define velocidadSaltoRY "1.2"
+#define alturaSinDanio "2"
+#define alturaGirder "0.8"
 #define pi 3.141592
 
 
@@ -30,154 +32,109 @@ commonParser::commonParser()
 void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usables,
                         std::map<int, editorWorm> &worms, std::map<int, editorViga> &vigas)
 {
-    commonArchivo archivo = commonArchivo(nombre, std::fstream::out);
+    YAML::Emitter out;
+    out << YAML::BeginMap;
+    out <<YAML::Key<<"Worm";
+    out <<YAML::BeginSeq;
     for (auto &worm : worms){
-        saveWorm(archivo, worm.second);
+        out <<YAML::Flow;
+        out << YAML::BeginSeq;
+        out << std::to_string(worm.second.getX());
+        out << std::to_string(worm.second.getY());
+        out << angle_rad;
+        out << longitudW;
+        out << alto;
+        out <<restitucion;
+        out << std::to_string(worm.second.getVida());
+        out << velocidad;
+        out << velocidadSaltoAX;
+        out <<velocidadSaltoAY;
+        out << velocidadSaltoRX;
+        out <<velocidadSaltoRY;
+        out<<alturaSinDanio;
+        out <<YAML::EndSeq;
     }
+    out <<YAML::EndSeq;
 
+    out <<YAML::Key<<"Girder";
+    out <<YAML::BeginSeq;
     for (auto &viga : vigas){
-        saveViga(archivo, viga.second);
+        out<<YAML::Flow;
+        out<<YAML::BeginSeq;
+        out<<std::to_string(viga.second.getX());
+        out<<std::to_string(viga.second.getY());
+        out<<viga.second.get_angulo();
+        out<<std::to_string(viga.second.get_tam());
+        out<<alturaGirder;
+        out<<YAML::EndSeq;
     }
+    out <<YAML::EndSeq;
 
+    out<<YAML::Key<<"Usable";
+    out<<YAML::BeginSeq;
     for (auto &usable : usables){
-        saveUsable(archivo,usable.second,usable.first);
+        out<<YAML::Flow;
+        out<<YAML::BeginSeq;
+        out<<std::to_string(usable.first);
+        out<<std::to_string(usable.second.getAmmo());
+        out <<YAML::EndSeq;
     }
+    out <<YAML::EndSeq;
+
+    out <<YAML::EndMap;
+
+
+    commonArchivo archivo = commonArchivo(nombre,std::fstream::out);
+    archivo<<out.c_str();
 }
 
 void commonParser::load(EditorPantalla *editor, std::string &file)
 {
-    commonArchivo archivo = commonArchivo(file, std::fstream::in);
-    while (!archivo.eof()){
-        std::string buf;
-        char c = archivo.leer_caracter();
-        archivo.leer_caracter();
-        if ( c == 'W'){
-           archivo.leer_linea(buf, ' ');
-           buf.clear();
-           archivo.leer_linea(buf, ' ');
-           int x = std::stoi(buf);
-           archivo.leer_linea(buf, ' ');
-           buf.clear();
-           archivo.leer_linea(buf, ' ');
-           int y = std::stoi(buf);
-           buf.clear();
-           archivo.leer_linea(buf, ' ');
-           buf.clear();
-           archivo.leer_linea(buf, ' ');
-           int vida = std::stoi(buf);
-           buf.clear();
-           archivo.leer_linea(buf);
-           editor->agregar_gusano(x,y,vida);
-
-        }
-        if (c == 'V'){
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            int x = std::stoi(buf);
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            int y = std::stoi(buf);
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            float angulo = std::stof(buf);
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            int largo = std::stoi(buf);
-            int id;
-            if (largo == 3){
-                id = editor->agregar_viga_chica(x,y);
-            } else{
-                id = editor->agregar_viga_grande(x,y);
+    try{
+        YAML::Node config = YAML::LoadFile(file);
+        if (config["Worm"]){
+            for (YAML::iterator it = config["Worm"].begin(); it != config["Worm"].end(); ++it){
+                const YAML::Node& worm = *it;
+                int x = worm[0].as<int>();
+                int y = worm[1].as<int>();
+                y = -y;
+                int id = editor->agregar_gusano(x,y);
+                int vida = worm[6].as<int>();
+                editor->setVIdaWorm(id,vida);
             }
-            float ang = 0;
-            while (ang<angulo){
-                ang += 5*pi/180;
-                editor->aumetar_angulo(id);
+        }
+        if (config["Girder"]){
+            for (YAML::iterator it = config["Girder"].begin(); it != config["Girder"].end(); ++it){
+                const YAML::Node& girder = *it;
+                int x = girder[0].as<int>();
+                int y = girder[1].as<int>();
+                y = -y;
+                float angulo = girder[2].as<float>();
+                std::cout<<angulo<<std::endl;
+                int longitud = girder[3].as<int>();
+                int id;
+                if (longitud == 3){
+                    id = editor->agregar_viga_chica(x,y);
+                } else {
+                    id = editor->agregar_viga_grande(x,y);
+                }
+                float anguloActual = 0;
+                while (anguloActual < angulo) {
+                    editor->aumetar_angulo(id);
+                    anguloActual += 5*pi/180;
+                }
             }
-            archivo.leer_linea(buf);
         }
-        if (c == 'U'){
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            int id = std::stoi(buf);
-
-            archivo.leer_linea(buf, ' ');
-            buf.clear();
-            archivo.leer_linea(buf, ' ');
-            int ammo = std::stoi(buf);
-            editor->agregar_arma(id,ammo);
+        if (config["Usable"]){
+             for (YAML::iterator it = config["Usable"].begin(); it != config["Usable"].end(); ++it){
+                 const YAML::Node& usable = *it;
+                 int id = usable[0].as<int>();
+                 int ammo = usable[1].as<int>();
+                 editor->agregar_arma(id,ammo);
+             }
         }
+    } catch(std::exception &e){
+        std::cout<<e.what()<<"\n";
     }
 }
 
-void commonParser::saveWorm(commonArchivo &archivo, editorWorm &worm)
-{
-    std::string buf;
-    buf = "W ";
-    int x = worm.getX();
-    int y = worm.getY();
-    int vida = worm.getVida();
-    buf += "posicionX ";
-    buf += std::to_string(x);
-    buf += " posicionY ";
-    buf += std::to_string(y);
-    buf += " vida ";
-    buf += std::to_string(vida);
-    buf += " angulo ";
-    buf += std::to_string(angle_rad);
-    buf += " longitud ";
-    buf += std::to_string(longitudW);
-    buf += " alto ";
-    buf += std::to_string(alto);
-    buf += " densidad ";
-    buf += std::to_string(densidad);
-    buf += " velocidad ";
-    buf += std::to_string(velocidad);
-    buf += " saltoAciaAdelante ";
-    buf += std::to_string(velocidadSaltoAX);
-    buf += ' ';
-    buf += std::to_string(velocidadSaltoAY);
-    buf += " saltoAciaAtras ";
-    buf += std::to_string(velocidadSaltoRX);
-    buf += ' ';
-    buf += std::to_string(velocidadSaltoRY);
-    buf += " alturaSinDaño ";
-    buf += std::to_string(alturaSinDanio);
-    buf += '\n';
-    archivo<<buf;
-}
-
-void commonParser::saveViga(commonArchivo &archivo,editorViga& viga)
-{
-    std::string buf;
-    buf = "V ";
-    buf += "posicionX ";
-    buf += std::to_string(viga.getX());
-    buf += " posicionY ";
-    buf += std::to_string(viga.getY());
-    buf += " angulo ";
-    buf += std::to_string(viga.get_angulo());
-    buf += " longitud ";
-    buf += std::to_string(viga.get_tam());
-    buf += " alto ";
-    buf += std::to_string(alto);
-    buf += '\n';
-    archivo<<buf;
-}
-
-void commonParser::saveUsable(commonArchivo &archivo, editorUsables &usable, int id)
-{
-    std::string buf;
-    buf = "U ";
-    buf += "id ";
-    buf += std::to_string(id);
-    buf += " ammo ";
-    buf += std::to_string(usable.getAmmo());
-    buf += '\n';
-    archivo<<buf;
-}

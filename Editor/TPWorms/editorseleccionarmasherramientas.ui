@@ -6,612 +6,368 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1156</width>
-    <height>585</height>
+    <width>1201</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>770</x>
-     <y>510</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="Bazooka">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>110</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bazooka</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>350</x>
-     <y>110</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Mortero</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>620</x>
-     <y>110</y>
-     <width>111</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Granada Verde</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>980</x>
-     <y>110</y>
-     <width>91</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Granada Roja</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>310</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Banana</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>310</y>
-     <width>101</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Granada Santa</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>650</x>
-     <y>310</y>
-     <width>67</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Dinamita</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>980</x>
-     <y>320</y>
-     <width>121</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bate de Baseball</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_8">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>480</y>
-     <width>101</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Ataque Aereo</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_9">
-   <property name="geometry">
-    <rect>
-     <x>366</x>
-     <y>480</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Teletransportacion</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionBazooka">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>130</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionMortero">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>130</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionGranadaV">
-   <property name="geometry">
-    <rect>
-     <x>600</x>
-     <y>130</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionGranadaR">
-   <property name="geometry">
-    <rect>
-     <x>950</x>
-     <y>130</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionBanana">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>330</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionGranadaS">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>330</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionDinamita">
-   <property name="geometry">
-    <rect>
-     <x>610</x>
-     <y>330</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionBate">
-   <property name="geometry">
-    <rect>
-     <x>960</x>
-     <y>340</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municiobnaereo">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>500</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="municionTeletransportador">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>500</y>
-     <width>41</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="maxLength">
-    <number>3</number>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="bazooka">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>130</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Mortero">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>130</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="GranadaV">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>130</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="GranadaR">
-   <property name="geometry">
-    <rect>
-     <x>1010</x>
-     <y>130</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Banana">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>330</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="GranadaS">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>330</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Dinamita">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>330</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Bate">
-   <property name="geometry">
-    <rect>
-     <x>1010</x>
-     <y>340</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Aereo">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>500</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="Teletransportador">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>500</y>
-     <width>89</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Selecionar</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>30</y>
-     <width>91</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Bazooka.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>320</x>
-     <y>40</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Mortar1.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_12">
-   <property name="geometry">
-    <rect>
-     <x>620</x>
-     <y>30</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>W4_Grenade.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_13">
-   <property name="geometry">
-    <rect>
-     <x>966</x>
-     <y>36</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Redgrenade.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_14">
-   <property name="geometry">
-    <rect>
-     <x>56</x>
-     <y>236</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Bananabomb.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_15">
-   <property name="geometry">
-    <rect>
-     <x>346</x>
-     <y>236</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Holy_Grenade.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_16">
-   <property name="geometry">
-    <rect>
-     <x>616</x>
-     <y>246</y>
-     <width>101</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>W4_Dynamite.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_17">
-   <property name="geometry">
-    <rect>
-     <x>976</x>
-     <y>246</y>
-     <width>101</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>Baseballbat.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_18">
-   <property name="geometry">
-    <rect>
-     <x>56</x>
-     <y>406</y>
-     <width>91</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>W4_Airstrike.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_19">
-   <property name="geometry">
-    <rect>
-     <x>366</x>
-     <y>406</y>
-     <width>111</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap>IconTeleport.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="5" column="8">
+    <widget class="QLineEdit" name="municionDinamita">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="10">
+    <widget class="QLineEdit" name="municionGranadaR">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="5">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Teletransportacion</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="8">
+    <widget class="QLabel" name="dinamita">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>W4_Dynamite.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="10">
+    <widget class="QLabel" name="granadaR">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Redgrenade.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="8">
+    <widget class="QLabel" name="granadaV">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>W4_Grenade.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Mortero</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLineEdit" name="municionBanana">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <widget class="QLineEdit" name="municionAereo">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="10">
+    <widget class="QLabel" name="bate">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Baseballbat.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="4">
+    <widget class="QLineEdit" name="municionTeletransportador">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLineEdit" name="municionBazooka">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="aereo">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>W4_Airstrike.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="5">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Granada Santa</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Banana</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="8">
+    <widget class="QLineEdit" name="municionGranadaV">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="9">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Dinamita</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="4">
+    <widget class="QLineEdit" name="municionGranadaS">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="banana">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Bananabomb.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="10">
+    <widget class="QLineEdit" name="municionBate">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Ataque Aereo</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="10" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="Bazooka">
+     <property name="text">
+      <string>Bazooka</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="9">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Granada Verde</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="11">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Granada Roja</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="11">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Bate de Baseball</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4">
+    <widget class="QLineEdit" name="municionMortero">
+     <property name="maxLength">
+      <number>3</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="mortero">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Mortar1.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4">
+    <widget class="QLabel" name="tele">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>IconTeleport.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QLabel" name="granadaS">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Holy_Grenade.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="bazooka_2">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>Bazooka.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QCheckBox" name="Bazookka">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <widget class="QCheckBox" name="Mortero">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="9">
+    <widget class="QCheckBox" name="GranadaV">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="11">
+    <widget class="QCheckBox" name="GranadaR">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QCheckBox" name="Banana">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="5">
+    <widget class="QCheckBox" name="GranadaS">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="9">
+    <widget class="QCheckBox" name="Dinamita">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="11">
+    <widget class="QCheckBox" name="Bate">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QCheckBox" name="Aereo">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="5">
+    <widget class="QCheckBox" name="Teletransportador">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

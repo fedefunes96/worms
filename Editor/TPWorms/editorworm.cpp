@@ -5,14 +5,18 @@ editorWorm::editorWorm()
 
 }
 
-editorWorm::editorWorm(int posX, int posY, int vida)
+editorWorm::editorWorm(int posX, int posY)
 {
     this->posX = posX;
     this->posY = posY;
-    this->vida = vida;
 }
 
 int editorWorm::getVida()
 {
     return vida;
+}
+
+void editorWorm::setVida(int vida)
+{
+    this->vida = vida;
 }

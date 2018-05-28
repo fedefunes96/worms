@@ -4,12 +4,34 @@
 #include <editorusables.h>
 #include <string>
 #include <QMessageBox>
+#include <iostream>
 
 editorSeleccionArmasHerramientas::editorSeleccionArmasHerramientas(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::editorSeleccionArmasHerramientas)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Seleccion de armas y herramientas");
+    QPixmap bazooka = QPixmap("../imagenes/Bazooka.png");
+    QPixmap mortero = QPixmap("../imagenes/Mortar.png");
+    QPixmap granadaV = QPixmap("../imagenes/W4_Grenade.png");
+    QPixmap granadaR = QPixmap("../imagenes/Redgrenade.png");
+    QPixmap banana = QPixmap("../imagenes/Bananabomb.png");
+    QPixmap granadaS = QPixmap("../imagenes/Holy_Grenade.png");
+    QPixmap dinamita = QPixmap("../imagenes/W4_Dynamite.png");
+    QPixmap bate = QPixmap("../imagenes/Baseballbat.png");
+    QPixmap aereo = QPixmap("../imagenes/W4_Airstrike.png");
+    QPixmap tele = QPixmap("../imagenes/IconTeleport.png");
+    ui->bazooka_2->setPixmap(bazooka);
+    ui->mortero->setPixmap(mortero);
+    ui->granadaV->setPixmap(granadaV);
+    ui->granadaR->setPixmap(granadaR);
+    ui->banana->setPixmap(banana);
+    ui->granadaS->setPixmap(granadaS);
+    ui->dinamita->setPixmap(dinamita);
+    ui->bate->setPixmap(bate);
+    ui->aereo->setPixmap(aereo);
+    ui->tele->setPixmap(tele);
 }
 
 editorSeleccionArmasHerramientas::~editorSeleccionArmasHerramientas()
@@ -21,174 +43,207 @@ void editorSeleccionArmasHerramientas::pasarMap(EditorPantalla *editor, std::map
     this->editor = editor;
     for (auto item : usables){
         if (item.first == 1){
-            this->ui->bazooka->setText("Sacar");
+            ui->Bazookka->setChecked(true);
         }
         if (item.first == 2){
-            this->ui->Mortero->setText("Sacar");
+            ui->Mortero->setChecked(true);
         }
         if (item.first == 3){
-            this->ui->GranadaV->setText("Sacar");
+            ui->GranadaV->setChecked(true);
         }
         if (item.first == 4){
-             this->ui->GranadaR->setText("Sacar");
+            ui->GranadaR->setChecked(true);
         }
         if (item.first == 5){
-            this->ui->Banana->setText("Sacar");
+            ui->Banana->setChecked(true);
         }
         if (item.first == 6){
-            this->ui->GranadaS->setText("Sacar");
+            ui->GranadaS->setChecked(true);
         }
         if (item.first == 7){
-            this->ui->Dinamita->setText("Sacar");
+            ui->Dinamita->setChecked(true);
         }
         if (item.first == 8){
-            this->ui->Bate->setText("Sacar");
+            ui->Bate->setChecked(true);
         }
         if (item.first == 9){
-            this->ui->Aereo->setText("Sacar");
+            ui->Aereo->setChecked(true);
         }
         if (item.first == 10){
-            this->ui->Teletransportador->setText("Sacar");
+            ui->Teletransportador->setChecked(true);
         }
     }
 }
 
-void editorSeleccionArmasHerramientas::on_bazooka_clicked()
+
+void editorSeleccionArmasHerramientas::on_Bazookka_clicked()
 {
-    int municion = ui->municionBazooka->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(1,municion)){
-            ui->bazooka->setText("Selecionar");
-        } else {
-            ui->bazooka->setText("Sacar");
+    if (ui->Bazookka->checkState() == Qt::Checked){
+        int municion = ui->municionBazooka->text().toInt();
+        if (municion == 0){
+            ui->Bazookka->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Mortero_clicked()
 {
-    int municion = ui->municionMortero->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(2,municion)){
-            ui->Mortero->setText("Selecionar");
-        } else {
-            ui->Mortero->setText("Sacar");
+    if (ui->Mortero->checkState() == Qt::Checked){
+        int municion = ui->municionMortero->text().toInt();
+        if (municion == 0){
+            ui->Mortero->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_GranadaV_clicked()
 {
-    int municion = ui->municionGranadaV->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(3,municion)){
-            ui->GranadaV->setText("Selecionar");
-        } else {
-            ui->GranadaV->setText("Sacar");
+    if (ui->GranadaV->checkState() == Qt::Checked){
+        int municion = ui->municionGranadaV->text().toInt();
+        if (municion == 0){
+            ui->GranadaV->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_GranadaR_clicked()
 {
-    int municion = ui->municionGranadaR->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(4,municion)){
-            ui->GranadaR->setText("Selecionar");
-        } else {
-            ui->GranadaR->setText("Sacar");
+    if (ui->GranadaR->checkState() == Qt::Checked){
+        int municion = ui->municionGranadaR->text().toInt();
+        if (municion == 0){
+            ui->GranadaR->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Banana_clicked()
 {
-    int municion = ui->municionBanana->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(5,municion)){
-            ui->Banana->setText("Selecionar");
-        } else {
-            ui->Banana->setText("Sacar");
+    if (ui->Banana->checkState() == Qt::Checked){
+        int municion = ui->municionBanana->text().toInt();
+        if (municion == 0){
+            ui->Banana->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_GranadaS_clicked()
 {
-    int municion = ui->municionGranadaS->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(6,municion)){
-        ui->GranadaS->setText("Selecionar");
-        } else {
-        ui->GranadaS->setText("Sacar");
+    if (ui->GranadaS->checkState() == Qt::Checked){
+        int municion = ui->municionGranadaS->text().toInt();
+        if (municion == 0){
+            ui->GranadaS->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Dinamita_clicked()
 {
-    int municion = ui->municionDinamita->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(7,municion)){
-            ui->Dinamita->setText("Selecionar");
-        } else {
-            ui->Dinamita->setText("Sacar");
+    if (ui->Dinamita->checkState() == Qt::Checked){
+        int municion = ui->municionDinamita->text().toInt();
+        if (municion == 0){
+            ui->Dinamita->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Bate_clicked()
 {
-    int municion = ui->municionBate->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(8,municion)){
-            ui->Bate->setText("Selecionar");
-        } else {
-            ui->Bate->setText("Sacar");
+    if (ui->Dinamita->checkState() == Qt::Checked){
+        int municion = ui->municionBate->text().toInt();
+        if (municion == 0){
+            ui->Bate->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Aereo_clicked()
 {
-    int municion = ui->municiobnaereo->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(9,municion)){
-            ui->Aereo->setText("Selecionar");
-        } else {
-            ui->Aereo->setText("Sacar");
+    if (ui->Aereo->checkState() == Qt::Checked){
+        int municion = ui->municionAereo->text().toInt();
+        if (municion == 0){
+            ui->Aereo->setChecked(false);
+            mensaje_error();
         }
     }
 }
 
 void editorSeleccionArmasHerramientas::on_Teletransportador_clicked()
 {
-    int municion = ui->municionTeletransportador->text().toInt();
-    if (municion == 0){
-        QMessageBox::information(this, tr("Error"), tr("municion invalida"));
-    } else{
-        if (editor->agregar_arma(10,municion)){
-            ui->Teletransportador->setText("Selecionar");
-        } else {
-            ui->Teletransportador->setText("Sacar");
+    if (ui->Teletransportador->checkState() == Qt::Checked){
+        int municion = ui->municionTeletransportador->text().toInt();
+        if (municion == 0){
+            ui->Teletransportador->setChecked(false);
+            mensaje_error();
         }
     }
 }
+
+void editorSeleccionArmasHerramientas::on_buttonBox_accepted()
+{
+    if (ui->Bazookka->checkState() == Qt::Unchecked){
+        editor->remove_weapon(1);
+    } else {
+        editor->agregar_arma(1,ui->municionBazooka->text().toInt());
+    }
+    if (ui->Mortero->checkState() == Qt::Unchecked){
+        editor->remove_weapon(2);
+    } else {
+        editor->agregar_arma(2,ui->municionMortero->text().toInt());
+    }
+    if (ui->GranadaV->checkState() == Qt::Unchecked){
+        editor->remove_weapon(3);
+    } else {
+        editor->agregar_arma(3,ui->municionGranadaV->text().toInt());
+    }
+    if (ui->GranadaR->checkState() == Qt::Unchecked){
+        editor->remove_weapon(4);
+    } else {
+        editor->agregar_arma(4,ui->municionGranadaR->text().toInt());
+    }
+    if (ui->Banana->checkState() == Qt::Unchecked){
+        editor->remove_weapon(5);
+    } else {
+        editor->agregar_arma(5,ui->municionBanana->text().toInt());
+    }
+    if (ui->GranadaS->checkState() == Qt::Unchecked){
+        editor->remove_weapon(6);
+    } else{
+        editor->agregar_arma(6,ui->municionGranadaS->text().toInt());
+    }
+    if (ui->Dinamita->checkState() == Qt::Unchecked){
+        editor->remove_weapon(7);
+    } else {
+        editor->agregar_arma(7,ui->municionDinamita->text().toInt());
+    }
+    if (ui->Bate->checkState() == Qt::Unchecked){
+        editor->remove_weapon(8);
+    } else {
+        editor->agregar_arma(8,ui->municionBate->text().toInt());
+    }
+    if (ui->Aereo->checkState() == Qt::Unchecked){
+        editor->remove_weapon(9);
+    } else {
+        editor->agregar_arma(9,ui->municionAereo->text().toInt());
+    }
+    if (ui->Teletransportador->checkState() == Qt::Unchecked){
+        editor->remove_weapon(10);
+    } else {
+        editor->agregar_arma(10,ui->municionTeletransportador->text().toInt());
+    }
+    editor->loadWeapons();
+}
+
+void editorSeleccionArmasHerramientas::mensaje_error()
+{
+    QMessageBox::information(this,tr("Error"),tr("Munivion invalida."));
+}
+
+

@@ -4,7 +4,7 @@ editor_viga_view::editor_viga_view(QObject* parent):
      QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("/home/santiago/Documentos/Taller 1/TPWorms/viga.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap("../imagenes/viga.png"); // Load the sprite image QPixmap
 }
 
 void editor_viga_view::esGrande(bool si)

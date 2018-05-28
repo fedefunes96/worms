@@ -13,6 +13,8 @@
 #include "editorworm.h"
 #include "editorviga.h"
 #include "celda.h"
+#include <QDropEvent>
+#include <vector>
 
 namespace Ui {
 class EditorPantalla;
@@ -29,15 +31,21 @@ public:
 
     void fileName(QString name);
 
-    void agregar_gusano(int x, int y, int vida);
+    int agregar_gusano(int x, int y);
+
+    void setVIdaWorm(int id, int vida);
 
     int agregar_viga_grande(int x, int y);
 
     int agregar_viga_chica(int x, int y);
 
-    bool agregar_arma(int id, int municion);
+    void agregar_arma(int id, int municion);
+
+    void remove_weapon(int id);
 
     void aumetar_angulo(int id);
+
+    void loadWeapons();
 
 private slots:
 
@@ -63,6 +71,11 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_ok_clicked();
+
+
+    void on_pushButton_3_clicked();
+
 private:
     std::map<int, QGraphicsItem*> items;
     celda celdas[100][40];
@@ -70,11 +83,15 @@ private:
     std::map<int,editorUsables>usables;
     std::map<int, editorWorm> worms;
     std::map<int, editorViga> vigas;
+
     int id;
     int estado;
     QGraphicsScene * scene;
     int current_id;
     QString nombre;
+    int xscene;
+    int yscene;
+    std::vector<QPixmap*> armas;
 
     void load();
 };
