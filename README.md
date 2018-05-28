@@ -1,4 +1,4 @@
-# Tareas
+﻿# Tareas
 - Modelo servidor
 - 1) Hacer explosiones más realistas y calculo de daños
 - 2) Cambiar proyectiles cuadrados a circulares
@@ -25,3 +25,10 @@
 -7) Interfaz conexion servidor
 -8) Documentacion
 -9) Testings
+
+-Cliente editor
+	1) Finalizar creador de ecenarios
+	2) Implementar sistema de sonido y musica (ya esta solo hay que agregarlo al cliente)
+	3) Creacion de Escenarios de prueba y preparacion de la demo
+	4) Pantallas de victoria y derrota
+	5) Testing
