@@ -1,14 +1,14 @@
 #ifndef THROWABLE_H
 #define THROWABLE_H
 
-#include "ubicable.h"
+#include "movable.h"
 #include "stage.h"
 #include <Box2D/Box2D.h>
 #include <string>
 
 #define THROWABLE_TYPE "Throwable"
 
-class Throwable : public Ubicable {
+class Throwable : public Movable {
 private:
 	Stage& stage;
 	b2Body* body;
@@ -34,11 +34,15 @@ public:
 	virtual std::string get_type() override;
 	virtual int get_id() override;
 	virtual void delete_myself() override;
-	virtual void start_contacting(Ubicable* ubicable) override;
+	//virtual void start_contacting(Ubicable* ubicable) override;
+	virtual void start_contacting() override;
+	virtual void stop_contacting() override;
 
-	virtual void colision(Girder& girder) override;
+	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
-	virtual void colision(Throwable& throwable) override;	
+	virtual void colision(Throwable& throwable) override;	*/
+
+	virtual void move_step() override;
 };
 
 #endif

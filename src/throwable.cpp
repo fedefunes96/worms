@@ -1,5 +1,5 @@
 #include "throwable.h"
-#include "ubicable.h"
+#include "movable.h"
 #include <Box2D/Box2D.h>
 #include "stage.h"
 #include <cmath>
@@ -64,12 +64,20 @@ void Throwable::delete_myself() {
 	this->stage.remove(this->body);
 }
 
-void Throwable::start_contacting(Ubicable* ubicable) {
+/*void Throwable::start_contacting(Ubicable* ubicable) {
 	ubicable->colision(*this);
+}*/
+//Whatever i hit, i must explode
+void Throwable::start_contacting() {
+	this->explode();
+}
+
+void Throwable::stop_contacting() {
+	//Do nothing
 }
 
 //Whatever i hit, i must explode
-void Throwable::colision(Girder& girder) {
+/*void Throwable::colision(Girder& girder) {
 	this->explode();
 }
 
@@ -79,8 +87,12 @@ void Throwable::colision(Worm& worm) {
 
 void Throwable::colision(Throwable& throwable) {
 	this->explode();
-}
+}*/
 
 int Throwable::get_id() {
 	return this->id_obj;
+}
+
+void Throwable::move_step() {
+	//Do nothing, using impulses
 }

@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <thread>
 #include <string>
+#include "water.h"
+#include <memory>
 
 #include "girder.h"
 #include "worm.h"
@@ -51,22 +53,7 @@ void Game::initialize_players() {
 
 void Game::create_test_world() {
 	//Let's create 2 worms
-
-	Worm worm1(this->stage
-		, 1 //Set player's one id (Useless)
-		, 5 //5 x right
-		, 10 // 10 y up
-		, 0.0 // Angle 0 -> Facing right
-		, 1 //Long 2m long
-		, 1 //Height 2m height
-		, 0.0 //Bouncing null
-		, 100.0 //100 hp
-		, 2.0 //Mov speeed
-		, std::make_pair (10.0,20.0) //Forw jump
-		, std::make_pair (10.0,20.0) //Back jump
-		, 10.0); //Max fall damage
-
-	Worm worm2(this->stage
+	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
 		, 1 //Set player's one id (Useless)
 		, 10 //10 x right
 		, 20 // 20 y up
@@ -78,41 +65,50 @@ void Game::create_test_world() {
 		, 2.0 //Mov speeed
 		, std::make_pair (10.0,20.0) //Forw jump
 		, std::make_pair (10.0,20.0) //Back jump
-		, 10.0); //Max fall damage	
+		, 10.0))); //Max fall damage)));
 
-	this->worms.push_back(std::move(worm1));
-	this->worms.push_back(std::move(worm2));
+	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
+		, 1 //Set player's one id (Useless)
+		, 5 //5 x right
+		, 10 // 10 y up
+		, 0.0 // Angle 0 -> Facing right
+		, 1 //Long 2m long
+		, 1 //Height 2m height
+		, 0.0 //Bouncing null
+		, 100.0 //100 hp
+		, 2.0 //Mov speeed
+		, std::make_pair (10.0,20.0) //Forw jump
+		, std::make_pair (10.0,20.0) //Back jump
+		, 10.0))); //Max fall damage)));
 
-	//Set 2 worms to player 1
 	this->players[0].attach_worm(this->worms[0]);
 	this->players[0].attach_worm(this->worms[1]);
 
-
 	//Create 3 girders
-	Girder girder1(this->stage
-		, 0
-		, 0
-		, 0.0
-		, 20
-		, 1);
 
-	Girder girder2(this->stage
+	this->girders.push_back(
+	std::unique_ptr<Girder>(new Girder(this->stage
 		, -5
 		, 0
 		, b2_pi //Vertical
 		, 20
-		, 1);
+		, 1)));
 
-	Girder girder3(this->stage
+	this->girders.push_back(
+	std::unique_ptr<Girder>(new Girder(this->stage
 		, 20
 		, 0
 		, b2_pi
 		, 20
-		, 1);	
+		, 1)));
 
-	this->girders.push_back(std::move(girder1));		
-	this->girders.push_back(std::move(girder2));	
-	this->girders.push_back(std::move(girder3));			
+	this->girders.push_back(
+	std::unique_ptr<Girder>(new Girder(this->stage
+		, 0
+		, 0
+		, 0.0
+		, 20
+		, 1)));
 }
 
 void Game::initialize_game(const std::string& stage_file) {
@@ -265,6 +261,10 @@ void Game::notify_removal(Ubicable* ubicable) {
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_removal(ubicable);
 	}
+}
+
+float Game::get_water_level() {
+	return this->water.get_water_level();
 }
 
 Game::~Game() {

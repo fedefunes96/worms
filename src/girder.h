@@ -25,12 +25,16 @@ public:
 
 	virtual std::string get_type() override;
 	virtual void delete_myself() override;
-	virtual void start_contacting(Ubicable* ubicable) override;
+	//virtual void start_contacting(Ubicable* ubicable) override;
+	virtual void start_contacting() override;
+	virtual void stop_contacting() override;
 
-	virtual void colision(Girder& girder) override;
+	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
-	virtual void colision(Throwable& throwable) override;
+	virtual void colision(Throwable& throwable) override;*/
 	virtual int get_id() override;
+
+	//Girder(Girder&&);
 };
 
 #endif

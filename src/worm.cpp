@@ -1,10 +1,11 @@
 #include "worm.h"
 #include <vector>
 #include <utility>
-#include "ubicable.h"
+#include "movable.h"
 #include "stage.h"
 #include <Box2D/Box2D.h>
 #include <string>
+#include "sensor.h"
 
 int Worm::id_worms = 0;
 
@@ -51,8 +52,16 @@ Worm::Worm(Stage& stage
 	this->fixture = this->body->CreateFixture(&fixture_def);		
 	this->fixture->SetUserData(this);
 
+	//Set a sensor at the floor of the body
+	//Barely showing
+	this->sensor_for_jump.add_at_position(this->body
+										, b2Vec2(0, -height*0.85)
+										, longitude
+										, height*0.1);
+
 	this->actual_health = health;
 	this->facing_direction = NONE;
+	this->actual_velocity.Set(0, 0);
 }
 
 void Worm::receive_dmg(int damage) {
@@ -73,55 +82,44 @@ void Worm::add_health(int health) {
 }
 
 void Worm::start_moving(MoveDirection mdirect) {
-	if (this->facing_direction != mdirect) {
-		this->facing_direction = mdirect;
+	//Mutex in here (1)
+	float32 angle = this->body->GetAngle();
 
-		float32 angle = this->body->GetAngle();
-
-		switch (mdirect) {
-			case RIGHT: {
-				this->actual_velocity = b2Vec2(mov_speed*cos(angle), mov_speed*sin(angle));
-				break;
-			}
-			case LEFT: {
-				this->actual_velocity = b2Vec2(-mov_speed*cos(angle), mov_speed*sin(angle));
-				break;
-			}	
-			case JUMP_FORW: {
-				
-				break;
-			}
-			case JUMP_BACK: {
-				
-				break;
-			}										
-			case NONE: break;
+	switch (mdirect) {
+		case RIGHT: {
+			this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
+			this->facing_direction = RIGHT;
+			break;
+		}
+		case LEFT: {
+			this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
+			this->facing_direction = LEFT;
+			break;
+		}	
+		case JUMP_FORW: {
+			this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
+			break;
+		}
+		case JUMP_BACK: {
+			this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);				
+			break;
+		}										
+		case NONE: {
+			this->actual_velocity.Set(0, 0);
+			break;
 		}
 	}
 }
 
-void Worm::move_left() {
-	this->body->SetTransform(body->GetPosition(), b2_pi);
-	this->body->SetLinearVelocity(b2Vec2(-mov_speed, 0));
+void Worm::move_step() {
+	//Need mutex (1)
+	if (this->is_on_ground()) {
+		this->body->SetLinearVelocity(this->actual_velocity); 
+	}
 }
 
-void Worm::move_right() {
-	this->body->SetTransform(body->GetPosition(), 0.0);
-	this->body->SetLinearVelocity(b2Vec2(mov_speed, 0));
-}
-
-void Worm::jump_forw() {
-	float32 angle = this->body->GetAngle();
-
-	this->body->SetLinearVelocity(b2Vec2(back_jump_speed.first*cos(angle)
-										, back_jump_speed.second));
-}
-
-void Worm::jump_back() {
-	float32 angle = this->body->GetAngle();
-
-	this->body->SetLinearVelocity(b2Vec2(forw_jump_speed.first*cos(angle)
-										, forw_jump_speed.second));
+bool Worm::is_on_ground() {
+	return this->sensor_for_jump.get_number_colisions() > 0;
 }
 
 void Worm::use(Usable& usable, const b2Vec2& dest) {
@@ -145,11 +143,19 @@ void Worm::delete_myself() {
 	this->stage.remove(this->body);
 }
 
-void Worm::start_contacting(Ubicable* ubicable) {
+/*void Worm::start_contacting(Ubicable* ubicable) {
 	ubicable->colision(*this);
+}*/
+
+void Worm::start_contacting() {
+	//Do nothing
 }
 
-void Worm::colision(Girder& girder) {
+void Worm::stop_contacting() {
+	//Do nothing
+}
+
+/*void Worm::colision(Girder& girder) {
 	//Do nothing
 }
 
@@ -159,4 +165,4 @@ void Worm::colision(Worm& worm) {
 
 void Worm::colision(Throwable& throwable) {
 	//Do nothing
-}
+}*/

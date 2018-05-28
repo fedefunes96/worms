@@ -26,6 +26,13 @@ Girder::Girder(Stage& stage, const int x, const int y, const float angle_rad
 	this->fixture->SetUserData(this);	
 }
 
+/*Girder::Girder(Girder&& other)
+ : stage(other.stage)
+ , id_obj(other.id_obj) {
+ 	this->body = other.body;
+ 	this->fixture = other.fixture;
+}*/
+
 std::string Girder::get_type() {
 	return GIRDER_TYPE;
 }
@@ -34,11 +41,19 @@ void Girder::delete_myself() {
 	this->stage.remove(this->body);
 }
 
-void Girder::start_contacting(Ubicable* ubicable) {
+/*void Girder::start_contacting(Ubicable* ubicable) {
 	ubicable->colision(*this);
+}*/
+
+void Girder::start_contacting() {
+	//Do nothing
 }
 
-void Girder::colision(Girder& girder) {
+void Girder::stop_contacting() {
+	//Do nothing
+}
+
+/*void Girder::colision(Girder& girder) {
 	//Do nothing
 }
 
@@ -48,7 +63,7 @@ void Girder::colision(Worm& worm) {
 
 void Girder::colision(Throwable& throwable) {
 	//Do nothing
-}
+}*/
 
 int Girder::get_id() {
 	return this->id_obj;

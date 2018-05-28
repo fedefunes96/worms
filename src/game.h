@@ -8,7 +8,7 @@
 #include <thread>
 #include <string>
 #include "ubicable.h"
-
+#include "water.h"
 
 #include "girder.h"
 #include "worm.h"
@@ -27,9 +27,10 @@ private:
 	Stage stage;
 	std::vector<Player> players;
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
+	Water water;
 
-	std::vector<Worm> worms;
-	std::vector<Girder> girders;
+	std::vector<std::unique_ptr<Worm>> worms;
+	std::vector<std::unique_ptr<Girder>> girders;
 
 	int id_actual_player;
 	std::thread stage_t;
@@ -57,6 +58,8 @@ public:
 
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);
 	void notify_removal(Ubicable* ubicable);
+
+	float get_water_level();
 
 	virtual void run() override;
 };

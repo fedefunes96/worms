@@ -4,10 +4,11 @@
 #include <vector>
 #include <utility>
 #include "usable.h"
-#include "ubicable.h"
+#include "movable.h"
 #include <Box2D/Box2D.h>
 #include "stage.h"
 #include <string>
+#include "sensor.h"
 
 #define WORM_TYPE "Worm"
 
@@ -19,7 +20,7 @@ enum MoveDirection {
 	JUMP_BACK
 };
 
-class Worm : public Ubicable {
+class Worm : public Movable {
 private:
 	Stage& stage;
 	const int id;
@@ -28,6 +29,7 @@ private:
 
 	b2Body* body;
 	b2Fixture* fixture;
+	Sensor sensor_for_jump;
 
 	const int total_health; //Useful for percentage calculations of hp
 	const float mov_speed;
@@ -41,6 +43,8 @@ private:
 
 	MoveDirection facing_direction;
 	b2Vec2 actual_velocity;
+
+	bool is_on_ground();
 public:
 	Worm(Stage& stage
 		, const int id
@@ -59,21 +63,20 @@ public:
 	virtual std::string get_type() override;
 	virtual int get_id() override;
 	virtual void delete_myself() override;
-	virtual void start_contacting(Ubicable* ubicable) override;
+	//virtual void start_contacting(Ubicable* ubicable) override;
+	virtual void start_contacting() override;
+	virtual void stop_contacting() override;
 
-	virtual void colision(Girder& girder) override;
+	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
-	virtual void colision(Throwable& throwable) override;
+	virtual void colision(Throwable& throwable) override;*/
+
+	virtual void move_step() override;
 
 	int get_health();
 	void add_health(int health);
 
 	void receive_dmg(int damage);
-
-	void move_left();
-	void move_right();
-	void jump_forw();
-	void jump_back();
 
 	void start_moving(MoveDirection mdirect);
 

@@ -2,6 +2,7 @@
 #include <Box2D/Box2D.h>
 #include <thread>
 #include "ubicable.h"
+#include "movable.h"
 #include "game.h"
 #include <vector>
 
@@ -49,44 +50,48 @@ void Stage::draw() {
 	this->pre_initialize();
 	this->continue_drawing = true;
 
-
 	while(this->continue_drawing) {
-
 		int cant_objects_moving = 0;
 
  		for ( b2Body* b = this->world.GetBodyList(); b; b = b->GetNext()) {
  			//Only notify movables
- 			if (b->GetType() != b2_dynamicBody)
+ 			if (b->GetType() == b2_staticBody)
  				continue;
 
  			b2Vec2 pos = b->GetWorldCenter();
  			float angle = b->GetAngle();
 
- 			Ubicable* ubic = (Ubicable*) b->GetUserData();
+ 			Movable* movable = (Movable*) b->GetUserData();
 
  			//Touched water
+ 			//if (pos.y < this->game.get_water_level()) {
+
+ 			//printf("Posx %0.1f - Posy %0.1f - angle %0.1f\n", pos.x, pos.y, angle);
+
  			if (pos.y < 0.0) {
  				//Notifying position if necessary
- 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
- 				ubic->delete_myself();
+ 				this->game.notify_position(movable, pos.x, pos.y, angle);
+ 				movable->delete_myself();
  			} else {
- 				this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);	
+ 				this->game.notify_position(movable, pos.x, pos.y, angle);	
  				//printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
  			}
 
- 			if(b->IsAwake())
+ 			if (b->IsAwake())
  				cant_objects_moving++;
+
+ 			movable->move_step();
   		}
 
-  		/*if (cant_objects_moving > 0)
+  		if (cant_objects_moving > 0)
   			this->something_moving = true;
   		else
-  			this->something_moving = false;*/
+  			this->something_moving = false;
 
   		//Need mutex type (3)
-  		(cant_objects_moving > 0) 
+  		/*(cant_objects_moving > 0) 
   		? this->something_moving = true 
-  		: this->something_moving = false;
+  		: this->something_moving = false;*/
 
   		this->remove_deads();
 
@@ -106,6 +111,9 @@ bool Stage::is_something_moving() {
 void Stage::pre_initialize() {
 	//Lets notify every player for every object
 	//in the world (including static ones)
+	
+	printf("Pre initialization of the world\n");
+
  	for ( b2Body* b = this->world.GetBodyList(); b; b = b->GetNext()) {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
