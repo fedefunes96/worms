@@ -3,8 +3,7 @@
 #include <unordered_map>
 #include "player.h"
 #include <memory>
-#include "../Escenario/Game_worms/protocol.h"
-//#include "../Escenario/Game_Worms/protocol.h"
+#include "protocol.h"
 #include "ubicable.h"
 #include <thread>
 #include <string>
