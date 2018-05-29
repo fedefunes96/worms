@@ -27,8 +27,7 @@
 -9) Testings
 
 -Cliente editor
-	1) Finalizar creador de ecenarios
-	2) Implementar sistema de sonido y musica (ya esta solo hay que agregarlo al cliente)
+	1) Finalizar creador de ecenarios (problemas con el dragg)
+	2) Implementar sistema de sonido y musica (ya esta solo hay que agregarlo a la vista)
 	3) Creacion de Escenarios de prueba y preparacion de la demo
-	4) Pantallas de victoria y derrota
 	5) Testing

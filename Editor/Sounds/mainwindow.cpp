@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //sounds.emplace_back("../Sounds/sounds/English/AMAZING.WAV");
-    //sounds.emplace_back("../Sounds/sounds/English/BORING.WAV");
     generalSounds *a = new generalSounds("../Sounds/sounds/English/AMAZING.WAV");
     generalSounds *b = new generalSounds("../Sounds/sounds/English/BORING.WAV");
     sounds.push_back(a);

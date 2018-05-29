@@ -27,12 +27,18 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     backgrounMusic.cpp \
-    generalSounds.cpp
+    generalSounds.cpp \
+    commonWin.cpp \
+    commonLose.cpp
 
 HEADERS += \
         mainwindow.h \
     backgrounMusic.h \
-    generalSounds.h
+    generalSounds.h \
+    commonWin.h \
+    commonLose.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    commonWin.ui \
+    commonLose.ui

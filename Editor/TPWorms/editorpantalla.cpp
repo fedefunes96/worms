@@ -12,6 +12,8 @@
 #include <QScrollBar>
 #include <QBrush>
 #include <QImage>
+#include <iostream>
+#include <QGraphicsSceneMouseEvent>
 
 EditorPantalla::EditorPantalla(QWidget *parent) :
     QDialog(parent),
@@ -22,8 +24,8 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Nuevo mapa");
     this->scene = new QGraphicsScene(this);
-    scene->setFocus();
     ui->graphicsView->setScene(scene);
+    scene->setFocus();
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
     scene->setBackgroundBrush(QBrush(QImage("../imagenes/fondo.png")));
     this->id = 0;
@@ -32,7 +34,6 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     ui->mas->hide();
     ui->menos->hide();
     this->current_id = -1;
-
     QPixmap bazooka = QPixmap("../imagenes/Bazooka.png");
     ui->bazooka->setPixmap(bazooka);
     QPixmap mortero = QPixmap("../imagenes/Mortar.png");
@@ -79,6 +80,16 @@ void EditorPantalla::load()
     std::string name = nombre.toUtf8().constData();
     commonParser::load(this,name);
     loadWeapons();
+}
+
+bool EditorPantalla::checkWorms()
+{
+    for (auto &worm : worms){
+        if (worm.second.getVida() == 0){
+            return false;
+        }
+    }
+    return true;
 }
 
 void EditorPantalla::loadWeapons()
@@ -174,6 +185,7 @@ int EditorPantalla::agregar_gusano(int x, int y)
     } else {
         QMessageBox::information(this, tr("Error"), tr("celda ocupada"));
     }
+    return -1;
 }
 
 void EditorPantalla::setVIdaWorm(int id, int vida)
@@ -324,6 +336,12 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
                 ui->ok->hide();
             } else {
                 ui->vidaGusano->show();
+                int vida = worms[current_id].getVida();
+                if (vida != 0){
+                    ui->vidaGusano->setText(QString::number(vida));
+                } else {
+                    ui->vidaGusano->setText("vida");
+                }
                 ui->ok->show();
                 ui->mas->hide();
                 ui->menos->hide();
@@ -354,8 +372,15 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
         agregar_viga_chica(x,y);
         ui->agregarVigaChica->setChecked(false);
     }
+
 }
 
+void EditorPantalla::mouseReleaseEvent(QMouseEvent *event)
+{
+    int x = event->pos().x();
+    int y = event->pos().y();
+    std::cout<<x<<' '<<y<<std::endl;
+}
 
 void EditorPantalla::on_quitar_clicked()
 {
@@ -451,30 +476,38 @@ void EditorPantalla::on_menos_clicked()
 
 void EditorPantalla::on_saveAs_clicked()
 {
-    nombre = QFileDialog::getSaveFileName(this,
+    if (this->checkWorms()){
+        nombre = QFileDialog::getSaveFileName(this,
                                                tr("Save "),
                                                tr(".txt"));
-    if (nombre.isEmpty()){
-        return;
+        if (nombre.isEmpty()){
+            return;
+        }
+        this->setWindowTitle(nombre);
+        std::string name = nombre.toUtf8().constData();
+        commonParser::save(name,this->usables,this->worms,this->vigas);
+    } else {
+        QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0"));
     }
-    this->setWindowTitle(nombre);
-    std::string name = nombre.toUtf8().constData();
-    commonParser::save(name,this->usables,this->worms,this->vigas);
 }
 
 void EditorPantalla::on_pushButton_clicked()
 {
-    if (nombre.isEmpty()){
-        nombre = QFileDialog::getSaveFileName(this,
+    if (this->checkWorms()){
+        if (nombre.isEmpty()){
+            nombre = QFileDialog::getSaveFileName(this,
                                                    tr("Save "),
                                                    tr(".yaml"));
+        }
+        if (nombre.isEmpty()){
+            return;
+        }
+        this->setWindowTitle(nombre);
+        std::string name = nombre.toUtf8().constData();
+        commonParser::save(name,this->usables,this->worms,this->vigas);
+    } else {
+        QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0"));
     }
-    if (nombre.isEmpty()){
-        return;
-    }
-    this->setWindowTitle(nombre);
-    std::string name = nombre.toUtf8().constData();
-    commonParser::save(name,this->usables,this->worms,this->vigas);
 }
 
 void EditorPantalla::on_pushButton_2_clicked()

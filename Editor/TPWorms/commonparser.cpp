@@ -34,6 +34,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
 {
     YAML::Emitter out;
     out << YAML::BeginMap;
+    out <<YAML::Key<<"Water";
+    out<<0;
     out <<YAML::Key<<"Worm";
     out <<YAML::BeginSeq;
     for (auto &worm : worms){

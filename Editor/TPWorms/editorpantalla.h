@@ -59,6 +59,8 @@ private slots:
 
     void mousePressEvent(QMouseEvent *evento);
 
+    void mouseReleaseEvent(QMouseEvent *event);
+
     void on_quitar_clicked();
 
     void on_mas_clicked();
@@ -73,7 +75,6 @@ private slots:
 
     void on_ok_clicked();
 
-
     void on_pushButton_3_clicked();
 
 private:
@@ -83,7 +84,6 @@ private:
     std::map<int,editorUsables>usables;
     std::map<int, editorWorm> worms;
     std::map<int, editorViga> vigas;
-
     int id;
     int estado;
     QGraphicsScene * scene;
@@ -92,8 +92,9 @@ private:
     int xscene;
     int yscene;
     std::vector<QPixmap*> armas;
-
     void load();
+
+    bool checkWorms();
 };
 
 
