@@ -11,15 +11,23 @@
 class Player {
 private:
 	int id;
+	int second_counter;
+	bool my_turn;
+	bool continue_receiving;
+
 	Protocol protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>&> usables;
 	std::unordered_map<int, Worm&> worms;
 
-	void wait_to_play(int time, bool* end);
+	bool is_my_turn();
+	void set_turn();
+	int get_second_counter();
+	void set_second_counter(int count);
 public:
 	Player(Protocol protocol);
 	//Player(Player&&);
 	void play();
+	void start_receiving();
 	bool lost();
 
 	void attach_worm(std::unique_ptr<Worm>& worm);

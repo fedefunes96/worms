@@ -8,14 +8,35 @@
 #include <thread>
 #include <string>
 
-//#include "common_socket_exception.h"
+#include "common_socket_exception.h"
 
 
 
 Player::Player(Protocol protocol) 
 	: protocol(protocol) {
 
-	//this->protocol.send(this->id)
+	this->my_turn = false;
+	this->continue_receiving = true;
+}
+
+bool Player::is_my_turn() {
+	//mutex
+	return this->my_turn;
+}
+
+void Player::set_turn() {
+	//mutex
+	this->my_turn = this->my_turn ? false : true;
+}
+
+int Player::get_second_counter() {
+	//mutex
+	return this->second_counter;
+}
+
+void Player::set_second_counter(int count) {
+	//mutex
+	this->second_counter = count;
 }
 
 void Player::play() {
@@ -38,46 +59,37 @@ void Player::play() {
 	//Countdown if needed
 	//1 byte - Countdown
 
-	/*char cmd = this->protocolo.receive_char();
-
-	CommandCreator cmd_creator;
-
-	std::unique_ptr<Command> command = cmd_creator.create(cmd, protocolo);
-
-	command.execute(this->usables, this->worms);
-	command.execute(this);*/
-	//bool turn_over = false;
-
-	/*std::thread wait_t(&Player::wait_to_play, this, 60, &turn_over);
-
-	while (!turn_over) {
-		try {
-			//char cmd = this->protocol.receive_command();
-
-			//PlayerCmdCreator cmd_creator;
-
-			//Consider 0 == Move
-			// ""      1 == Attack
-			if (cmd == 0) {
-				Worm& worm = this->worms.at(this->id_actual_worm)
-				MoveDirection mdirect = this->protocol.receive_int()
-				worm.start_moving(mdirect)
-			}
-		} catch (SocketException& e) {
-			//Make all players wait?
-			//Destroy thread or another method to wait
-			wait_t.join();
-			turn_over = true;
-		}
-	}
-
-	wait_t.join();*/
+	/*this->set_turn();
+	this->set_second_counter(60);
+	this->start_counting();*/
+	//Ask game for time, change
+	//May happen that player disconnect's
+	//So don't make other player's wait
+	/*while (this->get_second_counter() > 0 && this->is_my_turn()) {
+		//mutex
+		//1 second
+		std::thread(std::chrono(1000)):
+		this->second_counter--; 
+	}	
+	//No longer my turn
+	this->set_turn();*/
 }
 
-void Player::wait_to_play(int time, bool* end) {
-	//Make wait time with chrono
+void Player::start_receiving() {
+	while (this->continue_receiving) {
+		try {
+			/*
+			char cmd = this->protocol.receive_cmd();
 
-	*end = true;
+			if (!this->my_turn)
+				continue;
+			*/
+		} catch(SocketException& e) {
+			//Played disconnected
+			//Throw PlayerDisconnected
+			break;
+		}
+	}
 }
 
 /*Player::Player(Player&& other)
