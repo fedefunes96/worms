@@ -75,7 +75,7 @@ void Player::play() {
 	this->set_turn();*/
 }
 
-void Player::start_receiving() {
+void Player::game_loop() {
 	while (this->continue_receiving) {
 		try {
 			/*
@@ -84,6 +84,15 @@ void Player::start_receiving() {
 			if (!this->my_turn)
 				continue;
 			*/
+
+			char cmd = this->protocol.recvCmd();
+
+			if (cmd == 0) {
+				
+			} else {
+
+			}
+
 		} catch(SocketException& e) {
 			//Played disconnected
 			//Throw PlayerDisconnected
@@ -98,6 +107,15 @@ void Player::start_receiving() {
 	, worms(other.worms) {
 }*/
 
+void Player::notify_winner(int id) {
+
+}
+
+void Player::notify_game_end() {
+	//mutex
+	this->continue_receiving = false;
+}
+
 void Player::notify_actual_player(int id) {
 	//Need mutex type (2)
 	//Send:
@@ -105,6 +123,8 @@ void Player::notify_actual_player(int id) {
 	//1 byte - player id
 
 	//this->protocol.send(id);
+
+	printf("Notifying\n");
 }
 
 void Player::notify_removal(Ubicable* ubicable) {
@@ -113,6 +133,17 @@ void Player::notify_removal(Ubicable* ubicable) {
 	//1 byte - command notify remove object
 	//1 byte - type of object
 	//1 byte - owner (in case of worm)
+
+	if (ubicable->get_type().compare("Worm") == 0) {
+		std::unordered_map<int, std::unique_ptr<Worm>&>::const_iterator it;
+
+		it = this->worms.find(ubicable->get_id());
+
+		if (it != this->worms.end()) {
+			this->worms.erase(it);
+		}
+	}
+
 	//this->protocol.send(ubicable);
 }
 
@@ -126,7 +157,7 @@ void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) 
 	//4 bytes - pos Y
 	//4 bytes - angle
 
-	int8_t id_type;
+	/*int8_t id_type;
 
 	if (ubicable->get_type().compare("Worm") == 0) {
 		id_type = 0;
@@ -142,21 +173,25 @@ void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) 
 	int32_t posY = static_cast<int32_t>(y);
 	int32_t angle_int = static_cast<int32_t>(angle);
 
-	this->protocol.sendPosition(id_type, id_obj, posX, posY, angle_int);
+	this->protocol.sendPosition(id_type, id_obj, posX, posY, angle_int);*/
 }
 
 void Player::attach_worm(std::unique_ptr<Worm>& worm) {
-	this->protocol.sendWormId((char) worm->get_id(), worm->get_health());
+	this->worms.emplace(worm->get_id(), worm);
+
+	//this->protocol.sendWormId((char) worm->get_id(), worm->get_health());
 }
 
-void Player::attach_usable(int id, std::unique_ptr<Usable>& usable) {
+void Player::attach_usable(std::unique_ptr<Usable> usable) {
+	this->usables.emplace(usable->get_id(), std::move(usable));
 
+	//this->protocol.sendUsableId((char) usable->get_id());
 }
 
 void Player::set_id(int id) {
 	this->id = id;
 	//Notify client id
-	this->protocol.sendPlayerId((char) id);
+	//this->protocol.sendPlayerId((char) id);
 }
 
 int Player::get_id() {
@@ -164,5 +199,6 @@ int Player::get_id() {
 }
 
 bool Player::lost() {
-	return false;
+	//need mutex
+	return this->worms.size() == 0;
 }

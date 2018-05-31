@@ -3,6 +3,7 @@
 
 #include "usable.h"
 #include "worm.h"
+#include "thread.h"
 #include <unordered_map>
 #include <memory>
 #include "protocol.h"
@@ -16,8 +17,8 @@ private:
 	bool continue_receiving;
 
 	Protocol protocol;
-	std::unordered_map<int, std::unique_ptr<Usable>&> usables;
-	std::unordered_map<int, Worm&> worms;
+	std::unordered_map<int, std::unique_ptr<Usable>> usables;
+	std::unordered_map<int, std::unique_ptr<Worm>&> worms;
 
 	bool is_my_turn();
 	void set_turn();
@@ -27,12 +28,14 @@ public:
 	Player(Protocol protocol);
 	//Player(Player&&);
 	void play();
-	void start_receiving();
+	void game_loop();
 	bool lost();
 
 	void attach_worm(std::unique_ptr<Worm>& worm);
-	void attach_usable(int id, std::unique_ptr<Usable>& usable);
+	void attach_usable(std::unique_ptr<Usable> usable);
 
+	void notify_winner(int id);
+	void notify_game_end();
 	void notify_actual_player(int id);
 	void notify_removal(Ubicable* ubicable);
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);

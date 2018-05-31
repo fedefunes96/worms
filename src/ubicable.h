@@ -21,6 +21,7 @@ public:
 	//virtual void start_contacting(Ubicable* ubicable) = 0;
 	virtual void start_contacting() = 0;
 	virtual void stop_contacting() = 0;
+	virtual void create_myself(b2World& world) = 0;
 	virtual void delete_myself() = 0;
 
 	/*virtual void colision(Static& static_obj) = 0;	

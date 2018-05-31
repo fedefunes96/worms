@@ -16,7 +16,7 @@ private:
 public:
 	void push(const T& obj) {
 		std::unique_lock<std::mutex> mlock(this->m);
-		this->queue.push(std::move(obj));
+		this->queue.push(obj);
 		mlock.unlock();
 		this->cond_var.notify_one();	
 	}

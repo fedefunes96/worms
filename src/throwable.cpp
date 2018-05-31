@@ -12,16 +12,23 @@ Throwable::Throwable(Stage& stage
 	, const int x
 	, const int y
 	, const float angle_rad
-	, const b2Vec2& velocity
+	, const b2Vec2 velocity
 	, const float angular_velocity
 	, const float radius
 	, const float restitution
 	, const float max_dmg)
 	: stage(stage)
 	, id_obj(id_throwables++)
+	, x(x)
+	, y(y)
+	, angle_rad(angle_rad)
+	, velocity(velocity)
+	, angular_velocity(angular_velocity)
+	, radius(radius)
+	, restitution(restitution)
 	, max_dmg(max_dmg) {
 
-	b2BodyDef body_def;
+	/*b2BodyDef body_def;
 	b2CircleShape body_shape;
 	b2FixtureDef fixture_def;
 
@@ -40,10 +47,9 @@ Throwable::Throwable(Stage& stage
 	this->body->SetUserData(this);
 
 	this->fixture = this->body->CreateFixture(&fixture_def);		
-	this->fixture->SetUserData(this);
-	//this->body->SetLinearVelocity(velocity);
-	this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
-	this->body->ApplyAngularImpulse(angular_velocity);
+	this->fixture->SetUserData(this);*/
+
+	stage.insert(this);
 }
 
 void Throwable::explode() {
@@ -58,6 +64,29 @@ void Throwable::explode() {
 
 std::string Throwable::get_type() {
 	return THROWABLE_TYPE;
+}
+
+void Throwable::create_myself(b2World& world) {
+	b2BodyDef body_def;
+	b2CircleShape body_shape;
+	b2FixtureDef fixture_def;
+
+	body_def.type = b2_dynamicBody;
+	body_def.position.Set(x, y);
+	body_def.angle = angle_rad;
+
+	body_shape.m_radius = radius;
+	body_shape.m_p.Set(0, 0);
+
+	fixture_def.shape = &(body_shape);
+	fixture_def.density = 1.0;
+	fixture_def.restitution = restitution;
+
+	this->body = world.CreateBody(&body_def);
+	this->body->SetUserData(this);
+
+	b2Fixture* fixture = this->body->CreateFixture(&fixture_def);		
+	fixture->SetUserData(this);
 }
 
 void Throwable::delete_myself() {
@@ -94,5 +123,9 @@ int Throwable::get_id() {
 }
 
 void Throwable::move_step() {
-	//Do nothing, using impulses
+	//Dont move!
+		/*this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
+
+		this->body->ApplyAngularImpulse(angular_velocity);*/
+
 }

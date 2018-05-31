@@ -4,7 +4,7 @@
 #include "player.h"
 //#include "stage.h"
 #include <vector>
-#include "common_thread.h"
+#include "thread.h"
 #include <thread>
 #include <string>
 #include "ubicable.h"
@@ -22,7 +22,7 @@ enum Game_status {
 	DRAW
 };
 
-class Game : public Thread {
+class Game {
 private:
 	Stage stage;
 	std::vector<Player> players;
@@ -33,8 +33,11 @@ private:
 	std::vector<std::unique_ptr<Girder>> girders;
 
 	int id_actual_player;
+	int id_player_list;
+
 	std::thread stage_t;
 	std::thread game_t;
+	std::vector<std::thread> players_t;
 	//Player winner;
 	//std::vector<Player>::iterator it_actual_player;
 
@@ -61,7 +64,8 @@ public:
 
 	float get_water_level();
 
-	virtual void run() override;
+	void game_loop();
+	//virtual void run() override;
 };
 
 #endif

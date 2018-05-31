@@ -2,7 +2,7 @@
 #include "player.h"
 #include "stage.h"
 #include <vector>
-#include "common_thread.h"
+#include "thread.h"
 #include "common_socket_exception.h"
 #include <algorithm>
 #include <thread>
@@ -12,11 +12,12 @@
 
 #include "girder.h"
 #include "worm.h"
+#include "bazooka.h"
 
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
  : stage(1.0/60.0, 6, 2, *this) 
  , players(std::move(players)) {
- 	this->id_actual_player = 0;
+ 	this->id_player_list = 0;
 
  	this->initialize_players();
  	this->initialize_game(stage_file);
@@ -28,7 +29,7 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
 
 void Game::start_game() {
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
-
+	this->game_t = std::thread(&Game::game_loop, this);
 	//Wait ten seconds
 	printf("Start the world\n");
 
@@ -45,6 +46,10 @@ void Game::initialize_players() {
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].set_id(i+1);
+		this->players_t.push_back(
+			std::thread(&Player::game_loop, &this->players[i])
+			);
+		//this->players[i]->start;
 	}
 
 	//Start players so they can hear events
@@ -81,16 +86,19 @@ void Game::create_test_world() {
 		, std::make_pair (10.0,20.0) //Back jump
 		, 10.0))); //Max fall damage)));
 
+	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(INFINITY_AMMO));	
+
 	this->players[0].attach_worm(this->worms[0]);
 	this->players[0].attach_worm(this->worms[1]);
+	this->players[0].attach_usable(std::move(ptr));
 
 	//Create 3 girders
 
 	this->girders.push_back(
 	std::unique_ptr<Girder>(new Girder(this->stage
-		, -5
 		, 0
-		, b2_pi //Vertical
+		, 0
+		, b2_pi/2 //Vertical
 		, 20
 		, 1)));
 
@@ -157,7 +165,7 @@ void Game::initialize_game(const std::string& stage_file) {
 	*/
 }
 
-void Game::run() {
+void Game::game_loop() {
 	Game_status game_status = UNDEFINED;
 
 	while (game_status == UNDEFINED) {
@@ -165,16 +173,16 @@ void Game::run() {
 
 		try {
 			//Notify everyone whose turn it is
-			this->notify_actual_player(this->id_actual_player);
+			this->notify_actual_player(actual_player.get_id());
 
 			actual_player.play();
 		} catch(const SocketException& e) {
 			//Player disconnected
 
 		}
-
 		//Need conditional variable over Stage
 		game_status = this->round_over();
+
 	}
 
 	this->end_game(game_status);
@@ -182,20 +190,26 @@ void Game::run() {
 
 Player& Game::get_actual_player() {
 	//return *(this->players.begin() + this->id_actual_player);
-	return this->players[this->id_actual_player];
+	return this->players[this->id_player_list];
 }
 
 void Game::notify_winner() {
 	//std::unordered_map<int, Player>::iterator it = this->players.begin();
 	std::vector<Player>::iterator it = this->players.begin();
 
+	int id_winner;
+
 	while (it != this->players.end()) {
 		if (!(*it).lost()) {
-			//Notify winner
-			//Player winner = std::move(*it);
+			//Get winner
+			id_winner = (*it).get_id();
 			break;
 		}
 	}	
+
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		this->players[i].notify_winner(id_winner);
+	}
 }
 
 void Game::end_game(Game_status game_status) {
@@ -204,6 +218,7 @@ void Game::end_game(Game_status game_status) {
 		this->notify_winner();
 	}*/
 	this->notify_winner();
+	printf("Game ended\n");
 	//Show message "Loser" to all losers
 	//this->notify_losers();
 }
@@ -217,6 +232,7 @@ Game_status Game::check_for_winner() {
 	while (it != this->players.end()) {
 		if (!(*it).lost()) {
 			cant_players_alive++;
+			++it;
 		}
 	}
 
@@ -231,10 +247,12 @@ Game_status Game::check_for_winner() {
 
 Game_status Game::round_over() {
 
+	printf("Round is over!\n");
+
 	Game_status game_status = check_for_winner();
 
-	(this->id_actual_player+1 >= (int) this->players.size() 
-	? this->id_actual_player = 0 : ++this->id_actual_player);
+	(this->id_player_list+1 >= (int) this->players.size() 
+	? this->id_player_list = 0 : ++this->id_player_list);
 
 	return game_status;
 }
@@ -270,5 +288,16 @@ float Game::get_water_level() {
 Game::~Game() {
 	//for (int i = 0; i < this->players.size(); i++)
 	//	this->players.join();
+
 	this->stage_t.join();
+	this->game_t.join();
+
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		this->players[i].notify_game_end();
+		//this->players[i].join();
+	}
+
+	for (int i = 0; i < (int) this->players_t.size(); i++) {
+		this->players_t[i].join();
+	}
 }

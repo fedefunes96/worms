@@ -25,6 +25,10 @@ Worm::Worm(Stage& stage
 	: stage(stage)
 	, id(id)
 	, id_obj(id_worms++)
+	, x(x)
+	, y(y)
+	, angle_rad(angle_rad)
+	, restitution(restitution)
 	, total_health(health)
 	, mov_speed(mov_speed)
 	, forw_jump_speed(forw_jump_speed)
@@ -32,7 +36,7 @@ Worm::Worm(Stage& stage
 	, height_dmg(height_dmg)
 	, longitude(longitude)
 	, height(height) {
-	b2BodyDef body_def;
+	/*b2BodyDef body_def;
 	b2PolygonShape body_shape;
 	b2FixtureDef fixture_def;
 
@@ -57,11 +61,13 @@ Worm::Worm(Stage& stage
 	this->sensor_for_jump.add_at_position(this->body
 										, b2Vec2(0, -height*0.85)
 										, longitude
-										, height*0.1);
+										, height*0.1);*/
 
 	this->actual_health = health;
 	this->facing_direction = NONE;
 	this->actual_velocity.Set(0, 0);
+
+	stage.insert(this);
 }
 
 void Worm::receive_dmg(int damage) {
@@ -137,6 +143,35 @@ std::string Worm::get_type() {
 
 int Worm::get_id() {
 	return this->id_obj;
+}
+
+void Worm::create_myself(b2World& world) {
+	b2BodyDef body_def;
+	b2PolygonShape body_shape;
+	b2FixtureDef fixture_def;
+
+	body_def.type = b2_dynamicBody;
+	body_def.position.Set(x, y);
+	body_def.angle = angle_rad;
+
+	body_shape.SetAsBox(longitude, height);
+
+	fixture_def.shape = &(body_shape);
+	fixture_def.density = 1.0;
+	fixture_def.restitution = restitution;
+
+	this->body = world.CreateBody(&body_def);
+	this->body->SetUserData(this);
+
+	b2Fixture* fixture = this->body->CreateFixture(&fixture_def);		
+	fixture->SetUserData(this);
+
+	//Set a sensor at the floor of the body
+	//Barely showing
+	this->sensor_for_jump.add_at_position(body
+										, b2Vec2(0, -height*0.85)
+										, longitude
+										, height*0.1);
 }
 
 void Worm::delete_myself() {

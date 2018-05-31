@@ -24,14 +24,15 @@ Stage::Stage(const float32 time_step
 }
 
 void Stage::remove(b2Body* body) {
-	//Remove object
-	//Need mutex type (1)
+	std::lock_guard<std::mutex> lock(this->remove_m);
+	
 	this->game.notify_removal((Ubicable*) body->GetUserData());
 	this->to_remove.push_back(body);
 }
 
 void Stage::remove_deads() {
-	//Need mutex type (1)
+	std::lock_guard<std::mutex> lock(this->remove_m);
+
 	std::vector<b2Body*>::iterator it = this->to_remove.begin();
 
 	while (it != this->to_remove.end()) {
@@ -40,13 +41,31 @@ void Stage::remove_deads() {
 	}
 }
 
-b2Body* Stage::insert(b2BodyDef* body_def) {
+/*b2Body* Stage::insert(b2BodyDef* body_def) {
 	//Insert object
 	//Need mutex type (2)
 	return this->world.CreateBody(body_def);
+}*/
+void Stage::insert(Ubicable* ubicable) {
+	std::lock_guard<std::mutex> lock(this->create_m);
+
+	this->to_create.push_back(ubicable);
+}
+
+void Stage::create_objects() {
+	std::lock_guard<std::mutex> lock(this->create_m);
+
+	std::vector<Ubicable*>::iterator it = this->to_create.begin();
+
+	while (it != this->to_create.end()) {
+		(*it)->create_myself(this->world);
+		it = this->to_create.erase(it);
+	}	
 }
 
 void Stage::draw() {
+	//Create first to pre initialize
+	this->create_objects();
 	this->pre_initialize();
 	this->continue_drawing = true;
 
@@ -74,7 +93,7 @@ void Stage::draw() {
  				movable->delete_myself();
  			} else {
  				this->game.notify_position(movable, pos.x, pos.y, angle);	
- 				//printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
+ 				printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
  			}
 
  			if (b->IsAwake())
@@ -99,7 +118,9 @@ void Stage::draw() {
 		this->world.Step(
 			this->time_step
 			, this->velocity_iterations
-			, this->position_iterations);		
+			, this->position_iterations);	
+
+		this->create_objects();
 	}
 }
 
@@ -111,14 +132,13 @@ bool Stage::is_something_moving() {
 void Stage::pre_initialize() {
 	//Lets notify every player for every object
 	//in the world (including static ones)
-	
-	printf("Pre initialization of the world\n");
-
  	for ( b2Body* b = this->world.GetBodyList(); b; b = b->GetNext()) {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
 
  		this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
+
+ 		printf("Pos x: %0.2f - Pos y: %0.2f - angle: %0.2f\n", pos.x, pos.y, angle);
   	}
 }
 

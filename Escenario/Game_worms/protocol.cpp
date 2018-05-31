@@ -1,5 +1,17 @@
 #include "protocol.h"
 #include <iostream>
+
+enum class Commands : char {
+    POSITION = 0,
+    ATTACH_WORM_ID,
+    ATTACH_USABLE_ID,
+    ATTACH_PLAYER_ID,
+    REMOVE,
+    GAME_END,
+    ACTUAL_PLAYER,
+    WINNER
+};
+
 Protocol::Protocol(Socket *conexion):conexion(conexion)
 {
 }
@@ -31,10 +43,10 @@ void Protocol::sendPlayerId(int8_t id) {
     conexion->enviar((const char*)&id,1);
 }
 
-void Protocol::recvMove(int8_t* id, int8_t *dir){
+/*void Protocol::recvMove(int8_t* id, int8_t *dir){
     conexion->recibir((char*)id,1);
     conexion->recibir((char*)dir,1);
-}
+}*/
 
 //------------------------------------
 

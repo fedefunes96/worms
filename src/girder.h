@@ -11,19 +11,25 @@ class Girder : public Ubicable {
 private:
 	Stage& stage;
 	b2Body* body;
-	b2Fixture* fixture;	
+	//b2Fixture* fixture;	
 
 	static int id_girders;
     const int id_obj;	
+    const int x;
+    const int y;
+    const float angle_rad;
+    const int longitude;
+    const int height;
 public:
 	Girder(Stage& stage
 		, const int x
 		, const int y
-		, const float angle
+		, const float angle_rad
 		, const int longitude
 		, const int height);
 
 	virtual std::string get_type() override;
+	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself() override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;

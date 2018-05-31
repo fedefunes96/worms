@@ -28,9 +28,13 @@ private:
     const int id_obj;
 
 	b2Body* body;
-	b2Fixture* fixture;
+	//b2Fixture* fixture;
 	Sensor sensor_for_jump;
 
+	const int x;
+	const int y;
+	const int angle_rad;
+	const float restitution;
 	const int total_health; //Useful for percentage calculations of hp
 	const float mov_speed;
 	const std::pair<float, float> forw_jump_speed;
@@ -62,6 +66,7 @@ public:
 
 	virtual std::string get_type() override;
 	virtual int get_id() override;
+	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself() override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;

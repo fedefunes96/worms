@@ -17,6 +17,7 @@ public:
 
 	virtual std::string get_type() override;
 	virtual int get_id() override;
+	virtual void create_myself(b2World& world) override;	
 	virtual void delete_myself() override;
 	virtual void start_contacting() override;
 	virtual void stop_contacting() override;

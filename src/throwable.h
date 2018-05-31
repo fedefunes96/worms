@@ -12,11 +12,17 @@ class Throwable : public Movable {
 private:
 	Stage& stage;
 	b2Body* body;
-	b2Fixture* fixture;
+	//b2Fixture* fixture;
 
 	static int id_throwables;
     const int id_obj;	
-
+    const int x;
+    const int y;
+    const float angle_rad;
+    const b2Vec2 velocity;
+	const float angular_velocity;
+	const float radius;
+	const float restitution;
 	const float max_dmg;
 
 	void explode();
@@ -25,7 +31,7 @@ public:
 	, const int x
 	, const int y
 	, const float angle_rad
-	, const b2Vec2& velocity
+	, const b2Vec2 velocity
 	, const float angular_velocity
 	, const float radius
 	, const float restitution
@@ -33,6 +39,7 @@ public:
 
 	virtual std::string get_type() override;
 	virtual int get_id() override;
+	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself() override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
