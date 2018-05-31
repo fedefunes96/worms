@@ -5,15 +5,15 @@
 class EditorUbicable
 {
 protected:
-    int posX;
-    int posY;
+    float posX;
+    float posY;
 
 public:
     EditorUbicable(){}
 
-    int getX();
+    float getX();
 
-    int getY();
+    float getY();
 
     void setPos(int x, int y);
 };

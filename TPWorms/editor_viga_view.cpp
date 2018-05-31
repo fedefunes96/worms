@@ -33,9 +33,9 @@ void editor_viga_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *
      * and the last two arguments - the width and height of the displayed area, that is, the frame
      * */
     if (grande){
-        painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 300,50);
+        painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 140,50);
     } else {
-        painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 150,50);
+        painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 70,50);
     }
     Q_UNUSED(option);
     Q_UNUSED(widget);

@@ -9,8 +9,8 @@ editorViga::editorViga()
 
 editorViga::editorViga(int posX, int posY, int tam)
 {
-    this->posX = posX;
-    this->posY = posY;
+    this->posX = posX*6/140;
+    this->posY = posY*6/140;
     this->angulo = 0;
     this->tam = tam;
 }

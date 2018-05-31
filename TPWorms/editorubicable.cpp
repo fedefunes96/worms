@@ -1,11 +1,11 @@
 #include "editorubicable.h"
 
-int EditorUbicable::getX()
+float EditorUbicable::getX()
 {
     return posX;
 }
 
-int EditorUbicable::getY()
+float EditorUbicable::getY()
 {
     return posY;
 }

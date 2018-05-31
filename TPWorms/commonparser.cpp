@@ -43,13 +43,13 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &worm : worms){
         out <<YAML::Flow;
         out << YAML::BeginSeq;
-        out << std::to_string(worm.second.getX());
-        out << std::to_string(worm.second.getY());
+        out << worm.second.getX();
+        out << worm.second.getY();
         out << angle_rad;
         out << longitudW;
         out << alto;
         out <<restitucion;
-        out << std::to_string(worm.second.getVida());
+        out << worm.second.getVida();
         out << velocidad;
         out << velocidadSaltoAX;
         out <<velocidadSaltoAY;
@@ -65,10 +65,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &viga : vigas){
         out<<YAML::Flow;
         out<<YAML::BeginSeq;
-        out<<std::to_string(viga.second.getX());
-        out<<std::to_string(viga.second.getY());
+        out<<viga.second.getX();
+        out<<viga.second.getY();
         out<<viga.second.get_angulo();
-        out<<std::to_string(viga.second.get_tam());
+        out<<viga.second.get_tam();
         out<<alturaGirder;
         out<<YAML::EndSeq;
     }
@@ -80,7 +80,7 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
         out<<YAML::Flow;
         out<<YAML::BeginSeq;
         out<<std::to_string(usable.first);
-        out<<std::to_string(usable.second.getAmmo());
+        out<<usable.second.getAmmo();
         out <<YAML::EndSeq;
     }
     out <<YAML::EndSeq;

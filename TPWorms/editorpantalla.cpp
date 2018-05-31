@@ -198,8 +198,7 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
     int celdaY = -y/50+1;
     bool ocupadas = celdas[celdaX][celdaY].esta_ocupado() ||
             celdas[celdaX+1][celdaY].esta_ocupado() || celdas[celdaX+2][celdaY].esta_ocupado()
-            || celdas[celdaX+3][celdaY].esta_ocupado() || celdas[celdaX+4][celdaY].esta_ocupado()
-            || celdas[celdaX+5][celdaY].esta_ocupado();
+            || celdas[celdaX+3][celdaY].esta_ocupado();
     if (!ocupadas){
         int xn = celdaX*50;
         int yn = -celdaY*50;
@@ -211,9 +210,6 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
         celdas[celdaX][celdaY].llenar_celda(id);
         celdas[celdaX+1][celdaY].llenar_celda(id);
         celdas[celdaX+2][celdaY].llenar_celda(id);
-        celdas[celdaX+3][celdaY].llenar_celda(id);
-        celdas[celdaX+4][celdaY].llenar_celda(id);
-        celdas[celdaX+5][celdaY].llenar_celda(id);
         this->vigas.emplace(std::piecewise_construct,
                         std::forward_as_tuple(id++),
                         std::forward_as_tuple(x,-y,6));
@@ -229,8 +225,7 @@ int EditorPantalla::agregar_viga_chica(int x, int y)
 {
     int celdaX = x/50;
     int celdaY = -y/50+1;
-    bool ocupadas = celdas[celdaX][celdaY].esta_ocupado() ||
-            celdas[celdaX+1][celdaY].esta_ocupado() || celdas[celdaX+2][celdaY].esta_ocupado();
+    bool ocupadas = celdas[celdaX][celdaY].esta_ocupado();
     if (!ocupadas){
         int xn = celdaX*50;
         int yn = -celdaY*50;
@@ -238,10 +233,9 @@ int EditorPantalla::agregar_viga_chica(int x, int y)
         viga->esGrande(false);
         scene->addItem((QGraphicsItem*)viga);
         viga->setPos(xn,yn);
+
         this->items[id] = viga;
         celdas[celdaX][celdaY].llenar_celda(id);
-        celdas[celdaX+1][celdaY].llenar_celda(id);
-        celdas[celdaX+2][celdaY].llenar_celda(id);
         this->vigas.emplace(std::piecewise_construct,
                         std::forward_as_tuple(id++),
                         std::forward_as_tuple(x,-y,3));
@@ -282,13 +276,12 @@ void EditorPantalla::aumetar_angulo(int id)
     int y1 = items[id]->pos().y()/50;
     editor_viga_view *viga = (editor_viga_view *)items[id];
     if (viga->tam()){
-        for (int i = 1; i < 6; i++){
-            celdas[x1+i][y1].vaciar_celda();
-        }
-    } else {
         for (int i = 1; i < 3; i++){
             celdas[x1+i][y1].vaciar_celda();
         }
+    } else {
+        celdas[x1][y1].vaciar_celda();
+
     }
     vigas[id].aumentarAngulo(5);
     items[id]->setRotation(items[id]->rotation() - 5);
@@ -402,13 +395,11 @@ void EditorPantalla::on_quitar_clicked()
         if (it2 != vigas.end()){
             editor_viga_view *viga = (editor_viga_view *)items[current_id];
             if (viga->tam()){
-                for (int i = 0; i < 6; i++){
-                    celdas[x1+i][y1].vaciar_celda();
-                }
-            } else {
                 for (int i = 0; i < 3; i++){
                     celdas[x1+i][y1].vaciar_celda();
                 }
+            } else {
+              celdas[x1][y1].vaciar_celda();
             }
             vigas.erase(it2);
         }
@@ -434,13 +425,11 @@ void EditorPantalla::on_mas_clicked()
         int y1 = y/50;
         editor_viga_view *viga = (editor_viga_view *)items[current_id];
         if (viga->tam()){
-            for (int i = 1; i < 6; i++){
-                celdas[x1+i][y1].vaciar_celda();
-            }
-        } else {
             for (int i = 1; i < 3; i++){
                 celdas[x1+i][y1].vaciar_celda();
             }
+        } else {
+                celdas[x1][y1].vaciar_celda();
         }
         vigas[current_id].aumentarAngulo(5);
         items[current_id]->setRotation(items[current_id]->rotation() - 5);
@@ -459,13 +448,11 @@ void EditorPantalla::on_menos_clicked()
         int y1 = y/50;
         editor_viga_view *viga = (editor_viga_view *)items[current_id];
         if (viga->tam()){
-            for (int i = 1; i < 6; i++){
-                celdas[x1+i][y1].vaciar_celda();
-            }
-        } else {
             for (int i = 1; i < 3; i++){
                 celdas[x1+i][y1].vaciar_celda();
             }
+        } else {
+                celdas[x1][y1].vaciar_celda();
         }
         vigas[current_id].aumentarAngulo(-5);
         items[current_id]->setRotation(items[current_id]->rotation() + 5);
