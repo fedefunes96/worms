@@ -12,7 +12,7 @@
 
 #define WORM_TYPE "Worm"
 
-enum MoveDirection {
+enum class MoveDirection : char {
 	NONE = 0,
 	RIGHT,
 	LEFT,
@@ -23,7 +23,6 @@ enum MoveDirection {
 class Worm : public Movable {
 private:
 	Stage& stage;
-	const int id;
 	static int id_worms;
     const int id_obj;
 
@@ -51,7 +50,6 @@ private:
 	bool is_on_ground();
 public:
 	Worm(Stage& stage
-		, const int id
 		, const int x
 		, const int y
 		, const float angle_rad
@@ -85,7 +83,7 @@ public:
 
 	void start_moving(MoveDirection mdirect);
 
-	void use(Usable& usable, const b2Vec2& dest);	
+	void use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<float>& params);	
 };
 
 #endif

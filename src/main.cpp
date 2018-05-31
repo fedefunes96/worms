@@ -19,12 +19,10 @@ int main(int argc, char* argv[]) {
 
 	Socket server(port);
 
-	/*Socket* skt = server.server_aceptar_clt();
+	Socket* skt = server.server_aceptar_clt();
 
 	if (skt == nullptr)
-		return 0;*/
-
-	Socket* skt = nullptr;
+		return 0;
 
 	std::vector<Player> players;
 

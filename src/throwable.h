@@ -6,8 +6,6 @@
 #include <Box2D/Box2D.h>
 #include <string>
 
-#define THROWABLE_TYPE "Throwable"
-
 class Throwable : public Movable {
 private:
 	Stage& stage;
@@ -37,7 +35,7 @@ public:
 	, const float restitution
 	, const float max_dmg);
 
-	virtual std::string get_type() override;
+	virtual std::string get_type() = 0;
 	virtual int get_id() override;
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself() override;

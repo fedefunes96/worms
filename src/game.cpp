@@ -48,7 +48,7 @@ void Game::initialize_players() {
 		this->players[i].set_id(i+1);
 		this->players_t.push_back(
 			std::thread(&Player::game_loop, &this->players[i])
-			);
+		);
 		//this->players[i]->start;
 	}
 
@@ -59,7 +59,6 @@ void Game::initialize_players() {
 void Game::create_test_world() {
 	//Let's create 2 worms
 	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
-		, 1 //Set player's one id (Useless)
 		, 10 //10 x right
 		, 20 // 20 y up
 		, 0.0 // Angle 0 -> Facing right
@@ -73,7 +72,6 @@ void Game::create_test_world() {
 		, 10.0))); //Max fall damage)));
 
 	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
-		, 1 //Set player's one id (Useless)
 		, 5 //5 x right
 		, 10 // 10 y up
 		, 0.0 // Angle 0 -> Facing right
@@ -86,7 +84,7 @@ void Game::create_test_world() {
 		, std::make_pair (10.0,20.0) //Back jump
 		, 10.0))); //Max fall damage)));
 
-	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(INFINITY_AMMO));	
+	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO));	
 
 	this->players[0].attach_worm(this->worms[0]);
 	this->players[0].attach_worm(this->worms[1]);

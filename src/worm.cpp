@@ -10,7 +10,6 @@
 int Worm::id_worms = 0;
 
 Worm::Worm(Stage& stage
-	, const int id
 	, const int x
 	, const int y
 	, const float angle_rad
@@ -23,7 +22,6 @@ Worm::Worm(Stage& stage
 	, const std::pair<float, float> back_jump_speed
 	, const float height_dmg)
 	: stage(stage)
-	, id(id)
 	, id_obj(id_worms++)
 	, x(x)
 	, y(y)
@@ -64,7 +62,7 @@ Worm::Worm(Stage& stage
 										, height*0.1);*/
 
 	this->actual_health = health;
-	this->facing_direction = NONE;
+	this->facing_direction = MoveDirection::NONE;
 	this->actual_velocity.Set(0, 0);
 
 	stage.insert(this);
@@ -92,25 +90,25 @@ void Worm::start_moving(MoveDirection mdirect) {
 	float32 angle = this->body->GetAngle();
 
 	switch (mdirect) {
-		case RIGHT: {
+		case MoveDirection::RIGHT: {
 			this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
-			this->facing_direction = RIGHT;
+			this->facing_direction = MoveDirection::RIGHT;
 			break;
 		}
-		case LEFT: {
+		case MoveDirection::LEFT: {
 			this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
-			this->facing_direction = LEFT;
+			this->facing_direction = MoveDirection::LEFT;
 			break;
 		}	
-		case JUMP_FORW: {
+		case MoveDirection::JUMP_FORW: {
 			this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
 			break;
 		}
-		case JUMP_BACK: {
+		case MoveDirection::JUMP_BACK: {
 			this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);				
 			break;
 		}										
-		case NONE: {
+		case MoveDirection::NONE: {
 			this->actual_velocity.Set(0, 0);
 			break;
 		}
@@ -128,13 +126,10 @@ bool Worm::is_on_ground() {
 	return this->sensor_for_jump.get_number_colisions() > 0;
 }
 
-void Worm::use(Usable& usable, const b2Vec2& dest) {
-	/*b2Vec2 pos = this->body->GetPosition();
+void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<float>& params) {
+	b2Vec2 pos = this->body->GetPosition();
 
-	float32 angle = atan2(dest.y - pos.y, dest.x - pos.x);
-
-	b2Vec2 angle_vec(cos(angle), sin(angle));*/
-	//usable.use();
+	usable->use(pos, dest, params);
 }
 
 std::string Worm::get_type() {

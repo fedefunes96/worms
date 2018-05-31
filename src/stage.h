@@ -25,6 +25,8 @@ private:
 
 	//std::mutex m;
 
+	std::vector<std::unique_ptr<Ubicable>> ubicables;
+
 	std::vector<Ubicable*> to_create;
 	std::vector<b2Body*> to_remove;
 

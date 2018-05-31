@@ -13,66 +13,49 @@
 
 
 Player::Player(Protocol protocol) 
-	: protocol(protocol) {
+	: protocol(std::move(protocol)) {
+
+	this->my_turn = false;
+	this->continue_receiving = true;
+}
+
+Player::Player(Player&& other)
+	: protocol(std::move(other.protocol))
+	, usables(std::move(other.usables))
+	, worms(std::move(other.worms)) {
 
 	this->my_turn = false;
 	this->continue_receiving = true;
 }
 
 bool Player::is_my_turn() {
-	//mutex
+	std::lock_guard<std::mutex> lock(this->turn_m);
+
 	return this->my_turn;
 }
 
-void Player::set_turn() {
-	//mutex
-	this->my_turn = this->my_turn ? false : true;
-}
+void Player::set_turn(bool state) {
+	std::lock_guard<std::mutex> lock(this->turn_m);
 
-int Player::get_second_counter() {
-	//mutex
-	return this->second_counter;
-}
-
-void Player::set_second_counter(int count) {
-	//mutex
-	this->second_counter = count;
+	this->my_turn = state;
 }
 
 void Player::play() {
-	//Comunications:
-	//1 byte - Command
-	//-------
-	//Command == Move
-	//1 byte - Id worm (Unnecessary)
-	//1 byte - Move direction
-	//Command == Stop moving
-	//1 byte - Id worm
-	//-------
-	//Command = Type of attack
-	//1 byte - Id weapon (Not necessary (I have type of attack as id))
-	//1 byte - Id worm
-	//4 bytes - Pos X
-	//4 bytes - Pos Y
-	//Variable power if needed
-	//1 byte - Var power
-	//Countdown if needed
-	//1 byte - Countdown
+	this->set_turn(true);
 
-	/*this->set_turn();
-	this->set_second_counter(60);
-	this->start_counting();*/
-	//Ask game for time, change
-	//May happen that player disconnect's
-	//So don't make other player's wait
-	/*while (this->get_second_counter() > 0 && this->is_my_turn()) {
-		//mutex
-		//1 second
-		std::thread(std::chrono(1000)):
-		this->second_counter--; 
-	}	
-	//No longer my turn
-	this->set_turn();*/
+	this->counter.set_time(20);
+
+	this->counter.start_counting();
+
+	printf("Starts turn of 20 secs\n");
+
+	while (!this->counter.is_over() && this->is_my_turn()) {}
+
+	printf("Ends turn of 20 secs\n");
+	
+	this->counter.stop();
+
+	this->set_turn(false);
 }
 
 void Player::game_loop() {
@@ -85,13 +68,39 @@ void Player::game_loop() {
 				continue;
 			*/
 
-			char cmd = this->protocol.recvCmd();
+			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
-			if (cmd == 0) {
-				
+			if (cmd == Commands::MOVE) {
+				int id_worm;
+				int dir;
+
+				this->protocol.recvMove(&id, &dir);
+
+				MoveDirection mdir = static_cast<MoveDirection>(dir);
+
+				//Should check if worm exists
+				this->worms.at(id_worm)->start_moving(mdir);
+
+			} else if (cmd == Commands::ATTACK) {
+				int id_usable;
+				int id_worm;
+				int posx;
+				int posy;
+
+				std::vector<float> params;
+
+				this->protocol.recvAttack(&id_usable, &id_worm, &posx, &posy, params);    
+
+				b2Vec2 dest(posx, posy);
+
+				this->worms.at(id_worm)->use(this->usables.at(id_usable), dest, params);
 			} else {
-
+				//Player's cheating
+				//Disconnect him
 			}
+
+			if (!this->is_my_turn())
+				continue;
 
 		} catch(SocketException& e) {
 			//Played disconnected
@@ -101,38 +110,22 @@ void Player::game_loop() {
 	}
 }
 
-/*Player::Player(Player&& other)
-	: protocolo(other.protocolo)
-	, usables(other.usables)
-	, worms(other.worms) {
-}*/
-
 void Player::notify_winner(int id) {
-
+	this->protocol.sendWinner(id);
 }
 
 void Player::notify_game_end() {
 	//mutex
 	this->continue_receiving = false;
+	this->protocol.sendGameEnd();
 }
 
 void Player::notify_actual_player(int id) {
-	//Need mutex type (2)
-	//Send:
-	//1 byte - command notify turn
-	//1 byte - player id
 
-	//this->protocol.send(id);
-
-	printf("Notifying\n");
+	this->protocol.sendActualPlayer(id);
 }
 
 void Player::notify_removal(Ubicable* ubicable) {
-	//Need mutex type (2)
-	//Send:
-	//1 byte - command notify remove object
-	//1 byte - type of object
-	//1 byte - owner (in case of worm)
 
 	if (ubicable->get_type().compare("Worm") == 0) {
 		std::unordered_map<int, std::unique_ptr<Worm>&>::const_iterator it;
@@ -144,54 +137,30 @@ void Player::notify_removal(Ubicable* ubicable) {
 		}
 	}
 
-	//this->protocol.send(ubicable);
+	this->protocol.sendRemove(ubicable->get_type(), ubicable->get_id());
 }
 
 void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-	//Need mutex type (2)
-	//Send:
-	//1 byte - command notify position object
-	//1 byte - type of object
-	//4 bytes - id obj
-	//4 bytes - pos X
-	//4 bytes - pos Y
-	//4 bytes - angle
 
-	/*int8_t id_type;
-
-	if (ubicable->get_type().compare("Worm") == 0) {
-		id_type = 0;
-	} else if (ubicable->get_type().compare("Girder") == 0) {
-		id_type = 1;
-	} else if (ubicable->get_type().compare("Throwable") == 0) {
-		id_type = 2;
-	}
-
-	int32_t id_obj = ubicable->get_id();
-
-	int32_t posX = static_cast<int32_t>(x);
-	int32_t posY = static_cast<int32_t>(y);
-	int32_t angle_int = static_cast<int32_t>(angle);
-
-	this->protocol.sendPosition(id_type, id_obj, posX, posY, angle_int);*/
+	this->protocol.sendPosition(ubicable->get_type(), ubicable->get_id(), x, y, angle);
 }
 
 void Player::attach_worm(std::unique_ptr<Worm>& worm) {
-	this->worms.emplace(worm->get_id(), worm);
 
-	//this->protocol.sendWormId((char) worm->get_id(), worm->get_health());
+	this->worms.emplace(worm->get_id(), worm);
+	this->protocol.sendWormId(worm->get_id(), worm->get_health());
 }
 
 void Player::attach_usable(std::unique_ptr<Usable> usable) {
-	this->usables.emplace(usable->get_id(), std::move(usable));
 
-	//this->protocol.sendUsableId((char) usable->get_id());
+	this->usables.emplace(usable->get_id(), std::move(usable));
+	this->protocol.sendUsableId(usable->get_id(), usable->get_ammo());
 }
 
 void Player::set_id(int id) {
 	this->id = id;
 	//Notify client id
-	//this->protocol.sendPlayerId((char) id);
+	this->protocol.sendPlayerId(id);
 }
 
 int Player::get_id() {

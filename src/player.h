@@ -8,6 +8,7 @@
 #include <memory>
 #include "protocol.h"
 #include "ubicable.h"
+#include "counter.h"
 
 class Player {
 private:
@@ -15,18 +16,20 @@ private:
 	int second_counter;
 	bool my_turn;
 	bool continue_receiving;
+	Counter counter;
 
 	Protocol protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>> usables;
 	std::unordered_map<int, std::unique_ptr<Worm>&> worms;
 
+	std::mutex turn_m;
+
 	bool is_my_turn();
-	void set_turn();
-	int get_second_counter();
-	void set_second_counter(int count);
+	void set_turn(bool state);
 public:
 	Player(Protocol protocol);
-	//Player(Player&&);
+	Player(Player&&);
+
 	void play();
 	void game_loop();
 	bool lost();

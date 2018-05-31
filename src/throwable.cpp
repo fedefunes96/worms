@@ -62,10 +62,6 @@ void Throwable::explode() {
 	this->delete_myself();
 }
 
-std::string Throwable::get_type() {
-	return THROWABLE_TYPE;
-}
-
 void Throwable::create_myself(b2World& world) {
 	b2BodyDef body_def;
 	b2CircleShape body_shape;

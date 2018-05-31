@@ -25,7 +25,7 @@ Stage::Stage(const float32 time_step
 
 void Stage::remove(b2Body* body) {
 	std::lock_guard<std::mutex> lock(this->remove_m);
-	
+
 	this->game.notify_removal((Ubicable*) body->GetUserData());
 	this->to_remove.push_back(body);
 }
@@ -93,7 +93,7 @@ void Stage::draw() {
  				movable->delete_myself();
  			} else {
  				this->game.notify_position(movable, pos.x, pos.y, angle);	
- 				printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
+ 				//printf("Pos X: %0.1f - Pos Y: %0.1f - Angle: %0.1f\n", pos.x, pos.y, b->GetAngle());
  			}
 
  			if (b->IsAwake())
@@ -138,7 +138,7 @@ void Stage::pre_initialize() {
 
  		this->game.notify_position((Ubicable*) b->GetUserData(), pos.x, pos.y, angle);
 
- 		printf("Pos x: %0.2f - Pos y: %0.2f - angle: %0.2f\n", pos.x, pos.y, angle);
+ 		//printf("Pos x: %0.2f - Pos y: %0.2f - angle: %0.2f\n", pos.x, pos.y, angle);
   	}
 }
 
