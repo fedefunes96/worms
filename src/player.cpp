@@ -47,11 +47,11 @@ void Player::play() {
 
 	this->counter.start_counting();
 
-	printf("Starts turn of 20 secs\n");
+	//printf("Starts turn of 20 secs\n");
 
 	while (!this->counter.is_over() && this->is_my_turn()) {}
 
-	printf("Ends turn of 20 secs\n");
+	//printf("Ends turn of 20 secs\n");
 	
 	this->counter.stop();
 
@@ -61,13 +61,18 @@ void Player::play() {
 void Player::game_loop() {
 	while (this->continue_receiving) {
 		try {
-			/*
-			char cmd = this->protocol.receive_cmd();
+			//std::lock_guard<std::mutex> lock(this->worms_m);
+			//MoveDirection mdir = MoveDirection::LEFT;
 
-			if (!this->my_turn)
-				continue;
-			*/
+			//if (!this->worms.at(0)->im_dead())
+			//this->worms.at(0)->start_moving(mdir);
 
+			/*b2Vec2 dest(10, 3);
+			std::vector<float> params;
+
+			this->worms.at(0)->use(this->usables.at(0), dest, params);	
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(20000));*/
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
@@ -126,16 +131,17 @@ void Player::notify_actual_player(int id) {
 }
 
 void Player::notify_removal(Ubicable* ubicable) {
+	/*std::lock_guard<std::mutex> lock(this->worms_m);
 
 	if (ubicable->get_type().compare("Worm") == 0) {
-		std::unordered_map<int, std::unique_ptr<Worm>&>::const_iterator it;
+		std::unordered_map<int, Worm*>::const_iterator it;
 
 		it = this->worms.find(ubicable->get_id());
 
 		if (it != this->worms.end()) {
 			this->worms.erase(it);
 		}
-	}
+	}*/
 
 	this->protocol.sendRemove(ubicable->get_type(), ubicable->get_id());
 }
@@ -145,8 +151,8 @@ void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) 
 	this->protocol.sendPosition(ubicable->get_type(), ubicable->get_id(), x, y, angle);
 }
 
-void Player::attach_worm(std::unique_ptr<Worm>& worm) {
-
+//void Player::attach_worm(Worm* worm) {
+void Player::attach_worm(std::shared_ptr<Worm> worm) {
 	this->worms.emplace(worm->get_id(), worm);
 	this->protocol.sendWormId(worm->get_id(), worm->get_health());
 }

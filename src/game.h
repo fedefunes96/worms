@@ -29,8 +29,8 @@ private:
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
 	Water water;
 
-	std::vector<std::unique_ptr<Worm>> worms;
-	std::vector<std::unique_ptr<Girder>> girders;
+	//std::vector<std::unique_ptr<Worm>> worms;
+	//std::vector<std::unique_ptr<Girder>> girders;
 
 	int id_actual_player;
 	int id_player_list;

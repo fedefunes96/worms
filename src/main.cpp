@@ -14,7 +14,6 @@
 
 int main(int argc, char* argv[]) {
 
-	//std::string ip("127.0.0.1");
 	std::string port("7777");
 
 	Socket server(port);
@@ -23,6 +22,8 @@ int main(int argc, char* argv[]) {
 
 	if (skt == nullptr)
 		return 0;
+
+	//Socket* skt = nullptr;
 
 	std::vector<Player> players;
 
@@ -36,38 +37,7 @@ int main(int argc, char* argv[]) {
 
 	Game game("hi", std::move(players));
 
-	/*b2Vec2 velocity(50.0, 10.0);
-
-	Throwable test_mov(stage
-		, 5
-		, 2
-		, 0
-		, velocity
-		, 30.0
-		, 1.0
-		, 0.0
-		, 75.0);
-
-	Girder test_static(stage
-		, 0
-		, 10
-		, 0
-		, 1
-		, 1);*/
-
-	delete skt;
-
-	//stage.draw();
-	/*for (int i = 0; i < 50; i++) {
-		stage.draw();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-	}*/
-	//Girder girder(stage, 0, 20, 0, 1, 1);
-
-	//b2Vec2 pos = girder.get_position();
-
-	//printf("X: %.02f - Y: %0.2f\n", pos.x, pos.y);
-	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	//delete skt;
 
 	return 0;
 }

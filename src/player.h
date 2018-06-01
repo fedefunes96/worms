@@ -20,9 +20,11 @@ private:
 
 	Protocol protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>> usables;
-	std::unordered_map<int, std::unique_ptr<Worm>&> worms;
+	//std::unordered_map<int, Worm*> worms;
+	std::unordered_map<int, std::shared_ptr<Worm>> worms;
 
 	std::mutex turn_m;
+	std::mutex worms_m;
 
 	bool is_my_turn();
 	void set_turn(bool state);
@@ -34,7 +36,8 @@ public:
 	void game_loop();
 	bool lost();
 
-	void attach_worm(std::unique_ptr<Worm>& worm);
+	//void attach_worm(Worm* worm);
+	void attach_worm(std::shared_ptr<Worm> worm);
 	void attach_usable(std::unique_ptr<Usable> usable);
 
 	void notify_winner(int id);

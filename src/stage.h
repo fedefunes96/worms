@@ -6,6 +6,7 @@
 #include <thread>
 #include <vector>
 #include "ubicable.h"
+#include "movable.h"
 #include <mutex>
 //#include "game.h"
 
@@ -26,21 +27,28 @@ private:
 	//std::mutex m;
 
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
+	std::vector<std::shared_ptr<Movable>> movables;
 
-	std::vector<Ubicable*> to_create;
-	std::vector<b2Body*> to_remove;
+	//std::vector<Ubicable*> to_create;
+	std::vector<std::unique_ptr<Ubicable>> to_create;
+	std::vector<std::shared_ptr<Movable>> to_create_mov;
+	//std::vector<b2Body*> to_remove;
 
-	std::mutex create_m;
-	std::mutex remove_m;
+	std::mutex ubicable_m;
+	std::mutex movable_m;
+	//std::mutex remove_m;
 
 	bool continue_drawing;
 	bool something_moving;
 
 	void remove_deads();
 	void create_objects();
+	void create_objects_mov();
+
 	void pre_initialize();
 public:
-	Stage(const float32 time_step
+	Stage(const std::string& stage_file
+		, const float32 time_step
 		, const int32 velocity_iterations
 		, const int32 position_iterations
 		, Game& game
@@ -48,9 +56,12 @@ public:
 
 	void draw();
 	void stop_drawing();	
-	void remove(b2Body* body);
+	//void remove(b2Body* body);
 	bool is_something_moving();
-	void insert(Ubicable* ubicable);
+	//void insert(Ubicable* ubicable);
+
+	void insert(std::unique_ptr<Ubicable> ubicable);
+	void insert(std::shared_ptr<Movable> movable);
 	//b2Body* insert(b2BodyDef* body_def);
 
 	b2World& get_world();

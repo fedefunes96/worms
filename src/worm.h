@@ -43,8 +43,10 @@ private:
 	const int height;
 	int actual_health;
 	int owner;
+	bool dead;
 
 	MoveDirection facing_direction;
+	MoveDirection move_direction;
 	b2Vec2 actual_velocity;
 
 	bool is_on_ground();
@@ -65,7 +67,7 @@ public:
 	virtual std::string get_type() override;
 	virtual int get_id() override;
 	virtual void create_myself(b2World& world) override;
-	virtual void delete_myself() override;
+	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
 	virtual void stop_contacting() override;
@@ -75,6 +77,9 @@ public:
 	virtual void colision(Throwable& throwable) override;*/
 
 	virtual void move_step() override;
+	virtual b2Body* get_body() override;
+	virtual bool im_dead() override;
+	virtual void force_death() override;
 
 	int get_health();
 	void add_health(int health);

@@ -30,7 +30,7 @@ public:
 
 	virtual std::string get_type() override;
 	virtual void create_myself(b2World& world) override;
-	virtual void delete_myself() override;
+	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
 	virtual void stop_contacting() override;
@@ -39,6 +39,9 @@ public:
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;*/
 	virtual int get_id() override;
+	virtual b2Body* get_body() override;
+	virtual bool im_dead() override;
+	virtual void force_death() override;
 
 	//Girder(Girder&&);
 };

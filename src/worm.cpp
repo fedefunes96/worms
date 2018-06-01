@@ -34,44 +34,18 @@ Worm::Worm(Stage& stage
 	, height_dmg(height_dmg)
 	, longitude(longitude)
 	, height(height) {
-	/*b2BodyDef body_def;
-	b2PolygonShape body_shape;
-	b2FixtureDef fixture_def;
-
-	body_def.type = b2_dynamicBody;
-	body_def.position.Set(x, y);
-	body_def.angle = angle_rad;
-
-	body_shape.SetAsBox(longitude, height);
-
-	fixture_def.shape = &(body_shape);
-	fixture_def.density = 1.0;
-	fixture_def.restitution = restitution;
-
-	this->body = stage.insert(&body_def);
-	this->body->SetUserData(this);
-
-	this->fixture = this->body->CreateFixture(&fixture_def);		
-	this->fixture->SetUserData(this);
-
-	//Set a sensor at the floor of the body
-	//Barely showing
-	this->sensor_for_jump.add_at_position(this->body
-										, b2Vec2(0, -height*0.85)
-										, longitude
-										, height*0.1);*/
 
 	this->actual_health = health;
-	this->facing_direction = MoveDirection::NONE;
+	this->facing_direction = MoveDirection::RIGHT;
+	this->move_direction = MoveDirection::NONE;
 	this->actual_velocity.Set(0, 0);
-
-	stage.insert(this);
+	this->dead = true;
 }
 
 void Worm::receive_dmg(int damage) {
 	if (this->actual_health - damage <= 0) {
 		this->actual_health = 0;
-		this->delete_myself();
+		this->dead = true;
 	} else {
 		this->actual_health -= damage;
 	}
@@ -87,37 +61,43 @@ void Worm::add_health(int health) {
 
 void Worm::start_moving(MoveDirection mdirect) {
 	//Mutex in here (1)
-	float32 angle = this->body->GetAngle();
-
-	switch (mdirect) {
-		case MoveDirection::RIGHT: {
-			this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
-			this->facing_direction = MoveDirection::RIGHT;
-			break;
-		}
-		case MoveDirection::LEFT: {
-			this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
-			this->facing_direction = MoveDirection::LEFT;
-			break;
-		}	
-		case MoveDirection::JUMP_FORW: {
-			this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
-			break;
-		}
-		case MoveDirection::JUMP_BACK: {
-			this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);				
-			break;
-		}										
-		case MoveDirection::NONE: {
-			this->actual_velocity.Set(0, 0);
-			break;
-		}
-	}
+	this->move_direction = mdirect;
 }
 
 void Worm::move_step() {
 	//Need mutex (1)
+	//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
+
 	if (this->is_on_ground()) {
+		//printf("Im on ground\n");
+		//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);	
+		float32 angle = this->body->GetAngle();
+
+		switch (this->move_direction) {
+			case MoveDirection::RIGHT: {
+				this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
+				this->facing_direction = MoveDirection::RIGHT;
+				break;
+			}
+			case MoveDirection::LEFT: {
+				this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
+				this->facing_direction = MoveDirection::LEFT;
+				break;
+			}	
+			case MoveDirection::JUMP_FORW: {
+				this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
+				break;
+			}
+			case MoveDirection::JUMP_BACK: {
+				this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);				
+				break;
+			}										
+			case MoveDirection::NONE: {
+				this->actual_velocity.Set(0, 0);
+				break;
+			}
+		}
+
 		this->body->SetLinearVelocity(this->actual_velocity); 
 	}
 }
@@ -127,6 +107,9 @@ bool Worm::is_on_ground() {
 }
 
 void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<float>& params) {
+	if (this->dead)
+		return;
+
 	b2Vec2 pos = this->body->GetPosition();
 
 	usable->use(pos, dest, params);
@@ -141,6 +124,8 @@ int Worm::get_id() {
 }
 
 void Worm::create_myself(b2World& world) {
+	this->dead = false;
+
 	b2BodyDef body_def;
 	b2PolygonShape body_shape;
 	b2FixtureDef fixture_def;
@@ -164,13 +149,13 @@ void Worm::create_myself(b2World& world) {
 	//Set a sensor at the floor of the body
 	//Barely showing
 	this->sensor_for_jump.add_at_position(body
-										, b2Vec2(0, -height*0.85)
+										, b2Vec2(0, -height)
 										, longitude
 										, height*0.1);
 }
 
-void Worm::delete_myself() {
-	this->stage.remove(this->body);
+void Worm::delete_myself(b2World& world) {
+	world.DestroyBody(this->body);
 }
 
 /*void Worm::start_contacting(Ubicable* ubicable) {
@@ -196,3 +181,15 @@ void Worm::colision(Worm& worm) {
 void Worm::colision(Throwable& throwable) {
 	//Do nothing
 }*/
+
+b2Body* Worm::get_body() {
+	return this->body;
+}
+
+bool Worm::im_dead() {
+	return this->dead;
+}
+
+void Worm::force_death() {
+	this->dead = true;
+}

@@ -10,7 +10,7 @@ void Sensor::add_at_position(b2Body* body, b2Vec2 pos, float longitude, float he
 	b2PolygonShape body_shape;
 	b2FixtureDef fixture_def;
 
-	body_shape.SetAsBox(longitude, height*0.1, b2Vec2(0, -height*0.85), 0);
+	body_shape.SetAsBox(longitude, height, pos, 0);
 
 	fixture_def.shape = &(body_shape);
 	fixture_def.density = 1.0;
@@ -40,7 +40,7 @@ void Sensor::create_myself(b2World& world) {
 	//This object doesn't exist in the stage
 }	
 
-void Sensor::delete_myself() {
+void Sensor::delete_myself(b2World& world) {
 	//This object doesn't exist in the stage
 }
 
@@ -50,4 +50,17 @@ void Sensor::start_contacting() {
 
 void Sensor::stop_contacting() {
 	this->object_count--;
+}
+
+b2Body* Sensor::get_body() {
+	b2Body* b = nullptr;
+	return b;
+}
+
+bool Sensor::im_dead() {
+	return false;
+}
+
+void Sensor::force_death() {
+
 }

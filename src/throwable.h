@@ -23,6 +23,8 @@ private:
 	const float restitution;
 	const float max_dmg;
 
+	bool dead;
+
 	void explode();
 public:
 	Throwable(Stage& stage
@@ -38,7 +40,7 @@ public:
 	virtual std::string get_type() = 0;
 	virtual int get_id() override;
 	virtual void create_myself(b2World& world) override;
-	virtual void delete_myself() override;
+	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
 	virtual void stop_contacting() override;
@@ -48,6 +50,10 @@ public:
 	virtual void colision(Throwable& throwable) override;	*/
 
 	virtual void move_step() override;
+	virtual b2Body* get_body() override;
+	virtual bool im_dead() override;
+	virtual void force_death() override;
+
 };
 
 #endif

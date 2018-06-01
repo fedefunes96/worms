@@ -28,28 +28,7 @@ Throwable::Throwable(Stage& stage
 	, restitution(restitution)
 	, max_dmg(max_dmg) {
 
-	/*b2BodyDef body_def;
-	b2CircleShape body_shape;
-	b2FixtureDef fixture_def;
-
-	body_def.type = b2_dynamicBody;
-	body_def.position.Set(x, y);
-	body_def.angle = angle_rad;
-
-	body_shape.m_radius = radius;
-	body_shape.m_p.Set(0, 0);
-
-	fixture_def.shape = &(body_shape);
-	fixture_def.density = 1.0;
-	fixture_def.restitution = restitution;
-
-	this->body = stage.insert(&body_def);
-	this->body->SetUserData(this);
-
-	this->fixture = this->body->CreateFixture(&fixture_def);		
-	this->fixture->SetUserData(this);*/
-
-	stage.insert(this);
+	this->dead = false;
 }
 
 void Throwable::explode() {
@@ -59,7 +38,8 @@ void Throwable::explode() {
 		, 10.0);
 
 	//Now i dissapear
-	this->delete_myself();
+	this->dead = true;
+	printf("Explode\n");
 }
 
 void Throwable::create_myself(b2World& world) {
@@ -83,10 +63,14 @@ void Throwable::create_myself(b2World& world) {
 
 	b2Fixture* fixture = this->body->CreateFixture(&fixture_def);		
 	fixture->SetUserData(this);
+
+	this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
+
+	this->body->ApplyAngularImpulse(angular_velocity);
 }
 
-void Throwable::delete_myself() {
-	this->stage.remove(this->body);
+void Throwable::delete_myself(b2World& world) {
+	world.DestroyBody(this->body);
 }
 
 /*void Throwable::start_contacting(Ubicable* ubicable) {
@@ -94,7 +78,8 @@ void Throwable::delete_myself() {
 }*/
 //Whatever i hit, i must explode
 void Throwable::start_contacting() {
-	this->explode();
+	if (!this->dead)
+		this->explode();
 }
 
 void Throwable::stop_contacting() {
@@ -124,4 +109,16 @@ void Throwable::move_step() {
 
 		this->body->ApplyAngularImpulse(angular_velocity);*/
 
+}
+
+b2Body* Throwable::get_body() {
+	return this->body;
+}
+
+bool Throwable::im_dead() {
+	return this->dead;
+}
+
+void Throwable::force_death() {
+	this->dead = true;
 }

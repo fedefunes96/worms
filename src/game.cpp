@@ -15,7 +15,7 @@
 #include "bazooka.h"
 
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
- : stage(1.0/60.0, 6, 2, *this) 
+ : stage(stage_file, 1.0/60.0, 6, 2, *this) 
  , players(std::move(players)) {
  	this->id_player_list = 0;
 
@@ -30,12 +30,18 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
 void Game::start_game() {
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
 	this->game_t = std::thread(&Game::game_loop, this);
+
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		this->players_t.push_back(
+			std::thread(&Player::game_loop, &this->players[i])
+		);
+	}
 	//Wait ten seconds
-	printf("Start the world\n");
+	//printf("Start the world\n");
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20000));
 
-	printf("End of world\n");
+	//printf("End of world\n");
 
 	this->stage.stop_drawing();
 }
@@ -46,9 +52,6 @@ void Game::initialize_players() {
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].set_id(i+1);
-		this->players_t.push_back(
-			std::thread(&Player::game_loop, &this->players[i])
-		);
 		//this->players[i]->start;
 	}
 
@@ -58,9 +61,9 @@ void Game::initialize_players() {
 
 void Game::create_test_world() {
 	//Let's create 2 worms
-	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
+	Worm* worm = new Worm(this->stage
 		, 10 //10 x right
-		, 20 // 20 y up
+		, 3 // 20 y up
 		, 0.0 // Angle 0 -> Facing right
 		, 1 //Long 2m long
 		, 1 //Height 2m height
@@ -69,9 +72,17 @@ void Game::create_test_world() {
 		, 2.0 //Mov speeed
 		, std::make_pair (10.0,20.0) //Forw jump
 		, std::make_pair (10.0,20.0) //Back jump
-		, 10.0))); //Max fall damage)));
+		, 10.0);
 
-	this->worms.push_back(std::unique_ptr<Worm>(new Worm(this->stage
+	std::shared_ptr<Worm> worm1_ptr = std::shared_ptr<Worm>(worm);
+	//Copy the shared ptr
+	this->players[0].attach_worm(worm1_ptr);
+
+	//Move the shared ptr (faster)
+	this->stage.insert(std::move(worm1_ptr));
+	//this->stage.insert(std::shared_ptr<Movable>(worm));
+
+	Worm* worm2 = new Worm(this->stage
 		, 5 //5 x right
 		, 10 // 10 y up
 		, 0.0 // Angle 0 -> Facing right
@@ -82,38 +93,44 @@ void Game::create_test_world() {
 		, 2.0 //Mov speeed
 		, std::make_pair (10.0,20.0) //Forw jump
 		, std::make_pair (10.0,20.0) //Back jump
-		, 10.0))); //Max fall damage)));
+		, 10.0);
+
+	std::shared_ptr<Worm> worm2_ptr = std::shared_ptr<Worm>(worm2);
+
+	this->players[0].attach_worm(worm2_ptr);
+	this->stage.insert(std::move(worm2_ptr));
+	//this->stage.insert(std::shared_ptr<Movable>(worm2));
 
 	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO));	
 
-	this->players[0].attach_worm(this->worms[0]);
-	this->players[0].attach_worm(this->worms[1]);
+	//this->players[0].attach_worm(worm);
+	//this->players[0].attach_worm(worm2);
 	this->players[0].attach_usable(std::move(ptr));
 
 	//Create 3 girders
 
-	this->girders.push_back(
-	std::unique_ptr<Girder>(new Girder(this->stage
+	this->stage.insert(
+		std::unique_ptr<Ubicable>(new Girder(this->stage
 		, 0
 		, 0
 		, b2_pi/2 //Vertical
 		, 20
 		, 1)));
 
-	this->girders.push_back(
-	std::unique_ptr<Girder>(new Girder(this->stage
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
 		, 20
 		, 0
 		, b2_pi
 		, 20
 		, 1)));
 
-	this->girders.push_back(
-	std::unique_ptr<Girder>(new Girder(this->stage
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
 		, 0
 		, 0
 		, 0.0
-		, 20
+		, 200
 		, 1)));
 }
 
@@ -216,7 +233,7 @@ void Game::end_game(Game_status game_status) {
 		this->notify_winner();
 	}*/
 	this->notify_winner();
-	printf("Game ended\n");
+	//printf("Game ended\n");
 	//Show message "Loser" to all losers
 	//this->notify_losers();
 }
@@ -292,10 +309,10 @@ Game::~Game() {
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].notify_game_end();
-		//this->players[i].join();
-	}
-
-	for (int i = 0; i < (int) this->players_t.size(); i++) {
 		this->players_t[i].join();
 	}
+
+	/*for (int i = 0; i < (int) this->players_t.size(); i++) {
+		this->players_t[i].join();
+	}*/
 }
