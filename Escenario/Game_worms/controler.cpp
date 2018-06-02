@@ -41,10 +41,6 @@ void Controler::run()
         if(cmd== static_cast<int>(Commands::GAME_END)){
             qDebug()<<"game end";
             gameRunning=false;
-            EventGame* e= new EventGame();
-            delete(e);
-            e->angle=0;
-            this->game->addEvent(*e);
             //avisar a game
             return;
         }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
