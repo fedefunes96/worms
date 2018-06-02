@@ -37,7 +37,6 @@ void Controler::run()
         EventGame event;
         int8_t cmd = this->protocol->recvCmd();
         event.typeEvent=cmd;
-
         if(cmd== static_cast<int>(Commands::GAME_END)){
             qDebug()<<"game end";
             gameRunning=false;

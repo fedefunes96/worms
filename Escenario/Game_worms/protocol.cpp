@@ -13,13 +13,15 @@ void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, fl
     TypeObj type;
     Commands cmd = Commands::POSITION;
 
-    if (type_obj.compare("Worm")) {
+
+    if (type_obj.compare("Worm")==0) {
         type = TypeObj::WORM;
-    } else if (type_obj.compare("Girder")) {
+    } else if (type_obj.compare("Girder")==0) {
         type = TypeObj::GIRDER;
-    } else if (type_obj.compare("Bazooka")) {
+    } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
     }
+
 
     int32_t conv_id = htonl(id_obj); 
     int32_t conv_posx = htonl(static_cast<int>(posX));
@@ -215,18 +217,13 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     conexion->recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
     conexion->recibir((char*)&aux,4);
-    //std::cout <<"posX:"<<(ntohl(aux))<<std::endl;
     *posX = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
-    //std::cout <<"posY:"<<(ntohl(aux))<<std::endl;
     *posY = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
     float aux2=(ntohl(aux)*57.2958/100)+0.5;
-    //std::cout << "valor angulo" << aux2 << std::endl;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
-
-//    std::cout << "type:" << static_cast<int16_t>(*type_obj) << "id:" << *id_obj << "posX:" << *posX << "posY:" << *posY << std::endl;
 }
 
 

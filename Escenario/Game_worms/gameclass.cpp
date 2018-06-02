@@ -9,7 +9,7 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->myPlayer = new Player();
     this->queue = new QQueue<EventGame>();
     this->timer = new QTimer();
-    this->timer->start(1);
+    this->timer->start(400);
     connect(this->timer,&QTimer::timeout,this,&GameClass::checkQueueEvent);
 }
 
@@ -39,7 +39,7 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
         qDebug()<<"add worm";
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
-            qDebug()<<"move worm";
+            qDebug()<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
             this->game->moveObjTo(id,posX,posY,angle);
         }else{
             qDebug()<<"pos worm sin vida";
@@ -58,7 +58,6 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
         }
     }else if(type==1 && health==-10){
         //es girder
-        qDebug()<<"girder";
         if(!this->game->containsItem(type,id)){
             //no contiene girder...
             qDebug()<<"no contiene girder";
@@ -79,7 +78,6 @@ void GameClass::updatePlayer(int type, int id, int ammo, Worm_View *worm)
     if(type==2){
         //set weapon to player to be usable
     }else if(type==3){
-        qDebug()<<"entre";
         this->myPlayer->setId(id);
     }else if(type==6){
     }
@@ -124,16 +122,19 @@ void GameClass::checkQueueEvent(){
         }else if(e.typeEvent==static_cast<int>(TypeEvent::ACTUAL_PLAYER)){
             //enable player id to play
         }else if((e.typeEvent==static_cast<int>(TypeEvent::ATTACH_WORM_ID)) || (e.typeEvent==static_cast<int>(TypeEvent::POSITION))){
-            qDebug()<<"update item";
+            //qDebug()<<"update item";
             this->updateItem(e.typeObj,e.id,e.health,e.posX,e.posY,e.angle);
         }else if(e.typeEvent==static_cast<int>(TypeEvent::REMOVE)){
             //remove item
         }else if(e.typeEvent==static_cast<int>(TypeEvent::WINNER)){
-            qDebug()<<"winner asoidaoisd";
+            qDebug()<<"winner leido!";
             this->timer->stop();
+
         }
 
 
+    }else{
+        //qDebug()<<"queue vacia";
     }
 }
 
