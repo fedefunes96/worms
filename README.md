@@ -17,14 +17,12 @@
 
 - Modelo cliente/ Escenario
 - 1) Ajustes finales protocolo con servidor
-- 2) Finalizar modelo cliente
-- 3) Finalizar mantener animacion
-- 4) Finalizar loadWeapon segun el angulo del worm
-- 5) Hacer animaicon worm apuntando
-- 6) Hacer animacion worm ahogandose + colocar agua
-- 7) Interfaz conexion servidor
-- 8) Documentacion
-- 9) Testings
+- 2) Finalizar creacion de bullets
+- 3) Finalizar modelo cliente - turnos/multiplayer
+- 4) Hacer animacion worm ahogandose + colocar agua y muerte del worm
+- 5) Interfaz conexion servidor
+- 6) Documentacion
+- 7) Testings
 
 -Cliente editor
 	1) Finalizar creador de ecenarios (problemas con el dragg)
