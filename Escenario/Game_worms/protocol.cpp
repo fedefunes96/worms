@@ -55,6 +55,7 @@ void Protocol::sendWormId(int8_t id, int32_t health) {
 void Protocol::sendUsableId(int8_t id, int32_t ammo) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
+
     Commands cmd = Commands::ATTACH_USABLE_ID;
 
     int32_t conv_ammo = htonl(ammo);
@@ -214,22 +215,25 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     conexion->recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
     conexion->recibir((char*)&aux,4);
-    std::cout <<"posX:"<<(ntohl(aux))<<std::endl;
+    //std::cout <<"posX:"<<(ntohl(aux))<<std::endl;
     *posX = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
-    std::cout <<"posY:"<<(ntohl(aux))<<std::endl;
+    //std::cout <<"posY:"<<(ntohl(aux))<<std::endl;
     *posY = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
     float aux2=(ntohl(aux)*57.2958/100)+0.5;
     //std::cout << "valor angulo" << aux2 << std::endl;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
+
+//    std::cout << "type:" << static_cast<int16_t>(*type_obj) << "id:" << *id_obj << "posX:" << *posX << "posY:" << *posY << std::endl;
 }
 
 
 int8_t Protocol::recvCmd() {
     uint8_t cmd;
     conexion->recibir((char*)&cmd,1);
+    //std::cout << "command:" << static_cast<int16_t>(cmd) << std::endl;
     return cmd;
 }
 
@@ -239,11 +243,13 @@ void Protocol::recvWormId(int8_t *id, int32_t *health)
     int32_t aux;
     conexion->recibir((char*)&aux,4);
     *health = ntohl(aux);
+    //std::cout << "idWorm:" << static_cast<int16_t>(*id) << "health:" << *health << std::endl;
 }
 
 void Protocol::recvPlayerId(int8_t *id)
 {
     conexion->recibir((char*)id,1);
+    //std::cout << "idPlayer:" << static_cast<int16_t>(*id) << std::endl;
 }
 
 void Protocol::recvUsableId(int8_t* id,int32_t* ammo)

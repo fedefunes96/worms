@@ -1,24 +1,28 @@
 #include "camera.h"
 #include "mybutton.h"
 #include <QDebug>
-#include "dialogchooseweapon.h"
 
-Camera::Camera(QGraphicsScene *scene):QGraphicsView()
+Camera::Camera(QWidget *parent):QGraphicsView(parent)
 {
+
+}
+
+Camera::Camera(QGraphicsScene *scene,int w, int h):QGraphicsView()
+{
+
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     verticalScrollBar()->setValue(scene->height()); // no hace falta chequear, se mueve hasta el maximo
-    qDebug()<<verticalScrollBar()->value();
     horizontalScrollBar()->setValue(0);
-    setFixedSize(1024,768);
+    setFixedSize(w,h-55); // el 40 es por la barra de arriba en ubuntu...
     show();
-    timer = new QTimer();
-    connect(timer, &QTimer::timeout, this, &Camera::followObject);
-    timer->start(5);
-    this->posXcamera_R=800;
+    //timer = new QTimer();
+    //connect(timer, &QTimer::timeout, this, &Camera::followObject);
+    //timer->start(5);
+    this->posXcamera_R=w-200;
     this->posXcamera_L=200;
-    this->posYcamera_D=700;
+    this->posYcamera_D=h-100;
     this->posYcamera_U=100;
 
 
@@ -26,23 +30,30 @@ Camera::Camera(QGraphicsScene *scene):QGraphicsView()
 
     setWindowTitle("Worms Armaggedon");
 
-    this->boton->setGeometry(512,scene->height()-40,30,30);
+    this->boton->setGeometry((w/2)-15,this->scene()->height()-40,30,30);
     boton->setAttribute(Qt::WA_TranslucentBackground);
     connect(boton,&QPushButton::clicked,this,&Camera::handleButton);
     scene->addWidget(this->boton);
+    this->wormActive = nullptr;
 
 
 }
 
 
+void Camera::setVisibleButton(bool visible){
+    this->boton->setVisible(visible);
+}
 
 void Camera::handleButton(){
-    qDebug()<<"presione boton";    
-    menuWeapon = new DialogChooseWeapon();
-    menuWeapon->setWindowTitle("Weapons & Tools");
+    if(this->wormActive==nullptr){
+        qDebug()<<"null";
+        return;
+    }
+    menuWeapon = new Weapons_and_Tools(this,this->wormActive);
     menuWeapon->setModal(true);
+    menuWeapon->setAttribute(Qt::WA_DeleteOnClose);
     menuWeapon->exec();
-
+    menuWeapon=nullptr;
 }
 
 void Camera::followObject()
@@ -57,7 +68,6 @@ void Camera::followObject()
         this->itemsToFollow.pop();
         return;
     }
-
 
     //esta vivo y quiero aun seguirlo..
     if(item->x() >= this->posXcamera_R && horizontalScrollBar()->value()!=2000)
@@ -78,13 +88,17 @@ void Camera::followObject()
         this->boton->move(point.x()-1,point.y());
     }
     //subir y bajar camara
-/*
+
+    //qDebug()<<verticalScrollBar()->value();
+    //8977
+    //qDebug()<<item->y();
+    //7775 y subiendo
     if(item->y() <= this->posYcamera_U && verticalScrollBar()->value() > 0){
         qDebug()<<"subir camara";
         this->posYcamera_U -=1;
         verticalScrollBar()->setValue(verticalScrollBar()->value()-1);
     }
-
+/*
     if(item->y() >= this->posYcamera_D && verticalScrollBar()->value() != 0){
         qDebug()<<"bajar camara";
         this->posYcamera_D +=1;
@@ -93,7 +107,10 @@ void Camera::followObject()
 */
 }
 
-
+void Camera::setWormActive(Worm_View* worm)
+{
+    this->wormActive = worm;
+}
 
 void Camera::addItemToFollow(MovableItem *item)
 {

@@ -2,13 +2,7 @@
     <qresource prefix="/images">
         <file>intro.jpg</file>
         <file>missile.png</file>
-        <file>wormwait.png</file>
-        <file>wwalk_left.png</file>
-        <file>wwalk_right.png</file>
         <file>intro2.jpg</file>
-        <file>wwalku_l.png</file>
-        <file>wwalku_r.png</file>
-        <file>bazooka.1.png</file>
         <file>shothit.png</file>
         <file>baseball.1.png</file>
         <file>banana.1.png</file>
@@ -16,12 +10,37 @@
         <file>cluster.1.png</file>
         <file>dynamite.1.png</file>
         <file>firepnch.1.png</file>
-        <file>girder.1.png</file>
         <file>grenade.1.png</file>
         <file>hgrenade.1.png</file>
         <file>mortar.1.png</file>
         <file>teleport.1.png</file>
         <file>grds4.png</file>
         <file>grdl4.png</file>
+        <file>wflyup.png</file>
+        <file>wjump.png</file>
+        <file>wland1.png</file>
+        <file>wbackflp.png</file>
+        <file>bazooka.1.png</file>
+        <file>wbazlnk.png</file>
+        <file>wairlnk.png</file>
+        <file>wbanlnk.png</file>
+        <file>wclslnk.png</file>
+        <file>wdynlnk.png</file>
+        <file>wgrnlnk.png</file>
+        <file>whgrlnk.png</file>
+        <file>wtellnk.png</file>
+        <file>wbsblnk.png</file>
+        <file>wairlnkd.png</file>
+        <file>wairlnku.png</file>
+        <file>wfly.png</file>
+        <file>wfall.png</file>
+        <file>wwalk.png</file>
+        <file>wwalkd.png</file>
+        <file>wwalku.png</file>
+        <file>wwait.png</file>
+        <file>wwaitd.png</file>
+        <file>wwaitu.png</file>
+        <file>target.png</file>
+        <file>lineTarget.png</file>
     </qresource>
 </RCC>

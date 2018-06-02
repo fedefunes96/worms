@@ -9,7 +9,7 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->myPlayer = new Player();
     this->queue = new QQueue<EventGame>();
     this->timer = new QTimer();
-    this->timer->start(2000);
+    this->timer->start(1);
     connect(this->timer,&QTimer::timeout,this,&GameClass::checkQueueEvent);
 }
 
@@ -19,6 +19,7 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
 {
     if(health!=-10 && type==0){
         //add vida
+        qDebug()<<"type:"<<type<<"id"<<id;
         if(this->game->containsItem(type,id)){
             //contiene al worm
             qDebug()<<"contiene worm";
@@ -113,6 +114,7 @@ void GameClass::checkQueueEvent(){
 
         if(e.typeEvent== static_cast<int>(TypeEvent::GAME_END)){
             qDebug()<<"game end";
+            this->timer->stop();
         }else if(e.typeEvent==static_cast<int>(TypeEvent::ATTACH_PLAYER_ID)){
             qDebug()<<"attach player id event";
             this->updatePlayer(e.typeEvent,e.id);
@@ -126,8 +128,9 @@ void GameClass::checkQueueEvent(){
             this->updateItem(e.typeObj,e.id,e.health,e.posX,e.posY,e.angle);
         }else if(e.typeEvent==static_cast<int>(TypeEvent::REMOVE)){
             //remove item
-        }else{
-            qDebug()<<"comando no valido aun";
+        }else if(e.typeEvent==static_cast<int>(TypeEvent::WINNER)){
+            qDebug()<<"winner asoidaoisd";
+            this->timer->stop();
         }
 
 

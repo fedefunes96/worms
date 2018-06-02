@@ -181,6 +181,10 @@ int Socket::recibir(char* texto,int cantidad){
 		}
 	}
 	if(socket_error||otro_socket_cerr){
+        if(socket_error){
+        }
+        if(otro_socket_cerr){
+        }
 		return CERO; 
 	}
 	return recibidos;

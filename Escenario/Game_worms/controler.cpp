@@ -33,18 +33,20 @@ void Controler::run()
 */
 
     bool gameRunning=true;
-    int count=0;
-    while(count!=3){ // temporal
+    while(gameRunning){ // temporal
         EventGame event;
-        count++;
         int8_t cmd = this->protocol->recvCmd();
         event.typeEvent=cmd;
 
         if(cmd== static_cast<int>(Commands::GAME_END)){
             qDebug()<<"game end";
             gameRunning=false;
+            EventGame* e= new EventGame();
+            delete(e);
+            e->angle=0;
+            this->game->addEvent(*e);
             //avisar a game
-            break;
+            return;
         }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
             qDebug()<<"attach player id";
             int8_t id;
@@ -79,14 +81,14 @@ void Controler::run()
             this->game->addEvent(event);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
-            qDebug()<<"remove";
+            //qDebug()<<"remove";
             int8_t id_obj;
             int32_t id;
             this->protocol->recvRemove(&id_obj,&id);
             //Remove item
             continue;
         }else if(cmd==static_cast<int>(Commands::POSITION)){
-            qDebug()<<"position";
+            //qDebug()<<"position";
             int8_t obj_type=0;
             int32_t id_obj=0;
             int32_t posX=0;
@@ -101,8 +103,10 @@ void Controler::run()
             event.health = -10;
             this->game->addEvent(event);
             continue;
-        }else{
-            qDebug()<<"comando no valido aun";
+        }else if(cmd==static_cast<int>(Commands::WINNER)){
+            qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+            this->game->addEvent(event);
+            gameRunning=false;
         }
     }
 

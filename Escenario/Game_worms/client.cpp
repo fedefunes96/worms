@@ -40,8 +40,6 @@ int main(int argc, char *argv[])
 
     GameClass game(rect,10000,10000);
 
-
-    qDebug()<<"asdpdaspoasdpo";
     Controler controler(&protocol,&game);
     controler.start();
 

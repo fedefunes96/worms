@@ -34,15 +34,11 @@ void Bazooka::nextFameImpact()
     this->update(0,0,60,60);
 }
 
-void Bazooka::moveTo(int posX, int posY, int angle)
+void Bazooka::moveTo(int angle, int posx, int posy)
 {
     // ver tema de anulos en la trayectoria... rotar imagen como se hizo para la viga
 }
 
-int Bazooka::getId()
-{
-    return this->id;
-}
 
 bool Bazooka::isMovable()
 {
@@ -57,6 +53,21 @@ bool Bazooka::isAlive()
 void Bazooka::move()
 {
     setPos(x()-1,y());
+}
+
+void Bazooka::mover()
+{
+
+}
+
+void Bazooka::runSpriteWeapon()
+{
+
+}
+
+void Bazooka::setPosition(int x, int y)
+{
+
 }
 
 void Bazooka::explote()

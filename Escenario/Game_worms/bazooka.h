@@ -10,7 +10,7 @@
 #include "worm_view.h"
 #include "movable.h"
 
-class Bazooka: public QObject, public MovableItem
+class Bazooka: public QObject,public MovableItem
 {
     Q_OBJECT
 public:
@@ -19,11 +19,13 @@ public:
     void fire();
 private slots:
     void nextFameImpact();
-    void moveTo(int posX,int posY, int angle);
-    int getId();
+    void moveTo(int angle, int posx,int posy);
     bool isMovable();
     bool isAlive();
     void move();
+    virtual void mover();
+    virtual void runSpriteWeapon();
+    virtual void setPosition(int x, int y) override;
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
