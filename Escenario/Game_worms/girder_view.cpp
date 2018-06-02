@@ -1,13 +1,14 @@
 #include "girder_view.h"
 
 #include <QMatrix>
-
+#include <QGraphicsScene>
 Girder_View::Girder_View()
 {
 }
 
 Girder_View::Girder_View(int angle,int large)
 {
+    setIdObj(1);
     QPixmap *pixmap;
     QMatrix rm;
     rm.translate(0, 0);
@@ -27,3 +28,9 @@ Girder_View::Girder_View(int angle,int large)
 
 }
 
+void Girder_View::setPosition(int x, int y)
+{
+    int width = this->boundingRect().width();
+    int height = this->boundingRect().height();
+    setPos(x-width/2,y-height/2);
+}

@@ -163,6 +163,41 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
 //------------------------------------
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Client
+
+// Client
+int convMtToPx(int mt){
+    float aux = ((mt*140)/6.0);
+    return int(aux + 0.5);
+}
+
+int convPxToMt(int px){
+    float aux = ((px*6)/140.0);
+    return int(aux + 0.5);
+}
+
+
+
 void Protocol::sendMove(int8_t id_worm,int8_t dir)
 {
     //state --> 1 = END     0 = START
@@ -170,23 +205,6 @@ void Protocol::sendMove(int8_t id_worm,int8_t dir)
     conexion->enviar((const char*)&id_worm,1);
     conexion->enviar((const char*)&dir,1);
 }
-
-void Protocol::sendJump(int8_t id_worm, int8_t dir)
-{
-    conexion->enviar((const char*)&id_worm,1);
-    conexion->enviar((const char*)&dir,1);
-}
-
-void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY)
-{
-    conexion->enviar((const char*)&id_weapon,1);
-    conexion->enviar((const char*)&id_worm,1);
-    int32_t conv = htonl(posX);
-    conexion->enviar((const char*)&conv,4);
-    conv = htonl(posY);
-    conexion->enviar((const char*)&conv,4);
-}
-
 
 
 void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle)
@@ -196,18 +214,18 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     conexion->recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
     conexion->recibir((char*)&aux,4);
-    *posX = ntohl(aux);
+    std::cout <<"posX:"<<(ntohl(aux))<<std::endl;
+    *posX = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
-//    printf("%d\n", ntohl(aux));
-    *posY = ntohl(aux);
+    std::cout <<"posY:"<<(ntohl(aux))<<std::endl;
+    *posY = convMtToPx(ntohl(aux));
     conexion->recibir((char*)&aux,4);
-    float aux2=(ntohl(aux)*57.325/100.0);
+    float aux2=(ntohl(aux)*57.2958/100)+0.5;
+    //std::cout << "valor angulo" << aux2 << std::endl;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
-
-
-//    std::cout << *id_obj << "-" << *posX << "-" << *posY << std::endl;
 }
+
 
 int8_t Protocol::recvCmd() {
     uint8_t cmd;
@@ -226,5 +244,53 @@ void Protocol::recvWormId(int8_t *id, int32_t *health)
 void Protocol::recvPlayerId(int8_t *id)
 {
     conexion->recibir((char*)id,1);
+}
+
+void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
+{
+    conexion->recibir((char*)id,1);
+    int32_t aux;
+    conexion->recibir((char*)&aux,4);
+    *ammo= ntohl(aux);
+}
+
+void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
+{
+    conexion->recibir((char*)id_obj,1);
+    int32_t aux;
+    conexion->recibir((char*)&aux,4);
+    *id=ntohl(aux);
+}
+
+void Protocol::recvActualPlayer(int8_t* id)
+{
+    conexion->recibir((char*)id,1);
+}
+
+
+void Protocol::recvWinner(int8_t* id)
+{
+    conexion->recibir((char*)id,1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY)
+{
+    conexion->enviar((const char*)&id_weapon,1);
+    conexion->enviar((const char*)&id_worm,1);
+    int32_t conv = htonl(posX);
+    conexion->enviar((const char*)&conv,4);
+    conv = htonl(posY);
+    conexion->enviar((const char*)&conv,4);
 }
 

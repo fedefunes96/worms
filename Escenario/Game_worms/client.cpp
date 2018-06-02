@@ -17,46 +17,72 @@
 
 #include "protocol.h"
 #include "player.h"
-#include "game.h"
 
 #include "socket.h"
+
+#include "gameclass.h"
+#include "controler.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Game_View my_game;
 
     // center de application
     QRect rect = a.desktop()->screenGeometry();
-    my_game.centerScreen(rect);
-    my_game.maximizateScreen();
 
-    std::string path(":/images/intro2.jpg");
-    my_game.setBackground(path);
-
-    //std::string("127.0.0.1");
+    std::string ip("127.0.0.1");
     std::string puerto("7777");
-    //Socket client(ip,puerto);
-    Socket client(puerto);
+    Socket client(ip,puerto);
+    //Socket client(puerto);
 
     Protocol protocol(&client);
-    int8_t my_id = protocol.recvId();
-    Player player;
-    player.setId(my_id);
 
-    Game game(&protocol,&player,&my_game,&a);
-    game.start();
+    GameClass game(rect,10000,10000);
 
-    /*
-    QEventLoop loop;
-    connect(&netobject, SIGNAL(done()), &loop, SLOT(quit()));
-    connect(quitButton, SIGNAL(clicked()), &app, SLOT(quit()));
-    netobject.start_long_lived_process_that_happens_on_other_thread();
 
-    loop.exec(); // BLOCKING (non-busy) until quit() is called via the signal done()
-    */
+    qDebug()<<"asdpdaspoasdpo";
+    Controler controler(&protocol,&game);
+    controler.start();
+
+    //game.updateItem(0,4,-10,100,100,0);
+    //game.updateItem(0,5,-10,150,100,0);
+
+
+
+
+
+    EventHandler *filter = new EventHandler(&a,game.getGameView(),&protocol);
+    a.installEventFilter(filter);
 
 
     return a.exec();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGraphicsItem>
+#include <QGraphicsPixmapItem>
 #include <QTimer>
 #include <QPixmap>
 #include <QPainter>
@@ -10,6 +11,8 @@
 #include <QTime>
 #include <QLabel>
 #include "movable.h"
+#include "target.h"
+
 
 class Worm_View: public QObject, public MovableItem
 {
@@ -17,55 +20,76 @@ class Worm_View: public QObject, public MovableItem
 public:
     explicit Worm_View(QObject* parent = 0);
     bool isAlive();
-    void set_idWorm(int id);
-    int getId();
+
+
+
     bool isMovable();
     std::pair<int, int> &getDir();
-    void setDir(int x, int y);
-    std::pair<int, int> &getAngle();
+
+    int getAngle();
     void moveTo(int angle, int posx, int posy);
     void throwProjectile();
     void delete_bullet(QGraphicsItem* item);
-    void setVida(int vida);
-    void moveDiag(int angle, int posX, int posY);    
+    void setVida(int health);
+    void setAngle(int angle);
+    virtual void setPosition(int x, int y) override;
+    void loadSpriteWeapon(int val);
+    void decTargetAngle();
+    void movTargetAngle(int dir);
+
 signals:
-public slots:
 
 private slots:
-    void nextFrame2_Left();
-    void nextFrame2_Right();
-    void move();
+    void mover();
+    void runSpriteWeapon();
+
 private:
+    void nextFrame();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
-    bool movingRight();
-    bool movingLeft();
-
-
 
     QLabel* labelVida;
-    int vida;
+    int health;
     bool labelset;
     std::pair<int,int> currentDir;
     std::pair<int,int> destDir;
-    std::pair<int,int> angle;
+    int angle;
     int speed;
-    QTimer *timer;      // Timer for turning images into QPixmap
+    QTimer *timer;
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
     int currentFrame;   // Coordinates X, which starts the next frame of the sprite
-    void setAngle(int x, int y);
 
     int count;
-    int cant;
+    int x1;
     int x2;
     int rep;
     int rep2;
     int desp;
     bool movUP;
     bool movR;
+    bool firstX;
+    int up;
+    int right;
 
-    void setSprite(int angle);
-    void setVarsMove(int cant, int x2, int rep, int rep2, bool movUP, bool movR);
+    void setSprite();
+    void setVarsMove(int x1, int x2, int rep, int rep2, bool movUP, bool movR);
+    void setDestDir(int x, int y);
+    void setDir(int x, int y);
+    void movObj();
+    void checkDelta();
+    void setVars(int cant1, int cant2, int up, int right, bool firsX);
+    void moveStep();
+    void stepSprite();
+    int weapon;
+    void loadSprite(QString& path_L,QString& path_U,QString path_D,QString path_Fly="",QString path_Fall="");
+    Target* target;
+    void setTarget();
+    bool targetVis;
+    int targetAngle;
+
+
+
+
 };
 
 #endif // WORM_VIEW_H

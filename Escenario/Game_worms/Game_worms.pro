@@ -18,38 +18,42 @@ SOURCES +=\
     worm_view.cpp \
     eventhandler.cpp \
     girder_view.cpp \
-    worm.cpp \
     camera.cpp \
     mybutton.cpp \
     bazooka.cpp \
-    dialogchooseweapon.cpp \
     protocol.cpp \
     client.cpp \
     player.cpp \
-    thread.cpp \
-    game.cpp \
     common_socket.cpp \
-    graphicitem.cpp
+    movable.cpp \
+    items.cpp \
+    weapons_and_tools.cpp \
+    target.cpp \
+    gameclass.cpp \
+    controler.cpp \
+    eventgame.cpp
 
 HEADERS  += \
     game_view.h \
     worm_view.h \
     eventhandler.h \
     girder_view.h \
-    worm.h \
     camera.h \
     mybutton.h \
     bazooka.h \
-    dialogchooseweapon.h \
     protocol.h \
     player.h \
-    thread.h \
-    game.h \
     socket.h \
-    movable.h
+    movable.h \
+    items.h \
+    weapons_and_tools.h \
+    target.h \
+    gameclass.h \
+    controler.h \
+    eventgame.h
 
 FORMS    += \
-    dialogchooseweapon.ui
+    weapons_and_tools.ui
 
 RESOURCES += \
     resources.qrc

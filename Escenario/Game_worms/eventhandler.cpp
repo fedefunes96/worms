@@ -3,7 +3,7 @@
 #include <QGraphicsView>
 #include <QScrollBar>
 
-
+#include "protocol.h"
 #include "girder_view.h"
 
 EventHandler::EventHandler(QObject *parent) : QObject(parent)
@@ -11,7 +11,7 @@ EventHandler::EventHandler(QObject *parent) : QObject(parent)
     this->keyPress=false;
 }
 
-EventHandler::EventHandler(QObject *parent,Game_View* game_view) : QObject(parent), game_view(game_view)
+EventHandler::EventHandler(QObject *parent,Game_View* game_view, Protocol* protocol) : QObject(parent), game_view(game_view), protocol(protocol)
 {
     this->worm_selected = nullptr;
 }
@@ -33,13 +33,13 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
         mouseMoveEvent(static_cast<QMouseEvent*>(event));
         return true;
     }
-*/
+
     if(event->type() == QEvent::MouseButtonPress){
         mouseClickEvent(static_cast<QMouseEvent*>(event));
         return true;
 
     }
-
+*/
     return false;
 }
 
@@ -106,47 +106,60 @@ void EventHandler::mouseClickEvent(QMouseEvent *m_event)
     }
 }
 
+
+
+
+
+
+
 void EventHandler::keyPressEvent(QKeyEvent *k_event)
 {
-    if(k_event->isAutoRepeat()){
-        return;
-    }
     switch(k_event->key()) {
         case Qt::Key_Space:
         {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
             qDebug() << "Espacio"; //JUMP worm
             if(this->game_view->getWormActive()==nullptr){
                 qDebug()<<"null pointer";
                 return;
             }
             Worm_View* worm = this->game_view->getWormActive();
-            worm->throwProjectile();
+            //worm->throwProjectile();
             break;
         }
         case Qt::Key_Left:
         {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
             keyPress = true;
             qDebug() << "Left"; //moveLeft worm
-
             if(this->game_view->getWormActive()==nullptr){
                 qDebug()<<"null pointer";
                 return;
             }
             Worm_View* worm = this->game_view->getWormActive();
-            worm->moveTo(-180,worm->x()-15,worm->y());
-            //this->protocol->sendMove(worm->getId(),0,0);
+            //worm->moveTo(-180,worm->x()+1,9999-worm->y()-29);
+            this->protocol->sendMove((int8_t)worm->getId(),(int8_t)2);
+            qDebug()<<worm->getId();
             break;
         }
         case Qt::Key_Right:
         {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+
             qDebug() << "Right";//moveRight worm
             if(this->game_view->getWormActive()==nullptr){
                 qDebug()<<"null pointer";
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            worm->moveTo(0,worm->x()+15,worm->y());
-            //this->protocol->sendMove(worm->getId(),0,1);
+            Worm_View* worm = this->game_view->getWormActive();            
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),1);
             break;
         }
         case Qt::Key_Up:
@@ -156,11 +169,19 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
+            Worm_View* worm = this->game_view->getWormActive();
+            worm->movTargetAngle(1);
             break;
         }
         case Qt::Key_Down:
         {
             qDebug() << "Down";//lookDown aim
+            if(this->game_view->getWormActive()==nullptr){
+                qDebug()<<"null pointer";
+                return;
+            }
+            Worm_View* worm = this->game_view->getWormActive();
+            worm->movTargetAngle(-1);
             break;
         }
 

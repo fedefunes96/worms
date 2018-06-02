@@ -6,17 +6,16 @@
 #include "movable.h"
 
 
-Game_View::Game_View()
+Game_View::Game_View(QRect screen,int w,int h)
 {
     //Create a graphic scene of the game. This scene will contain
     //all objects that I want to display
     this->scene = new QGraphicsScene();
 
 
+    this->scene->setSceneRect(0,0,w,h); //tam escenario
 
-    this->scene->setSceneRect(0,0,10000,10000); //tam escenario
-
-    camera = new Camera(this->scene);
+    camera = new Camera(this->scene,screen.width(),screen.height());
 
 
 
@@ -29,18 +28,46 @@ void Game_View::update_view()
 
 void Game_View::add_Item(QGraphicsItem *item, int posx, int posy)
 {
-    float aux = ((posx*140)/6);
-    int x = int(aux + 0.5);
-    aux = ((posy*140)/6);
-    int y = int(aux + 0.5);
+
+    this->items_list.push_back(dynamic_cast<Items*>(item));
+
     this->scene->addItem(item);
-    int width = item->boundingRect().width();
-    int height = item->boundingRect().height();
-    item->setPos(x-width/2,this->scene->height()-y-height/2);
+
+    Items* i = dynamic_cast<Items*>(item);
+    i->setPosition(posx,this->scene->height()-posy);
 }
 
+bool Game_View::containsItem(Items* item){
+    std::vector<Items*>::iterator it;
+    for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
+        if((static_cast<Items*>(*it))->getId()==item->getId()){
+            return true;
+        }
+    }
+    return false;
+}
 
+bool Game_View::containsItem(int8_t id_typ, int32_t id){
+    std::vector<Items*>::iterator it;
+    for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
+        if(((static_cast<Items*>(*it))->getId()==id) && (static_cast<Items*>(*it))->getIdObj()==id_typ){
+            return true;
+        }
+    }
+    return false;
+}
 
+Worm_View* Game_View::getItem(int8_t id_type, int32_t id)
+{
+    std::vector<Items*>::iterator it;
+    for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
+        Items* item = static_cast<Items*>(*it);
+        if((item->getId()==id) && (item->getIdObj()==id_type)){
+            return static_cast<Worm_View*>(item);
+        }
+    }
+    return nullptr;
+}
 
 void Game_View::del_Item(QGraphicsItem* item)
 {
@@ -83,7 +110,7 @@ Worm_View* Game_View::getWormActive()
     QList<QGraphicsItem*>::iterator it;
     for (it=qlist.begin();it!=qlist.end();it++)
     {
-        if((*it)->isSelected()){
+        if((*it)->isSelected() && (*it)->type()==Worm_View().type()){
             return static_cast<Worm_View*>(*it);
         }
     }
@@ -92,7 +119,10 @@ Worm_View* Game_View::getWormActive()
 }
 
 
-
+void Game_View::addWormActive(Worm_View* worm){
+    worm->setSelected(true);
+    this->camera->setWormActive(worm);
+}
 
 
 void Game_View::centerScreen(QRect rect)
@@ -113,9 +143,6 @@ void Game_View::minimizateScreen()
 }
 
 
-
-
-
 void Game_View::addWidget(QWidget* widget)
 {
     this->scene->addWidget(widget);
@@ -132,11 +159,15 @@ void Game_View::moveObjTo(int id, int posX, int posY, int angle)
     {
 
         MovableItem* item =dynamic_cast<MovableItem*>(*it);
-        if(!item){// no es un graphicItem
+        if(!item){// no es movible
             continue;
         }else if(item->getId()==id){
             //item->moveTo(posX,posY,angle);
-            qDebug()<<"move item at pos x:"<<item->x()<<" y:"<<item->y();
+            if(item->x()==-130 && item->y()==10070){//temporal para setear el escenario
+                qDebug()<<posX<<posY;
+                item->setPosition(posX,this->scene->height()-posY);
+            }
+            item->moveTo(angle,posX,posY);
         }
 
     }
@@ -149,17 +180,9 @@ void Game_View::moveObjTo(int id, int posX, int posY, int angle)
 
 void Game_View::addItemToFollow(MovableItem* item)
 {
+    item->setSelected(true); // esto tendria que estar en la logica de cuando es mi turno...
     this->camera->addItemToFollow(item);
 }
-
-
-
-
-
-
-
-
-
 
 
 

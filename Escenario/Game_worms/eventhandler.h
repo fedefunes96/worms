@@ -16,8 +16,7 @@ class EventHandler : public QObject
     Q_OBJECT
 public:
     explicit EventHandler(QObject *parent = 0);
-
-    EventHandler(QObject *parent, Game_View *game_view);
+    EventHandler(QObject *parent, Game_View *game_view, Protocol *protocol);
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private:
