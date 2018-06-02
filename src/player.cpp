@@ -43,15 +43,15 @@ void Player::set_turn(bool state) {
 void Player::play() {
 	this->set_turn(true);
 
-	this->counter.set_time(20);
+	this->counter.set_time(5);
 
 	this->counter.start_counting();
 
-	//printf("Starts turn of 20 secs\n");
+	printf("Starts turn of 5 secs\n");
 
-	while (!this->counter.is_over() && this->is_my_turn()) {}
+	while (this->counter.is_over() > 0 && this->is_my_turn()) {}
 
-	//printf("Ends turn of 20 secs\n");
+	printf("Ends turn of 5 secs\n");
 	
 	this->counter.stop();
 
@@ -73,7 +73,7 @@ void Player::game_loop() {
 			this->worms.at(0)->use(this->usables.at(0), dest, params);	
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(20000));*/
-			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
+			/*Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
 				int id_worm;
@@ -102,10 +102,12 @@ void Player::game_loop() {
 			} else {
 				//Player's cheating
 				//Disconnect him
-			}
+			}*/
 
 			if (!this->is_my_turn())
 				continue;
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		} catch(SocketException& e) {
 			//Played disconnected
@@ -116,17 +118,20 @@ void Player::game_loop() {
 }
 
 void Player::notify_winner(int id) {
+	printf("Sending Winner\n");
 	this->protocol.sendWinner(id);
 }
 
 void Player::notify_game_end() {
 	//mutex
 	this->continue_receiving = false;
+	printf("Sending Game end\n");
 	this->protocol.sendGameEnd();
 }
 
 void Player::notify_actual_player(int id) {
 
+	printf("Actual Player id: %d\n", id);
 	this->protocol.sendActualPlayer(id);
 }
 
@@ -143,28 +148,31 @@ void Player::notify_removal(Ubicable* ubicable) {
 		}
 	}*/
 
+	printf("Sending Remove object\n");
 	this->protocol.sendRemove(ubicable->get_type(), ubicable->get_id());
 }
 
 void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-
+	printf("Sending Position: %0.1f %0.1f %0.1f\n", x, y, angle);
 	this->protocol.sendPosition(ubicable->get_type(), ubicable->get_id(), x, y, angle);
 }
 
 //void Player::attach_worm(Worm* worm) {
 void Player::attach_worm(std::shared_ptr<Worm> worm) {
+	printf("Sending Worm id: %d %d\n", worm->get_id(), worm->get_health());
 	this->worms.emplace(worm->get_id(), worm);
 	this->protocol.sendWormId(worm->get_id(), worm->get_health());
 }
 
 void Player::attach_usable(std::unique_ptr<Usable> usable) {
-
+	printf("Sending Usable id: %d %d\n", usable->get_id(), usable->get_ammo());
 	this->usables.emplace(usable->get_id(), std::move(usable));
 	this->protocol.sendUsableId(usable->get_id(), usable->get_ammo());
 }
 
 void Player::set_id(int id) {
 	this->id = id;
+	printf("Sending Player id: %d\n", id);
 	//Notify client id
 	this->protocol.sendPlayerId(id);
 }

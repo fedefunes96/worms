@@ -79,7 +79,7 @@ void Stage::create_objects_mov() {
 	while (it != this->to_create_mov.end()) {
 		std::shared_ptr<Movable> movable = std::move(*it);
 		movable->create_myself(this->world);
-		printf("Creating movable\n");
+		//printf("Creating movable\n");
 		this->movables.push_back(std::move(movable));
 
 		it = this->to_create_mov.erase(it);

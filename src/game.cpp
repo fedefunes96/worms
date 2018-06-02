@@ -28,6 +28,7 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
 }
 
 void Game::start_game() {
+	printf("Creating threads\n");
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
 	this->game_t = std::thread(&Game::game_loop, this);
 
@@ -38,9 +39,9 @@ void Game::start_game() {
 	}
 	//Wait ten seconds
 	//printf("Start the world\n");
-
+	printf("Waiting 20 secs to end game\n");
 	std::this_thread::sleep_for(std::chrono::milliseconds(20000));
-
+	printf("Game ended 20 secs\n");
 	//printf("End of world\n");
 
 	this->stage.stop_drawing();
@@ -309,6 +310,7 @@ Game::~Game() {
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].notify_game_end();
+		
 		this->players_t[i].join();
 	}
 
