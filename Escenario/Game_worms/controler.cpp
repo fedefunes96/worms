@@ -71,7 +71,7 @@ void Controler::run()
             int8_t id;
             int32_t health;
             this->protocol->recvWormId(&id,&health);
-            event.id;
+            event.id=id;
             event.typeObj = static_cast<int>(TypeObj::WORM);
             event.health = health;
             this->game->addEvent(event);
