@@ -104,8 +104,10 @@ void Stage::draw() {
  		while (it != this->movables.end()) {
  			b2Body* b = (*it)->get_body(); 			
  			//Only notify movables moving
- 			if (!b->IsAwake())
+ 			if (!b->IsAwake()) {
+ 				++it;
  				continue;
+ 			}
 
  			b2Vec2 pos = b->GetWorldCenter();
  			float angle = b->GetAngle();
