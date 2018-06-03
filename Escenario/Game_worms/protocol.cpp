@@ -178,7 +178,7 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
 int8_t Protocol::recvRoomSel()
 {
     int8_t id;
-    conexion->recibir((const char*)&id,1);
+    conexion->recibir((char*)&id,1);
     return id;
 }
 
@@ -279,15 +279,15 @@ void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
 int8_t Protocol::recvRooms()
 {
     int8_t rooms;
-    conexion->recibir((const char*)&rooms,1);
+    conexion->recibir((char*)&rooms,1);
     return rooms;
 }
 
 void Protocol::recvRoomCaratc(int8_t *room, int8_t *cantMax, int8_t *cantActual)
 {
-    conexion->recibir((const char*)room,1);
-    conexion->recibir((const char*)cantMax,1);
-    conexion->recibir((const char*)cantActual,1);
+    conexion->recibir((char*)room,1);
+    conexion->recibir(( char*)cantMax,1);
+    conexion->recibir(( char*)cantActual,1);
 }
 
 void Protocol::sendRoomSel(int8_t id)
