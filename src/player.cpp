@@ -43,15 +43,15 @@ void Player::set_turn(bool state) {
 void Player::play() {
 	this->set_turn(true);
 
-	this->counter.set_time(5);
+	this->counter.set_time(40);
 
 	this->counter.start_counting();
 
-	printf("Starts turn of 5 secs\n");
+	printf("Starts turn of 40 secs\n");
 
-	while (this->counter.is_over() > 0 && this->is_my_turn()) {}
+	while (this->counter.is_over() && this->is_my_turn()) {}
 
-	printf("Ends turn of 5 secs\n");
+	printf("Ends turn of 40 secs\n");
 	
 	this->counter.stop();
 
@@ -153,7 +153,9 @@ void Player::notify_removal(Ubicable* ubicable) {
 }
 
 void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-	printf("Sending Position: %0.1f %0.1f %0.1f\n", x, y, angle);
+	if ((ubicable->get_type()).compare("Worm")==0) {
+		//printf("Sending Position worm: %0.1f %0.1f %0.1f\n", x, y, angle);	
+	}
 	this->protocol.sendPosition(ubicable->get_type(), ubicable->get_id(), x, y, angle);
 }
 
@@ -166,8 +168,8 @@ void Player::attach_worm(std::shared_ptr<Worm> worm) {
 
 void Player::attach_usable(std::unique_ptr<Usable> usable) {
 	printf("Sending Usable id: %d %d\n", usable->get_id(), usable->get_ammo());
-	this->usables.emplace(usable->get_id(), std::move(usable));
 	this->protocol.sendUsableId(usable->get_id(), usable->get_ammo());
+	this->usables.emplace(usable->get_id(), std::move(usable));
 }
 
 void Player::set_id(int id) {
