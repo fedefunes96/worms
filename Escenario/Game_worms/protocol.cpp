@@ -126,6 +126,18 @@ void Protocol::sendWinner(int8_t id) {
     conexion->enviar((const char*)&id,1);
 }
 
+void Protocol::sendRooms(int8_t rooms)
+{
+    conexion->enviar((const char*)&rooms,1);
+}
+
+void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual)
+{
+    conexion->enviar((const char*)&room,1);
+    conexion->enviar((const char*)&cantMax,1);
+    conexion->enviar((const char*)&cantActual,1);
+}
+
 void Protocol::recvMove(int* id, int *dir) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
 
@@ -161,6 +173,13 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
     }
 
     params = std::move(extra_params);
+}
+
+int8_t Protocol::recvRoomSel()
+{
+    int8_t id;
+    conexion->recibir((const char*)&id,1);
+    return id;
 }
 
 //------------------------------------
@@ -255,6 +274,25 @@ void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
     int32_t aux;
     conexion->recibir((char*)&aux,4);
     *ammo= ntohl(aux);
+}
+
+int8_t Protocol::recvRooms()
+{
+    int8_t rooms;
+    conexion->recibir((const char*)&rooms,1);
+    return rooms;
+}
+
+void Protocol::recvRoomCaratc(int8_t *room, int8_t *cantMax, int8_t *cantActual)
+{
+    conexion->recibir((const char*)room,1);
+    conexion->recibir((const char*)cantMax,1);
+    conexion->recibir((const char*)cantActual,1);
+}
+
+void Protocol::sendRoomSel(int8_t id)
+{
+    conexion->enviar((const char*) &id,1);
 }
 
 void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
