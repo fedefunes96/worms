@@ -9,7 +9,7 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->myPlayer = new Player();
     this->queue = new QQueue<EventGame>();
     this->timer = new QTimer();
-    this->timer->start(400);
+    this->timer->start(1);
     connect(this->timer,&QTimer::timeout,this,&GameClass::checkQueueEvent);
 }
 
@@ -53,9 +53,9 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
             this->game->add_Item(worm,posX,posY);
             this->myPlayer->addWorm(worm);
             //Descomentar si se quiere probar el movimiento del worm sin sserver..
-            //if(id==0){
-                //this->game->addWormActive(worm);
-            //}
+            if(id==0){
+                this->game->addWormActive(worm);
+            }
         }
     }else if(type==1 && health==-10){
         //es girder

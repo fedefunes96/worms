@@ -188,6 +188,10 @@ void Worm_View::nextFrame(){
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
     this->targetVis=false;
+    setDestDir(posx,posy);
+    if(currentDir==destDir){
+        return;
+    }
 
     timer->setInterval(23);
     if((angle==-270)||(this->angle>-135 && this->angle<-45))
@@ -195,17 +199,14 @@ void Worm_View::moveTo(int angle, int posx,int posy)
         timer->setInterval(10);// sirve para que setear la nueva velocidad..
         timer->disconnect();
     }
-    currentFrame = 0;
+    //currentFrame = 0;
     setAngle(angle);
     timer->disconnect();
     if(this->spriteImage== nullptr){
         qDebug()<<"aun no hay imagen...";
         return;
     }
-    setDestDir(posx,posy);
-    if(currentDir==destDir){
-        return;
-    }
+   
     this->checkDelta();
     connect(timer, &QTimer::timeout, this, &Worm_View::mover);
 }
