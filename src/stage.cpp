@@ -90,6 +90,7 @@ void Stage::draw() {
 	//Create first to pre initialize
 	//static objects
 	this->create_objects();
+	this->create_objects_mov();
 	this->pre_initialize();
 	this->continue_drawing = true;
 
@@ -101,8 +102,10 @@ void Stage::draw() {
  		std::vector<std::shared_ptr<Movable>>::iterator it = this->movables.begin();
 
  		while (it != this->movables.end()) {
- 			//Only notify movables
- 			b2Body* b = (*it)->get_body();
+ 			b2Body* b = (*it)->get_body(); 			
+ 			//Only notify movables moving
+ 			if (!b->IsAwake())
+ 				continue;
 
  			b2Vec2 pos = b->GetWorldCenter();
  			float angle = b->GetAngle();
@@ -121,8 +124,8 @@ void Stage::draw() {
 
  			this->game.notify_position((*it).get(), pos.x, pos.y, angle);
 
- 			if (b->IsAwake())
- 				cant_objects_moving++;
+ 			//if (b->IsAwake())
+ 			cant_objects_moving++;
 
  			(*it)->move_step();
  			//movable->move_step();
@@ -171,6 +174,19 @@ void Stage::pre_initialize() {
 
  		++it;
   	}	
+
+ 	std::vector<std::shared_ptr<Movable>>::iterator it_mov = this->movables.begin();
+
+ 	while (it_mov != this->movables.end()) {
+ 		b2Body* b = (*it_mov)->get_body();
+
+ 		b2Vec2 pos = b->GetWorldCenter();
+ 		float angle = b->GetAngle();
+
+ 		this->game.notify_position((*it_mov).get(), pos.x, pos.y, angle);
+
+ 		++it_mov;
+  	}	  	
 }
 
 void Stage::stop_drawing() {
