@@ -102,6 +102,8 @@ void Stage::draw() {
  		std::vector<std::shared_ptr<Movable>>::iterator it = this->movables.begin();
 
  		while (it != this->movables.end()) {
+ 			(*it)->move_step();
+ 			
  			b2Body* b = (*it)->get_body(); 			
  			//Only notify movables moving
  			if (!b->IsAwake()) {
@@ -128,8 +130,6 @@ void Stage::draw() {
 
  			//if (b->IsAwake())
  			cant_objects_moving++;
-
- 			(*it)->move_step();
  			//movable->move_step();
 
  			++it;
