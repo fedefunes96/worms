@@ -43,17 +43,19 @@ void Player::set_turn(bool state) {
 void Player::play() {
 	this->set_turn(true);
 
-	this->counter.set_time(40);
+	//this->counter.set_time(40);
 
-	this->counter.start_counting();
+	//this->counter.start_counting();
 
 	printf("Starts turn of 40 secs\n");
 
-	while (this->counter.is_over() && this->is_my_turn()) {}
+	//while (this->counter.is_over() && this->is_my_turn()) {}
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(40000));
 
 	printf("Ends turn of 40 secs\n");
 	
-	this->counter.stop();
+	//this->counter.stop();
 
 	this->set_turn(false);
 }
@@ -73,7 +75,7 @@ void Player::game_loop() {
 			this->worms.at(0)->use(this->usables.at(0), dest, params);	
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(20000));*/
-			/*Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
+			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
 				int id_worm;
@@ -102,12 +104,12 @@ void Player::game_loop() {
 			} else {
 				//Player's cheating
 				//Disconnect him
-			}*/
+			}
 
 			if (!this->is_my_turn())
 				continue;
 
-			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		} catch(SocketException& e) {
 			//Played disconnected
