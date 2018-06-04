@@ -369,4 +369,16 @@ void commonParser::loadWeaponCaract(std::string &file)
     }
 }
 
+int commonParser::waterLvl(std::string &file)
+{
+    YAML::Node config = YAML::LoadFile(file);
+    return config["Water"].as<int>();
+}
+
+int commonParser::cantidad(std::string &file)
+{
+    YAML::Node config = YAML::LoadFile(file);
+    return config["Cantidad"].as<int>();
+}
+
 

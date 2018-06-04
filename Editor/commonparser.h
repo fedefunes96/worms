@@ -29,6 +29,10 @@ public:
 
     static void loadWeaponCaract(std::string& file);
 
+    static int waterLvl(std::string& file);
+
+    static int cantidad(std::string& file);
+
 private:
 
 };
