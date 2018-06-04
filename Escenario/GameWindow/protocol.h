@@ -51,7 +51,7 @@ public:
     void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
     void recvMove(int* id, int *dir);
     void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params); 
-    int8_t recvRoomSel();  
+    int8_t recvRoomSel();   
     //------------
 
     void sendMove(int8_t id_worm, int8_t dir);

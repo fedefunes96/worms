@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 
     std::string ip("127.0.0.1");
     std::string puerto("7777");
-    //Socket client(ip,puerto);
-    Socket client(puerto);
+    Socket client(ip,puerto);
+    //Socket client(puerto);
 
     Protocol protocol(&client);
 

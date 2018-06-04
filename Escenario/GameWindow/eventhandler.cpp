@@ -141,8 +141,8 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             Worm_View* worm = this->game_view->getWormActive();
-            worm->moveTo(-180,worm->x()+1,9999-worm->y()-29);
-            //this->protocol->sendMove((int8_t)worm->getId(),(int8_t)2);
+            //worm->moveTo(-180,worm->x()+1,9999-worm->y()-29);
+            this->protocol->sendMove((int8_t)worm->getId(),2);
             qDebug()<<worm->getId();
             break;
         }
@@ -158,8 +158,8 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             Worm_View* worm = this->game_view->getWormActive();            
-            worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
-            //this->protocol->sendMove(worm->getId(),1);
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),1);
             break;
         }
         case Qt::Key_Up:
@@ -182,6 +182,40 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             Worm_View* worm = this->game_view->getWormActive();
             worm->movTargetAngle(-1);
+            break;
+        }
+
+        case Qt::Key_Return:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+
+            qDebug() << "Enter!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";//moveRight worm
+            if(this->game_view->getWormActive()==nullptr){
+                qDebug()<<"null pointer";
+                return;
+            }
+            Worm_View* worm = this->game_view->getWormActive();
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),3);
+            break;
+        }
+
+        case Qt::Key_Backspace:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+
+            qDebug() << "backSpace";//moveRight worm
+            if(this->game_view->getWormActive()==nullptr){
+                qDebug()<<"null pointer";
+                return;
+            }
+            Worm_View* worm = this->game_view->getWormActive();
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),4);
             break;
         }
 
@@ -208,8 +242,8 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
-            //Worm_View* w = this->game_view->getWormActive();
-            //this->protocol->sendMove(w->getId(),1,0);
+            Worm_View* w = this->game_view->getWormActive();
+            this->protocol->sendMove(w->getId(),0);
             break;
         }
         case Qt::Key_Right:
@@ -222,8 +256,8 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 qDebug()<<"null pointer";
                 return;
             }
-            //Worm_View* w = this->game_view->getWormActive();
-            //this->protocol->sendMove(w->getId(),1,1);
+            Worm_View* w = this->game_view->getWormActive();
+            this->protocol->sendMove(w->getId(),0);
             break;
         }
 
@@ -234,6 +268,44 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             }
             qDebug()<<"solte Espacio";
         }
+
+        case Qt::Key_Return:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+
+            qDebug() << "solte Enter";//moveRight worm
+            if(this->game_view->getWormActive()==nullptr){
+                qDebug()<<"null pointer";
+                return;
+            }
+            Worm_View* worm = this->game_view->getWormActive();
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),0);
+            break;
+        }
+
+        case Qt::Key_Backspace:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+
+            qDebug() << "solte backSpace";//moveRight worm
+            if(this->game_view->getWormActive()==nullptr){
+                qDebug()<<"null pointer";
+                return;
+            }
+            Worm_View* worm = this->game_view->getWormActive();
+            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+            this->protocol->sendMove(worm->getId(),0);
+            break;
+        }
+
+
+
+
     default:
         break;
     }

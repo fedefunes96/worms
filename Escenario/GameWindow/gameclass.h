@@ -23,6 +23,7 @@ public:
 
     void timerStop();
     void moveWorm();
+    std::vector<int> fireWeapon();
 private slots:
     void prueba();
     void prueba2();

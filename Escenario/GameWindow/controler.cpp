@@ -31,8 +31,8 @@ void Controler::run()
     ev.angle=0;
     this->game->addEvent(ev);
     return;
-*/
 
+*/
     bool gameRunning=true;
     while(gameRunning){ // temporal
         EventGame event;

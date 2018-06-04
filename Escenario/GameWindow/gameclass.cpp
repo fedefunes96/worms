@@ -9,7 +9,7 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->myPlayer = new Player();
     this->queue = new QQueue<EventGame>();
     this->timer = new QTimer();
-    this->timer->start(1);
+    this->timer->start(2);
     connect(this->timer,&QTimer::timeout,this,&GameClass::checkQueueEvent);
 }
 
@@ -19,49 +19,53 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
 {
     if(health!=-10 && type==0){
         //add vida
-        qDebug()<<"type:"<<type<<"id"<<id;
+        //qDebug()<<"type:"<<type<<"id"<<id;
         if(this->game->containsItem(type,id)){
             //contiene al worm
-            qDebug()<<"contiene worm";
+            //qDebug()<<"contiene worm";
             Worm_View *worm = this->game->getItem(type,id);
             worm->setVida(health);
         }else{
             //no contiene al worm --> lo creo..
-            qDebug()<<"no tengo worm, seteo vida y pos arbitraria";
+            //qDebug()<<"no tengo worm, seteo vida y pos arbitraria";
             Worm_View *worm = new Worm_View();
             worm->setVida(health);
             worm->setId(id);
             worm->setIdObj(type);
             this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
+            if(id==0){
+                qDebug()<<"worm active";
+                this->game->addWormActive(worm);
+            }
         }
     }else if(health==-10 && type==0){
         // add worm
-        qDebug()<<"add worm";
+        //qDebug()<<"add worm";
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
-            qDebug()<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
+            qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
             this->game->moveObjTo(id,posX,posY,angle);
         }else{
-            qDebug()<<"pos worm sin vida";
+            //qDebug()<<"pos worm sin vida";
             // no lo contiene lo tengo que agregar
             Worm_View* worm = new Worm_View();
             worm->setVida(100);//default...
             worm->setId(id);
             worm->setIdObj(type);
             worm->setAngle(angle);
-            qDebug()<<"posX:"<<posX<<"posY:"<<posY;
+            //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
             this->game->add_Item(worm,posX,posY);
             this->myPlayer->addWorm(worm);
             //Descomentar si se quiere probar el movimiento del worm sin sserver..
-            if(id==0){
-                this->game->addWormActive(worm);
-            }
+            //if(id==0){
+                //this->game->addWormActive(worm);
+            //}
         }
     }else if(type==1 && health==-10){
         //es girder
         if(!this->game->containsItem(type,id)){
             //no contiene girder...
-            qDebug()<<"no contiene girder";
+            //qDebug()<<"no contiene girder";
             Girder_View* girder = new Girder_View(angle,140);
             girder->setId(id);
             girder->setIdObj(type);
@@ -99,6 +103,39 @@ Game_View *GameClass::getGameView()
 void GameClass::moveWorm(){
     this->game->moveObjTo(0,300,300,-45);
 }
+
+
+
+/*
+
+std::vector<int> GameClass::fireWeapon()
+{
+    if(isMyTurn()){
+        int idWeapon = this->game->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
+        if(idWeapon<0 && !this->myPlayer->isAvailableAmmo(idWeapon)){
+            return nullptr;
+        }
+        //puedo disparar el arma...
+
+        this->game->getWormActive()->throwProjectile(); //genero bullet en pos...
+        this->myPlayer->useWeapon(idWeapon); //resto ammo
+        std::vector<int> vect;
+        int id = this->game->getWormActive()->getId();
+        std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
+        int timeW = this->game->getWormActive()->getTimeWeapon();
+        vect.push_back(id);
+        vect.push_back(idWeapon);
+        vect.push_back(pos.first);
+        vect.push_back(pos.second);
+        vect.push_back(timeW);
+         // falta el power que esta en el release
+        return vect;
+    }
+}
+
+
+*/
+
 
 
 

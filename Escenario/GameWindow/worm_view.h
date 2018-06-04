@@ -19,13 +19,10 @@ class Worm_View: public QObject, public MovableItem
     Q_OBJECT
 public:
     explicit Worm_View(QObject* parent = 0);
+    bool isMoving();
     bool isAlive();
-
-
-
     bool isMovable();
     std::pair<int, int> &getDir();
-
     int getAngle();
     void moveTo(int angle, int posx, int posy);
     void throwProjectile();
@@ -36,8 +33,7 @@ public:
     void loadSpriteWeapon(int val);
     void decTargetAngle();
     void movTargetAngle(int dir);
-
-signals:
+    int getWeaponId();
 
 private slots:
     void mover();
@@ -47,6 +43,7 @@ private:
     void nextFrame();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
+    void checkAngle(int angle);
 
     QLabel* labelVida;
     int health;
@@ -86,6 +83,8 @@ private:
     void setTarget();
     bool targetVis;
     int targetAngle;
+    bool moving;
+    bool loadingWeapon;
 
 
 

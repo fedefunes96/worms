@@ -24,8 +24,8 @@ void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, fl
 
 
     int32_t conv_id = htonl(id_obj); 
-    int32_t conv_posx = htonl(static_cast<int>(posX));
-    int32_t conv_posy = htonl(static_cast<int>(posY));
+    int32_t conv_posx = htonl(static_cast<int>(posX*10000));
+    int32_t conv_posy = htonl(static_cast<int>(posY*10000));
     int32_t conv_angle = htonl(static_cast<int>(angle*100));
 
     //char c = static_cast<std::underlying_type<Commands>::type>(cmd);
@@ -181,6 +181,7 @@ int8_t Protocol::recvRoomSel()
     conexion->recibir((char*)&id,1);
     return id;
 }
+
 //------------------------------------
 
 
@@ -207,7 +208,7 @@ int8_t Protocol::recvRoomSel()
 // Client
 
 // Client
-int convMtToPx(int mt){
+int convMtToPx(float mt){
     float aux = ((mt*140)/6.0);
     return int(aux + 0.5);
 }
@@ -223,6 +224,10 @@ void Protocol::sendMove(int8_t id_worm,int8_t dir)
 {
     //state --> 1 = END     0 = START
     //dir --> 1 = RIGHT     0 = LEFT
+    std::cout << "id:" << static_cast<int16_t>(id_worm) << "dir" << static_cast<int16_t>(dir) << std::endl;
+
+    Commands cmd = Commands::MOVE;
+    conexion->enviar((const char*)&cmd,1);
     conexion->enviar((const char*)&id_worm,1);
     conexion->enviar((const char*)&dir,1);
 }
@@ -235,9 +240,9 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     conexion->recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
     conexion->recibir((char*)&aux,4);
-    *posX = convMtToPx(ntohl(aux));
+    *posX = convMtToPx(ntohl(aux)/10000.0);
     conexion->recibir((char*)&aux,4);
-    *posY = convMtToPx(ntohl(aux));
+    *posY = convMtToPx(ntohl(aux)/10000.0);
     conexion->recibir((char*)&aux,4);
     float aux2=(ntohl(aux)*57.2958/100)+0.5;
     int32_t aux3 = (int32_t) aux2;
@@ -285,8 +290,8 @@ int8_t Protocol::recvRooms()
 void Protocol::recvRoomCaratc(int8_t *room, int8_t *cantMax, int8_t *cantActual)
 {
     conexion->recibir((char*)room,1);
-    conexion->recibir((char*)cantMax,1);
-    conexion->recibir((char*)cantActual,1);
+    conexion->recibir(( char*)cantMax,1);
+    conexion->recibir(( char*)cantActual,1);
 }
 
 void Protocol::sendRoomSel(int8_t id)
