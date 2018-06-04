@@ -60,8 +60,8 @@ void Player::game_loop() {
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
-				int id_worm;
-				int dir;
+				int id_worm=0;
+				int dir=0;
 
 				this->protocol.recvMove(&id, &dir);
 
