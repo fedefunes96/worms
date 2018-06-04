@@ -287,6 +287,7 @@ Game::~Game() {
 	//for (int i = 0; i < this->players.size(); i++)
 	//	this->players.join();
 
+	this->stage.stop_drawing();
 	this->stage_t.join();
 	//this->game_t.join();
 
