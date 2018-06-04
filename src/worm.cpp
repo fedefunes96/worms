@@ -40,6 +40,7 @@ Worm::Worm(Stage& stage
 	this->move_direction = MoveDirection::NONE;
 	this->actual_velocity.Set(0, 0);
 	this->dead = true;
+	this->jump_cooldown = 0;
 }
 
 void Worm::receive_dmg(int damage) {
@@ -68,7 +69,7 @@ void Worm::move_step(float32 time_step) {
 	//Need mutex (1)
 	//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
 
-	if (this->is_on_ground()) {
+	if (this->is_on_ground() && !this->jump_cooldown) {
 		//printf("Im on ground\n");
 		//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);	
 		float32 angle = this->body->GetAngle();
@@ -86,24 +87,30 @@ void Worm::move_step(float32 time_step) {
 			}	
 			case MoveDirection::JUMP_FORW: {
 				if(this->facing_direction == MoveDirection::LEFT)
-					this->actual_velocity.Set(-forw_jump_speed.first*time_step, forw_jump_speed.second*time_step);	
+					this->actual_velocity.Set(-forw_jump_speed.first, forw_jump_speed.second);	
 				else if (this->facing_direction == MoveDirection::RIGHT) {
-					this->actual_velocity.Set(forw_jump_speed.first*time_step, forw_jump_speed.second*time_step);	
+					this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
 				}
+				this->jump_cooldown = JUMP_COOLDOWN;
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
 				if(this->facing_direction == MoveDirection::LEFT)
-					this->actual_velocity.Set(back_jump_speed.first*time_step, back_jump_speed.second*time_step);	
+					this->actual_velocity.Set(back_jump_speed.first, back_jump_speed.second);	
 				else if (this->facing_direction == MoveDirection::RIGHT) {
-					this->actual_velocity.Set(-back_jump_speed.first*time_step, back_jump_speed.second*time_step);	
-				}				
+					this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);	
+				}	
+				this->jump_cooldown = JUMP_COOLDOWN;			
 				break;
 			}										
 			case MoveDirection::NONE: {
 				this->actual_velocity.Set(0, 0);
 				break;
 			}
+		}
+
+		if (this->jump_cooldown > 0) {
+			this->jump_cooldown--;
 		}
 
 		this->body->SetLinearVelocity(this->actual_velocity); 
