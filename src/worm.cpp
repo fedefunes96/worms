@@ -86,20 +86,30 @@ void Worm::move_step(float32 time_step) {
 				break;
 			}	
 			case MoveDirection::JUMP_FORW: {
-				if(this->facing_direction == MoveDirection::LEFT)
-					this->actual_velocity.Set(-forw_jump_speed.first, forw_jump_speed.second);	
-				else if (this->facing_direction == MoveDirection::RIGHT) {
-					this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
+				this->actual_velocity.Set(0, 0);
+				b2Vec2 impulse_speed;
+
+				if(this->facing_direction == MoveDirection::LEFT) {
+					impulse_speed.Set(-forw_jump_speed.first, forw_jump_speed.second);
 				}
+				else if (this->facing_direction == MoveDirection::RIGHT) {
+					impulse_speed.Set(forw_jump_speed.first, forw_jump_speed.second);
+				}
+				this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
 				this->jump_cooldown = JUMP_COOLDOWN;
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
-				if(this->facing_direction == MoveDirection::LEFT)
-					this->actual_velocity.Set(back_jump_speed.first, back_jump_speed.second);	
+				this->actual_velocity.Set(0, 0);	
+				b2Vec2 impulse_speed;
+
+				if(this->facing_direction == MoveDirection::LEFT) {
+					impulse_speed.Set(back_jump_speed.first, back_jump_speed.second);
+				}
 				else if (this->facing_direction == MoveDirection::RIGHT) {
-					this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);	
-				}	
+					impulse_speed.Set(-back_jump_speed.first, back_jump_speed.second);
+				}
+				this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
 				this->jump_cooldown = JUMP_COOLDOWN;			
 				break;
 			}										
@@ -113,7 +123,7 @@ void Worm::move_step(float32 time_step) {
 			this->jump_cooldown--;
 		}
 
-		this->body->SetLinearVelocity(this->actual_velocity); 
+		this->body->SetLinearVelocity(this->actual_velocity);
 	}
 }
 

@@ -62,8 +62,8 @@ void Game::create_test_world() {
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (20.0,6.0) //Forw jump
-		, std::make_pair (20.0,6.0) //Back jump
+		, std::make_pair (6.0, 20.0) //Forw jump
+		, std::make_pair (6.0,20.0) //Back jump
 		, 10.0);
 
 	std::shared_ptr<Worm> worm1_ptr = std::shared_ptr<Worm>(worm);
@@ -83,8 +83,8 @@ void Game::create_test_world() {
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (20.0,6.0) //Forw jump
-		, std::make_pair (20.0,6.0) //Back jump
+		, std::make_pair (6.0,20.0) //Forw jump
+		, std::make_pair (6.0,20.0) //Back jump
 		, 10.0);
 
 	std::shared_ptr<Worm> worm2_ptr = std::shared_ptr<Worm>(worm2);
