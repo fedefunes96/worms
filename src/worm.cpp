@@ -121,9 +121,9 @@ void Worm::move_step(float32 time_step) {
 
 		if (this->jump_cooldown > 0) {
 			this->jump_cooldown--;
+		} else {
+			this->body->SetLinearVelocity(this->actual_velocity);
 		}
-
-		this->body->SetLinearVelocity(this->actual_velocity);
 	}
 }
 
