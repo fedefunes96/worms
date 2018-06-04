@@ -47,8 +47,11 @@ public:
     void sendGameEnd();
     void sendActualPlayer(int8_t id);
     void sendWinner(int8_t id);
+    void sendRooms(int8_t rooms);
+    void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
     void recvMove(int* id, int *dir);
-    void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params);    
+    void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params); 
+    int8_t recvRoomSel();  
     //------------
 
     void sendMove(int8_t id_worm, int8_t dir);
@@ -64,6 +67,9 @@ public:
     void recvActualPlayer(int8_t *id);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
+    int8_t recvRooms();
+    void recvRoomCaratc(int8_t* room, int8_t* cantMax, int8_t* cantActual);
+    void sendRoomSel(int8_t id);
 private:
     Socket* conexion;
 
