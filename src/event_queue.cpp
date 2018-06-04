@@ -4,7 +4,7 @@
 #include <string>
 
 void EventQueue::add_event(Event event) {
-	this->block_queue.push(event);
+	this->block_queue.push(std::move(event));
 }
 
 Event EventQueue::get_event() {

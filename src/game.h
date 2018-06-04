@@ -36,7 +36,7 @@ private:
 	int id_player_list;
 
 	std::thread stage_t;
-	std::thread game_t;
+	//std::thread game_t;
 	std::vector<std::thread> players_t;
 	//Player winner;
 	//std::vector<Player>::iterator it_actual_player;

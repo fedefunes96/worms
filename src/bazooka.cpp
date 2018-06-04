@@ -5,28 +5,36 @@
 
 Bazooka::Bazooka(Stage& stage, int ammo) : Usable(stage, ammo) {}
 
-void Bazooka::action(const b2Vec2& from_pos, const b2Vec2& dest_pos, std::vector<float> params) {
-	//Throwable!
+void Bazooka::action(const float longitude
+	, const float height
+	, const b2Vec2& from_pos
+	, const b2Vec2& dest_pos
+	, const std::vector<float>& params) {
+
+	b2Vec2 normalized_dest = dest_pos - from_pos;
+
+	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
+
+	/*Worms are boxes
+	//Height radius and long radius
+	         Worm     Projection of     Sum radius so it doesn't
+	  					Missile           overlap
+	  										________
+	        ____  		  ___              /  ____  \
+	       |    |   ->   /   \     ->      | |    | |
+	       |____|   ->   \___/     ->      | |____| |
+	                                       \________/
+	*/
 	
-	//NormalMissile missile(from_pos, restitution, max_dmg, radius);
+	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
+	b2Vec2 velocity(10.0 * cos(angle), 10 * sin(angle));
 
-	float32 dot = from_pos.x*dest_pos.x + from_pos.y*dest_pos.y;
-	float32 det = from_pos.x*dest_pos.y - from_pos.y*dest_pos.x;
-
-	float32 angle = atan2(det, dot);
-
-	b2Vec2 where(from_pos.x + 2*cos(angle), from_pos.y + 2*sin(angle));
-
-	/*printf("Angle %0.1f Cos %0.1f Sen %0.1f\n", angle, cos(angle), sin(angle));
-	printf("From %0.1f %0.1f\n", from_pos.x, from_pos.y);
-	printf("Dest %0.1f %0.1f\n", dest_pos.x, dest_pos.y);
-	printf("Where %0.1f %0.1f\n", where.x, where.y);*/
 
 	BazookaMissile* missile = new BazookaMissile(this->stage
 												, where.x
-												, where.y+10
+												, where.y
 												, angle
-												, b2Vec2(0, 100)
+												, velocity
 												, 0.0
 												, 1.0
 												, 0

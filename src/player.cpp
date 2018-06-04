@@ -43,19 +43,13 @@ void Player::set_turn(bool state) {
 void Player::play() {
 	this->set_turn(true);
 
-	//this->counter.set_time(40);
-
-	//this->counter.start_counting();
+	this->counter.set_time(40);
 
 	printf("Starts turn of 40 secs\n");
 
-	//while (this->counter.is_over() && this->is_my_turn()) {}
-
-	std::this_thread::sleep_for(std::chrono::milliseconds(40000));
+	this->counter.start_counting();
 
 	printf("Ends turn of 40 secs\n");
-	
-	//this->counter.stop();
 
 	this->set_turn(false);
 }
@@ -63,18 +57,6 @@ void Player::play() {
 void Player::game_loop() {
 	while (this->continue_receiving) {
 		try {
-			//std::lock_guard<std::mutex> lock(this->worms_m);
-			//MoveDirection mdir = MoveDirection::LEFT;
-
-			//if (!this->worms.at(0)->im_dead())
-			//this->worms.at(0)->start_moving(mdir);
-
-			/*b2Vec2 dest(10, 3);
-			std::vector<float> params;
-
-			this->worms.at(0)->use(this->usables.at(0), dest, params);	
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(20000));*/
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
@@ -86,6 +68,7 @@ void Player::game_loop() {
 				MoveDirection mdir = static_cast<MoveDirection>(dir);
 
 				//Should check if worm exists
+				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(id_worm)->start_moving(mdir);
 
 			} else if (cmd == Commands::ATTACK) {
@@ -100,10 +83,12 @@ void Player::game_loop() {
 
 				b2Vec2 dest(posx, posy);
 
+				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(id_worm)->use(this->usables.at(id_usable), dest, params);
 			} else {
 				//Player's cheating
 				//Disconnect him
+				this->disconnected_player();
 			}
 
 			if (!this->is_my_turn())
@@ -113,9 +98,34 @@ void Player::game_loop() {
 
 		} catch(SocketException& e) {
 			//Played disconnected
-			//Throw PlayerDisconnected
+			this->disconnected_player();
 			break;
 		}
+	}
+}
+
+void Player::disconnected_player() {
+	//Remove each of his worms
+	std::lock_guard<std::mutex> lock(this->worms_m);
+
+	std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
+
+	while (it != this->worms.end()) {
+		it->second->force_death();
+
+		it = this->worms.erase(it);
+	}
+}
+
+void Player::check_if_worm_was_mine(Ubicable* ubicable) {
+	std::lock_guard<std::mutex> lock(this->worms_m);
+
+	std::unordered_map<int, std::shared_ptr<Worm>>::const_iterator it;
+
+	it = this->worms.find(ubicable->get_id());
+
+	if (it != this->worms.end()) {
+		this->worms.erase(it);
 	}
 }
 
@@ -138,17 +148,9 @@ void Player::notify_actual_player(int id) {
 }
 
 void Player::notify_removal(Ubicable* ubicable) {
-	/*std::lock_guard<std::mutex> lock(this->worms_m);
-
 	if (ubicable->get_type().compare("Worm") == 0) {
-		std::unordered_map<int, Worm*>::const_iterator it;
-
-		it = this->worms.find(ubicable->get_id());
-
-		if (it != this->worms.end()) {
-			this->worms.erase(it);
-		}
-	}*/
+		this->check_if_worm_was_mine(ubicable);
+	}
 
 	printf("Sending Remove object\n");
 	this->protocol.sendRemove(ubicable->get_type(), ubicable->get_id());
@@ -186,6 +188,6 @@ int Player::get_id() {
 }
 
 bool Player::lost() {
-	//need mutex
+	std::lock_guard<std::mutex> lock(this->worms_m);
 	return this->worms.size() == 0;
 }

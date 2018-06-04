@@ -28,6 +28,8 @@ private:
 
 	bool is_my_turn();
 	void set_turn(bool state);
+	void check_if_worm_was_mine(Ubicable* ubicable);
+	void disconnected_player();
 public:
 	Player(Protocol protocol);
 	Player(Player&&);

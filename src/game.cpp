@@ -22,42 +22,33 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
  	this->initialize_players();
  	this->initialize_game(stage_file);
  	this->start_game();
-
- 	//Start drawing the stage
- 	//this->stage_t = std::thread(&Stage::draw, &this->stage);
 }
 
 void Game::start_game() {
 	printf("Creating threads\n");
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
-	this->game_t = std::thread(&Game::game_loop, this);
+	//this->game_t = std::thread(&Game::game_loop, this);
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players_t.push_back(
 			std::thread(&Player::game_loop, &this->players[i])
 		);
 	}
-	//Wait ten seconds
-	//printf("Start the world\n");
-	printf("Waiting 20 secs to end game\n");
-	std::this_thread::sleep_for(std::chrono::milliseconds(20000));
-	printf("Game ended 20 secs\n");
-	//printf("End of world\n");
 
-	this->stage.stop_drawing();
+	this->game_loop();
+	//printf("Waiting 20 secs to end game\n");
+	//std::this_thread::sleep_for(std::chrono::milliseconds(20000));
+	//printf("Game ended 20 secs\n");
+
+	//this->stage.stop_drawing();
 }
 
 void Game::initialize_players() {
 	//First, set an id to every player
 	//Starting with id = 1
-
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].set_id(i+1);
-		//this->players[i]->start;
 	}
-
-	//Start players so they can hear events
-	//this->players.start();
 }
 
 void Game::create_test_world() {
@@ -205,23 +196,18 @@ void Game::game_loop() {
 }
 
 Player& Game::get_actual_player() {
-	//return *(this->players.begin() + this->id_actual_player);
 	return this->players[this->id_player_list];
 }
 
 void Game::notify_winner() {
-	//std::unordered_map<int, Player>::iterator it = this->players.begin();
-	std::vector<Player>::iterator it = this->players.begin();
-
 	int id_winner;
 
-	while (it != this->players.end()) {
-		if (!(*it).lost()) {
-			//Get winner
-			id_winner = (*it).get_id();
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		if (!this->players[i].lost()) {
+			id_winner = this->players[i].get_id();
 			break;
 		}
-	}	
+	}
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].notify_winner(id_winner);
@@ -240,15 +226,11 @@ void Game::end_game(Game_status game_status) {
 }
 
 Game_status Game::check_for_winner() {
-	//std::unordered_map<int, Player>::iterator it = this->players.begin();
-	std::vector<Player>::iterator it = this->players.begin();
-
 	int cant_players_alive = 0;
 
-	while (it != this->players.end()) {
-		if (!(*it).lost()) {
+	for (int i = 0; i < (int) this->players.size(); i++) {
+		if (!this->players[i].lost()) {
 			cant_players_alive++;
-			++it;
 		}
 	}
 
@@ -306,7 +288,7 @@ Game::~Game() {
 	//	this->players.join();
 
 	this->stage_t.join();
-	this->game_t.join();
+	//this->game_t.join();
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].notify_game_end();

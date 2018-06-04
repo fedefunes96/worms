@@ -9,7 +9,12 @@
 class Bazooka : public Usable {
 public:
 	Bazooka(Stage& stage, int ammo);
-	virtual void action(const b2Vec2& from_pos, const b2Vec2& dest_pos, std::vector<float> params) override;
+	virtual void action(
+		const float longitude
+		, const float height
+		, const b2Vec2& from_pos
+		, const b2Vec2& dest_pos
+		, const std::vector<float>& params) override;
 	virtual int get_id() override;
 };
 

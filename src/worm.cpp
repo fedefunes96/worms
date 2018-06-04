@@ -112,7 +112,7 @@ void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::v
 
 	b2Vec2 pos = this->body->GetPosition();
 
-	usable->use(pos, dest, params);
+	usable->use(this->longitude, this->height, pos, dest, params);
 }
 
 std::string Worm::get_type() {

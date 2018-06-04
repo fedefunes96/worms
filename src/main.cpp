@@ -12,8 +12,9 @@
 #include "socket.h"
 #include "protocol.h"
 
-int main(int argc, char* argv[]) {
+#include "counter.h"
 
+int main(int argc, char* argv[]) {
 	std::string port("7777");
 
 	Socket server(port);
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
 
 	Game game("hi", std::move(players));
 
-	//delete skt;
+	delete skt;
 
 	return 0;
 }
