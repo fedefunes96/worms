@@ -103,7 +103,7 @@ int Throwable::get_id() {
 	return this->id_obj;
 }
 
-void Throwable::move_step() {
+void Throwable::move_step(float32 time_step) {
 	//Dont move!
 		/*this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
 

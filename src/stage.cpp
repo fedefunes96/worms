@@ -102,7 +102,7 @@ void Stage::draw() {
  		std::vector<std::shared_ptr<Movable>>::iterator it = this->movables.begin();
 
  		while (it != this->movables.end()) {
- 			(*it)->move_step();
+ 			(*it)->move_step(this->time_step);
  			
  			b2Body* b = (*it)->get_body(); 			
  			//Only notify movables moving

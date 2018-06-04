@@ -27,7 +27,7 @@ public:
 	virtual int get_id() = 0;
 
 	virtual void force_death() = 0;
-	virtual void move_step() = 0;
+	virtual void move_step(float32 time_step) = 0;
 	virtual b2Body* get_body() = 0;
 	virtual bool im_dead() = 0;
 };

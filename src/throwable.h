@@ -49,7 +49,7 @@ public:
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;	*/
 
-	virtual void move_step() override;
+	virtual void move_step(float32 time_step) override;
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;

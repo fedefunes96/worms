@@ -64,7 +64,7 @@ void Worm::start_moving(MoveDirection mdirect) {
 	this->move_direction = mdirect;
 }
 
-void Worm::move_step() {
+void Worm::move_step(float32 time_step) {
 	//Need mutex (1)
 	//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
 
@@ -75,21 +75,29 @@ void Worm::move_step() {
 
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
-				this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
+				this->actual_velocity.Set(mov_speed*cos(angle)*time_step, mov_speed*sin(angle)*time_step);
 				this->facing_direction = MoveDirection::RIGHT;
 				break;
 			}
 			case MoveDirection::LEFT: {
-				this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
+				this->actual_velocity.Set(-mov_speed*cos(angle)*time_step, mov_speed*sin(angle)*time_step);
 				this->facing_direction = MoveDirection::LEFT;
 				break;
 			}	
 			case MoveDirection::JUMP_FORW: {
-				this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);	
+				if(this->facing_direction == MoveDirection::LEFT)
+					this->actual_velocity.Set(-forw_jump_speed.first*time_step, forw_jump_speed.second*time_step);	
+				else if (this->facing_direction == MoveDirection::RIGHT) {
+					this->actual_velocity.Set(forw_jump_speed.first*time_step, forw_jump_speed.second*time_step);	
+				}
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
-				this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);				
+				if(this->facing_direction == MoveDirection::LEFT)
+					this->actual_velocity.Set(back_jump_speed.first*time_step, back_jump_speed.second*time_step);	
+				else if (this->facing_direction == MoveDirection::RIGHT) {
+					this->actual_velocity.Set(-back_jump_speed.first*time_step, back_jump_speed.second*time_step);	
+				}				
 				break;
 			}										
 			case MoveDirection::NONE: {
