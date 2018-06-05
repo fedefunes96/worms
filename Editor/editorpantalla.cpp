@@ -19,6 +19,7 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EditorPantalla)
 {
+
     xscene = 2000;
     yscene = 1000;
     ui->setupUi(this);
