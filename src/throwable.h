@@ -5,10 +5,12 @@
 #include "stage.h"
 #include <Box2D/Box2D.h>
 #include <string>
+#include "worm.h"
 
 class Throwable : public Movable {
-private:
+protected:
 	Stage& stage;
+	Worm* owner;
 	b2Body* body;
 	//b2Fixture* fixture;
 
@@ -24,10 +26,12 @@ private:
 	const float max_dmg;
 
 	bool dead;
+	bool stop_collide_owner;
 
-	void explode();
+	virtual void explode();
 public:
 	Throwable(Stage& stage
+	, Worm* owner
 	, const int x
 	, const int y
 	, const float angle_rad
@@ -43,8 +47,14 @@ public:
 	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
-	virtual void stop_contacting() override;
+	virtual void stop_contacting(Ubicable* ubicable) override;
+	virtual void stop_contacting(Worm* worm) override;
 
+	virtual bool should_collide_with(Ubicable* ubicable) override;
+	
+	virtual bool should_collide_with(Girder* girder) override;
+	virtual bool should_collide_with(Worm* worm) override;
+	virtual bool should_collide_with(Throwable* throwable) override;
 	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;	*/
@@ -53,7 +63,7 @@ public:
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;
-
+	virtual bool is_affected_by_wind() = 0;
 };
 
 #endif

@@ -64,6 +64,7 @@ void Game::create_test_world() {
 		, 2.0 //Mov speeed
 		, std::make_pair (6.0, 20.0) //Forw jump
 		, std::make_pair (6.0,20.0) //Back jump
+		, 25.0
 		, 10.0);
 
 	std::shared_ptr<Worm> worm1_ptr = std::shared_ptr<Worm>(worm);
@@ -85,6 +86,7 @@ void Game::create_test_world() {
 		, 2.0 //Mov speeed
 		, std::make_pair (6.0,20.0) //Forw jump
 		, std::make_pair (6.0,20.0) //Back jump
+		, 25.0
 		, 10.0);
 
 	std::shared_ptr<Worm> worm2_ptr = std::shared_ptr<Worm>(worm2);
@@ -93,7 +95,12 @@ void Game::create_test_world() {
 	this->stage.insert(std::move(worm2_ptr));
 	//this->stage.insert(std::shared_ptr<Movable>(worm2));
 
-	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO));	
+	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO
+												, 10.0
+												, 0.0
+												, 0.5
+												, 0
+												, 50.0));	
 
 	//this->players[0].attach_worm(worm);
 	//this->players[0].attach_worm(worm2);
@@ -188,6 +195,9 @@ void Game::game_loop() {
 
 		}
 		//Need conditional variable over Stage
+
+		this->stage.wait_stop_moving();
+
 		game_status = this->round_over();
 
 	}

@@ -2,12 +2,15 @@
 #define STAGE_H
 
 #include "contact_listener.h"
+#include "contact_filter.h"
 #include <Box2D/Box2D.h>
 #include <thread>
 #include <vector>
 #include "ubicable.h"
 #include "movable.h"
 #include <mutex>
+#include "wind.h"
+#include <condition_variable>
 //#include "game.h"
 
 class Game;
@@ -20,32 +23,34 @@ private:
 
 	b2Vec2 gravity;
 	b2World world;
-	std::thread t_world;
-	ContactListener contact_listener;
-	Game& game;
 
-	//std::mutex m;
+	std::thread t_world;
+
+	ContactListener contact_listener;
+	ContactFilter contact_filter;
+
+	Game& game;
+	Wind wind;
 
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
 	std::vector<std::shared_ptr<Movable>> movables;
 
-	//std::vector<Ubicable*> to_create;
 	std::vector<std::unique_ptr<Ubicable>> to_create;
 	std::vector<std::shared_ptr<Movable>> to_create_mov;
-	//std::vector<b2Body*> to_remove;
 
 	std::mutex ubicable_m;
 	std::mutex movable_m;
-	//std::mutex remove_m;
+	std::mutex something_moving_m;
 
 	bool continue_drawing;
-	bool something_moving;
+	std::condition_variable something_moving;
 
 	void remove_deads();
 	void create_objects();
 	void create_objects_mov();
 
 	void pre_initialize();
+	void nothing_moving();
 public:
 	Stage(const std::string& stage_file
 		, const float32 time_step
@@ -56,17 +61,13 @@ public:
 
 	void draw();
 	void stop_drawing();	
-	//void remove(b2Body* body);
-	bool is_something_moving();
-	//void insert(Ubicable* ubicable);
+
+	void wait_stop_moving();
 
 	void insert(std::unique_ptr<Ubicable> ubicable);
 	void insert(std::shared_ptr<Movable> movable);
-	//b2Body* insert(b2BodyDef* body_def);
 
 	b2World& get_world();
-
-	//Stage(Stage&&);
 
 	~Stage();
 };

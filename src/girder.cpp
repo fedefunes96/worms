@@ -9,8 +9,8 @@ Girder::Girder(Stage& stage
 	, const int x
 	, const int y
 	, const float angle_rad
-	, const int longitude
-	, const int height) 
+	, const float longitude
+	, const float height) 
 	: stage(stage)
 	, id_obj(id_girders++) 
 	, x(x)
@@ -54,7 +54,11 @@ void Girder::start_contacting() {
 	//Do nothing
 }
 
-void Girder::stop_contacting() {
+void Girder::stop_contacting(Ubicable* ubicable) {
+	//Do nothing
+}
+
+void Girder::stop_contacting(Worm* worm) {
 	//Do nothing
 }
 
@@ -72,4 +76,21 @@ bool Girder::im_dead() {
 
 void Girder::force_death() {
 
+}
+
+bool Girder::should_collide_with(Ubicable* ubicable) {
+	return ubicable->should_collide_with(this);
+}
+	
+bool Girder::should_collide_with(Girder* girder) {
+	//Girder's won't collide with girder's
+	return false;
+}
+
+bool Girder::should_collide_with(Worm* girder) {
+	return true;
+}
+
+bool Girder::should_collide_with(Throwable* girder) {
+	return true;
 }

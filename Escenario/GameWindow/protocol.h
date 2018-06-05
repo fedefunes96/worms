@@ -34,9 +34,9 @@ class Protocol {
 private:
     std::mutex client_send_m;
     std::mutex server_recv_m;
+    Socket& conexion;
 public:
-    Protocol(Socket* conexion);
-    Protocol(Protocol&&);
+    Protocol(Socket& conexion);
 
     //Server
     void sendPosition(std::string type_obj, int32_t id_obj, float posX, float posY, float angle);
@@ -70,9 +70,6 @@ public:
     int8_t recvRooms();
     void recvRoomCaratc(int8_t* room, int8_t* cantMax, int8_t* cantActual);
     void sendRoomSel(int8_t id);
-private:
-    Socket* conexion;
-
 };
 
 #endif // PROTOCOL_H

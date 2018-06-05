@@ -9,10 +9,9 @@
 
 //class Movable;
 //class Static;
-/*class Girder;
+class Girder;
 class Worm;
 class Throwable;
-class Stage;*/
 
 class Ubicable {
 public:
@@ -20,10 +19,16 @@ public:
 	virtual ~Ubicable() {}
 	//virtual void start_contacting(Ubicable* ubicable) = 0;
 	virtual void start_contacting() = 0;
-	virtual void stop_contacting() = 0;
+	virtual void stop_contacting(Ubicable* ubicable) = 0;
+	virtual void stop_contacting(Worm* worm) = 0;
 	virtual void create_myself(b2World& world) = 0;
 	virtual void delete_myself(b2World& world) = 0;
 
+	virtual bool should_collide_with(Ubicable* ubicable) = 0;
+
+	virtual bool should_collide_with(Girder* girder) = 0;
+	virtual bool should_collide_with(Worm* worm) = 0;
+	virtual bool should_collide_with(Throwable* throwable) = 0;
 	/*virtual void colision(Static& static_obj) = 0;	
 	virtual void colision(Girder& girder) = 0;
 	virtual void colision(Worm& worm) = 0;	

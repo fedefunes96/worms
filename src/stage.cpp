@@ -2,10 +2,14 @@
 #include <Box2D/Box2D.h>
 #include <thread>
 #include "ubicable.h"
+#include "contact_listener.h"
+#include "contact_filter.h"
 #include "movable.h"
 #include "game.h"
 #include <vector>
 #include <algorithm>
+#include "wind.h"
+#include <condition_variable>
 
 Stage::Stage(const std::string& stage_file
 	, const float32 time_step
@@ -20,7 +24,7 @@ Stage::Stage(const std::string& stage_file
 	, game(game) {
 
 	this->world.SetContactListener(&this->contact_listener);
-	this->something_moving = false;
+	this->world.SetContactFilter(&this->contact_filter);
 }
 
 void Stage::remove_deads() {
@@ -104,6 +108,8 @@ void Stage::draw() {
  		while (it != this->movables.end()) {
  			(*it)->move_step(this->time_step);
  			
+ 			wind.apply((*it).get());
+
  			b2Body* b = (*it)->get_body(); 			
  			//Only notify movables moving
  			if (!b->IsAwake()) {
@@ -135,15 +141,9 @@ void Stage::draw() {
  			++it;
   		}
 
-  		if (cant_objects_moving > 0)
-  			this->something_moving = true;
-  		else
-  			this->something_moving = false;
+  		if (cant_objects_moving == 0)
+  			this->nothing_moving();
 
-  		//Need mutex type (3)
-  		//(cant_objects_moving > 0) 
-  		//? this->something_moving = true 
-  		//: this->something_moving = false;
 
   		this->remove_deads();
 
@@ -156,9 +156,16 @@ void Stage::draw() {
 	printf("End of world draw\n");
 }
 
-bool Stage::is_something_moving() {
-	//Need mutex type (3)
-	return this->something_moving;
+void Stage::nothing_moving() {
+		std::unique_lock<std::mutex> mlock(this->something_moving_m);
+
+		this->something_moving.notify_one();	
+}
+
+void Stage::wait_stop_moving() {
+	std::unique_lock<std::mutex> mlock(this->something_moving_m);
+	
+	this->something_moving.wait(mlock);
 }
 
 void Stage::pre_initialize() {
@@ -199,7 +206,4 @@ b2World& Stage::get_world() {
 	return this->world;
 }
 
-Stage::~Stage() {
-	//this->game_over=true;
-	//t_world.join();
-}
+Stage::~Stage() {}

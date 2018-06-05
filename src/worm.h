@@ -7,6 +7,7 @@
 #include "movable.h"
 #include <Box2D/Box2D.h>
 #include "stage.h"
+#include <mutex>
 #include <string>
 #include "sensor.h"
 
@@ -39,17 +40,21 @@ private:
 	const float mov_speed;
 	const std::pair<float, float> forw_jump_speed;
 	const std::pair<float, float> back_jump_speed;
-	const float height_dmg;
-	const int longitude;
-	const int height;
+	const float max_height_dmg;
+	const float min_height_for_dmg;
+	const float longitude;
+	const float height;
 	int actual_health;
 	int owner;
 	int jump_cooldown;
 	bool dead;
 
+	std::mutex direction_m;
+
 	MoveDirection facing_direction;
 	MoveDirection move_direction;
 	b2Vec2 actual_velocity;
+	b2Vec2 last_position;
 
 	bool is_on_ground();
 public:
@@ -57,14 +62,15 @@ public:
 		, const int x
 		, const int y
 		, const float angle_rad
-		, const int longitude
-		, const int height
+		, const float longitude
+		, const float height
 		, const float restitution
 		, const int health
 		, const float mov_speed
 		, const std::pair<float, float> forw_jump_speed
 		, const std::pair<float, float> back_jump_speed
-		, const float height_dmg);
+		, const float max_height_dmg
+		, const float min_height_for_dmg);
 
 	virtual std::string get_type() override;
 	virtual int get_id() override;
@@ -72,8 +78,14 @@ public:
 	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
-	virtual void stop_contacting() override;
+	virtual void stop_contacting(Ubicable* ubicable) override;
+	virtual void stop_contacting(Worm* worm) override;
 
+	virtual bool should_collide_with(Ubicable* ubicable) override;
+	
+	virtual bool should_collide_with(Girder* girder) override;
+	virtual bool should_collide_with(Worm* worm) override;
+	virtual bool should_collide_with(Throwable* throwable) override;
 	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;*/
@@ -82,6 +94,10 @@ public:
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;
+	virtual bool is_affected_by_wind() override;
+
+	float get_longitude();
+	float get_height();
 
 	int get_health();
 	void add_health(int health);

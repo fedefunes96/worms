@@ -1,13 +1,13 @@
-#ifndef BAZOOKA_MISSILE_H
-#define BAZOOKA_MISSILE_H
+#ifndef FRAGMENT_MISSILE_H
+#define FRAGMENT_MISSILE_H
 
 #include "throwable.h"
 
-#define BAZOOKA_TYPE "Bazooka"
+#define FRAGMENT_TYPE "Fragment"
 
-class BazookaMissile : public Throwable {
+class FragmentMissile : public Throwable {
 public:
-	BazookaMissile(Stage& stage
+	FragmentMissile(Stage& stage
 	, Worm* owner
 	, const int x
 	, const int y

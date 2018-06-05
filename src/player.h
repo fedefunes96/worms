@@ -10,14 +10,15 @@
 #include "ubicable.h"
 #include "counter.h"
 
-class Player {
+class Player : public Thread {
 private:
 	int id;
 	int second_counter;
-	bool my_turn;
-	bool continue_receiving;
+	bool should_receive;
+	bool connected;
 	Counter counter;
 
+	Socket socket;
 	Protocol protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>> usables;
 	//std::unordered_map<int, Worm*> worms;
@@ -26,15 +27,16 @@ private:
 	std::mutex turn_m;
 	std::mutex worms_m;
 
-	bool is_my_turn();
-	void set_turn(bool state);
+	bool should_i_receive();
+	void set_receive(bool state);
 	void check_if_worm_was_mine(Ubicable* ubicable);
 	void disconnected_player();
 public:
-	Player(Protocol protocol);
+	Player(Socket socket);
 	Player(Player&&);
 
 	void play();
+	virtual void run() override;
 	void game_loop();
 	bool lost();
 
@@ -50,6 +52,8 @@ public:
 
 	void set_id(int id);
 	int get_id();
+
+	bool is_disconnected();
 };
 
 #endif

@@ -1,0 +1,31 @@
+#ifndef DELAYED_THROWABLE_H
+#define DELAYED_THROWABLE_H
+
+#include "throwable.h"
+#include <Box2D/Box2D.h>
+
+class DelayedThrowable : public Throwable {
+private:
+	int counter;
+	float conversor;
+protected:
+	virtual void explode() override;
+public:
+	DelayedThrowable(Stage& stage
+	, Worm* owner	
+	, const int x
+	, const int y
+	, const float angle_rad
+	, const b2Vec2 velocity
+	, const float angular_velocity
+	, const float radius
+	, const float restitution
+	, const float max_dmg
+	, const int time);
+
+	virtual std::string get_type() = 0;
+	virtual bool is_affected_by_wind() = 0;
+	virtual void move_step(float32 time_step) override;
+};
+
+#endif

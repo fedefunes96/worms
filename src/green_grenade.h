@@ -1,13 +1,13 @@
-#ifndef BAZOOKA_H
-#define BAZOOKA_H
+#ifndef GREEN_GRENADE_H
+#define GREEN_GRENADE_H
 
 #include "usable.h"
 #include <Box2D/Box2D.h>
 #include "worm.h"
 
-#define BAZOOKA_ID 0
+#define GREEN_GRENADE_ID 2
 
-class Bazooka : public Usable {
+class GreenGrenade : public Usable {
 private:
 	const float velocity;
 	const float angular_velocity;
@@ -16,7 +16,7 @@ private:
 	const float max_dmg;
 
 public:
-	Bazooka(Stage& stage
+	GreenGrenade(Stage& stage
 	, const int ammo
 	, const float velocity
 	, const float angular_velocity

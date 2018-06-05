@@ -18,23 +18,29 @@ private:
     const int x;
     const int y;
     const float angle_rad;
-    const int longitude;
-    const int height;
+    const float longitude;
+    const float height;
 public:
 	Girder(Stage& stage
 		, const int x
 		, const int y
 		, const float angle_rad
-		, const int longitude
-		, const int height);
+		, const float longitude
+		, const float height);
 
 	virtual std::string get_type() override;
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
 	virtual void start_contacting() override;
-	virtual void stop_contacting() override;
+	virtual void stop_contacting(Ubicable* ubicable) override;
+	virtual void stop_contacting(Worm* worm) override;
 
+	virtual bool should_collide_with(Ubicable* ubicable) override;
+	
+	virtual bool should_collide_with(Girder* girder) override;
+	virtual bool should_collide_with(Worm* girder) override;
+	virtual bool should_collide_with(Throwable* girder) override;
 	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;*/

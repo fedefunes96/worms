@@ -2,8 +2,9 @@
 #include "stage.h"
 #include <Box2D/Box2D.h>
 #include "query_callback.h"
+#include "worm.h"
 
-Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius) {
+Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const float max_dmg) {
 	QueryCallback queryCallback;
 	b2AABB aabb;
 	aabb.lowerBound = pos - b2Vec2(radius, radius);
@@ -20,8 +21,24 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius) {
 			continue;
 		
 		//Change this later
-		if (((Ubicable*) body->GetUserData())->get_type().compare("Worm")==0) {
-		
+
+		Ubicable* ubicable = (Ubicable*) body->GetUserData();
+
+		if (ubicable->get_type().compare("Worm")==0) {
+			b2Vec2 blastDir = bodyCom - pos;
+			float distance = blastDir.Normalize();
+
+			if (distance == 0) {
+				((Worm*) ubicable)->receive_dmg(max_dmg);
+         		continue;
+			}
+
+			float invDistance = 1 / distance;
+			float blastPower = 5.0;
+			float impulseMag = blastPower * invDistance * invDistance;
+			body->ApplyLinearImpulse(impulseMag * blastDir, bodyCom);
+			//Down cast	
+			((Worm*) ubicable)->receive_dmg(max_dmg - (distance * max_dmg/radius));
 		}
 		//applyBlastImpulse(body, center, bodyCom, blastPower );
 	}

@@ -13,14 +13,15 @@ Worm::Worm(Stage& stage
 	, const int x
 	, const int y
 	, const float angle_rad
-	, const int longitude
-	, const int height
+	, const float longitude
+	, const float height
 	, const float restitution
 	, const int health
 	, const float mov_speed
 	, const std::pair<float, float> forw_jump_speed
 	, const std::pair<float, float> back_jump_speed
-	, const float height_dmg)
+	, const float max_height_dmg
+	, const float min_height_for_dmg)
 	: stage(stage)
 	, id_obj(id_worms++)
 	, x(x)
@@ -31,7 +32,8 @@ Worm::Worm(Stage& stage
 	, mov_speed(mov_speed)
 	, forw_jump_speed(forw_jump_speed)
 	, back_jump_speed(back_jump_speed)
-	, height_dmg(height_dmg)
+	, max_height_dmg(max_height_dmg)
+	, min_height_for_dmg(min_height_for_dmg)
 	, longitude(longitude)
 	, height(height) {
 
@@ -41,6 +43,8 @@ Worm::Worm(Stage& stage
 	this->actual_velocity.Set(0, 0);
 	this->dead = true;
 	this->jump_cooldown = 0;
+
+	this->last_position.Set(x, y);
 }
 
 void Worm::receive_dmg(int damage) {
@@ -52,6 +56,14 @@ void Worm::receive_dmg(int damage) {
 	}
 }
 
+float Worm::get_longitude() {
+	return this->longitude;
+}
+
+float Worm::get_height() {
+	return this->height;
+}
+
 int Worm::get_health() {
 	return this->actual_health;
 }
@@ -61,12 +73,13 @@ void Worm::add_health(int health) {
 }
 
 void Worm::start_moving(MoveDirection mdirect) {
-	//Mutex in here (1)
+	std::lock_guard<std::mutex> lock(this->direction_m);
+
 	this->move_direction = mdirect;
 }
 
 void Worm::move_step(float32 time_step) {
-	//Need mutex (1)
+	std::lock_guard<std::mutex> lock(this->direction_m);
 	//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
 
 	if (this->is_on_ground() && !this->jump_cooldown) {
@@ -125,6 +138,21 @@ void Worm::move_step(float32 time_step) {
 			this->body->SetLinearVelocity(this->actual_velocity);
 		}
 	}
+
+	if (this->is_on_ground()) {
+		b2Vec2 actual_position = this->body->GetPosition();
+
+		float fall_height = last_position.y - actual_position.y;
+
+		if (fall_height >= this->min_height_for_dmg) {
+			if (fall_height >= max_height_dmg)
+				this->receive_dmg(max_height_dmg);
+			else
+				this->receive_dmg(fall_height);
+		}
+
+		this->last_position = actual_position;
+	}
 }
 
 bool Worm::is_on_ground() {
@@ -135,9 +163,9 @@ void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::v
 	if (this->dead)
 		return;
 
-	b2Vec2 pos = this->body->GetPosition();
+	//b2Vec2 pos = this->body->GetPosition();
 
-	usable->use(this->longitude, this->height, pos, dest, params);
+	usable->use(this, dest, params);
 }
 
 std::string Worm::get_type() {
@@ -177,6 +205,7 @@ void Worm::create_myself(b2World& world) {
 										, b2Vec2(0, -height)
 										, longitude
 										, height*0.1);
+
 }
 
 void Worm::delete_myself(b2World& world) {
@@ -191,7 +220,11 @@ void Worm::start_contacting() {
 	//Do nothing
 }
 
-void Worm::stop_contacting() {
+void Worm::stop_contacting(Ubicable* ubicable) {
+	ubicable->stop_contacting(this);
+}
+
+void Worm::stop_contacting(Worm* worm) {
 	//Do nothing
 }
 
@@ -217,4 +250,25 @@ bool Worm::im_dead() {
 
 void Worm::force_death() {
 	this->dead = true;
+}
+
+bool Worm::is_affected_by_wind() {
+	return false;
+}
+
+bool Worm::should_collide_with(Ubicable* ubicable) {
+	return ubicable->should_collide_with(this);
+}
+	
+bool Worm::should_collide_with(Girder* girder) {
+	return true;
+}
+
+bool Worm::should_collide_with(Worm* worm) {
+	//Dont collide with other worms
+	return true;
+}
+
+bool Worm::should_collide_with(Throwable* throwable) {
+	return true;
 }

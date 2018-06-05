@@ -5,10 +5,12 @@
 #include <cmath>
 #include "explosion.h"
 #include <string>
+#include "worm.h"
 
 int Throwable::id_throwables = 0;
 
 Throwable::Throwable(Stage& stage
+	, Worm* owner
 	, const int x
 	, const int y
 	, const float angle_rad
@@ -18,6 +20,7 @@ Throwable::Throwable(Stage& stage
 	, const float restitution
 	, const float max_dmg)
 	: stage(stage)
+	, owner(owner)
 	, id_obj(id_throwables++)
 	, x(x)
 	, y(y)
@@ -29,13 +32,15 @@ Throwable::Throwable(Stage& stage
 	, max_dmg(max_dmg) {
 
 	this->dead = false;
+	this->stop_collide_owner = false;
 }
 
 void Throwable::explode() {
 	//Explode in place
 	Explosion explosion(this->stage
 		, this->body->GetPosition()
-		, 10.0);
+		, this->radius
+		, this->max_dmg);
 
 	//Now i dissapear
 	this->dead = true;
@@ -82,8 +87,13 @@ void Throwable::start_contacting() {
 		this->explode();
 }
 
-void Throwable::stop_contacting() {
+void Throwable::stop_contacting(Ubicable* ubicable) {
 	//Do nothing
+}
+
+void Throwable::stop_contacting(Worm* worm) {
+	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner)
+		this->stop_collide_owner = true;
 }
 
 //Whatever i hit, i must explode
@@ -105,10 +115,6 @@ int Throwable::get_id() {
 
 void Throwable::move_step(float32 time_step) {
 	//Dont move!
-		/*this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
-
-		this->body->ApplyAngularImpulse(angular_velocity);*/
-
 }
 
 b2Body* Throwable::get_body() {
@@ -121,4 +127,24 @@ bool Throwable::im_dead() {
 
 void Throwable::force_death() {
 	this->dead = true;
+}
+
+bool Throwable::should_collide_with(Ubicable* ubicable) {
+	return ubicable->should_collide_with(this);
+}
+	
+bool Throwable::should_collide_with(Girder* girder) {
+	return true;
+}
+
+bool Throwable::should_collide_with(Worm* worm) {
+	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner)
+		return false;
+
+	return true;
+}
+
+bool Throwable::should_collide_with(Throwable* throwable) {
+	//Don't collide with other throwables
+	return false;
 }

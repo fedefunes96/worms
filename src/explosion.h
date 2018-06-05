@@ -6,7 +6,7 @@
 
 class Explosion {
 public:
-	Explosion(Stage& stage, const b2Vec2& pos, const float radius);
+	Explosion(Stage& stage, const b2Vec2& pos, const float radius, const float max_dmg);
 };
 
 #endif

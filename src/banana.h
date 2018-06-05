@@ -1,13 +1,13 @@
-#ifndef BAZOOKA_H
-#define BAZOOKA_H
+#ifndef BANANA_H
+#define BANANA_H
 
 #include "usable.h"
 #include <Box2D/Box2D.h>
 #include "worm.h"
 
-#define BAZOOKA_ID 0
+#define BANANA_ID 4
 
-class Bazooka : public Usable {
+class Banana : public Usable {
 private:
 	const float velocity;
 	const float angular_velocity;
@@ -16,7 +16,7 @@ private:
 	const float max_dmg;
 
 public:
-	Bazooka(Stage& stage
+	Banana(Stage& stage
 	, const int ammo
 	, const float velocity
 	, const float angular_velocity

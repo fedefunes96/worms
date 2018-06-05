@@ -48,8 +48,13 @@ void Sensor::start_contacting() {
 	this->object_count++;
 }
 
-void Sensor::stop_contacting() {
+void Sensor::stop_contacting(Ubicable* ubicable) {
 	this->object_count--;
+}
+
+void Sensor::stop_contacting(Worm* worm) {
+	//Do nothing
+	//Count once
 }
 
 b2Body* Sensor::get_body() {
@@ -63,4 +68,20 @@ bool Sensor::im_dead() {
 
 void Sensor::force_death() {
 
+}
+
+bool Sensor::should_collide_with(Ubicable* ubicable) {
+	return false;
+}
+	
+bool Sensor::should_collide_with(Girder* girder) {
+	return false;
+}
+
+bool Sensor::should_collide_with(Worm* worm) {
+	return false;
+}
+
+bool Sensor::should_collide_with(Throwable* throwable) {
+	return false;
 }

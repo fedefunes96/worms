@@ -20,10 +20,17 @@ public:
 	virtual void create_myself(b2World& world) override;	
 	virtual void delete_myself(b2World& world) override;
 	virtual void start_contacting() override;
-	virtual void stop_contacting() override;
+	virtual void stop_contacting(Ubicable* ubicable) override;
+	virtual void stop_contacting(Worm* worm) override;
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;
+
+	virtual bool should_collide_with(Ubicable* ubicable) override;
+	
+	virtual bool should_collide_with(Girder* girder) override;
+	virtual bool should_collide_with(Worm* worm) override;
+	virtual bool should_collide_with(Throwable* throwable) override;
 }; 
 
 #endif

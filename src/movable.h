@@ -15,7 +15,8 @@ public:
 	virtual ~Movable() {}
 	//virtual void start_contacting(Ubicable* ubicable) = 0;
 	virtual void start_contacting() = 0;
-	virtual void stop_contacting() = 0;
+	virtual void stop_contacting(Ubicable* ubicable) = 0;
+	virtual void stop_contacting(Worm* worm) = 0;
 	virtual void create_myself(b2World& world) = 0;	
 	virtual void delete_myself(b2World& world) = 0;
 
@@ -30,6 +31,13 @@ public:
 	virtual void move_step(float32 time_step) = 0;
 	virtual b2Body* get_body() = 0;
 	virtual bool im_dead() = 0;
+	virtual bool is_affected_by_wind() = 0;
+
+	virtual bool should_collide_with(Ubicable* ubicable) = 0;
+	
+	virtual bool should_collide_with(Girder* girder) = 0;
+	virtual bool should_collide_with(Worm* worm) = 0;
+	virtual bool should_collide_with(Throwable* throwable) = 0;
 };
 
 #endif

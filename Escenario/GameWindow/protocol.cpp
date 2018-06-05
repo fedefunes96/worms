@@ -1,11 +1,8 @@
 #include "protocol.h"
 #include <iostream>
 
-Protocol::Protocol(Socket *conexion) : conexion(conexion) {}
-
-Protocol::Protocol(Protocol&& other) : conexion(other.conexion) {
-    other.conexion = nullptr;
-}
+Protocol::Protocol(Socket& conexion) : conexion(conexion) {}
+//Server 
 //Server 
 void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, float posY, float angle) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
@@ -30,12 +27,12 @@ void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, fl
 
     //char c = static_cast<std::underlying_type<Commands>::type>(cmd);
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&type,1);
-    conexion->enviar((const char*)&conv_id,4);
-    conexion->enviar((const char*)&conv_posx,4);
-    conexion->enviar((const char*)&conv_posy,4);
-    conexion->enviar((const char*)&conv_angle,4);
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&type,1);
+    conexion.enviar((const char*)&conv_id,4);
+    conexion.enviar((const char*)&conv_posx,4);
+    conexion.enviar((const char*)&conv_posy,4);
+    conexion.enviar((const char*)&conv_angle,4);
 
 //std::cout << angle*100 << "-" << id_obj << "-" << posX << "-" << posY << std::endl;
 }
@@ -49,9 +46,9 @@ void Protocol::sendWormId(int8_t id, int32_t health) {
 
     //char c = static_cast<std::underlying_type<Commands>::type>(cmd);
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id,1);
-    conexion->enviar((const char*)&conv_health,4);    
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
+    conexion.enviar((const char*)&conv_health,4);    
 }
 
 void Protocol::sendUsableId(int8_t id, int32_t ammo) {
@@ -62,9 +59,9 @@ void Protocol::sendUsableId(int8_t id, int32_t ammo) {
 
     int32_t conv_ammo = htonl(ammo);
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id,1);
-    conexion->enviar((const char*)&conv_ammo,4);       
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
+    conexion.enviar((const char*)&conv_ammo,4);       
 }
 
 void Protocol::sendPlayerId(int8_t id) {
@@ -74,8 +71,8 @@ void Protocol::sendPlayerId(int8_t id) {
 
     //char c = static_cast<std::underlying_type<Commands>::type>(cmd);
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id,1);
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
 }
 
 void Protocol::sendRemove(std::string type_obj, int32_t id) {
@@ -95,9 +92,9 @@ void Protocol::sendRemove(std::string type_obj, int32_t id) {
 
     int32_t conv_id = htonl(id); 
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&type,1);
-    conexion->enviar((const char*)&conv_id,4);   
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&type,1);
+    conexion.enviar((const char*)&conv_id,4);   
 }
 
 void Protocol::sendGameEnd() {
@@ -105,7 +102,7 @@ void Protocol::sendGameEnd() {
 
     Commands cmd = Commands::GAME_END;
 
-    conexion->enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&cmd,1);
 }
 
 void Protocol::sendActualPlayer(int8_t id) {
@@ -113,8 +110,8 @@ void Protocol::sendActualPlayer(int8_t id) {
 
     Commands cmd = Commands::ACTUAL_PLAYER;  
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id,1);
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
 }
 
 void Protocol::sendWinner(int8_t id) {
@@ -122,43 +119,43 @@ void Protocol::sendWinner(int8_t id) {
 
     Commands cmd = Commands::WINNER;  
 
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id,1);
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
 }
 
 void Protocol::sendRooms(int8_t rooms)
 {
-    conexion->enviar((const char*)&rooms,1);
+    conexion.enviar((const char*)&rooms,1);
 }
 
 void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual)
 {
-    conexion->enviar((const char*)&room,1);
-    conexion->enviar((const char*)&cantMax,1);
-    conexion->enviar((const char*)&cantActual,1);
+    conexion.enviar((const char*)&room,1);
+    conexion.enviar((const char*)&cantMax,1);
+    conexion.enviar((const char*)&cantActual,1);
 }
 
 void Protocol::recvMove(int* id, int *dir) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
 
-    conexion->recibir((char*)id,1);
-    conexion->recibir((char*)dir,1);
+    conexion.recibir((char*)id,1);
+    conexion.recibir((char*)dir,1);
 }
 
 void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
     
     int8_t uid;
-    conexion->recibir((char*)&uid,1);
+    conexion.recibir((char*)&uid,1);
     *id_weapon = uid;
 
-    conexion->recibir((char*)id_worm,1);
+    conexion.recibir((char*)id_worm,1);
 
     int32_t aux;
 
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *posx = ntohl(aux);
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *posy = ntohl(aux);
 
     std::vector<float> extra_params;
@@ -178,7 +175,7 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
 int8_t Protocol::recvRoomSel()
 {
     int8_t id;
-    conexion->recibir((char*)&id,1);
+    conexion.recibir((char*)&id,1);
     return id;
 }
 
@@ -227,23 +224,23 @@ void Protocol::sendMove(int8_t id_worm,int8_t dir)
     std::cout << "id:" << static_cast<int16_t>(id_worm) << "dir" << static_cast<int16_t>(dir) << std::endl;
 
     Commands cmd = Commands::MOVE;
-    conexion->enviar((const char*)&cmd,1);
-    conexion->enviar((const char*)&id_worm,1);
-    conexion->enviar((const char*)&dir,1);
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id_worm,1);
+    conexion.enviar((const char*)&dir,1);
 }
 
 
 void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle)
 {
-    conexion->recibir((char*)type_obj,1);
+    conexion.recibir((char*)type_obj,1);
     int32_t aux;
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *posX = convMtToPx(ntohl(aux)/10000.0);
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *posY = convMtToPx(ntohl(aux)/10000.0);
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     float aux2=(ntohl(aux)*57.2958/100)+0.5;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
@@ -252,70 +249,70 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
 
 int8_t Protocol::recvCmd() {
     uint8_t cmd;
-    conexion->recibir((char*)&cmd,1);
+    conexion.recibir((char*)&cmd,1);
     //std::cout << "command:" << static_cast<int16_t>(cmd) << std::endl;
     return cmd;
 }
 
 void Protocol::recvWormId(int8_t *id, int32_t *health)
 {
-    conexion->recibir((char*)id,1);
+    conexion.recibir((char*)id,1);
     int32_t aux;
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *health = ntohl(aux);
     //std::cout << "idWorm:" << static_cast<int16_t>(*id) << "health:" << *health << std::endl;
 }
 
 void Protocol::recvPlayerId(int8_t *id)
 {
-    conexion->recibir((char*)id,1);
+    conexion.recibir((char*)id,1);
     //std::cout << "idPlayer:" << static_cast<int16_t>(*id) << std::endl;
 }
 
 void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
 {
-    conexion->recibir((char*)id,1);
+    conexion.recibir((char*)id,1);
     int32_t aux;
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *ammo= ntohl(aux);
 }
 
 int8_t Protocol::recvRooms()
 {
     int8_t rooms;
-    conexion->recibir((char*)&rooms,1);
+    conexion.recibir((char*)&rooms,1);
     return rooms;
 }
 
 void Protocol::recvRoomCaratc(int8_t *room, int8_t *cantMax, int8_t *cantActual)
 {
-    conexion->recibir((char*)room,1);
-    conexion->recibir(( char*)cantMax,1);
-    conexion->recibir(( char*)cantActual,1);
+    conexion.recibir((char*)room,1);
+    conexion.recibir(( char*)cantMax,1);
+    conexion.recibir(( char*)cantActual,1);
 }
 
 void Protocol::sendRoomSel(int8_t id)
 {
-    conexion->enviar((const char*) &id,1);
+    conexion.enviar((const char*) &id,1);
 }
 
 void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
 {
-    conexion->recibir((char*)id_obj,1);
+    conexion.recibir((char*)id_obj,1);
     int32_t aux;
-    conexion->recibir((char*)&aux,4);
+    conexion.recibir((char*)&aux,4);
     *id=ntohl(aux);
 }
 
 void Protocol::recvActualPlayer(int8_t* id)
 {
-    conexion->recibir((char*)id,1);
+    conexion.recibir((char*)id,1);
 }
 
 
 void Protocol::recvWinner(int8_t* id)
 {
-    conexion->recibir((char*)id,1);
+    conexion.recibir((char*)id,1);
 }
 
 
@@ -331,11 +328,11 @@ void Protocol::recvWinner(int8_t* id)
 
 void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY)
 {
-    conexion->enviar((const char*)&id_weapon,1);
-    conexion->enviar((const char*)&id_worm,1);
+    conexion.enviar((const char*)&id_weapon,1);
+    conexion.enviar((const char*)&id_worm,1);
     int32_t conv = htonl(posX);
-    conexion->enviar((const char*)&conv,4);
+    conexion.enviar((const char*)&conv,4);
     conv = htonl(posY);
-    conexion->enviar((const char*)&conv,4);
+    conexion.enviar((const char*)&conv,4);
 }
 

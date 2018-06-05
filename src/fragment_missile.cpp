@@ -1,7 +1,7 @@
-#include "bazooka_missile.h"
+#include "fragment_missile.h"
 #include "throwable.h"
 
-BazookaMissile::BazookaMissile(Stage& stage
+FragmentMissile::FragmentMissile(Stage& stage
 	, Worm* owner
 	, const int x
 	, const int y
@@ -22,10 +22,10 @@ BazookaMissile::BazookaMissile(Stage& stage
 		, restitution
 		, max_dmg) {}
 
-std::string BazookaMissile::get_type() {
-	return BAZOOKA_TYPE;
+std::string FragmentMissile::get_type() {
+	return FRAGMENT_TYPE;
 }
 
-bool BazookaMissile::is_affected_by_wind() {
+bool FragmentMissile::is_affected_by_wind() {
 	return true;
 }

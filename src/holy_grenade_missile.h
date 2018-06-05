@@ -1,13 +1,13 @@
-#ifndef BAZOOKA_MISSILE_H
-#define BAZOOKA_MISSILE_H
+#ifndef HOLY_GRENADE_MISSILE_H
+#define HOLY_GRENADE_MISSILE_H
 
-#include "throwable.h"
+#include "delayed_throwable.h"
 
-#define BAZOOKA_TYPE "Bazooka"
+#define HOLY_GRENADE_TYPE "HolyGrenade"
 
-class BazookaMissile : public Throwable {
+class HolyGrenadeMissile : public DelayedThrowable {
 public:
-	BazookaMissile(Stage& stage
+	HolyGrenadeMissile(Stage& stage
 	, Worm* owner
 	, const int x
 	, const int y
@@ -16,7 +16,8 @@ public:
 	, const float angular_velocity
 	, const float radius
 	, const float restitution
-	, const float max_dmg);
+	, const float max_dmg
+	, const int time);
 
 	virtual std::string get_type() override;
 	virtual bool is_affected_by_wind() override;

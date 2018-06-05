@@ -1,10 +1,10 @@
-#include "bazooka.h"
+#include "holy_grenade.h"
 #include "usable.h"
 #include <Box2D/Box2D.h>
-#include "bazooka_missile.h"
+#include "holy_grenade_missile.h"
 #include "worm.h"
 
-Bazooka::Bazooka(Stage& stage
+HolyGrenade::HolyGrenade(Stage& stage
 	, const int ammo
 	, const float velocity
 	, const float angular_velocity
@@ -19,7 +19,7 @@ Bazooka::Bazooka(Stage& stage
 	, max_dmg(max_dmg) {}
 
 
-/*void Bazooka::action(const float longitude
+/*void HolyGrenade::action(const float longitude
 	, const float height
 	, const b2Vec2& from_pos
 	, const b2Vec2& dest_pos
@@ -28,22 +28,13 @@ Bazooka::Bazooka(Stage& stage
 	b2Vec2 normalized_dest = dest_pos - from_pos;
 
 	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
-*/
-	/*Worms are boxes
-	//Height radius and long radius
-	         Worm     Projection of     Sum radius so it doesn't
-	  					Missile           overlap
-	  										________
-	        ____  		  ___              /  ____  \
-	       |    |   ->   /   \     ->      | |    | |
-	       |____|   ->   \___/     ->      | |____| |
-	                                       \________/
-	*/
 
-/*	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
+	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
 	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
 
-	BazookaMissile* missile = new BazookaMissile(this->stage
+	int time = static_cast<int>(params[1]);
+
+	HolyGrenadeMissile* missile = new HolyGrenadeMissile(this->stage
 												, where.x
 												, where.y
 												, angle
@@ -51,12 +42,12 @@ Bazooka::Bazooka(Stage& stage
 												, this->angular_velocity
 												, this->radius
 												, this->restitution
-												, this->max_dmg);
+												, this->max_dmg
+												, time);
 
 	this->stage.insert(std::move(std::shared_ptr<Movable>(missile)));
 }*/
-
-void Bazooka::action(Worm* worm
+void HolyGrenade::action(Worm* worm
 	, const b2Vec2& dest_pos
 	, const std::vector<float>& params) {
 
@@ -70,21 +61,12 @@ void Bazooka::action(Worm* worm
 
 	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
 
-	/*Worms are boxes
-	//Height radius and long radius
-	         Worm     Projection of     Sum radius so it doesn't
-	  					Missile           overlap
-	  										________
-	        ____  		  ___              /  ____  \
-	       |    |   ->   /   \     ->      | |    | |
-	       |____|   ->   \___/     ->      | |____| |
-	                                       \________/
-	*/
-
 	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
 	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
 
-	BazookaMissile* missile = new BazookaMissile(this->stage
+	int time = static_cast<int>(params[1]);
+
+	HolyGrenadeMissile* missile = new HolyGrenadeMissile(this->stage
 												, worm
 												, where.x
 												, where.y
@@ -93,11 +75,11 @@ void Bazooka::action(Worm* worm
 												, this->angular_velocity
 												, this->radius
 												, this->restitution
-												, this->max_dmg);
+												, this->max_dmg
+												, time);
 
 	this->stage.insert(std::move(std::shared_ptr<Movable>(missile)));
 }
-
-int Bazooka::get_id() {
-	return BAZOOKA_ID;
+int HolyGrenade::get_id() {
+	return HOLY_GRENADE_ID;
 }
