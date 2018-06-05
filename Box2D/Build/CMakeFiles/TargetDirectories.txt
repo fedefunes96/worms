@@ -1,0 +1,6 @@
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/Box2D/CMakeFiles/Box2D.dir
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/Box2D/CMakeFiles/Box2D_shared.dir
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/HelloWorld/CMakeFiles/HelloWorld.dir
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/Testbed/CMakeFiles/Testbed.dir
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/freeglut/CMakeFiles/freeglut_static.dir
+/home/fede/Escritorio/TpFinalTaller/Box2D/Build/glui/CMakeFiles/glui.dir

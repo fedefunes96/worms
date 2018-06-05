@@ -1,0 +1,73 @@
+#ifndef TESTGIRDER_H
+#define TESTGIRDER_H
+
+#include "../../../girder.h"
+    
+class TestGirder : public Test {
+    public:
+    TestGirder() { 
+        b2BodyDef myBodyDef;
+        myBodyDef.type = b2_staticBody;
+        myBodyDef.position.Set(0, 0);
+        myBodyDef.angle = 0;
+
+        b2Body* staticBody = m_world->CreateBody(&myBodyDef);
+
+        b2PolygonShape boxShape;
+        boxShape.SetAsBox(100, 1);
+
+        b2FixtureDef boxFixtureDef;
+        boxFixtureDef.shape = &boxShape;
+       // boxFixtureDef.density = 1;  
+
+        staticBody->CreateFixture(&boxFixtureDef);  
+
+        b2BodyDef myBodyDef2;
+        myBodyDef2.type = b2_staticBody;
+        myBodyDef2.position.Set(0, 20);
+        myBodyDef2.angle = 0;
+
+        b2Body* staticBody2 = m_world->CreateBody(&myBodyDef2);
+
+        b2PolygonShape boxShape2;
+        boxShape2.SetAsBox(6, 0.8);
+
+        b2FixtureDef boxFixtureDef2;
+        boxFixtureDef2.shape = &boxShape2;
+       // boxFixtureDef.density = 1;  
+
+        staticBody2->CreateFixture(&boxFixtureDef2);          
+    } //do nothing, no scene yet
+    
+    void Step(Settings* settings) {
+        //run the default physics and rendering
+        Test::Step(settings); 
+    
+        //show some text in the main screen
+        m_debugDraw.DrawString(5, m_textLine, "Prueba");
+        m_textLine += 15; 
+
+       /* b2BodyDef myBodyDef;
+        myBodyDef.type = b2_dynamicBody;
+        myBodyDef.position.Set(0, 20);
+        myBodyDef.angle = 0;
+
+        b2Body* staticBody = m_world->CreateBody(&myBodyDef);
+
+        b2PolygonShape boxShape;
+        boxShape.SetAsBox(2, 1);
+
+        b2FixtureDef boxFixtureDef;
+        boxFixtureDef.shape = &boxShape;
+        boxFixtureDef.density = 1;  
+
+        staticBody->CreateFixture(&boxFixtureDef);  */  
+
+    }
+    
+    static Test* Create() {
+        return new TestGirder;
+    }
+};
+  
+#endif
