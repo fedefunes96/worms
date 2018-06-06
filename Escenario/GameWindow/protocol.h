@@ -17,7 +17,10 @@ enum class Commands : uint8_t {
     ACTUAL_PLAYER,
     WINNER,
     MOVE,
-    ATTACK
+    ATTACK,
+    SHOW_ROOMS,
+    JOIN_ROOM,
+    EXIT_ROOM
 };
 
 enum class TypeObj : uint8_t {
