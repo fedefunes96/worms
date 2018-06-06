@@ -22,7 +22,7 @@ enum Game_status {
 	DRAW
 };
 
-class Game {
+class Game : public Thread {
 private:
 	Stage stage;
 	std::vector<Player> players;
@@ -32,8 +32,9 @@ private:
 	//std::vector<std::unique_ptr<Worm>> worms;
 	//std::vector<std::unique_ptr<Girder>> girders;
 
-	int id_actual_player;
+	//int id_actual_player;
 	int id_player_list;
+	bool is_over;
 
 	std::thread stage_t;
 	//std::thread game_t;
@@ -65,6 +66,8 @@ public:
 	float get_water_level();
 
 	void game_loop();
+	virtual void run() override;
+	bool game_finished();
 	//virtual void run() override;
 };
 

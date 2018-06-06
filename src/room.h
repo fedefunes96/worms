@@ -7,7 +7,7 @@
 
 class Room {
 private:
-	//std::vector<std::unique_ptr<Player>&> players;
+	std::vector<std::unique_ptr<Player>> players;
 
 public:
 	Room(const std::string name

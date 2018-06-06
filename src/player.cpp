@@ -7,16 +7,13 @@
 #include "ubicable.h"
 #include <thread>
 #include <string>
-
 #include "common_socket_exception.h"
-
-
 
 Player::Player(Socket socket) 
 	: socket(std::move(socket))
 	, protocol(this->socket) {
 
-	this->should_receive = false;
+	this->should_receive = true;
 	this->connected = true;
 }
 
@@ -114,6 +111,8 @@ void Player::game_loop() {
 void Player::disconnected_player() {
 	//Remove each of his worms
 	//std::lock_guard<std::mutex> lock(this->worms_m);
+
+	this->set_receive(false);
 
 	std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
 

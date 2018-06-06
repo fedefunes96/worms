@@ -71,17 +71,17 @@ void Sensor::force_death() {
 }
 
 bool Sensor::should_collide_with(Ubicable* ubicable) {
-	return false;
+	return true;
 }
 	
 bool Sensor::should_collide_with(Girder* girder) {
-	return false;
+	return true;
 }
 
 bool Sensor::should_collide_with(Worm* worm) {
-	return false;
+	return true;
 }
 
 bool Sensor::should_collide_with(Throwable* throwable) {
-	return false;
+	return true;
 }

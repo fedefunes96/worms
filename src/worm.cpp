@@ -73,14 +73,12 @@ void Worm::add_health(int health) {
 }
 
 void Worm::start_moving(MoveDirection mdirect) {
+	if (this->dead)
+		return;
+
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
 	this->move_direction = mdirect;
-}
-
-void Worm::move_step(float32 time_step) {
-	std::lock_guard<std::mutex> lock(this->direction_m);
-	//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
 
 	if (this->is_on_ground() && !this->jump_cooldown) {
 		//printf("Im on ground\n");
@@ -89,12 +87,12 @@ void Worm::move_step(float32 time_step) {
 
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
-				this->actual_velocity.Set(mov_speed*cos(angle)*time_step, mov_speed*sin(angle)*time_step);
+				this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
 				this->facing_direction = MoveDirection::RIGHT;
 				break;
 			}
 			case MoveDirection::LEFT: {
-				this->actual_velocity.Set(-mov_speed*cos(angle)*time_step, mov_speed*sin(angle)*time_step);
+				this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
 				this->facing_direction = MoveDirection::LEFT;
 				break;
 			}	
@@ -131,12 +129,16 @@ void Worm::move_step(float32 time_step) {
 				break;
 			}
 		}
+	}	
+}
 
-		if (this->jump_cooldown > 0) {
-			this->jump_cooldown--;
-		} else {
-			this->body->SetLinearVelocity(this->actual_velocity);
-		}
+void Worm::move_step(float32 time_step) {
+	std::lock_guard<std::mutex> lock(this->direction_m);
+
+	if (this->jump_cooldown > 0) {
+		this->jump_cooldown--;
+	} else {
+		this->body->SetLinearVelocity(this->actual_velocity);
 	}
 
 	if (this->is_on_ground()) {

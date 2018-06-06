@@ -18,6 +18,7 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
  : stage(stage_file, 1.0/60.0, 6, 2, *this) 
  , players(std::move(players)) {
  	this->id_player_list = 0;
+ 	this->is_over = false;
 
  	this->initialize_players();
  	this->initialize_game(stage_file);
@@ -179,8 +180,17 @@ void Game::initialize_game(const std::string& stage_file) {
 	*/
 }
 
+void Game::run() {
+	this->game_loop();
+}
+
+bool Game::game_finished() {
+	return this->is_over;
+}
+
 void Game::game_loop() {
 	Game_status game_status = UNDEFINED;
+	this->is_over = false;
 
 	while (game_status == UNDEFINED) {
 		Player& actual_player = this->get_actual_player();
@@ -230,6 +240,7 @@ void Game::end_game(Game_status game_status) {
 		this->notify_winner();
 	}*/
 	this->notify_winner();
+	this->is_over = true;
 	//printf("Game ended\n");
 	//Show message "Loser" to all losers
 	//this->notify_losers();
