@@ -77,7 +77,7 @@ void Game_View::del_Item(QGraphicsItem* item)
     //something like this we have to do
 }
 
-void Game_View::setBackground(std::__cxx11::string &path)
+void Game_View::setBackground(std::string &path)
 {
     //set the background image.
     //this->scene->setBackgroundBrush(QBrush(QImage(path.c_str())));
