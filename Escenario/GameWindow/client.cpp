@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     Socket client(ip,puerto);
     //Socket client(puerto,5);
 
-    Protocol protocol(&client);
+    Protocol protocol(client);
 
     GameClass game(rect,10000,10000);
 
