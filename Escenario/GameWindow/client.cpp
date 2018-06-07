@@ -23,6 +23,7 @@
 #include "gameclass.h"
 #include "controler.h"
 
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -34,13 +35,22 @@ int main(int argc, char *argv[])
     std::string ip("127.0.0.1");
     std::string puerto("7777");
     Socket client(ip,puerto);
-    //Socket client(puerto);
+    //Socket client(puerto,5);
 
-    Protocol protocol(client);
+    Protocol protocol(&client);
 
     GameClass game(rect,10000,10000);
 
-    Controler controler(&protocol,&game);
+
+//    Updater up;
+//    up.setGameToUpdate(&game);
+//    up.setFunction(updateGame);
+//    up.start();
+
+
+    Controler controler(&protocol);
+
+    game.connectController(&controler);
     controler.start();
 
     //game.updateItem(0,4,-10,100,100,0);
@@ -48,9 +58,7 @@ int main(int argc, char *argv[])
 
 
 
-
-
-    EventHandler *filter = new EventHandler(&a,game.getGameView(),&protocol);
+    EventHandler *filter = new EventHandler(&a,&game,&protocol);
     a.installEventFilter(filter);
 
 

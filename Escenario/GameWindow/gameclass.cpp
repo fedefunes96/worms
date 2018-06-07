@@ -6,13 +6,20 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->game = new Game_View(screen,w,h);
     std::string path("../../images/intro2.jpg");
     this->game->setBackground(path);
+    this->myTurn=true;
     this->myPlayer = new Player();
-    this->queue = new QQueue<EventGame>();
-    this->timer = new QTimer();
-    this->timer->start(2);
-    connect(this->timer,&QTimer::timeout,this,&GameClass::checkQueueEvent);
+    this->game->addPlayerActive(this->myPlayer);
 }
 
+Camera* GameClass::getCamera()
+{
+    return this->game->getCamera();
+}
+
+void GameClass::connectController(Controler *controler)
+{
+    connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
+}
 
 
 void GameClass::updateItem(int type, int id, int health, int posX, int posY, int angle)
@@ -24,18 +31,18 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
             //contiene al worm
             //qDebug()<<"contiene worm";
             Worm_View *worm = this->game->getItem(type,id);
-            worm->setVida(health);
+            worm->setHealth(health);
         }else{
             //no contiene al worm --> lo creo..
-            //qDebug()<<"no tengo worm, seteo vida y pos arbitraria";
+            qDebug()<<"no tengo worm, seteo vida y pos arbitraria";
             Worm_View *worm = new Worm_View();
-            worm->setVida(health);
+            worm->setHealth(health);
             worm->setId(id);
             worm->setIdObj(type);
             this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
+            this->myPlayer->addWorm(worm);
             if(id==0){
-                qDebug()<<"worm active";
-                this->game->addWormActive(worm);
+                worm->setSelected(true);
             }
         }
     }else if(health==-10 && type==0){
@@ -49,17 +56,13 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
             //qDebug()<<"pos worm sin vida";
             // no lo contiene lo tengo que agregar
             Worm_View* worm = new Worm_View();
-            worm->setVida(100);//default...
+            worm->setHealth(100);//default...
             worm->setId(id);
             worm->setIdObj(type);
             worm->setAngle(angle);
             //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
             this->game->add_Item(worm,posX,posY);
             this->myPlayer->addWorm(worm);
-            //Descomentar si se quiere probar el movimiento del worm sin sserver..
-            //if(id==0){
-                //this->game->addWormActive(worm);
-            //}
         }
     }else if(type==1 && health==-10){
         //es girder
@@ -71,6 +74,11 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
             girder->setIdObj(type);
             this->game->add_Item(girder,posX,posY);
         }
+    }else{
+        if(this->game->containsItem(type,id)){
+            MovableItem* item = this->game->getItem(type,id);
+            item->moveTo(angle,posX,posY);
+        }
     }
     //falta chequear si es un misil/proyectil...
 
@@ -81,10 +89,10 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
 void GameClass::updatePlayer(int type, int id, int ammo, Worm_View *worm)
 {
     if(type==2){
-        //set weapon to player to be usable
+        this->myPlayer->addWeapon(id,ammo);
     }else if(type==3){
         this->myPlayer->setId(id);
-    }else if(type==6){
+    }else if(type==6){ //ganador creo
     }
 }
 
@@ -100,80 +108,110 @@ Game_View *GameClass::getGameView()
 }
 
 
-void GameClass::moveWorm(){
-    this->game->moveObjTo(0,300,300,-45);
+Worm_View* GameClass::getWormActive()
+{
+    return this->game->getWormActive();
 }
 
-
-
-/*
 
 std::vector<int> GameClass::fireWeapon()
 {
+    std::vector<int> vect;
     if(isMyTurn()){
+
         int idWeapon = this->game->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
-        if(idWeapon<0 && !this->myPlayer->isAvailableAmmo(idWeapon)){
-            return nullptr;
+        int angle = this->game->getWormActive()->getTargetAngle();
+        if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
+            qDebug()<<"entreeeeeeee";
+            return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
 
-        this->game->getWormActive()->throwProjectile(); //genero bullet en pos...
-        this->myPlayer->useWeapon(idWeapon); //resto ammo
-        std::vector<int> vect;
+        std::pair<int,int> posW = this->game->getWormActive()->getDir();
+        this->myPlayer->fireWeapon(idWeapon,this->game->getScene(),angle,posW.first,posW.second); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
+
         int id = this->game->getWormActive()->getId();
         std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
-        int timeW = this->game->getWormActive()->getTimeWeapon();
-        vect.push_back(id);
+        //int timeW = this->game->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
+        vect.push_back(id);
         vect.push_back(pos.first);
         vect.push_back(pos.second);
-        vect.push_back(timeW);
+        //vect.push_back(timeW);
          // falta el power que esta en el release
-        return vect;
     }
+    return vect;
 }
 
 
-*/
 
-
-
-
-void GameClass::addEvent(EventGame event){
-    this->queue->enqueue(event);
+bool GameClass::isMyTurn(){
+    return this->myTurn;
 }
 
 
-void GameClass::checkQueueEvent(){
-    if(!this->queue->isEmpty()){
-        EventGame e = this->queue->dequeue();
 
-        if(e.typeEvent== static_cast<int>(TypeEvent::GAME_END)){
-            qDebug()<<"game end";
-            this->timer->stop();
-        }else if(e.typeEvent==static_cast<int>(TypeEvent::ATTACH_PLAYER_ID)){
-            qDebug()<<"attach player id event";
-            this->updatePlayer(e.typeEvent,e.id);
-
-        }else if(e.typeEvent==static_cast<int>(TypeEvent::ATTACH_USABLE_ID)){
-            //add to player id , the weapon id and ammo
-        }else if(e.typeEvent==static_cast<int>(TypeEvent::ACTUAL_PLAYER)){
-            //enable player id to play
-        }else if((e.typeEvent==static_cast<int>(TypeEvent::ATTACH_WORM_ID)) || (e.typeEvent==static_cast<int>(TypeEvent::POSITION))){
-            //qDebug()<<"update item";
-            this->updateItem(e.typeObj,e.id,e.health,e.posX,e.posY,e.angle);
-        }else if(e.typeEvent==static_cast<int>(TypeEvent::REMOVE)){
-            //remove item
-        }else if(e.typeEvent==static_cast<int>(TypeEvent::WINNER)){
-            qDebug()<<"winner leido!";
-            this->timer->stop();
-
-        }
-
-
-    }else{
-        //qDebug()<<"queue vacia";
+void GameClass::checkQueueEvent(QList<int> list)
+{
+    int cmd = list[0];
+    qDebug()<<cmd;
+    if(cmd== static_cast<int>(Commands::GAME_END)){
+       //terminar juego
+        qDebug()<<"game end";
+    }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
+        // asignar id del jugador
+        qDebug()<<"attach player id event";
+        this->updatePlayer(cmd,list[1]);
+    }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
+        //agregar arma al player para que el worm pueda usar
+        this->updatePlayer(cmd,list[1],list[2]);
+    }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
+        //mensaje con el id del jugador en turno
+        qDebug()<<"actual player setting";
+        checkRound(list[1]);
+    }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
+        // id del worm y su vida ... inicialmente
+        this->updateItem(static_cast<int>(TypeObj::WORM),list[1],list[2]);
+    }else if(cmd==static_cast<int>(Commands::REMOVE)){
+        // item a remover de la vista
+    }else if(cmd==static_cast<int>(Commands::POSITION)){
+        // actual item position
+        this->updateItem(list[1],list[2],-10,list[3],list[4],list[5]);
+    }else if(cmd==static_cast<int>(Commands::WINNER)){
+        // hay ganador y es el id pasado
+        qDebug()<<"winner leido!";
     }
+
 }
+
+
+void GameClass::checkRound(int id){
+    if(this->myPlayer->getId() != id){
+        this->myTurn=false;
+        this->myPlayer->getWormActive()->setSelected(false);
+        this->myPlayer->setActive(false);
+        return;
+    }
+    this->myTurn=true;
+    Worm_View* worm = this->myPlayer->getWormToPlay();    
+    this->myPlayer->setActive(true);
+    this->game->addItemToFollow(worm);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

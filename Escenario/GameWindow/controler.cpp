@@ -1,13 +1,11 @@
 #include "controler.h"
-#include "eventgame.h"
 
 #include <QTimer>
 #include "worm_view.h"
 
-Controler::Controler(Protocol *protocol, GameClass *game)
+Controler::Controler(Protocol *protocol)
 {
     this->protocol = protocol;
-    this->game = game;
     //timer = new QTimer();
     //timer->start(3000);
 }
@@ -20,68 +18,63 @@ void Controler::prueba(){
 
 void Controler::run()
 {
-//Descomentar si se prueba sin el server .. tambien en gameClass::updateItem descomentar..    
-/*
-    EventGame ev;
-    ev.typeEvent=0;
-    ev.id=0;
-    ev.posX=100;
-    ev.posY=100;
-    ev.health=-10;
-    ev.angle=0;
-    this->game->addEvent(ev);
-    return;
 
-*/
     bool gameRunning=true;
     while(gameRunning){ // temporal
-        EventGame event;
+        QList<int> list;
         int8_t cmd = this->protocol->recvCmd();
-        event.typeEvent=cmd;
+        list.push_back(cmd);
         if(cmd== static_cast<int>(Commands::GAME_END)){
             qDebug()<<"game end";
             gameRunning=false;
-            //avisar a game
+            //avisar a game con emit
             return;
         }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
             qDebug()<<"attach player id";
             int8_t id;
             this->protocol->recvPlayerId(&id);
-            event.id=id;
-            this->game->addEvent(event);
+            list.push_back(id);
+            //this->game->addEvent(event);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
             qDebug()<<"attach usable id";
             int8_t id_weapon;
             int32_t ammo;
             this->protocol->recvUsableId(&id_weapon,&ammo);
-            this->game->updatePlayer(cmd,id_weapon,ammo);
-            event.ammo = ammo;
-            event.id = id_weapon;
-            this->game->addEvent(event);
+            list.push_back(id_weapon);
+            list.push_back(ammo);
+            //this->game->addEvent(event);  UPDATE WEAPON TO USE
             continue;
         }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
             qDebug()<<"actual player";
             int8_t id;
             this->protocol->recvActualPlayer(&id);
             //Enable key control..
+            list.push_back(id);
+            //this->game->addEvent(event);    ACTUAL PLAYER
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
             qDebug()<<"attach worm id";
             int8_t id;
             int32_t health;
             this->protocol->recvWormId(&id,&health);
-            event.id=id;
-            event.typeObj = static_cast<int>(TypeObj::WORM);
-            event.health = health;
-            this->game->addEvent(event);
+
+            list.push_back(id);
+            list.push_back(static_cast<int>(TypeObj::WORM));
+            list.push_back(health);
+
+            //this->game->addEvent(event);    DEFINE WORM
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
             //qDebug()<<"remove";
             int8_t id_obj;
             int32_t id;
             this->protocol->recvRemove(&id_obj,&id);
-            //Remove item
+
+            list.push_back(id_obj);
+            list.push_back(id);
+            //Remove item     REMOVE ITEM
             continue;
         }else if(cmd==static_cast<int>(Commands::POSITION)){
             //qDebug()<<"position";
@@ -91,17 +84,19 @@ void Controler::run()
             int32_t posY=0;
             int32_t angle=0;
             this->protocol->recvPosition(&obj_type,&id_obj,&posX,&posY,&angle);
-            event.typeObj=obj_type;
-            event.id = id_obj;
-            event.posX = posX;
-            event.posY = posY;
-            event.angle = angle;
-            event.health = -10;
-            this->game->addEvent(event);
+
+            list.push_back(obj_type);
+            list.push_back(id_obj);
+            list.push_back(posX);
+            list.push_back(posY);
+            list.push_back(angle);
+
+            //this->game->addEvent(event);
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-            this->game->addEvent(event);
+            //this->game->addEvent(event);
             gameRunning=false;
         }
     }

@@ -11,7 +11,7 @@ EventHandler::EventHandler(QObject *parent) : QObject(parent)
     this->keyPress=false;
 }
 
-EventHandler::EventHandler(QObject *parent,Game_View* game_view, Protocol* protocol) : QObject(parent), game_view(game_view), protocol(protocol)
+EventHandler::EventHandler(QObject *parent, GameClass *game, Protocol* protocol) : QObject(parent), game(game), protocol(protocol)
 {
     this->worm_selected = nullptr;
 }
@@ -33,25 +33,32 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
         mouseMoveEvent(static_cast<QMouseEvent*>(event));
         return true;
     }
-
-    if(event->type() == QEvent::MouseButtonPress){
-        mouseClickEvent(static_cast<QMouseEvent*>(event));
-        return true;
-
-    }
 */
+
+
+    // SOLUCIONAR!!!!!!!!! , capaz captar signal click del mouse y conectar...
+    //if(event->type() == QEvent::MouseButtonPress){
+//        if(this->game->isMyTurn()){
+//            this->game->getWormActive()->hasClickeableTarget();
+//            mouseClickEvent(static_cast<QMouseEvent*>(event));
+//            return true;
+//        }
+//    }
+
+
     return false;
 }
 
 void EventHandler::mouseMoveEvent(QMouseEvent *m_event)
 {
     qDebug()<<"posx:"<<m_event->x()<<"   posy:"<<m_event->y();
-    Camera* view = this->game_view->getCamera();
+    /*
+    Camera* view = this->game->getCamera();
     if(m_event->x() >= 757)//move_der cam
     {
-        int width = this->game_view->getCamera()->width();
+        int width = this->game->getCamera()->width();
         qDebug()<<"mov_der";
-        int y = this->game_view->getCamera()->horizontalScrollBar()->value();
+        int y = this->game->getCamera()->horizontalScrollBar()->value();
         qDebug()<<y;
         if(!(y+10>=width)){
             view->horizontalScrollBar()->setValue( view->horizontalScrollBar()->value() + 10 );
@@ -61,36 +68,37 @@ void EventHandler::mouseMoveEvent(QMouseEvent *m_event)
     if(m_event->x() <= 10)//mov_izq cam
     {
         qDebug()<<"mov_izq";
-        int y = this->game_view->getCamera()->horizontalScrollBar()->value();
+        int y = this->game->getCamera()->horizontalScrollBar()->value();
         qDebug()<<y;
         if(!(y-10<0)){
             view->horizontalScrollBar()->setValue( view->horizontalScrollBar()->value() - 10 );
         }
     }
-
+*/
 
 }
 
 void EventHandler::mouseClickEvent(QMouseEvent *m_event)
 {
+    /*
     if( m_event->button() ==  Qt::LeftButton)
     {
-        int x = this->game_view->getCamera()->verticalScrollBar()->value();
-        int y = this->game_view->getCamera()->horizontalScrollBar()->value();
+        int x = this->game->getCamera()->verticalScrollBar()->value();
+        int y = this->game->getCamera()->horizontalScrollBar()->value();
         qDebug()<<"left click";
         qDebug()<<"vertical valx:"<<x <<"vertical valy:"<<y;
         qDebug()<<"Mvalx:"<<m_event->x() <<" Mvaly:"<<m_event->y();
-        if(!(this->game_view->itemAt(m_event->x(),m_event->y())))
+        if(!(this->game->itemAt(m_event->x(),m_event->y())))
         {
             qDebug()<<"no hay worm";
             return;
         }
         //this->view->itemAt() aca me devuelve el QgraphicsItem si yo le paso por parametro las posiciones ..
 
-        if((this->game_view->itemAt(m_event->x(),m_event->y()))->type()==Worm_View().type())
+        if((this->game->itemAt(m_event->x(),m_event->y()))->type()==Worm_View().type())
         {
             qDebug()<<"toque al worm";
-            Worm_View* worm = static_cast<Worm_View*>(this->game_view->itemAt(m_event->x(),m_event->y()));
+            Worm_View* worm = static_cast<Worm_View*>(this->game->itemAt(m_event->x(),m_event->y()));
             worm->setSelected(true);
             worm->setZValue(1);
             if(this->worm_selected){
@@ -104,6 +112,7 @@ void EventHandler::mouseClickEvent(QMouseEvent *m_event)
     {
         qDebug()<<"right click";
     }
+    */
 }
 
 
@@ -121,14 +130,28 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             qDebug() << "Espacio"; //JUMP worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(this->game->isMyTurn()){
+                std::vector<int> vect = this->game->fireWeapon();
+                
                 return;
+                if(vect.empty()){
+                    return;
+                }
+                //std::vector<int> vect2;
+                protocol->sendAttack(vect[0],vect[1],vect[2],vect[3]);
+                qDebug()<<"dispare! event";
             }
-            //Worm_View* worm = this->game_view->getWormActive();
-            //worm->throwProjectile();
             break;
         }
+        case Qt::Key_M:
+        {
+            if(!this->game->isMyTurn()){
+                return;
+            }
+            this->game->getCamera()->handleButton();
+            break;
+        }
+
         case Qt::Key_Left:
         {
             if(k_event->isAutoRepeat()){
@@ -136,14 +159,13 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             keyPress = true;
             qDebug() << "Left"; //moveLeft worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            //worm->moveTo(-180,worm->x()+1,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove((int8_t)worm->getId(),2);
-            qDebug()<<worm->getId();
             break;
         }
         case Qt::Key_Right:
@@ -152,35 +174,34 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            qDebug() << "Right";//moveRight worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            //qDebug() << "Right";//moveRight worm
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();            
-            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove(worm->getId(),1);
             break;
         }
         case Qt::Key_Up:
         {
             qDebug() << "Up";  //lookUp aim
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
+
+            Worm_View* worm = this->game->getWormActive();
             worm->movTargetAngle(1);
             break;
         }
         case Qt::Key_Down:
         {
             qDebug() << "Down";//lookDown aim
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
+
+            Worm_View* worm = this->game->getWormActive();
             worm->movTargetAngle(-1);
             break;
         }
@@ -192,12 +213,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             qDebug() << "Enter!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";//moveRight worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove(worm->getId(),3);
             break;
         }
@@ -209,12 +229,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             qDebug() << "backSpace";//moveRight worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove(worm->getId(),4);
             break;
         }
@@ -238,12 +257,12 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
             qDebug()<<"solte tecla izq";
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* w = this->game_view->getWormActive();
-            this->protocol->sendMove(w->getId(),0);
+
+            Worm_View* worm = this->game->getWormActive();
+            this->protocol->sendMove(worm->getId(),0);
             break;
         }
         case Qt::Key_Right:
@@ -252,12 +271,12 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
             qDebug()<<"solte tecla der";
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* w = this->game_view->getWormActive();
-            this->protocol->sendMove(w->getId(),0);
+
+            Worm_View* worm = this->game->getWormActive();
+            this->protocol->sendMove(worm->getId(),0);
             break;
         }
 
@@ -267,6 +286,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
             qDebug()<<"solte Espacio";
+            break;
         }
 
         case Qt::Key_Return:
@@ -276,12 +296,11 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             }
 
             qDebug() << "solte Enter";//moveRight worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove(worm->getId(),0);
             break;
         }
@@ -293,12 +312,11 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             }
 
             qDebug() << "solte backSpace";//moveRight worm
-            if(this->game_view->getWormActive()==nullptr){
-                qDebug()<<"null pointer";
+            if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game_view->getWormActive();
-            //worm->moveTo(0,worm->x()+29+30,9999-worm->y()-29);
+
+            Worm_View* worm = this->game->getWormActive();
             this->protocol->sendMove(worm->getId(),0);
             break;
         }

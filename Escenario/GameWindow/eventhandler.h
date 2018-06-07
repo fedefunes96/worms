@@ -9,6 +9,7 @@
 #include "camera.h"
 
 #include "protocol.h"
+#include "gameclass.h"
 
 
 class EventHandler : public QObject
@@ -16,14 +17,14 @@ class EventHandler : public QObject
     Q_OBJECT
 public:
     explicit EventHandler(QObject *parent = 0);
-    EventHandler(QObject *parent, Game_View *game_view, Protocol *protocol);
+    EventHandler(QObject *parent, GameClass *game, Protocol *protocol);
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private:
     void mouseMoveEvent(QMouseEvent *m_event);
     void keyPressEvent(QKeyEvent *k_event);
     void mouseClickEvent(QMouseEvent *m_event);
-    Game_View* game_view;
+    GameClass* game;
     Worm_View* worm_selected;
     void keyReleaseEvent(QKeyEvent *k_event);
     bool keyPress;

@@ -20,7 +20,6 @@ SOURCES +=\
     girder_view.cpp \
     camera.cpp \
     mybutton.cpp \
-    bazooka.cpp \
     protocol.cpp \
     client.cpp \
     player.cpp \
@@ -31,7 +30,10 @@ SOURCES +=\
     target.cpp \
     gameclass.cpp \
     controler.cpp \
-    eventgame.cpp
+    eventgame.cpp \
+    weapon.cpp \
+    misilBazooka.cpp \
+    bazooka.cpp
 
 HEADERS  += \
     game_view.h \
@@ -40,7 +42,6 @@ HEADERS  += \
     girder_view.h \
     camera.h \
     mybutton.h \
-    bazooka.h \
     protocol.h \
     player.h \
     socket.h \
@@ -50,10 +51,10 @@ HEADERS  += \
     target.h \
     gameclass.h \
     controler.h \
-    eventgame.h
+    eventgame.h \
+    weapon.h \
+    misilBazooka.h \
+    bazooka.h
 
 FORMS    += \
     weapons_and_tools.ui
-
-RESOURCES += \
-    resources.qrc

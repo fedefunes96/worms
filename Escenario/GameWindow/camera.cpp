@@ -17,9 +17,9 @@ Camera::Camera(QGraphicsScene *scene,int w, int h):QGraphicsView()
     horizontalScrollBar()->setValue(0);
     setFixedSize(w,h-55); // el 40 es por la barra de arriba en ubuntu...
     show();
-    //timer = new QTimer();
-    //connect(timer, &QTimer::timeout, this, &Camera::followObject);
-    //timer->start(5);
+    timer = new QTimer();
+    connect(timer, &QTimer::timeout, this, &Camera::followObject);
+    timer->start(5);
     this->posXcamera_R=w-200;
     this->posXcamera_L=200;
     this->posYcamera_D=h-100;
@@ -34,7 +34,7 @@ Camera::Camera(QGraphicsScene *scene,int w, int h):QGraphicsView()
     boton->setAttribute(Qt::WA_TranslucentBackground);
     connect(boton,&QPushButton::clicked,this,&Camera::handleButton);
     scene->addWidget(this->boton);
-    this->wormActive = nullptr;
+    this->playerActive = nullptr;
 
 
 }
@@ -45,11 +45,10 @@ void Camera::setVisibleButton(bool visible){
 }
 
 void Camera::handleButton(){
-    if(this->wormActive==nullptr){
-        qDebug()<<"null";
+    if(!this->playerActive->isActive() || menuWeapon!=nullptr){
         return;
     }
-    menuWeapon = new Weapons_and_Tools(this,this->wormActive);
+    menuWeapon = new Weapons_and_Tools(this,this->playerActive);
     menuWeapon->setModal(true);
     menuWeapon->setAttribute(Qt::WA_DeleteOnClose);
     menuWeapon->exec();
@@ -107,9 +106,9 @@ void Camera::followObject()
 */
 }
 
-void Camera::setWormActive(Worm_View* worm)
+void Camera::setPlayerActive(Player *player)
 {
-    this->wormActive = worm;
+    this->playerActive = player;
 }
 
 void Camera::addItemToFollow(MovableItem *item)

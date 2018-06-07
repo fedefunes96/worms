@@ -25,16 +25,19 @@ public:
     std::pair<int, int> &getDir();
     int getAngle();
     void moveTo(int angle, int posx, int posy);
-    void throwProjectile();
-    void delete_bullet(QGraphicsItem* item);
-    void setVida(int health);
+
+    void setHealth(int health);
     void setAngle(int angle);
     virtual void setPosition(int x, int y) override;
     void loadSpriteWeapon(int val);
-    void decTargetAngle();
     void movTargetAngle(int dir);
     int getWeaponId();
 
+    std::pair<int,int> getDirWeapon();
+
+    bool hasClickeableTarget();
+    int getTargetAngle();
+    int getTimeWeapon();
 private slots:
     void mover();
     void runSpriteWeapon();
@@ -85,6 +88,7 @@ private:
     int targetAngle;
     bool moving;
     bool loadingWeapon;
+    bool targetClick;
 
 
 

@@ -23,6 +23,7 @@ private:
     std::vector<Player*> players_list;
     std::vector<Items*> items_list;
 public:
+    Game_View();
     Game_View(QRect screen, int w, int h);
     void update_view();
     void add_Item(QGraphicsItem *item, int posx, int posy);
@@ -41,8 +42,9 @@ public:
     void addItemToFollow(MovableItem *item);
     bool containsItem(Items *item);
     bool containsItem(int8_t id_typ, int32_t id);
-    Worm_View *getItem(int8_t id_type, int32_t id);
-    void addWormActive(Worm_View *worm);
+    Worm_View *getItem(int8_t id_type, int32_t id);    
+    QGraphicsScene *getScene();
+    void addPlayerActive(Player *player);
 };
 
 #endif // GAME_VIEW_H

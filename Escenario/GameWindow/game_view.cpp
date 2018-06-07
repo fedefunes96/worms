@@ -6,6 +6,10 @@
 #include "movable.h"
 
 
+Game_View::Game_View()
+{
+}
+
 Game_View::Game_View(QRect screen,int w,int h)
 {
     //Create a graphic scene of the game. This scene will contain
@@ -15,10 +19,12 @@ Game_View::Game_View(QRect screen,int w,int h)
 
     this->scene->setSceneRect(0,0,w,h); //tam escenario
 
-    camera = new Camera(this->scene,screen.width(),screen.height());
+    this->camera = new Camera(this->scene,screen.width(),screen.height());
+}
 
-
-
+QGraphicsScene* Game_View::getScene()
+{
+    return this->scene;
 }
 
 void Game_View::update_view()
@@ -71,19 +77,17 @@ Worm_View* Game_View::getItem(int8_t id_type, int32_t id)
 
 void Game_View::del_Item(QGraphicsItem* item)
 {
-    //First don't delete...
-    //scene()->removeItem(this);
     this->scene->removeItem(item);
-    //something like this we have to do
+    delete(item);
 }
 
-void Game_View::setBackground(std::string &path)
+void Game_View::setBackground(std::__cxx11::string &path)
 {
     //set the background image.
     //this->scene->setBackgroundBrush(QBrush(QImage(path.c_str())));
     //QImage small = jpgImage->scaled(inputWidth, inputHeight,Qt::KeepAspectRatio);
     QImage* image = new QImage(path.c_str());
-    this->scene->setBackgroundBrush(QBrush(image->scaled(1024,800,Qt::KeepAspectRatio)));
+    this->scene->setBackgroundBrush(QBrush(image->scaled(this->camera->width(),this->camera->height(),Qt::KeepAspectRatio)));
 }
 
 
@@ -119,9 +123,8 @@ Worm_View* Game_View::getWormActive()
 }
 
 
-void Game_View::addWormActive(Worm_View* worm){
-    worm->setSelected(true);
-    this->camera->setWormActive(worm);
+void Game_View::addPlayerActive(Player* player){
+    this->camera->setPlayerActive(player);
 }
 
 

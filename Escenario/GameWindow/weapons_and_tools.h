@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QDebug>
-#include "worm_view.h"
+#include "player.h"
 
 
 namespace Ui {
@@ -15,8 +15,9 @@ class Weapons_and_Tools : public QDialog
     Q_OBJECT
 
 public:
-    Weapons_and_Tools(QWidget *parent = 0,Worm_View* worm = nullptr);
+    Weapons_and_Tools(QWidget *parent = 0,Player* player = nullptr);
     ~Weapons_and_Tools();
+    Player *getPlayer();
 private slots:
     void on_misil_clicked();
 
@@ -42,7 +43,7 @@ private slots:
 
 private:
     Ui::Weapons_and_Tools *ui;
-    Worm_View* worm;
+    Player* player;
 };
 
 #endif // WEAPONS_AND_TOOLS_H

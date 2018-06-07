@@ -1,8 +1,9 @@
 #include "player.h"
-
+#include <QDebug>
 Player::Player()
 {
-    it=this->worms_list.begin();
+    it=0;
+    this->wormActive=nullptr;
 }
 
 void Player::addWorm(Worm_View *worm)
@@ -22,12 +23,74 @@ int Player::getId()
 
 Worm_View *Player::getWormToPlay()
 {
-    if(it==this->worms_list.end()){
-        it=this->worms_list.begin();
+    if(this->worms_list.empty()){
+        qDebug()<<"lista vacia";
+        return nullptr;
     }
-    Worm_View* worm = (*it);
-    it++;
-    return worm;
+
+    if(this->worms_list.size() == this->it){
+        this->it=0;
+    }
+    qDebug()<<this->it;
+    this->wormActive = this->worms_list[this->it];
+    this->it++;
+    return this->wormActive;
 }
 
 
+Worm_View* Player::getWormActive(){
+    return this->wormActive;
+}
+
+bool Player::isActive(){
+    return this->isactive;
+}
+
+void Player::setActive(bool active){
+    this->isactive = active;
+}
+
+void Player::addWeapon(int type,int ammo)
+{
+    Weapon* weapon;
+    switch (type) {
+    case static_cast<int>(WeaponType::BAZOOKA_ID):
+        weapon = new Bazooka();
+        weapon->setIdObj(0);
+        if(ammo<0){
+            weapon->setAmmo(9999);
+        }else{
+            weapon->setAmmo(ammo);
+        }
+        break;
+    default:
+        return;
+    }
+    this->listWeapons.append(weapon);
+}
+
+bool Player::canFire(int type)
+{
+    QListIterator<Weapon*> Iter(this->listWeapons);
+    while(Iter.hasNext())
+    {
+        Weapon* w =Iter.next();
+        if(type==w->getIdObj() && w->getAmmo()>0){
+            return true;
+        }
+    }
+    return false;
+}
+
+void Player::fireWeapon(int type,QGraphicsScene *scene, int angle, int posX, int posY)
+{
+    QListIterator<Weapon*> Iter(this->listWeapons);
+    while(Iter.hasNext())
+    {
+        Weapon* w =Iter.next();
+        if(type==w->getIdObj() && w->getAmmo()>0){
+            w->fire(scene,angle,posX,posY);
+            return;
+        }
+    }
+}

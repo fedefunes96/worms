@@ -2,21 +2,24 @@
 #define CONTROLER_H
 
 #include "protocol.h"
-#include "gameclass.h"
 #include <QThread>
 #include <QDebug>
 #include <QTimer>
+#include <QList>
 
 class Controler: public QThread
 {
+    Q_OBJECT
 public:
-    Controler(Protocol* protocol,GameClass *game);
+    Controler(Protocol* protocol);
     void run();
 private slots:
     void prueba();
+
+signals:
+    void eventCreated(QList<int> list);
 private:
     Protocol *protocol;
-    GameClass *game;
     QTimer *timer;
 };
 

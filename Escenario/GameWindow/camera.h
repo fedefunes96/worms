@@ -12,7 +12,7 @@
 #include "movable.h"
 #include <stack>
 #include "weapons_and_tools.h"
-#include "worm_view.h"
+#include "player.h"
 
 class Camera : public QGraphicsView
 {
@@ -21,13 +21,12 @@ public:
     Camera(QGraphicsScene* scene, int w, int h);
     void addItemToFollow(MovableItem *item);
     void setVisibleButton(bool visible);
-    void setWormActive(Worm_View* worm);
+    void setPlayerActive(Player* player);
 signals:
 public slots:
-
+    void handleButton();
 private slots:
     void followObject();
-    void handleButton();
 private:
     QTimer* timer;
     QGraphicsItem* item;
@@ -38,7 +37,7 @@ private:
     MyButton* boton;
     Weapons_and_Tools* menuWeapon;
     std::stack<MovableItem*> itemsToFollow;
-    Worm_View* wormActive;
+    Player* playerActive;
 
 };
 

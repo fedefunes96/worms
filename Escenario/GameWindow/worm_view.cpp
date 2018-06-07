@@ -14,6 +14,19 @@
 #include <QMatrix>
 #include <QTransform>
 
+enum class WeaponType : uint8_t {
+    BAZOOKA_ID = 0,
+    AIRMISIL_ID,
+    BANANA_ID,
+    MORTER_ID,
+    BAT_ID,
+    DINAMITE_ID,
+    GRANADE_ID,
+    FRAG_GRANADE_ID,
+    HOLY_GRANADE_ID,
+    TELEPORT_ID,
+    PUNCH_ID
+};
 
 
 
@@ -22,14 +35,14 @@ Worm_View::Worm_View(QObject *parent) :
 {
 
 
-    this->weapon=99; //wormwait
+    this->weapon=-1; //wormwait
     setIdObj(0);
     setFlag(QGraphicsItem::ItemIsSelectable);
     currentFrame = 0;
     //this->timer=nullptr;
     spriteImage = new QPixmap("../../images/wormwait.png"); // Load the sprite image QPixmap
-    this->timer = new QTimer();   // Create a timer for sprite animation
-    this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
+    //this->timer = new QTimer();   // Create a timer for sprite animation
+    //this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
     currentDir.first = 0;
     currentDir.second = 0;
     this->health=0;
@@ -40,6 +53,7 @@ Worm_View::Worm_View(QObject *parent) :
     this->labelset=false;
     this->targetVis=false;
     this->target=nullptr;
+    this->targetClick =false;
     this->moving = false;
 
     setAngle(0);
@@ -87,7 +101,7 @@ int Worm_View::getAngle()
     return angle;
 }
 
-void Worm_View::setVida(int vida)
+void Worm_View::setHealth(int vida)
 {
     this->health = vida;
 }
@@ -96,9 +110,7 @@ void Worm_View::setVida(int vida)
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 
-    painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 60,60);
-    Q_UNUSED(option);
-    Q_UNUSED(widget);
+    
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
@@ -109,7 +121,7 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QString aux;
     aux.setNum(this->health);
     labelVida->setText(aux);
-    labelVida->setGeometry(x()+15,y()-10,30,20);
+    labelVida->setGeometry(x()+18,y()-10,30,20);
 
 
     if(this->targetVis){
@@ -121,6 +133,9 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     }
     this->target->setVisible(this->targetVis);
     setTarget();
+    painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 60,60);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
 }
 
@@ -136,6 +151,21 @@ int Worm_View::getWeaponId()
     return this->weapon;
 }
 
+std::pair<int, int> Worm_View::getDirWeapon()
+{
+    std::pair<int,int> dir;
+    if(!this->targetClick){
+        dir.first=this->target->boundingRect().width();  //tam target x. =150
+        dir.second = tan ( this->targetAngle * 3.1416 / 180 );
+    }else{
+        //stear segun click..
+    }
+    return dir;
+}
+
+int Worm_View::getTimeWeapon(){
+    return 0;
+}
 
 bool Worm_View::isMovable()
 {
@@ -143,20 +173,14 @@ bool Worm_View::isMovable()
 }
 
 
+int Worm_View::getTargetAngle(){
+    return this->targetAngle;
+}
 
 
 std::pair<int, int> &Worm_View::getDir()
 {
     return currentDir;
-}
-
-
-
-
-
-void Worm_View::delete_bullet(QGraphicsItem *item)
-{
-    delete(item);
 }
 
 
@@ -169,7 +193,7 @@ void Worm_View::setPosition(int x, int y)
 
     setPos(x-width/2,y-height/2);
     setDir(x-width/2,y-height/2);
-    //qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
+    qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
 }
 
 void Worm_View::setDestDir(int x, int y)
@@ -192,7 +216,13 @@ void Worm_View::nextFrame(){
 
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
+
+    QGraphicsScene* sc = scene();
+	this->setPosition(posx,sc->height()-posy);
+	return;
+    
     this->targetVis=false;
+    this->targetClick=false;
     this->weapon=99;
     setDestDir(posx,posy);
     if(currentDir==destDir){
@@ -249,15 +279,7 @@ bool Worm_View::isMoving()
 	return this->moving;
 }
 
-void Worm_View::throwProjectile()
-{
-    //prueba
-    Bazooka* g= new Bazooka(this);
-    g->setPos(x()-5,y()+30);
-    g->setRotation(133);
-    scene()->addItem(g);
-    g->fire();
-}
+
 
 
 void Worm_View::setSprite()
@@ -393,6 +415,9 @@ void Worm_View::checkDelta()
     this->setVars(cant1,cant2,up,right,firstX);
 }
 
+bool Worm_View::hasClickeableTarget(){
+    return this->targetClick;
+}
 
 void Worm_View::runSpriteWeapon()
 {
@@ -432,32 +457,34 @@ void Worm_View::loadSpriteWeapon(int val)
     QString path3;
 
     switch (val) {
-    case 0:
+    case static_cast<int>(WeaponType::AIRMISIL_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wairlnk.png";
         path2 ="../../images/wairlnku.png";
         path3 ="../../images/wairlnkd.png";
         loadSprite(path1,path2,path3);
-        this->targetVis=true;
+        this->targetClick=true;
         break;
-    case 1:
+    case static_cast<int>(WeaponType::BAT_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbsblnk.png";
         path2 ="../../images/wbsblnku.png";
         path3 ="../../images/wbsblnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 2:
+    case static_cast<int>(WeaponType::BANANA_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbanlnk.png";
         path2 ="../../images/wbanlnku.png";
         path3 ="../../images/wbanlnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 3:
+    case static_cast<int>(WeaponType::DINAMITE_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wdynlnk.png";
@@ -465,55 +492,61 @@ void Worm_View::loadSpriteWeapon(int val)
         path3 ="../../images/wdynlnkd.png";
         loadSprite(path1,path2,path3);
         break;
-    case 4:
+    case static_cast<int>(WeaponType::FRAG_GRANADE_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wclslnk.png";
         path2 ="../../images/wclslnku.png";
         path3 ="../../images/wclslnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 5:
+    case static_cast<int>(WeaponType::GRANADE_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wgrnlnk.png";
         path2 ="../../images/wgrnlnku.png";
         path3 ="../../images/wgrnlnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 6:
+    case static_cast<int>(WeaponType::HOLY_GRANADE_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/whgrlnk.png";
         path2 ="../../images/whgrlnku.png";
         path3 ="../../images/whgrlnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 7:
+    case static_cast<int>(WeaponType::MORTER_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbazlnk.png";
         path2 ="../../images/wbazlnku.png";
         path3 ="../../images/wbazlnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 8:
+    case static_cast<int>(WeaponType::TELEPORT_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wtellnk.png";
         path2 ="../../images/wtellnku.png";
         path3 ="../../images/wtellnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetClick=true;
         break;
-    case 9:
+    case static_cast<int>(WeaponType::BAZOOKA_ID):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbazlnk.png";
         path2 ="../../images/wbazlnku.png";
         path3 ="../../images/wbazlnkd.png";
         loadSprite(path1,path2,path3);
+        this->targetVis=true;
         break;
-    case 10:
+    case static_cast<int>(WeaponType::PUNCH_ID):
         //aca dejo al worm ocmo estaba en su pos...
         this->spriteImage = new QPixmap("../../images/wormwait.png");
         break;
