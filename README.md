@@ -1,19 +1,11 @@
 ﻿# Tareas
 - Modelo servidor
-- 1) Hacer explosiones más realistas y calculo de daños
-- 2) Cambiar proyectiles cuadrados a circulares
-- 3) Hacer rotar proyectiles en la trayectoria
-- 4) Agregar mutex
-- 5) Modelar movimiento continuo de gusanos
-- 6) Completar protocolo server -> cliente
-- 7) Hacer que los worms se traspasen
-- 8) Agregar todas las armas restantes (Testear lectura de archivos .cfg)
-- 9) Manejar desconexiones
-- 10) Notificar ganadores
-- 11) Manejo de tiempo de turnos
-- 12) Agregar threads al envio de información a cada jugador
-
-
+- 1) Comprobar funcionamiento de salas
+- 2) Pulir 3 armas restantes
+- 3) Agregar parseo de yaml, tanto server como game
+- 4) Completar protocolo server -> cliente
+- 5) Manejar desconexiones
+- 6) Manera optima de deslizar 45º
 
 - Modelo cliente/ Escenario
 - 1) Ajustes finales protocolo con servidor
