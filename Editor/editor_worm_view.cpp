@@ -9,7 +9,7 @@ Worm_View::Worm_View(QObject *parent) :
     QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("../imagenes/wormwait.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap("../images/wormwait.png"); // Load the sprite image QPixmap
 }
 
 void Worm_View::rotar()

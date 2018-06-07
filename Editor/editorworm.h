@@ -6,7 +6,7 @@
 class editorWorm: public EditorUbicable
 {
 private:
-    int vida = 0;
+    int vida = 100;
 
 public:
     editorWorm();

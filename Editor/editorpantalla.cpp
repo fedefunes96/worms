@@ -23,38 +23,40 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     xscene = 2000;
     yscene = 1000;
     ui->setupUi(this);
+    this->setWindowState(Qt::WindowMaximized);
     this->setWindowTitle("Nuevo mapa");
     this->scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
-    scene->setBackgroundBrush(QBrush(QImage("../imagenes/fondo.png")));
+    scene->setBackgroundBrush(QBrush(QImage("../images/fondo.png")));
     this->id = 0;
-    ui->vidaGusano->hide();
-    ui->ok->hide();
-    ui->mas->hide();
-    ui->menos->hide();
+    ui->wormOpt->hide();
+    ui->girderOpt->hide();
     this->current_id = -1;
-    QPixmap bazooka = QPixmap("../imagenes/Bazooka.png");
+    QPixmap bazooka = QPixmap("../images/Bazooka.png");
     ui->bazooka->setPixmap(bazooka);
-    QPixmap mortero = QPixmap("../imagenes/Mortar.png");
+    QPixmap mortero = QPixmap("../images/Mortar.png");
     ui->mortero->setPixmap(mortero);
-    QPixmap granadaV = QPixmap("../imagenes/W4_Grenade.png");
+    QPixmap granadaV = QPixmap("../images/W4_Grenade.png");
     ui->granadaV->setPixmap(granadaV);
-    QPixmap granadaR = QPixmap("../imagenes/Redgrenade.png");
+    QPixmap granadaR = QPixmap("../images/Redgrenade.png");
     ui->granadaR->setPixmap(granadaR);
-    QPixmap banana = QPixmap("../imagenes/Bananabomb.png");
+    QPixmap banana = QPixmap("../images/Bananabomb.png");
     ui->banana->setPixmap(banana);
-    QPixmap granadaS = QPixmap("../imagenes/Holy_Grenade.png");
+    QPixmap granadaS = QPixmap("../images/Holy_Grenade.png");
     ui->granadaS->setPixmap(granadaS);
-    QPixmap dinamita = QPixmap("../imagenes/W4_Dynamite.png");
+    QPixmap dinamita = QPixmap("../images/W4_Dynamite.png");
     ui->dinamita->setPixmap(dinamita);
-    QPixmap bate = QPixmap("../imagenes/Baseballbat.png");
+    QPixmap bate = QPixmap("../images/Baseballbat.png");
     ui->bate->setPixmap(bate);
-    QPixmap aereo = QPixmap("../imagenes/W4_Airstrike.png");
+    QPixmap aereo = QPixmap("../images/W4_Airstrike.png");
     ui->aereo->setPixmap(aereo);
-    QPixmap tele = QPixmap("../imagenes/IconTeleport.png");
+    QPixmap tele = QPixmap("../images/IconTeleport.png");
     ui->teletransportador->setPixmap(tele);
     loadWeapons();
+    ui->agregarGusano->setIcon(QIcon("../images/wormwait.png"));
+    ui->agregarVigaChica->setIcon(QIcon("../images/grds4.png"));
+    ui->AgregarViga->setIcon(QIcon("../images/grdl4.png"));
 }
 
 EditorPantalla::~EditorPantalla()
@@ -103,6 +105,42 @@ void EditorPantalla::vaciarCeldas(int x, int y, int cant)
 {
     for (int i = 0; i < cant; ++i){
         celdas[x+i][y].vaciar_celda();
+    }
+}
+
+void EditorPantalla::removeItem()
+{
+    std::map<int, QGraphicsItem*>::iterator iter;
+    iter = items.find(current_id);
+    if ( iter != items.end()){
+        int x = items[this->current_id]->pos().x();
+        int y = items[this->current_id]->pos().y();
+        int x1 = x/24;
+        int y1 = -y/24;
+        std::map<int, editorWorm>::iterator it;
+        it = this->worms.find(current_id);
+        if (it != worms.end()){
+            x1++;
+            vaciarCeldas(x1,y1,1);
+            worms.erase(it);
+        }
+
+        std::map<int, editorViga>::iterator it2;
+        it2 = this->vigas.find(current_id);
+        if (it2 != vigas.end()){
+            if (vigas[current_id].get_tam() == 6){
+                vaciarCeldas(x1,y1,6);
+            } else {
+                vaciarCeldas(x1,y1,3);
+            }
+            vigas.erase(it2);
+        }
+        delete items[current_id];
+        items.erase(iter);
+        current_id = -1;
+        estado = 0;
+        ui->girderOpt->hide();
+        ui->wormOpt->hide();
     }
 }
 
@@ -215,7 +253,7 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
     }
     if (!ocupadas){
         int xn = celdaX*24;
-        int yn = -celdaY/24;
+        int yn = -celdaY*24;
         QGraphicsItem *viga = new editor_viga_grande_view ();
         scene->addItem(viga);
         viga->setPos(xn,yn);
@@ -328,28 +366,17 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
             std::map<int, editorViga>::iterator it;
             it = this->vigas.find(current_id);
             if (it != vigas.end()){
-                ui->mas->show();
-                ui->menos->show();
-                ui->vidaGusano->hide();
-                ui->ok->hide();
+                ui->girderOpt->show();
+                ui->wormOpt->hide();
             } else {
-                ui->vidaGusano->show();
-                int vida = worms[current_id].getVida();
-                if (vida != 0){
-                    ui->vidaGusano->setText(QString::number(vida));
-                } else {
-                    ui->vidaGusano->setText("vida");
-                }
-                ui->ok->show();
-                ui->mas->hide();
-                ui->menos->hide();
+                ui->wormOpt->show();
+                ui->girderOpt->hide();
+                ui->vidaGusano->setValue(worms[current_id].getVida());
             }
         } else {
             this->current_id = -1;
-            ui->vidaGusano->hide();
-            ui->ok->hide();
-            ui->mas->hide();
-            ui->menos->hide();
+            ui->wormOpt->hide();
+            ui->girderOpt->hide();
         }
     }
 
@@ -372,40 +399,7 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
 
 void EditorPantalla::on_quitar_clicked()
 {
-    std::map<int, QGraphicsItem*>::iterator iter;
-    iter = items.find(current_id);
-    if ( iter != items.end()){
-        int x = items[this->current_id]->pos().x();
-        int y = items[this->current_id]->pos().y();
-        int x1 = x/24;
-        int y1 = -y/24;
-        std::map<int, editorWorm>::iterator it;
-        it = this->worms.find(current_id);
-        if (it != worms.end()){
-            x1++;
-            vaciarCeldas(x1,y1,1);
-            worms.erase(it);
-        }
-
-        std::map<int, editorViga>::iterator it2;
-        it2 = this->vigas.find(current_id);
-        if (it2 != vigas.end()){
-            if (vigas[current_id].get_tam() == 6){
-                vaciarCeldas(x1,y1,6);
-            } else {
-                vaciarCeldas(x1,y1,3);
-            }
-            vigas.erase(it2);
-        }
-        delete items[current_id];
-        items.erase(iter);
-        current_id = -1;
-        estado = 0;
-        ui->vidaGusano->hide();
-        ui->ok->hide();
-        ui->mas->hide();
-        ui->menos->hide();
-    }
+    removeItem();
 }
 
 void EditorPantalla::on_mas_clicked()
@@ -518,8 +512,7 @@ void EditorPantalla::on_ok_clicked()
     worms[current_id].setVida(vida);
 }
 
-
-void EditorPantalla::on_pushButton_3_clicked()
+void EditorPantalla::on_remove_clicked()
 {
-
+    removeItem();
 }

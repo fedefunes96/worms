@@ -5,7 +5,7 @@ editor_viga_view::editor_viga_view(QObject* parent):
      QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("../imagenes/viga.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap("../images/grds4.png"); // Load the sprite image QPixmap
 }
 
 

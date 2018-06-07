@@ -79,77 +79,79 @@ void commonParser::saveConfig()
     out<<2;
     out<<0;
     out<<50;
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"MortarSub";
-    out<<YAML::BeginSeq;
+    out<<10;
+    out<<5;
+    out<<6;
     out<<2;
     out<<0;
     out<<10;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
 
-    out<<YAML::Key<<"GranadaVerde";
+    out<<YAML::Key<<"GreenGrenade";
     out<<YAML::BeginSeq;
     out<<2;
     out<<0.5;
     out<<30;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
 
 
-    out<<YAML::Key<<"GranadaRoja";
+    out<<YAML::Key<<"RedGrenade";
     out<<YAML::BeginSeq;
     out<<2;
     out<<0.5;
     out<<30;
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"GranadaRojaSub";
-    out<<YAML::BeginSeq;
+    out<<10;
+    out<<5;
+    out<<6;
     out<<2;
     out<<0.5;
     out<<10;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
+
 
     out<<YAML::Key<<"Banana";
     out<<YAML::BeginSeq;
     out<<4;
     out<<1;
     out<<70;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
 
-    out<<YAML::Key<<"GranadaS";
+    out<<YAML::Key<<"HolyGrenade";
     out<<YAML::BeginSeq;
     out<<8;
     out<<0.5;
     out<<110;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
 
-    out<<YAML::Key<<"Dinamita";
+    out<<YAML::Key<<"Dynimite";
     out<<YAML::BeginSeq;
     out<<4;
-    out<<0.5;
+    out<<0;
     out<<50;
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"Bate";
     out<<YAML::BeginSeq;
-    out<<0;
-    out<<0;
     out<<10;
     out <<YAML::EndSeq;
 
-    out<<YAML::Key<<"Aereo";
+    out<<YAML::Key<<"AirAttack";
     out<<YAML::BeginSeq;
     out<<2;
     out<<0;
     out<<40;
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"Teletransportador";
-    out<<YAML::BeginSeq;
-    out<<0;
-    out<<0;
-    out<<0;
+    out<<10;
+    out<<5;
     out <<YAML::EndSeq;
 
     out <<YAML::EndMap;
@@ -172,8 +174,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &worm : worms){
         out <<YAML::Flow;
         out << YAML::BeginSeq;
-        out << worm.second.getX();
-        out << worm.second.getY();
+        out << worm.second.getX()*6/144;
+        out << worm.second.getY()*6/144;
         out << worm.second.getVida();
         out <<YAML::EndSeq;
     }
@@ -184,8 +186,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &viga : vigas){
         out<<YAML::Flow;
         out<<YAML::BeginSeq;
-        out<<viga.second.getX();
-        out<<viga.second.getY();
+        out<<viga.second.getX()*6/144;
+        out<<viga.second.getY()*6/144;
         out<<viga.second.get_angulo();
         out<<viga.second.get_tam();
         out<<YAML::EndSeq;
@@ -215,8 +217,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Girder"]){
             for (YAML::iterator it = config["Girder"].begin(); it != config["Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = girder[0].as<int>();
-                int y = girder[1].as<int>();
+                int x = girder[0].as<int>()*144/6;
+                int y = girder[1].as<int>()*144/6;
                 y = -y;
                 float angulo = girder[2].as<float>();
                 int longitud = girder[3].as<int>();
@@ -236,8 +238,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Worm"]){
             for (YAML::iterator it = config["Worm"].begin(); it != config["Worm"].end(); ++it){
                 const YAML::Node& worm = *it;
-                int x = worm[0].as<int>();
-                int y = worm[1].as<int>();
+                int x = worm[0].as<int>()*144/6;
+                int y = worm[1].as<int>()*144/6;
                 y = -y;
                 int id = editor->agregar_gusano(x,y);
                 int vida = worm[2].as<int>();
@@ -257,178 +259,3 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
     }
 
 }
-
-void commonParser::loadWorms(std::string &file, std::string &config)
-{
-    YAML::Node editor = YAML::LoadFile(file);
-    YAML::Node cfg = YAML::LoadFile(config);
-    if (editor["Worm"]){
-        int i= 0;
-        for (YAML::iterator it = editor["Worm"].begin(); it != editor["Worm"].end(); ++it,++i){
-            const YAML::Node& worm = *it;
-            int x = worm[0].as<int>()*6/140;
-            int y = worm[1].as<int>()*6/140;
-            int health = worm[2].as<int>();
-            float angl = cfg["Worm"][0].as<float>();
-            int longitud = cfg["Worm"][1].as<int>();
-            int height = cfg["Worm"][2].as<int>();
-            int restitution = cfg["Worm"][3].as<int>();
-            float speed = cfg["Worm"][4].as<float>();
-            float fowJumX  = cfg["Worm"][5].as<float>();
-            float fowJumy  = cfg["Worm"][6].as<float>();
-            float backJumX  = cfg["Worm"][7].as<float>();
-            float backJumY  = cfg["Worm"][8].as<float>();
-            int alturaMax = cfg["Worm"][9].as<int>();
-            int dkgPorM = cfg["Worm"][10].as<int>();
-            int damgMax = cfg["Worm"][11].as<int>();
-            // Crea el gusano como prefieras
-            // cambia la firma de la funcion a lo que te convenga.
-
-        }
-    }
-}
-
-void commonParser::loadGirder(std::string &file, std::string &config)
-{
-    YAML::Node editor = YAML::LoadFile(file);
-    YAML::Node cfg = YAML::LoadFile(config);
-    if (editor["Girder"]){
-        for (YAML::iterator it = editor["Girder"].begin(); it != editor["Girder"].end(); ++it){
-            const YAML::Node& girder = *it;
-            int x = girder[0].as<int>();
-            int y = girder[1].as<int>();
-            float angle = girder[2].as<float>();
-            int longitud = girder[3].as<int>();
-            float height = cfg["Girder"][0].as<float>();
-            // Crea la viga como quieras
-            // cambia la firma de la funcion a lo que te convenga.
-        }
-    }
-}
-
-void commonParser::loadWeapon(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-    if (config["Usable"]){
-         for (YAML::iterator it = config["Usable"].begin(); it != config["Usable"].end(); ++it){
-             const YAML::Node& usable = *it;
-             int id = usable[0].as<int>();
-             int ammo = usable[1].as<int>();
-         }
-    }
-}
-
-void commonParser::loadWeaponCaract(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-
-    int radius = config["Bazooka"][0].as<int>();
-    int restitution = config["Bazooka"][1].as<int>();
-    int max_damg = config["Bazooka"][2].as<int>();
-    int VDisparo = config["Bazooka"][3].as<int>();
-    int VAngular = config["Bazooka"][4].as<int>();
-    std::cout<<radius<<std::endl;
-
-    /*for (YAML::iterator it = config["Mortar"].begin(); it != config["Mortar"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["MortarSub"].begin(); it != config["MortarSub"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["GranadaVerde"].begin(); it != config["GranadaVerde"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["GranadaRoja"].begin(); it != config["GranadaRoja"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["GranadaRojaSub"].begin(); it != config["GranadaRojaSub"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["Banana"].begin(); it != config["Banana"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["GranadaS"].begin(); it != config["GranadaS"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["Dinamita"].begin(); it != config["Dinamita"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["Bate"].begin(); it != config["Bate"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["Aereo"].begin(); it != config["Aereo"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }
-
-    for (YAML::iterator it = config["Teletransportador"].begin(); it != config["Teletransportador"].end(); ++it){
-        const YAML::Node& usable = *it;
-        float radius = usable[0].as<float>();
-        float restitution = usable[1].as<float>();
-        float max_damg = usable[2].as<float>();
-    }*/
-}
-
-int commonParser::waterLvl(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-    return config["Water"].as<int>();
-}
-
-int commonParser::cantidad(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-    return config["Cantidad"].as<int>();
-}
-
-float commonParser::airMinSpeed(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-    return config["Wind"][0].as<int>();
-}
-
-float commonParser::airMaxSpeed(std::string &file)
-{
-    YAML::Node config = YAML::LoadFile(file);
-    return config["Wind"][1].as<int>();
-}
-
-

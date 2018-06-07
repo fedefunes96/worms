@@ -73,7 +73,7 @@ private slots:
 
     void on_ok_clicked();
 
-    void on_pushButton_3_clicked();
+    void on_remove_clicked();
 
 private:
     std::map<int, QGraphicsItem*> items;
@@ -98,6 +98,8 @@ private:
     void llenarCeldas(int x, int y, int cant);
 
     void vaciarCeldas(int x, int y, int cant);
+
+    void removeItem();
 };
 
 

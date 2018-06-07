@@ -4,7 +4,7 @@ editor_viga_grande_view::editor_viga_grande_view(QObject* parent):
         QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("../imagenes/viga.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap("../images/grdl4.png"); // Load the sprite image QPixmap
 }
 
 void editor_viga_grande_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
