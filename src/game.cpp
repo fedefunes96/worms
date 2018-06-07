@@ -58,13 +58,13 @@ void Game::create_test_world() {
 		, 20 //10 x right
 		, 10 // 20 y up
 		, 0.0 // Angle 0 -> Facing right
-		, 1 //Long 2m long
-		, 1 //Height 2m height
+		, 0.5 //Long 2m long
+		, 0.5 //Height 2m height
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (6.0, 30.0) //Forw jump
-		, std::make_pair (6.0, 30.0) //Back jump
+		, std::make_pair (2.0, 10.0) //Forw jump
+		, std::make_pair (2.0, 10.0) //Back jump
 		, 25.0
 		, 10.0);
 
@@ -80,13 +80,13 @@ void Game::create_test_world() {
 		, 15 //5 x right
 		, 15 // 10 y up
 		, 0.0 // Angle 0 -> Facing right
-		, 1 //Long 2m long
-		, 1 //Height 2m height
+		, 0.5 //Long 2m long
+		, 0.5 //Height 2m height
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (6.0,20.0) //Forw jump
-		, std::make_pair (6.0,20.0) //Back jump
+		, std::make_pair (2.0,10.0) //Forw jump
+		, std::make_pair (2.0,10.0) //Back jump
 		, 25.0
 		, 10.0);
 
