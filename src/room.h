@@ -3,18 +3,30 @@
 
 #include <vector>
 #include <string>
-#include "player.h"
+//#include "player.h"
+
+class Server;
 
 class Room {
 private:
-	std::vector<std::unique_ptr<Player>> players;
+	Server& server;
+	const std::string stage_file;
+	const int max_players;
+	int ammount_players;
+
+	//std::vector<std::unique_ptr<Player>>& players;
+	std::vector<int> player_ids;
 
 public:
-	Room(const std::string name
+	Room(Server& server
 		, const std::string stage_file
-		, const int cant_players);
+		, const int max_players);
 
-	//void add_player(std::unique_ptr<Player>&> player);
+	void add_player(int id);
+	void remove_player(int id);	
+	int get_ammount_players();
+
+	//void add_player(std::unique_ptr<Player>& player);
 	//void remove_player(std::unique_ptr<Player>&> player);
 };
 

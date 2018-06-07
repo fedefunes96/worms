@@ -19,6 +19,9 @@ private:
 	std::unordered_map<int, std::unique_ptr<Player>> players;
 	std::unordered_map<std::string, Room> rooms;
 	std::vector<std::unique_ptr<Game>> games;
+	std::vector<std::string> maps;
+
+	std::mutex room_m;
 
 	void check_active_users();
 	void check_active_games();
@@ -31,6 +34,13 @@ public:
 
 	void interrupt_server();
 	void start();
+
+	std::vector<std::string> get_rooms();
+	std::vector<std::string>& get_maps();
+	void create_room(const int id, const std::string name, const std::string stage_file);
+	void start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file);
+	bool join_room(const int id, const std::string& name);
+	void exit_room(const int id, const std::string& name);
 };
 
 #endif

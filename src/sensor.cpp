@@ -79,7 +79,7 @@ bool Sensor::should_collide_with(Girder* girder) {
 }
 
 bool Sensor::should_collide_with(Worm* worm) {
-	return true;
+	return false;
 }
 
 bool Sensor::should_collide_with(Throwable* throwable) {

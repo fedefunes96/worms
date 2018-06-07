@@ -151,6 +151,8 @@ void Stage::draw() {
 			this->time_step
 			, this->velocity_iterations
 			, this->position_iterations);	
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(25));
 	}
 
 	printf("End of world draw\n");

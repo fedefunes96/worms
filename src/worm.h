@@ -12,7 +12,7 @@
 #include "sensor.h"
 
 #define WORM_TYPE "Worm"
-#define JUMP_COOLDOWN 15
+#define JUMP_COOLDOWN 5
 
 enum class MoveDirection : char {
 	NONE = 0,

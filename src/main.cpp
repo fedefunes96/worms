@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
 	//Protocol protocol(skt);
 
-	Player player(std::move(skt));
+	Player player(std::move(skt), 0);
 
 	players.push_back(std::move(player));
 

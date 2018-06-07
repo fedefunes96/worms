@@ -10,6 +10,8 @@
 Server::Server(const std::string& port, int cant_users)
  : skt(port, cant_users) {
  	active_server = false;
+
+ 	//Load maps in here
 }
 
 void Server::end_user(std::unique_ptr<Player> player) {
@@ -26,7 +28,7 @@ void Server::check_active_users() {
 	it = this->players.begin();
 
 	while (it != this->players.end()) {
-		if (it->second->is_disconnected()) {
+		if (it->second->is_disconnected() && !it->second->is_in_game()) {
 			this->end_user(std::move(it->second));
 			it = this->players.erase(it);
 		} else {
@@ -44,6 +46,9 @@ void Server::check_active_games() {
 		if ((*it)->game_finished()) {
 			this->end_game(std::move(*it));
 			it = this->games.erase(it);
+
+			//Remove those users
+			this->check_active_users();
 		} else {
 			++it;
 		}
@@ -51,14 +56,14 @@ void Server::check_active_games() {
 }
 
 void Server::start() {
-	int id = 0;
+	int id = 1;
 	this->active_server = true;
 
 	while (this->active_server) {
 		try {			
 			Socket user = this->skt.aceptar();
 
-			std::unique_ptr<Player> player(new Player(std::move(user)));
+			std::unique_ptr<Player> player(new Player(std::move(user), id));
 
 			player->start();
 
@@ -104,4 +109,93 @@ void Server::interrupt_server() {
 	this->active_server = false;
 	//Shutdown server, stop accepting clients
 	this->skt.desconectar();
+}
+
+std::vector<std::string> Server::get_rooms() {
+	std::lock_guard<std::mutex> lock(this->room_m);
+
+	std::vector<std::string> rooms_names;
+
+	std::unordered_map<std::string, Room>::iterator it;
+
+	it = this->rooms.begin();
+
+	while (it != this->rooms.end()) {
+		rooms_names.push_back(it->first);
+		++it;
+	}
+
+	return rooms_names;
+}
+
+std::vector<std::string>& Server::get_maps() {
+	return this->maps;
+}
+
+void Server::create_room(const int id, const std::string name, const std::string stage_file) {
+	std::lock_guard<std::mutex> lock(this->room_m);
+	//Read stage file and get ammount of players
+	int ammount_players = 2;
+
+	Room room(*this, stage_file, ammount_players);
+
+	room.add_player(id);
+
+	this->rooms.emplace(name, std::move(room));
+}
+
+bool Server::join_room(const int id, const std::string& name) {
+	//Join room if it can
+	std::lock_guard<std::mutex> lock(this->room_m);
+
+	std::unordered_map<std::string, Room>::iterator it;
+
+	it = this->rooms.find(name);
+
+	if (it != this->rooms.end()) {
+		it->second.add_player(id);
+		return true;
+	}
+
+	return false;
+}
+
+void Server::exit_room(const int id, const std::string& name) {
+	//Exit room if it can
+	std::lock_guard<std::mutex> lock(this->room_m);
+
+	std::unordered_map<std::string, Room>::iterator it;
+
+	it = this->rooms.find(name);
+
+	if (it != this->rooms.end()) {
+		it->second.remove_player(id);
+
+		//No players left in the room
+		//Remove it
+		if (it->second.get_ammount_players() == 0) {
+			this->rooms.erase(it);
+		}
+	}
+}
+
+void Server::start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file) {
+	std::lock_guard<std::mutex> lock(this->room_m);
+
+	std::unordered_map<std::string, Room>::iterator it;
+
+	it = this->rooms.find(name);
+
+	if (it != this->rooms.end()) {
+		this->rooms.erase(it);
+
+		std::vector<Player*> players_for_game;
+
+		for (int i = 0; i < (int) ids.size(); i++) {
+			//Player* a = this->players.at(i).get();
+			players_for_game.push_back(this->players.at(i).get());
+		}
+
+		//this->games.push_back(std::unique_ptr<Game>(new Game(stage_file, players_for_game)))
+	}	
 }

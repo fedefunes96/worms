@@ -15,7 +15,7 @@
 #include "bazooka.h"
 
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
- : stage(stage_file, 1.0/60.0, 6, 2, *this) 
+ : stage(stage_file, 1.0/20.0, 6, 2, *this) 
  , players(std::move(players)) {
  	this->id_player_list = 0;
  	this->is_over = false;
@@ -55,16 +55,16 @@ void Game::initialize_players() {
 void Game::create_test_world() {
 	//Let's create 2 worms
 	Worm* worm = new Worm(this->stage
-		, 10 //10 x right
-		, 3 // 20 y up
+		, 20 //10 x right
+		, 10 // 20 y up
 		, 0.0 // Angle 0 -> Facing right
 		, 1 //Long 2m long
 		, 1 //Height 2m height
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (6.0, 20.0) //Forw jump
-		, std::make_pair (6.0,20.0) //Back jump
+		, std::make_pair (6.0, 30.0) //Forw jump
+		, std::make_pair (6.0, 30.0) //Back jump
 		, 25.0
 		, 10.0);
 
@@ -77,8 +77,8 @@ void Game::create_test_world() {
 	//this->stage.insert(std::shared_ptr<Movable>(worm));
 
 	Worm* worm2 = new Worm(this->stage
-		, 5 //5 x right
-		, 10 // 10 y up
+		, 15 //5 x right
+		, 15 // 10 y up
 		, 0.0 // Angle 0 -> Facing right
 		, 1 //Long 2m long
 		, 1 //Height 2m height
@@ -111,27 +111,51 @@ void Game::create_test_world() {
 
 	this->stage.insert(
 		std::unique_ptr<Ubicable>(new Girder(this->stage
-		, 0
-		, 0
+		, 3
+		, 2
 		, b2_pi/2 //Vertical
-		, 20
-		, 1)));
+		, 3
+		, 0.8)));
+
+	this->stage.insert(
+		std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 3
+		, 6
+		, b2_pi/2 //Vertical
+		, 3
+		, 0.8)));
 
 	this->stage.insert(
 	std::unique_ptr<Ubicable>(new Girder(this->stage
-		, 20
-		, 0
-		, b2_pi
-		, 20
-		, 1)));
-
-	this->stage.insert(
-	std::unique_ptr<Ubicable>(new Girder(this->stage
-		, 0
-		, 0
+		, 3
+		, 2
 		, 0.0
-		, 200
-		, 1)));
+		, 3
+		, 0.8)));
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 9
+		, 2
+		, 0.0
+		, 3
+		, 0.8)));
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 15
+		, 2
+		, 0.0
+		, 3
+		, 0.8)));	
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 21
+		, 2
+		, 0.0
+		, 3
+		, 0.8)));			
 }
 
 void Game::initialize_game(const std::string& stage_file) {
@@ -202,7 +226,6 @@ void Game::game_loop() {
 			actual_player.play();
 		} catch(const SocketException& e) {
 			//Player disconnected
-
 		}
 		//Need conditional variable over Stage
 
@@ -313,7 +336,7 @@ Game::~Game() {
 	//this->game_t.join();
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
-		this->players[i].notify_game_end();
+		this->players[i].disconnect();
 		
 		this->players_t[i].join();
 	}

@@ -16,6 +16,8 @@ private:
 	int second_counter;
 	bool should_receive;
 	bool connected;
+	bool in_game;
+
 	Counter counter;
 
 	Socket socket;
@@ -32,7 +34,7 @@ private:
 	void check_if_worm_was_mine(Ubicable* ubicable);
 	void disconnected_player();
 public:
-	Player(Socket socket);
+	Player(Socket socket, const int id);
 	Player(Player&&);
 
 	void play();
@@ -45,7 +47,6 @@ public:
 	void attach_usable(std::unique_ptr<Usable> usable);
 
 	void notify_winner(int id);
-	void notify_game_end();
 	void notify_actual_player(int id);
 	void notify_removal(Ubicable* ubicable);
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);
@@ -53,6 +54,8 @@ public:
 	void set_id(int id);
 	int get_id();
 
+	bool is_in_game();
+	void disconnect();
 	bool is_disconnected();
 };
 

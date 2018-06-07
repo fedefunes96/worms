@@ -9,12 +9,14 @@
 #include <string>
 #include "common_socket_exception.h"
 
-Player::Player(Socket socket) 
+Player::Player(Socket socket, const int id) 
 	: socket(std::move(socket))
 	, protocol(this->socket) {
 
 	this->should_receive = true;
 	this->connected = true;
+	this->in_game = false;
+	this->id = id;
 }
 
 Player::Player(Player&& other)
@@ -23,6 +25,7 @@ Player::Player(Player&& other)
 	, usables(std::move(other.usables))
 	, worms(std::move(other.worms)) {
 
+	this->id = other.id;
 	this->should_receive = other.should_receive;
 	this->connected = other.connected;
 }
@@ -63,8 +66,8 @@ void Player::game_loop() {
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
 			if (cmd == Commands::MOVE) {
-				int id_worm;
-				int dir;
+				int id_worm = 0;
+				int dir = 0;
 
 				this->protocol.recvMove(&id, &dir);
 
@@ -75,10 +78,10 @@ void Player::game_loop() {
 				this->worms.at(id_worm)->start_moving(mdir);
 
 			} else if (cmd == Commands::ATTACK) {
-				int id_usable;
-				int id_worm;
-				int posx;
-				int posy;
+				int id_usable = 0;
+				int id_worm = 0;
+				int posx = 0;
+				int posy = 0;
 
 				std::vector<float> params;
 
@@ -92,7 +95,6 @@ void Player::game_loop() {
 				//Player's cheating
 				//Disconnect him
 				this->disconnected_player();
-				this->connected = false;
 			}
 
 			if (!this->should_i_receive())
@@ -104,7 +106,6 @@ void Player::game_loop() {
 	} catch(SocketException& e) {
 			//Played disconnected
 			this->disconnected_player();
-			this->connected = false;
 	}
 }
 
@@ -123,6 +124,8 @@ void Player::disconnected_player() {
 
 		++it;
 	}
+
+	this->connected = false;
 }
 
 void Player::check_if_worm_was_mine(Ubicable* ubicable) {
@@ -137,16 +140,27 @@ void Player::check_if_worm_was_mine(Ubicable* ubicable) {
 	}
 }
 
+bool Player::is_in_game() {
+	return this->in_game;
+}
+
+/*void Player::notify_start_game() {
+	this->in_game = true;
+	this->protocol.sendGameStart();
+}*/
+
 void Player::notify_winner(int id) {
 	printf("Sending Winner\n");
 	this->protocol.sendWinner(id);
 }
 
-void Player::notify_game_end() {
+void Player::disconnect() {
 	//mutex
-	printf("Sending Game end\n");
-	this->protocol.sendGameEnd();
+	//printf("Sending Game end\n");
+	//this->protocol.sendGameEnd();
 	this->connected = false;
+	this->in_game = false;
+	this->socket.desconectar();
 }
 
 void Player::notify_actual_player(int id) {

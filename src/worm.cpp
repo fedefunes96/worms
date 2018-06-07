@@ -98,6 +98,7 @@ void Worm::start_moving(MoveDirection mdirect) {
 			}	
 			case MoveDirection::JUMP_FORW: {
 				this->actual_velocity.Set(0, 0);
+				this->body->SetLinearVelocity(this->actual_velocity);
 				b2Vec2 impulse_speed;
 
 				if(this->facing_direction == MoveDirection::LEFT) {
@@ -112,6 +113,7 @@ void Worm::start_moving(MoveDirection mdirect) {
 			}
 			case MoveDirection::JUMP_BACK: {
 				this->actual_velocity.Set(0, 0);	
+				this->body->SetLinearVelocity(this->actual_velocity);
 				b2Vec2 impulse_speed;
 
 				if(this->facing_direction == MoveDirection::LEFT) {
@@ -135,13 +137,15 @@ void Worm::start_moving(MoveDirection mdirect) {
 void Worm::move_step(float32 time_step) {
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
-	if (this->jump_cooldown > 0) {
+	/*if (this->jump_cooldown > 0) {
 		this->jump_cooldown--;
 	} else {
-		this->body->SetLinearVelocity(this->actual_velocity);
-	}
+		//this->body->SetLinearVelocity(this->actual_velocity);
+	}*/
 
-	if (this->is_on_ground()) {
+	if (this->is_on_ground() && this->jump_cooldown == 0) {
+		this->body->SetLinearVelocity(this->actual_velocity);
+
 		b2Vec2 actual_position = this->body->GetPosition();
 
 		float fall_height = last_position.y - actual_position.y;
@@ -154,6 +158,8 @@ void Worm::move_step(float32 time_step) {
 		}
 
 		this->last_position = actual_position;
+	} else if(this->jump_cooldown > 0) {
+		this->jump_cooldown--;
 	}
 }
 
@@ -205,7 +211,7 @@ void Worm::create_myself(b2World& world) {
 	//Barely showing
 	this->sensor_for_jump.add_at_position(body
 										, b2Vec2(0, -height)
-										, longitude
+										, longitude*0.5
 										, height*0.1);
 
 }
@@ -268,7 +274,7 @@ bool Worm::should_collide_with(Girder* girder) {
 
 bool Worm::should_collide_with(Worm* worm) {
 	//Dont collide with other worms
-	return true;
+	return false;
 }
 
 bool Worm::should_collide_with(Throwable* throwable) {
