@@ -11,6 +11,8 @@ protected:
 public:
     EditorUbicable(){}
 
+    ~EditorUbicable(){}
+
     int getX();
 
     int getY();

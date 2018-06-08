@@ -78,7 +78,7 @@ private slots:
 private:
     std::map<int, QGraphicsItem*> items;
     unsigned int cantidad = 2;
-    celda celdas[1000][1000];
+    std::map<std::pair<int,int>,int> celdas;
     Ui::EditorPantalla *ui;
     std::map<int,editorUsables>usables;
     std::map<int, editorWorm> worms;

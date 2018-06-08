@@ -14,6 +14,7 @@ class commonParser
 {
 public:
     commonParser();
+    ~commonParser(){}
 
     static void saveConfig();
 

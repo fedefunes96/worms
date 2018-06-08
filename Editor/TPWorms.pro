@@ -35,7 +35,6 @@ SOURCES += \
     editorseleccionarmasherramientas.cpp \
     editor_worm_view.cpp \
     editor_viga_view.cpp \
-    celda.cpp \
     commonarchivo.cpp \
     commonparser.cpp \
     editorBacgroun.cpp \
@@ -51,7 +50,6 @@ HEADERS += \
     editorseleccionarmasherramientas.h \
     editor_worm_view.h \
     editor_viga_view.h \
-    celda.h \
     commonarchivo.h \
     commonparser.h \
     editorBacgroun.h \

@@ -10,6 +10,7 @@ private:
     int municiones;
 public:
     editorUsables(int municiones);
+    ~editorUsables(){}
 
     int getAmmo();
 };

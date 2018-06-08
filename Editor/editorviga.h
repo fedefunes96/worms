@@ -12,7 +12,8 @@ private:
 public:
     editorViga();
     editorViga(int posX, int posY, int tam);
-    virtual void aumentarAngulo(int angulo);
+    ~editorViga(){}
+    void aumentarAngulo(int angulo);
     float get_angulo();
     int get_tam();
 };

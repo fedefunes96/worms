@@ -19,7 +19,6 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EditorPantalla)
 {
-
     xscene = 2000;
     yscene = 1000;
     ui->setupUi(this);
@@ -34,24 +33,34 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     ui->girderOpt->hide();
     this->current_id = -1;
     QPixmap bazooka = QPixmap("../images/Bazooka.png");
+    bazooka = bazooka.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bazooka->setPixmap(bazooka);
     QPixmap mortero = QPixmap("../images/Mortar.png");
+    mortero = mortero.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->mortero->setPixmap(mortero);
     QPixmap granadaV = QPixmap("../images/W4_Grenade.png");
+    granadaV = granadaV.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaV->setPixmap(granadaV);
     QPixmap granadaR = QPixmap("../images/Redgrenade.png");
+    granadaR = granadaR.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaR->setPixmap(granadaR);
     QPixmap banana = QPixmap("../images/Bananabomb.png");
+    banana = banana.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->banana->setPixmap(banana);
     QPixmap granadaS = QPixmap("../images/Holy_Grenade.png");
+    granadaS = granadaS.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaS->setPixmap(granadaS);
     QPixmap dinamita = QPixmap("../images/W4_Dynamite.png");
+    dinamita = dinamita.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->dinamita->setPixmap(dinamita);
     QPixmap bate = QPixmap("../images/Baseballbat.png");
+    bate = bate.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bate->setPixmap(bate);
     QPixmap aereo = QPixmap("../images/W4_Airstrike.png");
+    aereo = aereo.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->aereo->setPixmap(aereo);
     QPixmap tele = QPixmap("../images/IconTeleport.png");
+    tele = tele.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->teletransportador->setPixmap(tele);
     loadWeapons();
     ui->agregarGusano->setIcon(QIcon("../images/wormwait.png"));
@@ -61,6 +70,10 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
 
 EditorPantalla::~EditorPantalla()
 {
+    for (auto& x : items){
+        delete x.second;
+    }
+    delete scene;
     delete ui;
 }
 
@@ -74,11 +87,7 @@ void EditorPantalla::load()
         delete x.second;
     }
     items.clear();
-    for (int i = 0; i < 100;i++){
-        for (int j = 0; j < 40; j++){
-            celdas[i][j].vaciar_celda();
-        }
-    }
+    celdas.clear();
     std::string name = nombre.toUtf8().constData();
     commonParser::load(this,name);
     loadWeapons();
@@ -97,14 +106,14 @@ bool EditorPantalla::checkWorms()
 void EditorPantalla::llenarCeldas(int x, int y, int cant)
 {
     for (int i = 0; i < cant; ++i){
-        celdas[x+i][y].llenar_celda(id);
+        celdas[std::make_pair((x+i),y)] = id;
     }
 }
 
 void EditorPantalla::vaciarCeldas(int x, int y, int cant)
 {
     for (int i = 0; i < cant; ++i){
-        celdas[x+i][y].vaciar_celda();
+        celdas.erase(std::make_pair((x+i),y));
     }
 }
 
@@ -217,8 +226,9 @@ int EditorPantalla::agregar_gusano(int x, int y)
 {
     int celdaX = x/24;
     int celdaY = -y/24+1;
-
-    if (!celdas[celdaX][celdaY].esta_ocupado()){
+    std::map<std::pair<int,int>,int>::iterator it;
+    it = celdas.find(std::make_pair(celdaX,celdaY));
+    if (it == celdas.end()){
         int xn = celdaX*24 -20;
         int yn = -celdaY*24 -20;
         QGraphicsItem *worm = new Worm_View();
@@ -249,7 +259,9 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
     int celdaY = -y/24+1;
     bool ocupadas = true;
     for (int i = 0; i<6; ++i){
-        ocupadas = ocupadas && celdas[celdaX+i][celdaY].esta_ocupado();
+        std::map<std::pair<int,int>,int>::iterator it;
+        it = celdas.find(std::make_pair(celdaX+i,celdaY));
+        ocupadas = ocupadas && (it != celdas.end());
     }
     if (!ocupadas){
         int xn = celdaX*24;
@@ -276,7 +288,9 @@ int EditorPantalla::agregar_viga_chica(int x, int y)
     int celdaY = -y/24+1;
     bool ocupadas = true;
     for (int i = 0; i<3; ++i){
-        ocupadas = ocupadas && celdas[celdaX+i][celdaY].esta_ocupado();
+        std::map<std::pair<int,int>,int>::iterator it;
+        it = celdas.find(std::make_pair(celdaX+i,celdaY));
+        ocupadas = ocupadas && (it != celdas.end());
     }
     if (!ocupadas){
         int xn = celdaX*24;
@@ -360,8 +374,10 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
         if (current_id != -1){
             items[current_id]->setOpacity(1);
         }
-        if (celdas[celdaX][celdaY].esta_ocupado()){
-            this->current_id = this->celdas[celdaX][celdaY].obtener_id();
+        std::map<std::pair<int,int>,int>::iterator it;
+        it = celdas.find(std::make_pair(celdaX,celdaY));
+        if (it != celdas.end()){
+            this->current_id = celdas[std::make_pair(celdaX,celdaY)];
             items[current_id]->setOpacity(0.5);
             std::map<int, editorViga>::iterator it;
             it = this->vigas.find(current_id);

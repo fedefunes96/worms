@@ -12,7 +12,7 @@ class Worm_View: public QObject, public QGraphicsItem
 public:
     explicit Worm_View(QObject* parent = 0);
 
-    void rotar();
+    ~Worm_View();
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

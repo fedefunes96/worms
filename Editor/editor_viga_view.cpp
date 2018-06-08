@@ -8,6 +8,11 @@ editor_viga_view::editor_viga_view(QObject* parent):
     spriteImage = new QPixmap("../images/grds4.png"); // Load the sprite image QPixmap
 }
 
+editor_viga_view::~editor_viga_view()
+{
+    delete spriteImage;
+}
+
 
 void editor_viga_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

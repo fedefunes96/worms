@@ -13,6 +13,7 @@ class editor_viga_grande_view: public QObject, public QGraphicsItem
     Q_OBJECT
 public:
     editor_viga_grande_view(QObject* parent = 0);
+    ~editor_viga_grande_view();
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Editor de mapas");
+    this->setWindowTitle("Map editor");
 }
 
 MainWindow::~MainWindow()
@@ -26,8 +26,8 @@ void MainWindow::on_pushButton_clicked(){
 
 void MainWindow::on_load_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),
-                                                    tr("Escenario *.yaml"));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),"/home",
+                                                    tr("*.yaml"));
     if (fileName.isEmpty()){
         return;
     }

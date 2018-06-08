@@ -7,6 +7,11 @@ editor_viga_grande_view::editor_viga_grande_view(QObject* parent):
     spriteImage = new QPixmap("../images/grdl4.png"); // Load the sprite image QPixmap
 }
 
+editor_viga_grande_view::~editor_viga_grande_view()
+{
+    delete spriteImage;
+}
+
 void editor_viga_grande_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 144,50);

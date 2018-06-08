@@ -11,6 +11,7 @@ private:
 public:
     editorWorm();
     editorWorm(int posX, int posY);
+    ~editorWorm(){}
     int getVida();
     void setVida(int vida);
 };
