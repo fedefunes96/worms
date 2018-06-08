@@ -460,9 +460,9 @@ void Worm_View::loadSpriteWeapon(int val)
         return;
 
     default:
-        path1 ="../../images/wwait.png";
-        path2 ="../../images/wwaitu.png";
-        path3 ="../../images/wwaitd.png";
+        path1 ="../../images/wwalk.png";
+        path2 ="../../images/wwalku.png";
+        path3 ="../../images/wwalkd.png";
         loadSprite(path1,path2,path3);
     	return;
         //break;
