@@ -112,6 +112,7 @@ public:
 	void add_health(int health);
 
 	void receive_dmg(int damage);
+	void receive_explosion(const b2Vec2& impulse);
 
 	void start_moving(MoveDirection mdirect);
 

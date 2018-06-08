@@ -17,11 +17,11 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 		b2Vec2 bodyCom = body->GetWorldCenter();
 	      
 		//ignore bodies outside the blast range
-		if ((bodyCom - pos).Length() >= radius)
+		if ((bodyCom - pos).Length() >= radius) {
 			continue;
+		}
 		
 		//Change this later
-
 		Ubicable* ubicable = (Ubicable*) body->GetUserData();
 
 		if (ubicable->get_type().compare("Worm")==0) {
@@ -36,8 +36,11 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			float invDistance = 1 / distance;
 			float blastPower = 5.0;
 			float impulseMag = blastPower * invDistance * invDistance;
-			body->ApplyLinearImpulse(impulseMag * blastDir, bodyCom);
+
+			//((Worm*) ubicable)->set_slide(true);
+			//body->ApplyLinearImpulse(impulseMag * blastDir, bodyCom);
 			//Down cast	
+			((Worm*) ubicable)->receive_explosion(impulseMag * blastDir);
 			((Worm*) ubicable)->receive_dmg(max_dmg - (distance * max_dmg/radius));
 		}
 		//applyBlastImpulse(body, center, bodyCom, blastPower );

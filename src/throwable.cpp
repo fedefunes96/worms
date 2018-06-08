@@ -41,7 +41,7 @@ void Throwable::explode() {
 	//Explode in place
 	Explosion explosion(this->stage
 		, this->body->GetPosition()
-		, this->radius
+		, 2.0
 		, this->max_dmg);
 
 	//Now i dissapear
@@ -86,7 +86,7 @@ void Throwable::delete_myself(b2World& world) {
 void Throwable::start_contacting(b2Contact* contact) {
 	if (!this->dead)
 		this->explode();
-	printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
+	//printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
 }
 
 void Throwable::stop_contacting(Ubicable* ubicable) {

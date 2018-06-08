@@ -145,6 +145,11 @@ void Worm::set_slide(bool slide) {
 	this->should_slide = slide;
 }
 
+void Worm::receive_explosion(const b2Vec2& impulse) {
+	this->body->ApplyLinearImpulse(impulse, this->body->GetWorldCenter());
+	this->jump_cooldown = JUMP_COOLDOWN;		
+}
+
 void Worm::move_step(float32 time_step) {
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
