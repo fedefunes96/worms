@@ -35,6 +35,7 @@ void Controler::run()
             this->protocol->recvPlayerId(&id);
             list.push_back(id);
             //this->game->addEvent(event);
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
             qDebug()<<"attach usable id";
@@ -44,6 +45,7 @@ void Controler::run()
             list.push_back(id_weapon);
             list.push_back(ammo);
             //this->game->addEvent(event);  UPDATE WEAPON TO USE
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
             qDebug()<<"actual player";
@@ -52,29 +54,31 @@ void Controler::run()
             //Enable key control..
             list.push_back(id);
             //this->game->addEvent(event);    ACTUAL PLAYER
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
             qDebug()<<"attach worm id";
             int8_t id;
             int32_t health;
             this->protocol->recvWormId(&id,&health);
-
-            list.push_back(id);
-            list.push_back(static_cast<int>(TypeObj::WORM));
+            list.push_back(id);            
             list.push_back(health);
+            qDebug()<<"id:"<<id<<"vida"<<health;
 
             //this->game->addEvent(event);    DEFINE WORM
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
-            //qDebug()<<"remove";
+            qDebug()<<"remove";
             int8_t id_obj;
             int32_t id;
             this->protocol->recvRemove(&id_obj,&id);
 
             list.push_back(id_obj);
             list.push_back(id);
+            qDebug()<<"----->>>>>>>>>   id OBJ:"<<id_obj<<"id:"<<id;
             //Remove item     REMOVE ITEM
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::POSITION)){
             //qDebug()<<"position";
@@ -92,12 +96,16 @@ void Controler::run()
             list.push_back(angle);
 
             //this->game->addEvent(event);
+            if(id_obj==0 && obj_type==0){
+                qDebug()<<"--> x:"<<posX<<"y:"<<posY;
+            }
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
             //this->game->addEvent(event);
             gameRunning=false;
+            emit eventCreated(list);
         }
     }
 

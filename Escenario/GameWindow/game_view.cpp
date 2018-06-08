@@ -27,6 +27,17 @@ QGraphicsScene* Game_View::getScene()
     return this->scene;
 }
 
+int Game_View::getHeight()
+{
+   return this->scene->height();
+}
+
+int Game_View::getWidth()
+{
+   return this->scene->width();
+}
+
+
 void Game_View::update_view()
 {
     //do nothing for now.
@@ -63,25 +74,27 @@ bool Game_View::containsItem(int8_t id_typ, int32_t id){
     return false;
 }
 
-Worm_View* Game_View::getItem(int8_t id_type, int32_t id)
+Items* Game_View::getItem(int8_t id_type, int32_t id)
 {
     std::vector<Items*>::iterator it;
     for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
         Items* item = static_cast<Items*>(*it);
         if((item->getId()==id) && (item->getIdObj()==id_type)){
-            return static_cast<Worm_View*>(item);
+            qDebug()<<"type:"<<item->getIdObj()<<"id:"<<item->getId();
+            return static_cast<Items*>(item);
         }
     }
     return nullptr;
 }
 
-void Game_View::del_Item(QGraphicsItem* item)
+void Game_View::del_Item(Items* item)
 {
-    this->scene->removeItem(item);
-    delete(item);
+    MovableItem * aux = static_cast<MovableItem*>(item);
+    //this->scene->removeItem(aux);
+    aux->setVisible(false);
 }
 
-void Game_View::setBackground(std::__cxx11::string &path)
+void Game_View::setBackground(std::string &path)
 {
     //set the background image.
     //this->scene->setBackgroundBrush(QBrush(QImage(path.c_str())));
@@ -152,7 +165,7 @@ void Game_View::addWidget(QWidget* widget)
     widget->setGeometry(100,100,widget->width(),widget->height());
 }
 
-void Game_View::moveObjTo(int id, int posX, int posY, int angle)
+void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
 {
 
     QList<QGraphicsItem*> list_items = this->scene->items();
@@ -164,11 +177,12 @@ void Game_View::moveObjTo(int id, int posX, int posY, int angle)
         MovableItem* item =dynamic_cast<MovableItem*>(*it);
         if(!item){// no es movible
             continue;
-        }else if(item->getId()==id){
+        }else if(item->getId()==id && item->getIdObj()==type){
             //item->moveTo(posX,posY,angle);
             if(item->x()==-130 && item->y()==10070){//temporal para setear el escenario
                 qDebug()<<posX<<posY;
                 item->setPosition(posX,this->scene->height()-posY);
+                return;
             }
             item->moveTo(angle,posX,posY);
         }

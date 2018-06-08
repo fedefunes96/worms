@@ -8,7 +8,7 @@ class Bazooka : public Weapon
 {
 public:
     Bazooka();
-    virtual void fire(QGraphicsScene *scene,int angle,int x, int y);
+    virtual void fire();
 private:
     MisilBazooka *misil;
 };

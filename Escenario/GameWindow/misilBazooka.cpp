@@ -1,12 +1,13 @@
 #include "misilBazooka.h"
 #include <QDebug>
+#include <QGraphicsScene>
 
 MisilBazooka::MisilBazooka():MovableItem()
 {
     setFlag(QGraphicsItem::ItemIsSelectable);
     currentFrame=0;
     spriteImage = new QPixmap("../../images/misil.png");
-    timer = new QTimer();   // Create a timer for sprite animation
+    //timer = new QTimer();   // Create a timer for sprite animation
 
     update(0,0,60,60);
     this->id = 2; // id del misil...
@@ -29,7 +30,11 @@ void MisilBazooka::nextFameImpact()
 
 void MisilBazooka::moveTo(int angle, int posx, int posy)
 {
-    setPos(posx,posy);
+    qDebug()<<"mover misil";
+    int width = this->boundingRect().width();
+    int height = this->boundingRect().height();
+    QGraphicsScene* sc = this->scene();
+    setPos(posx-width/2,sc->height()-posy-height/2);
     setTransform(QTransform().translate(30, 30).rotate(angle).translate(-30, -30));
 }
 
@@ -57,11 +62,11 @@ void MisilBazooka::explote()
 {
 
     // hacer que el timer sea singleshoot para hacer la animacion de la explosion...
-    timer->start(40);
-    spriteImage = new QPixmap("../../images/shothit.png");
-    setPos(x()-30,y());
-    currentFrame=0;
-    connect(timer, &QTimer::timeout, this, &MisilBazooka::nextFameImpact);
+    //timer->start(40);
+    //spriteImage = new QPixmap("../../images/shothit.png");
+    //setPos(x()-30,y());
+    //currentFrame=0;
+    //connect(timer, &QTimer::timeout, this, &MisilBazooka::nextFameImpact);
 }
 
 void MisilBazooka::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -84,23 +89,17 @@ QRectF MisilBazooka::boundingRect() const
    return QRectF(0,0,60,60);
 }
 
-bool MisilBazooka::colliding()
-{
-    QList<QGraphicsItem*> list = collidingItems();
-    if(list.empty()){
-        return false;
-    }
-    return true;
-}
-
 
 
 void MisilBazooka::fire()
 {
 
-    timer->disconnect();
+    //timer->disconnect();
     //connect(timer, &QTimer::timeout, this, &MisilBazooka::move);
 }
 
-
+void MisilBazooka::setVisibility(bool vis)
+{
+    this->setVisible(vis);
+}
 

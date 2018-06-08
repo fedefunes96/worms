@@ -25,6 +25,7 @@ public:
     std::pair<int, int> &getDir();
     int getAngle();
     void moveTo(int angle, int posx, int posy);
+    void setVisibility(bool vis);
 
     void setHealth(int health);
     void setAngle(int angle);
@@ -39,7 +40,6 @@ public:
     int getTargetAngle();
     int getTimeWeapon();
 private slots:
-    void mover();
     void runSpriteWeapon();
 
 private:

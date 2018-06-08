@@ -10,8 +10,6 @@ class GameClass : public QObject
 public:
     GameClass(QRect screen,int w,int h);
 
-    void updateItem(int type=999,int id=999,int health=-10, int posX=0, int posY=0, int angle=0);
-    void updatePlayer(int type=999,int id=999, int ammo=-10, Worm_View* worm=nullptr);
 
     Player* getPlayer();
     Game_View* getGameView();
@@ -29,6 +27,10 @@ private:
     Player* myPlayer;
     bool myTurn;
 
+    void attachWorm(int type, int id, int health);
+    void updateItem(int type=999, int id=999, int posX=0, int posY=0, int angle=0);
+    void updatePlayer(int type=999,int id=999, int ammo=-10, Worm_View* worm=nullptr);
+    void removeItem(int type, int id);
 };
 
 #endif // GAMECLASS_H

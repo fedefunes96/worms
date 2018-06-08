@@ -35,7 +35,7 @@ public:
     Worm_View* getWormToPlay(); // me devuelve algun worm de la lista...
     void addWeapon(int type, int ammo);
     bool canFire(int type);
-    void fireWeapon(int type, QGraphicsScene *scene, int angle, int posX, int posY);
+    void fireWeapon(int type);
     Worm_View *getWormActive();
     bool isActive();
     void setActive(bool active);

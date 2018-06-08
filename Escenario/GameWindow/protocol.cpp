@@ -34,7 +34,7 @@ void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, fl
     conexion.enviar((const char*)&conv_posy,4);
     conexion.enviar((const char*)&conv_angle,4);
 
-//std::cout << angle*100 << "-" << id_obj << "-" << posX << "-" << posY << std::endl;
+    //std::cout << "angulo:" <<angle*100 << "-" << id_obj << "-" << posX << "-" << posY << std::endl;
 }
 
 void Protocol::sendWormId(int8_t id, int32_t health) {
@@ -81,11 +81,11 @@ void Protocol::sendRemove(std::string type_obj, int32_t id) {
     Commands cmd = Commands::REMOVE;    
     TypeObj type;
 
-    if (type_obj.compare("Worm")) {
+    if (type_obj.compare("Worm")==0) {
         type = TypeObj::WORM;
-    } else if (type_obj.compare("Girder")) {
+    } else if (type_obj.compare("Girder")==0) {
         type = TypeObj::GIRDER;
-    } else if (type_obj.compare("Bazooka")) {
+    } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
     }
 
@@ -316,23 +316,15 @@ void Protocol::recvWinner(int8_t* id)
 }
 
 
-
-
-
-
-
-
-
-
-
-
 void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY)
 {
+    Commands cmd = Commands::ATTACK;
+    conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&id_weapon,1);
     conexion.enviar((const char*)&id_worm,1);
-    int32_t conv = htonl(posX);
+    int32_t conv = htonl(convPxToMt(posX));
     conexion.enviar((const char*)&conv,4);
-    conv = htonl(posY);
+    conv = htonl(convPxToMt(posX));
     conexion.enviar((const char*)&conv,4);
 }
 

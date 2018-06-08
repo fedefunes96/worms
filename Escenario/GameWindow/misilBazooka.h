@@ -19,6 +19,7 @@ public:
     bool isAlive();
     void setPosition(int x, int y);
     void fire();
+    void setVisibility(bool vis);
 
 
 private slots:

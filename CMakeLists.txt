@@ -7,6 +7,8 @@ add_subdirectory(Escenario/GameWindow)
 
 # we don't want to copy if we're building in the source dir
 FILE(COPY "images/wormwait.png" DESTINATION "images")
+FILE(COPY "images/misil.png" DESTINATION "images")
+FILE(COPY "images/hgrenade.1.png" DESTINATION "images")
 FILE(COPY "images/airstrke.1.png" DESTINATION "images")
 FILE(COPY "images/banana.1.png" DESTINATION "images")
 FILE(COPY "images/baseball.1.png" DESTINATION "images")

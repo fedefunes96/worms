@@ -133,8 +133,8 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(this->game->isMyTurn()){
                 std::vector<int> vect = this->game->fireWeapon();
                 
-                return;
                 if(vect.empty()){
+                    qDebug()<<"vector vacio --> no arma seleccionada o disponible";
                     return;
                 }
                 //std::vector<int> vect2;
@@ -165,6 +165,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             Worm_View* worm = this->game->getWormActive();
+            worm->setAngle(-180);
             this->protocol->sendMove((int8_t)worm->getId(),2);
             break;
         }
@@ -180,6 +181,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             Worm_View* worm = this->game->getWormActive();
+            worm->setAngle(0);
             this->protocol->sendMove(worm->getId(),1);
             break;
         }

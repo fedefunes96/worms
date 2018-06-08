@@ -11,7 +11,7 @@ public:
     int getIdObj();
     void setAmmo(int ammo);
     int getAmmo();
-    virtual void fire(QGraphicsScene *scene,int angle,int x, int y)=0;
+    virtual void fire()=0;
 protected:
     int idObj;
     int ammo;

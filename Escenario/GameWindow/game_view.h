@@ -27,7 +27,7 @@ public:
     Game_View(QRect screen, int w, int h);
     void update_view();
     void add_Item(QGraphicsItem *item, int posx, int posy);
-    void del_Item(QGraphicsItem* item);
+    void del_Item(Items *item);
     void setBackground(std::string& path);
     QGraphicsItem *itemAt(int posx,int posy);
     Camera *getCamera();
@@ -38,13 +38,15 @@ public:
     void minimizateScreen();
     void addWidget(QWidget *widget);
 
-    void moveObjTo(int id, int posX, int posY, int angle);
+    void moveObjTo(int type, int id, int posX, int posY, int angle);
     void addItemToFollow(MovableItem *item);
     bool containsItem(Items *item);
     bool containsItem(int8_t id_typ, int32_t id);
-    Worm_View *getItem(int8_t id_type, int32_t id);    
+    Items *getItem(int8_t id_type, int32_t id);
     QGraphicsScene *getScene();
     void addPlayerActive(Player *player);
+    int getWidth();
+    int getHeight();
 };
 
 #endif // GAME_VIEW_H

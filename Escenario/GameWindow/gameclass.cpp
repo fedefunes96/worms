@@ -1,6 +1,7 @@
 #include "gameclass.h"
 #include "girder_view.h"
-
+#include <QDebug>
+#include "misilBazooka.h"
 GameClass::GameClass(QRect screen,int w,int h)
 {
     this->game = new Game_View(screen,w,h);
@@ -21,50 +22,31 @@ void GameClass::connectController(Controler *controler)
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
 }
 
-
-void GameClass::updateItem(int type, int id, int health, int posX, int posY, int angle)
+void GameClass::attachWorm(int type,int id, int health)
 {
-    if(health!=-10 && type==0){
-        //add vida
-        //qDebug()<<"type:"<<type<<"id"<<id;
-        if(this->game->containsItem(type,id)){
-            //contiene al worm
-            //qDebug()<<"contiene worm";
-            Worm_View *worm = this->game->getItem(type,id);
-            worm->setHealth(health);
-        }else{
-            //no contiene al worm --> lo creo..
-            qDebug()<<"no tengo worm, seteo vida y pos arbitraria";
-            Worm_View *worm = new Worm_View();
-            worm->setHealth(health);
-            worm->setId(id);
-            worm->setIdObj(type);
-            this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
-            this->myPlayer->addWorm(worm);
-            if(id==0){
-                worm->setSelected(true);
-            }
-        }
-    }else if(health==-10 && type==0){
-        // add worm
-        //qDebug()<<"add worm";
+    if(!this->game->containsItem(type,id)){
+        Worm_View *worm = new Worm_View();
+        qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
+        worm->setHealth(health);
+        worm->setId(id);
+        worm->setIdObj(type);
+        this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
+        this->myPlayer->addWorm(worm);
+    }
+}
+
+void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
+{
+    if(this->game->getHeight()<posY || this->game->getWidth()<posX){
+        return;
+    }
+    if(type==static_cast<int>(TypeObj::WORM)){
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
             qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
-            this->game->moveObjTo(id,posX,posY,angle);
-        }else{
-            //qDebug()<<"pos worm sin vida";
-            // no lo contiene lo tengo que agregar
-            Worm_View* worm = new Worm_View();
-            worm->setHealth(100);//default...
-            worm->setId(id);
-            worm->setIdObj(type);
-            worm->setAngle(angle);
-            //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
-            this->game->add_Item(worm,posX,posY);
-            this->myPlayer->addWorm(worm);
+            this->game->moveObjTo(type,id,posX,posY,angle);
         }
-    }else if(type==1 && health==-10){
+    }else if(type==static_cast<int>(TypeObj::GIRDER)){
         //es girder
         if(!this->game->containsItem(type,id)){
             //no contiene girder...
@@ -74,14 +56,23 @@ void GameClass::updateItem(int type, int id, int health, int posX, int posY, int
             girder->setIdObj(type);
             this->game->add_Item(girder,posX,posY);
         }
-    }else{
+    }else if(type==static_cast<int>(TypeObj::BAZOOKA_M)){
+        qDebug()<<"crear misil!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY;
         if(this->game->containsItem(type,id)){
-            MovableItem* item = this->game->getItem(type,id);
-            item->moveTo(angle,posX,posY);
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            MisilBazooka *misil = new MisilBazooka();
+            misil->setIdObj(type);
+            misil->setId(id);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(angle,posX,posY);
         }
     }
-    //falta chequear si es un misil/proyectil...
-
 }
 
 
@@ -120,25 +111,26 @@ std::vector<int> GameClass::fireWeapon()
     if(isMyTurn()){
 
         int idWeapon = this->game->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
-        int angle = this->game->getWormActive()->getTargetAngle();
+        //int angle = this->game->getWormActive()->getTargetAngle();
         if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
             qDebug()<<"entreeeeeeee";
             return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
 
-        std::pair<int,int> posW = this->game->getWormActive()->getDir();
-        this->myPlayer->fireWeapon(idWeapon,this->game->getScene(),angle,posW.first,posW.second); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
+        //std::pair<int,int> posW = this->game->getWormActive()->getDir();
+        this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
 
         int id = this->game->getWormActive()->getId();
         std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
+        qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
         //int timeW = this->game->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
         vect.push_back(id);
         vect.push_back(pos.first);
         vect.push_back(pos.second);
         //vect.push_back(timeW);
-         // falta el power que esta en el release
+        //falta el power que esta en el release
     }
     return vect;
 }
@@ -149,7 +141,11 @@ bool GameClass::isMyTurn(){
     return this->myTurn;
 }
 
-
+void GameClass::removeItem(int type,int id)
+{
+    MovableItem* item = static_cast<MovableItem*>(this->game->getItem(type,id));
+    item->setVisibility(false);
+}
 
 void GameClass::checkQueueEvent(QList<int> list)
 {
@@ -170,13 +166,15 @@ void GameClass::checkQueueEvent(QList<int> list)
         qDebug()<<"actual player setting";
         checkRound(list[1]);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
-        // id del worm y su vida ... inicialmente
-        this->updateItem(static_cast<int>(TypeObj::WORM),list[1],list[2]);
+        // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
+        this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::REMOVE)){
         // item a remover de la vista
+        qDebug()<<"remove !!";
+        this->removeItem(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::POSITION)){
         // actual item position
-        this->updateItem(list[1],list[2],-10,list[3],list[4],list[5]);
+        this->updateItem(list[1],list[2],list[3],list[4],list[5]);
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";

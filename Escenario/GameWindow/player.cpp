@@ -82,14 +82,14 @@ bool Player::canFire(int type)
     return false;
 }
 
-void Player::fireWeapon(int type,QGraphicsScene *scene, int angle, int posX, int posY)
+void Player::fireWeapon(int type)
 {
     QListIterator<Weapon*> Iter(this->listWeapons);
     while(Iter.hasNext())
     {
         Weapon* w =Iter.next();
         if(type==w->getIdObj() && w->getAmmo()>0){
-            w->fire(scene,angle,posX,posY);
+            w->fire();
             return;
         }
     }

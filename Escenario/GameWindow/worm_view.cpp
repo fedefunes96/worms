@@ -13,6 +13,7 @@
 #include <QImage>
 #include <QMatrix>
 #include <QTransform>
+#include <math.h>
 
 enum class WeaponType : uint8_t {
     BAZOOKA_ID = 0,
@@ -41,8 +42,8 @@ Worm_View::Worm_View(QObject *parent) :
     currentFrame = 0;
     //this->timer=nullptr;
     spriteImage = new QPixmap("../../images/wormwait.png"); // Load the sprite image QPixmap
-    //this->timer = new QTimer();   // Create a timer for sprite animation
-    //this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
+    this->timer = new QTimer();   // Create a timer for sprite animation
+    this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
     currentDir.first = 0;
     currentDir.second = 0;
     this->health=0;
@@ -78,6 +79,7 @@ bool Worm_View::isAlive()
 
 
 void Worm_View::movTargetAngle(int dir){
+    qDebug()<<"anguloooooooo: "<<this->targetAngle;
     if((this->targetAngle==-90 && dir==1) || (this->targetAngle==-270 && dir==-1) || (this->targetAngle==90 && dir==-1)){
         return;
     }
@@ -121,7 +123,7 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     QString aux;
     aux.setNum(this->health);
     labelVida->setText(aux);
-    labelVida->setGeometry(x()+18,y()-10,30,20);
+    labelVida->setGeometry(x()+22,y()-10,30,20);
 
 
     if(this->targetVis){
@@ -145,7 +147,6 @@ QRectF Worm_View::boundingRect() const
 }
 
 
-
 int Worm_View::getWeaponId()
 {
     return this->weapon;
@@ -156,7 +157,23 @@ std::pair<int, int> Worm_View::getDirWeapon()
     std::pair<int,int> dir;
     if(!this->targetClick){
         dir.first=this->target->boundingRect().width();  //tam target x. =150
-        dir.second = tan ( this->targetAngle * 3.1416 / 180 );
+        qDebug()<<"ancho target"<<dir.first;
+        qDebug()<<this->currentDir.first<<this->currentDir.second;
+        float aux = (tan( this->targetAngle * 3.1416 / 180 ))*dir.first;
+        dir.second = abs(aux);
+        qDebug()<<"nadsjksda"<<dir.second;
+        if(this->targetAngle<-90 && this->targetAngle>=-270){
+            dir.first = -dir.first;
+            if(this->targetAngle<-180){
+                dir.second = -dir.second;
+            }
+        }else if(this->targetAngle>0 && this->targetAngle<=90){
+            dir.second = -dir.second;
+        }
+        int w = this->scene()->width();
+        dir.first = dir.first + this->currentDir.first;
+        dir.second = w - this->currentDir.second + dir.second;
+        qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
     }else{
         //stear segun click..
     }
@@ -216,59 +233,34 @@ void Worm_View::nextFrame(){
 
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
-
+    this->targetVis=false;
+    this->weapon=-1;
+    setDestDir(posx,posy);
+    if(this->currentDir==this->destDir){
+        return;
+    }
+    this->moving=true;
+    checkAngle(angle);
     QGraphicsScene* sc = scene();
-	this->setPosition(posx,sc->height()-posy);
+    this->setPosition(posx,sc->height()-posy);
+    this->moving=false;
 	return;
     
-    this->targetVis=false;
-    this->targetClick=false;
-    this->weapon=99;
-    setDestDir(posx,posy);
-    if(currentDir==destDir){
-        return;
-    }
-    //timer->setInterval(20);
-    //if((angle==-270)||(this->angle>-135 && this->angle<-45))
-    //{
-        //timer->setInterval(10);// sirve para que setear la nueva velocidad..
-        //timer->disconnect();
-    //}
-    //currentFrame = 0;
-    checkAngle(angle);
-    //setAngle(angle);	
-    //timer->disconnect();
-    if(this->spriteImage== nullptr){
-        qDebug()<<"aun no hay imagen...";
-        return;
-    }
-   
-    this->checkDelta();
-    if(!this->moving && !this->loadingWeapon){
-    	connect(timer, &QTimer::timeout, this, &Worm_View::mover);	
-    	this->moving=true;
-    }
-    //connect(timer, &QTimer::timeout, this, &Worm_View::mover);	
+
+}
+
+void Worm_View::setVisibility(bool vis)
+{
+    this->setVisible(vis);
+    this->labelVida->setVisible(vis);
 }
 
 
 
 void Worm_View::checkAngle(int angle)
 {
-    if(this->currentDir.first<this->destDir.first && this->currentDir.second==destDir.second){
-        setAngle(0);
-    }else if(this->currentDir.first>destDir.first && this->currentDir.second==destDir.second){
-        setAngle(-180);
-    }else if(this->currentDir.first==destDir.first && this->currentDir.second<destDir.second){
-        if(angle==0){
-            setAngle(-271);
-        }else{
-            setAngle(-270);
-        }
-    }else if(this->currentDir.first==destDir.first && this->currentDir.second>destDir.second){
-        setAngle(-90);
-    }else{
-        setAngle(angle);
+    if(angle>4){
+        setAngle(-angle);
     }
 }
 
@@ -284,7 +276,7 @@ bool Worm_View::isMoving()
 
 void Worm_View::setSprite()
 {
-    if(!spriteImage)
+    if(spriteImage)
     {
         delete(spriteImage);
     }
@@ -314,106 +306,11 @@ void Worm_View::stepSprite(){
     this->update(0,0,60,60);
 }
 
-void Worm_View::moveStep()
-{
-    if(this->firstX){
-        if(this->desp==this->x1){
-            if(this->x2>0){
-                setPos(x(),y()+this->up);
-                setDir(x(),y());
-                stepSprite();
-            }
-            checkDelta();
-            return;
-        }else{            
-            this->desp++;
-            setPos(x()+this->right,y());
-        }
-    }else{
-        if(this->desp==this->x2){
-            if(this->x1>0){
-                setPos(x()+this->right,y());
-                setDir(x(),y());
-                stepSprite();
-            }
-            checkDelta();
-            return;
-        }else{
-            this->desp++;
-            setPos(x(),y()+this->up);
-        }
-
-    }
-    setDir(x(),y());
-    stepSprite();
-}
-
-void Worm_View::setVars(int cant1,int cant2,int up, int right, bool firsX)
-{
-    this->desp=0;
-    this->x1 = cant1;
-    this->x2 = cant2;
-    this->up = up;
-    this->right = right;
-    this->firstX = firsX;
-}
-
-void Worm_View::mover()
-{
-
-    qDebug()<<"id:"<<this->id<<"actual--> x:"<<currentDir.first<<"y:"<<currentDir.second;
-    qDebug()<<"id:"<<this->id<<"dest  --> x:"<<destDir.first<<"y:"<<destDir.second;
-    if(currentDir == destDir)
-    {
-        qDebug()<<"llegue al destino";        
-        timer->disconnect();
-        this->moving =false;
-        loadSpriteWeapon(this->weapon);
-        return;
-    }
-    moveStep();
-}
 
 
-void Worm_View::checkDelta()
-{
-    if(currentDir==destDir){
-        timer->disconnect();
-        qDebug()<<"LLEGUE";
-        this->moving = false;
-        loadSpriteWeapon(this->weapon);
-        return;
-    }
-    int dX = abs (currentDir.first-destDir.first);
-    int dY = abs (currentDir.second-destDir.second);
-    int cant1=0;
-    int cant2=0;
-    bool firstX=true;
-    int up = ((this->currentDir.second > this->destDir.second) ? -1 : 1 );
-    //int up = ((this->angle<=0 && this->angle>=-180) ? -1 : 1);
-    int right = ((this->currentDir.first > this->destDir.first) ? -1 : 1 );
-    //int right = (((this->angle<=0 && this->angle>-90) || (this->angle>-270 && this->angle<=-360)) ? 1 : -1);
-    //condition ? value_if_true : value_if_false
 
-    if(dY<=0){
-        cant1=dX;
-    }else if(dX<=0){
-        cant2=dY;
-        firstX=false;
-    }else if(dX >= dY){
-        cant1= int(((float)dX / (float)dY)+0.5);
-        cant2=1;
-    }else{
-        cant2= int(((float)dY / (float)dX)+0.5);
-        cant1=1;
-        firstX=false;
-    }
-//    qDebug()<<"angle:"<<this->angle;
-    qDebug()<<"right val:"<<right;
-    qDebug()<<"up val:"<<up;
-    qDebug()<<"dX:"<<dX<<"dY:"<<dY<<"cant1:"<<cant1<<"cant2:"<<cant2;
-    this->setVars(cant1,cant2,up,right,firstX);
-}
+
+
 
 bool Worm_View::hasClickeableTarget(){
     return this->targetClick;
@@ -431,7 +328,6 @@ void Worm_View::runSpriteWeapon()
         currentFrame-=60;
         this->update(0,0,60,60);
         this->timer->disconnect();
-        this->timer->setInterval(1);
         this->loadingWeapon = false;
         return;
     }
@@ -439,15 +335,11 @@ void Worm_View::runSpriteWeapon()
 }
 
 
-/*
-void Worm_View::getDirWeapon()
-{
-    int x =this->target->boundingRect().width();
-}
-*/
-
 void Worm_View::loadSpriteWeapon(int val)
 {
+    if(this->isMoving()){
+        return;
+    }
     this->weapon=val;
     timer->disconnect();
     
@@ -549,13 +441,13 @@ void Worm_View::loadSpriteWeapon(int val)
     case static_cast<int>(WeaponType::PUNCH_ID):
         //aca dejo al worm ocmo estaba en su pos...
         this->spriteImage = new QPixmap("../../images/wormwait.png");
-        break;
+        return;
 
     default:
-        //path1 ="../../images/wwait.png";
-        //path2 ="../../images/wwaitu.png";
-        //path3 ="../../images/wwaitd.png";
-        //loadSprite(path1,path2,path3);
+        path1 ="../../images/wwait.png";
+        path2 ="../../images/wwaitu.png";
+        path3 ="../../images/wwaitd.png";
+        loadSprite(path1,path2,path3);
     	return;
         //break;
     }
