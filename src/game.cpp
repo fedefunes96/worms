@@ -97,12 +97,11 @@ void Game::create_test_world() {
 	//this->stage.insert(std::shared_ptr<Movable>(worm2));
 
 	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO
-												, 10.0
+												, 2.5
 												, 0.0
-												, 0.5
+												, 0.25
 												, 0
 												, 50.0));	
-
 	//this->players[0].attach_worm(worm);
 	//this->players[0].attach_worm(worm2);
 	this->players[0].attach_usable(std::move(ptr));
@@ -155,7 +154,15 @@ void Game::create_test_world() {
 		, 2
 		, 0.0
 		, 3
-		, 0.8)));			
+		, 0.8)));	
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 27
+		, 2
+		, b2_pi/6
+		, 3
+		, 0.8)));					
 }
 
 void Game::initialize_game(const std::string& stage_file) {

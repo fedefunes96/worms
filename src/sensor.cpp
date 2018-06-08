@@ -83,5 +83,12 @@ bool Sensor::should_collide_with(Worm* worm) {
 }
 
 bool Sensor::should_collide_with(Throwable* throwable) {
-	return true;
+	return false;
+}
+
+void Sensor::pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) {
+	b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+
+	printf("X: %0.1f Y: %0.1f\n", worldManifold.normal.x, worldManifold.normal.y);
 }

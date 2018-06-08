@@ -31,6 +31,8 @@ public:
 	virtual bool should_collide_with(Girder* girder) override;
 	virtual bool should_collide_with(Worm* worm) override;
 	virtual bool should_collide_with(Throwable* throwable) override;
+
+	virtual void pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) override;
 }; 
 
 #endif

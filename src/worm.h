@@ -32,9 +32,9 @@ private:
 	//b2Fixture* fixture;
 	Sensor sensor_for_jump;
 
-	const int x;
-	const int y;
-	const int angle_rad;
+	const float x;
+	const float y;
+	const float angle_rad;
 	const float restitution;
 	const int total_health; //Useful for percentage calculations of hp
 	const float mov_speed;
@@ -48,6 +48,8 @@ private:
 	int owner;
 	int jump_cooldown;
 	bool dead;
+	bool should_slide;
+	bool sliding;
 
 	std::mutex direction_m;
 
@@ -59,8 +61,8 @@ private:
 	bool is_on_ground();
 public:
 	Worm(Stage& stage
-		, const int x
-		, const int y
+		, const float x
+		, const float y
 		, const float angle_rad
 		, const float longitude
 		, const float height
@@ -90,11 +92,15 @@ public:
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;*/
 
+	virtual void pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) override;
+
 	virtual void move_step(float32 time_step) override;
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;
 	virtual bool is_affected_by_wind() override;
+
+	void set_slide(bool slide);
 
 	float get_longitude();
 	float get_height();

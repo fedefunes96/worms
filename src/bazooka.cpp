@@ -63,8 +63,8 @@ void Bazooka::action(Worm* worm
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();
-	float longitude = worm->get_longitude();
-	float height = worm->get_height();
+	//float longitude = worm->get_longitude();
+	//float height = worm->get_height();
 
 	b2Vec2 normalized_dest = dest_pos - from_pos;
 
@@ -81,13 +81,21 @@ void Bazooka::action(Worm* worm
 	                                       \________/
 	*/
 
-	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
+	printf("From: %0.1f %0.1f\n", from_pos.x, from_pos.y);
+	printf("Dest: %0.1f %0.1f\n", dest_pos.x, dest_pos.y);
+	//printf("Angle: %0.6f\n", angle);
+	//b2Vec2 where(from_pos.x + longitude*cos(angle), from_pos.y + height*sin(angle));
 	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+	//printf("Where: %0.1f %0.1f\n", where.x, where.y);
+
+	//printf("Final Velocity: %0.1f %0.1f\n", vec_velocity.x, vec_velocity.y);
+
+	//vec_velocity.Set(0.0, 40.0);
 
 	BazookaMissile* missile = new BazookaMissile(this->stage
 												, worm
-												, where.x
-												, where.y
+												, from_pos.x
+												, from_pos.y
 												, angle
 												, vec_velocity
 												, this->angular_velocity

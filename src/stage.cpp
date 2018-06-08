@@ -19,7 +19,7 @@ Stage::Stage(const std::string& stage_file
 	: time_step(time_step)
 	, velocity_iterations(velocity_iterations) 
 	, position_iterations(position_iterations)
-	, gravity(0.0f, -10.0f)
+	, gravity(0.0f, 0.0f)
 	, world(this->gravity, true)
 	, game(game) {
 
@@ -110,14 +110,21 @@ void Stage::draw() {
  			
  			wind.apply((*it).get());
 
- 			b2Body* b = (*it)->get_body(); 			
+ 			b2Body* b = (*it)->get_body(); 		
+
+ 			 //Apply gravity each time step
+ 			b->ApplyForce(b->GetMass()*(*it)->get_gravity(), b->GetWorldCenter());
+	
+			b2Vec2 pos = b->GetWorldCenter();
+			b2Vec2& last_pos = (*it)->get_position();
  			//Only notify movables moving
- 			if (!b->IsAwake()) {
+ 			if (pos.x == last_pos.x && pos.y == last_pos.y) {
  				++it;
  				continue;
  			}
 
- 			b2Vec2 pos = b->GetWorldCenter();
+ 			(*it)->set_position(pos);
+
  			float angle = b->GetAngle();
 
  			//Movable* movable = (Movable*) b->GetUserData();
@@ -125,8 +132,8 @@ void Stage::draw() {
  			//Touched water
  			//if (pos.y < this->game.get_water_level()) {
 
- 			if ((*it)->get_type().compare("Bazooka") == 0)
- 				printf("Movable: Posx %0.1f - Posy %0.1f - angle %0.1f\n", pos.x, pos.y, angle);
+ 			/*if ((*it)->get_type().compare("Worm") == 0)
+ 				printf("angle %0.1f\n", angle);*/
 
  			if (pos.y < 0.0) {
  				(*it)->force_death();

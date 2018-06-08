@@ -11,15 +11,16 @@ int Throwable::id_throwables = 0;
 
 Throwable::Throwable(Stage& stage
 	, Worm* owner
-	, const int x
-	, const int y
+	, const float x
+	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
 	, const float angular_velocity
 	, const float radius
 	, const float restitution
 	, const float max_dmg)
-	: stage(stage)
+	: Movable(x, y)
+	, stage(stage)
 	, owner(owner)
 	, id_obj(id_throwables++)
 	, x(x)
@@ -44,7 +45,6 @@ void Throwable::explode() {
 
 	//Now i dissapear
 	this->dead = true;
-	printf("Explode\n");
 }
 
 void Throwable::create_myself(b2World& world) {
@@ -85,6 +85,7 @@ void Throwable::delete_myself(b2World& world) {
 void Throwable::start_contacting() {
 	if (!this->dead)
 		this->explode();
+	printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
 }
 
 void Throwable::stop_contacting(Ubicable* ubicable) {
@@ -92,8 +93,9 @@ void Throwable::stop_contacting(Ubicable* ubicable) {
 }
 
 void Throwable::stop_contacting(Worm* worm) {
-	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner)
+	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner) {
 		this->stop_collide_owner = true;
+	}
 }
 
 //Whatever i hit, i must explode
