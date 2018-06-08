@@ -13,10 +13,10 @@ public:
 
 		//fixt_a->start_contacting(fixt_b);
 		//fixt_b->start_contacting(fixt_a);
-		fixt_a->start_contacting();
-		fixt_b->start_contacting();
+		fixt_a->start_contacting(contact);
+		fixt_b->start_contacting(contact);
 
-		if (fixt_a->get_type().compare("Worm") == 0) {
+		/*if (fixt_a->get_type().compare("Worm") == 0) {
 			b2WorldManifold worldManifold;
 			contact->GetWorldManifold(&worldManifold);
 
@@ -26,7 +26,7 @@ public:
 			contact->GetWorldManifold(&worldManifold);
 
 			printf("X: %0.1f Y: %0.1f\n", worldManifold.normal.x, worldManifold.normal.y);
-		}
+		}*/
 	}
 
 	void EndContact(b2Contact* contact) {
@@ -37,7 +37,7 @@ public:
 		fixt_b->stop_contacting(fixt_a);
 	}
 
-	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
+	/*void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {
 		Ubicable* fixt_a = (Ubicable*) contact->GetFixtureA()->GetUserData();
 		Ubicable* fixt_b = (Ubicable*) contact->GetFixtureB()->GetUserData();
 
@@ -46,7 +46,7 @@ public:
 		fixt_a->pre_solve_contact(contact, oldManifold);
 		fixt_b->pre_solve_contact(contact, oldManifold);
 
-		/*float32 desiredSlopeAngle = 45.0;
+		float32 desiredSlopeAngle = 45.0;
 		b2Vec2 a = b2Mul(b2Mat22((desiredSlopeAngle - 90.0) * (b2_pi / 180.0)), b2Vec2(0.0, 1.0));
 		b2Vec2 b = b2Vec2(-a.x, a.y);
 
@@ -64,8 +64,8 @@ public:
 		} else if (fixt_b->get_type().compare("Worm")==0 && slide) {
 			((Worm*) fixt_b)->set_slide(true);
 			printf("Angle more than 45°\n");
-		} */
-	}
+		} 
+	}*/
 };
 
 #endif

@@ -122,7 +122,7 @@ void Stage::draw() {
  				++it;
  				continue;
  			}
-
+ 			
  			(*it)->set_position(pos);
 
  			float angle = b->GetAngle();

@@ -25,6 +25,7 @@ Worm::Worm(Stage& stage
 	: Movable(x, y)
 	, stage(stage)
 	, id_obj(id_worms++)
+	, sensor_for_jump(*this)
 	, x(x)
 	, y(y)
 	, angle_rad(angle_rad)
@@ -82,19 +83,20 @@ void Worm::start_moving(MoveDirection mdirect) {
 
 	this->move_direction = mdirect;
 
-	if (this->is_on_ground() && !this->jump_cooldown) {
+	this->angle_for_mov = 0.0;
+
+	if (this->is_on_ground() && !this->jump_cooldown && !this->should_slide) {
 		//printf("Im on ground\n");
 		//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);	
-		float32 angle = this->body->GetAngle();
-
+		printf("angle: %0.1f\n", angle_for_mov * 180/b2_pi);
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
-				this->actual_velocity.Set(mov_speed*cos(angle), mov_speed*sin(angle));
+				this->actual_velocity.Set(mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
 				this->facing_direction = MoveDirection::RIGHT;
 				break;
 			}
 			case MoveDirection::LEFT: {
-				this->actual_velocity.Set(-mov_speed*cos(angle), mov_speed*sin(angle));
+				this->actual_velocity.Set(-mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
 				this->facing_direction = MoveDirection::LEFT;
 				break;
 			}	
@@ -221,7 +223,8 @@ void Worm::create_myself(b2World& world) {
 	this->dead = false;
 
 	b2BodyDef body_def;
-	b2PolygonShape body_shape;
+	//b2PolygonShape body_shape;
+	b2CircleShape body_shape;
 	b2FixtureDef fixture_def;
 
 	body_def.type = b2_dynamicBody;
@@ -229,7 +232,9 @@ void Worm::create_myself(b2World& world) {
 	body_def.angle = angle_rad;
 	body_def.fixedRotation = true;
 
-	body_shape.SetAsBox(longitude, height);
+	//body_shape.SetAsBox(longitude, height);
+	body_shape.m_radius = longitude;
+	body_shape.m_p.Set(0, 0);
 
 	fixture_def.shape = &(body_shape);
 	fixture_def.density = 1.0;
@@ -243,9 +248,10 @@ void Worm::create_myself(b2World& world) {
 
 	//Set a sensor at the floor of the body
 	//Barely showing
+	//Add more sensor to move from borders (BUG)
 	this->sensor_for_jump.add_at_position(body
 										, b2Vec2(0, -height)
-										, longitude*0.9
+										, longitude*0.95
 										, height*0.1);
 
 }
@@ -258,12 +264,30 @@ void Worm::delete_myself(b2World& world) {
 	ubicable->colision(*this);
 }*/
 
-void Worm::start_contacting() {
-	
+void Worm::start_contacting(b2Contact* contact) {
+	/*b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);
+
+	float angle = atan2(worldManifold.normal.y, worldManifold.normal.x) - b2_pi/2;
+
+	angle_for_mov = angle;
+
+	if (b2_pi/4 <= fabs(angle_for_mov) &&  fabs(angle_for_mov) < b2_pi/2) {
+		this->set_gravity(DEFAULT_GRAVITY);
+		this->should_slide = true;
+	} else if (0 <= fabs(angle_for_mov) && fabs(angle_for_mov) < b2_pi/4) {
+		this->set_gravity(b2Vec2(0, 0));
+		this->should_slide = false;
+	} else {
+		this->set_gravity(DEFAULT_GRAVITY);
+		this->should_slide = false;
+	}*/
+	//printf("angle: %0.1f\n", angle * 180/b2_pi);
 }
 
 void Worm::stop_contacting(Ubicable* ubicable) {
-	this->set_gravity(DEFAULT_GRAVITY);
+	/*this->set_gravity(DEFAULT_GRAVITY);
+	this->should_slide = false;*/
 
 	ubicable->stop_contacting(this);
 }

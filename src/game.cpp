@@ -63,8 +63,8 @@ void Game::create_test_world() {
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (2.0, 10.0) //Forw jump
-		, std::make_pair (2.0, 10.0) //Back jump
+		, std::make_pair (2.0, 7.0) //Forw jump
+		, std::make_pair (2.0, 7.0) //Back jump
 		, 25.0
 		, 10.0);
 
@@ -85,8 +85,8 @@ void Game::create_test_world() {
 		, 0.0 //Bouncing null
 		, 100.0 //100 hp
 		, 2.0 //Mov speeed
-		, std::make_pair (2.0,10.0) //Forw jump
-		, std::make_pair (2.0,10.0) //Back jump
+		, std::make_pair (2.0,7.0) //Forw jump
+		, std::make_pair (2.0,7.0) //Back jump
 		, 25.0
 		, 10.0);
 
@@ -162,7 +162,23 @@ void Game::create_test_world() {
 		, 2
 		, b2_pi/6
 		, 3
-		, 0.8)));					
+		, 0.8)));	
+
+	/*this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 21
+		, 4
+		, -b2_pi/6
+		, 3
+		, 0.8)));	*/	
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 15
+		, 4
+		, 5*b2_pi/6
+		, 3
+		, 0.8)));							
 }
 
 void Game::initialize_game(const std::string& stage_file) {

@@ -82,7 +82,7 @@ void Throwable::delete_myself(b2World& world) {
 	ubicable->colision(*this);
 }*/
 //Whatever i hit, i must explode
-void Throwable::start_contacting() {
+void Throwable::start_contacting(b2Contact* contact) {
 	if (!this->dead)
 		this->explode();
 	printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
@@ -117,6 +117,14 @@ int Throwable::get_id() {
 
 void Throwable::move_step(float32 time_step) {
 	//Dont move!
+	//Just rotate
+
+	b2Vec2 actual_pos = this->body->GetPosition();
+	b2Vec2& last_pos = this->get_position();
+
+	float32 angle = atan2(last_pos.y - actual_pos.y, last_pos.x - actual_pos.x);
+
+	this->body->SetTransform(actual_pos, angle);
 }
 
 b2Body* Throwable::get_body() {

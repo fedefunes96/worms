@@ -4,12 +4,15 @@
 #include <Box2D/Box2D.h>
 #include "ubicable.h"
 
+class Worm;
+
 class Sensor : public Ubicable {
 private:
+	Worm& worm;
 	int object_count;
 
 public:
-	Sensor();
+	Sensor(Worm& worm);
 
 	void add_at_position(b2Body* body, b2Vec2 pos, float longitude, float height);
 
@@ -19,7 +22,7 @@ public:
 	virtual int get_id() override;
 	virtual void create_myself(b2World& world) override;	
 	virtual void delete_myself(b2World& world) override;
-	virtual void start_contacting() override;
+	virtual void start_contacting(b2Contact* contact) override;
 	virtual void stop_contacting(Ubicable* ubicable) override;
 	virtual void stop_contacting(Worm* worm) override;
 	virtual b2Body* get_body() override;

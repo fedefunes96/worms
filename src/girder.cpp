@@ -50,7 +50,7 @@ void Girder::delete_myself(b2World& world) {
 	world.DestroyBody(this->body);
 }
 
-void Girder::start_contacting() {
+void Girder::start_contacting(b2Contact* contact) {
 	//Do nothing
 }
 

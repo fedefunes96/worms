@@ -46,7 +46,7 @@ public:
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
-	virtual void start_contacting() override;
+	virtual void start_contacting(b2Contact* contact) override;
 	virtual void stop_contacting(Ubicable* ubicable) override;
 	virtual void stop_contacting(Worm* worm) override;
 

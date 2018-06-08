@@ -45,11 +45,11 @@ private:
 	const float longitude;
 	const float height;
 	int actual_health;
-	int owner;
 	int jump_cooldown;
 	bool dead;
 	bool should_slide;
 	bool sliding;
+	float angle_for_mov;
 
 	std::mutex direction_m;
 
@@ -79,7 +79,7 @@ public:
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself(b2World& world) override;
 	//virtual void start_contacting(Ubicable* ubicable) override;
-	virtual void start_contacting() override;
+	virtual void start_contacting(b2Contact* contact) override;
 	virtual void stop_contacting(Ubicable* ubicable) override;
 	virtual void stop_contacting(Worm* worm) override;
 
