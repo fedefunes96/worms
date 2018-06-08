@@ -23,6 +23,7 @@ int Player::getId()
 
 Worm_View *Player::getWormToPlay()
 {
+    //qDebug()<<"pido worm para jugar";
     if(this->worms_list.empty()){
         qDebug()<<"lista vacia";
         return nullptr;
@@ -39,6 +40,7 @@ Worm_View *Player::getWormToPlay()
 
 
 Worm_View* Player::getWormActive(){
+    //qDebug()<<"id worm activo player!!!!!!!!!!!"<<this->wormActive->getId();
     return this->wormActive;
 }
 

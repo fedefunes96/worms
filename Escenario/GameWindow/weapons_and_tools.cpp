@@ -56,7 +56,6 @@ Weapons_and_Tools::~Weapons_and_Tools()
 
 void Weapons_and_Tools::on_misil_clicked()
 {
-    qDebug()<<this->player->getWormActive()->getId();
     this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::AIRMISIL_ID));
     close();
 }

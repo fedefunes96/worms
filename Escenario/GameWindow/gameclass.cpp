@@ -58,7 +58,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
         }
     }else if(type==static_cast<int>(TypeObj::BAZOOKA_M)){
         qDebug()<<"crear misil!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY;
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<angle;
         if(this->game->containsItem(type,id)){
             qDebug()<<"lo contiene";
             Items* item = this->game->getItem(type,id);
@@ -154,6 +154,8 @@ void GameClass::checkQueueEvent(QList<int> list)
     if(cmd== static_cast<int>(Commands::GAME_END)){
        //terminar juego
         qDebug()<<"game end";
+        this->myPlayer->setActive(false);
+        this->myTurn=false;
     }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
         // asignar id del jugador
         qDebug()<<"attach player id event";
@@ -178,6 +180,8 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";
+        this->myPlayer->setActive(false);
+        this->myTurn=false;
     }
 
 }

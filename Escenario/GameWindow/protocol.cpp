@@ -212,6 +212,7 @@ int convMtToPx(float mt){
 
 int convPxToMt(int px){
     float aux = ((px*6)/140.0);
+    //std::cout << "conver MT:" << (aux) << std::endl;
     return int(aux + 0.5);
 }
 
@@ -324,7 +325,10 @@ void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_
     conexion.enviar((const char*)&id_worm,1);
     int32_t conv = htonl(convPxToMt(posX));
     conexion.enviar((const char*)&conv,4);
-    conv = htonl(convPxToMt(posX));
+    conv = htonl(convPxToMt(posY));
     conexion.enviar((const char*)&conv,4);
+
+    //std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;
+
 }
 

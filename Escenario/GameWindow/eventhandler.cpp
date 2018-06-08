@@ -157,6 +157,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             Worm_View* worm = this->game->getWormActive();
+            //qDebug()<<"id worm a mover:"<<worm->getId();
             worm->setAngle(-180);
             this->protocol->sendMove((int8_t)worm->getId(),2);
             break;

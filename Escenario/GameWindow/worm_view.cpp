@@ -58,6 +58,7 @@ Worm_View::Worm_View(QObject *parent) :
     this->moving = false;
 
     setAngle(0);
+    this->selected=false;
 
 
 }
@@ -250,7 +251,7 @@ void Worm_View::moveTo(int angle, int posx,int posy)
         return;
     }
     this->moving=true;
-    checkAngle(angle);
+    //checkAngle(angle);
     QGraphicsScene* sc = scene();
     this->setPosition(posx,sc->height()-posy);
     this->moving=false;
@@ -351,6 +352,7 @@ void Worm_View::loadSpriteWeapon(int val)
         return;
     }
     this->weapon=val;
+    qDebug()<<"weapon id"<<this->weapon;
     timer->disconnect();
     
 
