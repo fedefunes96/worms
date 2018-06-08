@@ -6,7 +6,6 @@
 #include <QMessageBox>
 #include "editor_viga_view.h"
 #include <QFileDialog>
-#include "celda.h"
 #include "commonparser.h"
 #include <QDebug>
 #include <QScrollBar>

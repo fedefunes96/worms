@@ -88,5 +88,5 @@ FILE(COPY "images/W4_Airstrike.png" DESTINATION "images")
 FILE(COPY "images/IconTeleport.png" DESTINATION "images")
 FILE(COPY "images/Win.jpeg" DESTINATION "images")
 FILE(COPY "images/LoseScreen.gif" DESTINATION "images")
-
+FILE(COPY "images/fondo.png" DESTINATION "images")
 

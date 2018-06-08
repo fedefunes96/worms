@@ -12,7 +12,6 @@
 #include <QString>
 #include "editorworm.h"
 #include "editorviga.h"
-#include "celda.h"
 #include <QDropEvent>
 #include <vector>
 
