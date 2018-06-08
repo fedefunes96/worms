@@ -63,14 +63,14 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             qDebug()<<"lo contiene";
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(angle,posX,posY);
+            i->moveTo(-angle,posX,posY);
         }else{
             qDebug()<<"no contiene";
             MisilBazooka *misil = new MisilBazooka();
             misil->setIdObj(type);
             misil->setId(id);
             this->game->add_Item(misil,posX,posY);
-            misil->moveTo(angle,posX,posY);
+            misil->moveTo(-angle,posX,posY);
         }
     }
 }
