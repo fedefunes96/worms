@@ -213,6 +213,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             Worm_View* worm = this->game->getWormActive();
+            worm->setAngle(worm->getAngle())
             this->protocol->sendMove(worm->getId(),3);
             break;
         }
@@ -229,6 +230,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
 
             Worm_View* worm = this->game->getWormActive();
+            worm->setAngle(worm->getAngle())
             this->protocol->sendMove(worm->getId(),4);
             break;
         }
