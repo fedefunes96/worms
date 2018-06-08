@@ -29,6 +29,7 @@ void Server::check_active_users() {
 
 	while (it != this->players.end()) {
 		if (it->second->is_disconnected() && !it->second->is_in_game()) {
+			this->exit_room(it->first);
 			this->end_user(std::move(it->second));
 			it = this->players.erase(it);
 		} else {
@@ -160,22 +161,27 @@ bool Server::join_room(const int id, const std::string& name) {
 	return false;
 }
 
-void Server::exit_room(const int id, const std::string& name) {
+void Server::exit_room(const int id) {
 	//Exit room if it can
 	std::lock_guard<std::mutex> lock(this->room_m);
 
 	std::unordered_map<std::string, Room>::iterator it;
 
-	it = this->rooms.find(name);
+	it = this->rooms.begin();
 
-	if (it != this->rooms.end()) {
-		it->second.remove_player(id);
+	while (it != this->rooms.end()) {
+		if (it->second.has_player(id)) {
+			it->second.remove_player(id);
 
-		//No players left in the room
-		//Remove it
-		if (it->second.get_ammount_players() == 0) {
-			this->rooms.erase(it);
+			//No players left in the room
+			//Remove it
+			if (it->second.get_ammount_players() == 0) {
+				this->rooms.erase(it);
+			}
+
+			break;
 		}
+		++it;
 	}
 }
 

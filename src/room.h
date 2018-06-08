@@ -22,8 +22,9 @@ public:
 		, const std::string stage_file
 		, const int max_players);
 
-	void add_player(int id);
-	void remove_player(int id);	
+	void add_player(const int id);
+	bool has_player(const int id);
+	void remove_player(const int id);	
 	int get_ammount_players();
 
 	//void add_player(std::unique_ptr<Player>& player);

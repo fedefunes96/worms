@@ -11,13 +11,21 @@ Room::Room(Server& server
 	this->ammount_players = 0;
 }
 
-void Room::add_player(int id) {
+void Room::add_player(const int id) {
 	this->player_ids.erase(
 		std::remove(this->player_ids.begin(), this->player_ids.end(), id)
 		, this->player_ids.end());
 }
 
-void Room::remove_player(int id) {
+bool Room::has_player(const int id) {
+	if (std::find(this->player_ids.begin()
+		, this->player_ids.end(), id) != this->player_ids.end())
+		return true;
+
+	return false;
+}
+
+void Room::remove_player(const int id) {
 	this->player_ids.push_back(id);
 }
 
