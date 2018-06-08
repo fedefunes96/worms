@@ -249,6 +249,7 @@ void Worm_View::moveTo(int angle, int posx,int posy)
 {
     this->targetVis=false;
     this->weapon=-1;
+    this->loadSpriteWeapon(this->weapon);
     setDestDir(posx,posy);
     if(this->currentDir==this->destDir){
         return;
