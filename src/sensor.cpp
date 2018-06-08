@@ -63,13 +63,16 @@ void Sensor::start_contacting(b2Contact* contact) {
 	if (b2_pi/4 <= fabs(angle) &&  fabs(angle) < b2_pi/2) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(true);
+		this->worm.set_velocity(b2Vec2(0, 0));
 	} else if (0 <= fabs(angle) && fabs(angle) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
+		
 	} else {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(false);
-	}	
+		
+	}
 }
 
 void Sensor::stop_contacting(Ubicable* ubicable) {
@@ -118,8 +121,5 @@ bool Sensor::should_collide_with(Sensor* sensor) {
 }
 
 void Sensor::pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) {
-	/*b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
 
-	printf("X: %0.1f Y: %0.1f\n", worldManifold.normal.x, worldManifold.normal.y);*/
 }

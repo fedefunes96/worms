@@ -103,6 +103,7 @@ public:
 
 	void set_slide(bool slide);
 	void set_angle(float angle);
+	void set_velocity(b2Vec2 velocity);
 
 	float get_longitude();
 	float get_height();

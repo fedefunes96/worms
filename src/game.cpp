@@ -178,7 +178,15 @@ void Game::create_test_world() {
 		, 4
 		, 5*b2_pi/6
 		, 3
-		, 0.8)));							
+		, 0.8)));	
+
+	this->stage.insert(
+	std::unique_ptr<Ubicable>(new Girder(this->stage
+		, 9
+		, 4
+		, b2_pi/3.8
+		, 3
+		, 0.8)));										
 }
 
 void Game::initialize_game(const std::string& stage_file) {

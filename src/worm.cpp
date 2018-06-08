@@ -137,6 +137,10 @@ void Worm::start_moving(MoveDirection mdirect) {
 	}	
 }
 
+void Worm::set_velocity(b2Vec2 velocity) {
+	this->actual_velocity = velocity;
+}
+
 void Worm::set_slide(bool slide) {
 	this->should_slide = slide;
 }

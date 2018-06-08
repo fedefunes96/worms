@@ -119,7 +119,6 @@ int Throwable::get_id() {
 void Throwable::move_step(float32 time_step) {
 	//Dont move!
 	//Just rotate
-
 	b2Vec2 actual_pos = this->body->GetPosition();
 	b2Vec2& last_pos = this->get_position();
 
