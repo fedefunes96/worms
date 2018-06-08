@@ -25,12 +25,29 @@ enum class Commands : uint8_t {
 
 enum class TypeObj : uint8_t {
     WORM = 0,
-    GIRDER = 1,
-    BAZOOKA_M = 2
+    GIRDER,
+    BAZOOKA_M,
+    MORTAR_M,
+    FRAGMENT_M,
+    GREEN_GRENADE_M,
+    RED_GRENADE_M,
+    BANANA_M,
+    HOLY_GRENADE_M,
+    DYNAMITE_M,
+    AERIAL_ATTACK_M 
 };
 
 enum class UsableIds : uint8_t {
-    BAZOOKA = 0
+    BAZOOKA = 0,
+    MORTAR,
+    GREEN_GRENADE,
+    RED_GRENADE,
+    BANANA,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    AERIAL_ATTACK,
+    TELEPORTATION
 };
 
 class Protocol {
@@ -53,7 +70,7 @@ public:
     void sendRooms(int8_t rooms);
     void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
     void recvMove(int* id, int *dir);
-    void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params); 
+    void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<int>& params); 
     int8_t recvRoomSel();   
     //------------
 

@@ -6,10 +6,12 @@
 #include <Box2D/Box2D.h>
 #include <string>
 #include "sensor.h"
+#include "game.h"
 
 int Worm::id_worms = 0;
 
-Worm::Worm(Stage& stage
+Worm::Worm(Game& game
+	, Stage& stage
 	, const float x
 	, const float y
 	, const float angle_rad
@@ -23,6 +25,7 @@ Worm::Worm(Stage& stage
 	, const float max_height_dmg
 	, const float min_height_for_dmg)
 	: Movable(x, y)
+	, game(game)
 	, stage(stage)
 	, id_obj(id_worms++)
 	, sensor_for_jump(*this)
@@ -58,6 +61,8 @@ void Worm::receive_dmg(int damage) {
 	} else {
 		this->actual_health -= damage;
 	}
+
+	this->game.notify_health(this);
 }
 
 float Worm::get_longitude() {
@@ -188,8 +193,8 @@ void Worm::set_angle(float angle) {
 }
 
 void Worm::pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) {
-	b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
+	/*b2WorldManifold worldManifold;
+	contact->GetWorldManifold(&worldManifold);*/
 
 	//printf("X: %0.1f Y: %0.1f\n", worldManifold.normal.x, worldManifold.normal.y);
 	
@@ -214,7 +219,7 @@ bool Worm::is_on_ground() {
 	return this->sensor_for_jump.get_number_colisions() > 0;
 }
 
-void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<float>& params) {
+void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int>& params) {
 	if (this->dead)
 		return;
 

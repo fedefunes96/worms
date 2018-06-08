@@ -45,13 +45,13 @@ Dynamite::Dynamite(Stage& stage
 }*/
 void Dynamite::action(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<float>& params) {
+	, const std::vector<int>& params) {
 
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();
 
-	int time = static_cast<int>(params[1]);
+	int time = params[0];
 
 	DynamiteMissile* missile = new DynamiteMissile(this->stage
 												, worm

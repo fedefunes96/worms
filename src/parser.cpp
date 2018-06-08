@@ -14,7 +14,7 @@
 #include <string>
 
 void Parser::loadWorms(std::string &file, std::string &config, 
-	std::vector<Worm*> &worms, Stage& stage)
+	std::vector<Worm*> &worms, Stage& stage, Game& game)
 {
     YAML::Node editor = YAML::LoadFile(file);
     YAML::Node cfg = YAML::LoadFile(config);
@@ -39,7 +39,7 @@ void Parser::loadWorms(std::string &file, std::string &config,
             int alturaMax = cfg["Worm"][9].as<int>();
             //int dkgPorM = cfg["Worm"][10].as<int>();
             int damgMax = cfg["Worm"][11].as<int>();
-            worms[i] = new Worm(stage,x,y,angl,longitud,height, restitution,
+            worms[i] = new Worm(game, stage,x,y,angl,longitud,height, restitution,
             	health,speed,forw_jump,back_jump,damgMax,alturaMax);
         }
     }

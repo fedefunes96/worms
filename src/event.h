@@ -2,13 +2,12 @@
 #define EVENT_H
 
 #include <string>
+#include "protocol.h"
 
 class Event {
-private:
-	const std::string name;
 public:
-	Event(const std::string name);
-	const std::string& get_name();
+	virtual void process(Protocol& protocol) = 0;
+	virtual void execute() = 0;
 };
 
 #endif

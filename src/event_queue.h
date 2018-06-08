@@ -6,11 +6,11 @@
 
 class EventQueue {
 private:
-	BlockQueue<Event> block_queue;
+	BlockQueue<std::shared_ptr<Event>> block_queue;
 
 public:
-	void add_event(Event event);
-	Event get_event();
+	void add_event(std::shared_ptr<Event> event);
+	std::shared_ptr<Event> get_event();
 };
 
 

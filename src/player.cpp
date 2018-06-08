@@ -83,11 +83,13 @@ void Player::game_loop() {
 				int posx = 0;
 				int posy = 0;
 
-				std::vector<float> params;
+				std::vector<int> params;
 
 				this->protocol.recvAttack(&id_usable, &id_worm, &posx, &posy, params);    
 
 				b2Vec2 dest(posx, posy);
+
+				this->counter.set_time(3);
 
 				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(id_worm)->use(this->usables.at(id_usable), dest, params);
@@ -99,7 +101,6 @@ void Player::game_loop() {
 
 			if (!this->should_i_receive())
 				continue;
-
 			//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		}
@@ -167,6 +168,10 @@ void Player::notify_actual_player(int id) {
 
 	printf("Actual Player id: %d\n", id);
 	this->protocol.sendActualPlayer(id);
+}
+
+void Player::notify_health(Worm* worm) {
+	//this->protocol.sendWormHealth(worm->get_id(), worm->get_health());
 }
 
 void Player::notify_removal(Ubicable* ubicable) {

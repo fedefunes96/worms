@@ -50,6 +50,7 @@ public:
 	void notify_actual_player(int id);
 	void notify_removal(Ubicable* ubicable);
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);
+	void notify_health(Worm* worm);
 
 	void set_id(int id);
 	int get_id();

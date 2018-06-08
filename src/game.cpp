@@ -54,7 +54,8 @@ void Game::initialize_players() {
 
 void Game::create_test_world() {
 	//Let's create 2 worms
-	Worm* worm = new Worm(this->stage
+	Worm* worm = new Worm(*this
+		, this->stage
 		, 20 //10 x right
 		, 10 // 20 y up
 		, 0.0 // Angle 0 -> Facing right
@@ -76,7 +77,8 @@ void Game::create_test_world() {
 	this->stage.insert(std::move(worm1_ptr));
 	//this->stage.insert(std::shared_ptr<Movable>(worm));
 
-	Worm* worm2 = new Worm(this->stage
+	Worm* worm2 = new Worm(*this
+		, this->stage
 		, 15 //5 x right
 		, 15 // 10 y up
 		, 0.0 // Angle 0 -> Facing right
@@ -328,6 +330,14 @@ Game_status Game::round_over() {
 	? this->id_player_list = 0 : ++this->id_player_list);
 
 	return game_status;
+}
+
+void Game::notify_health(Worm* worm) {
+	std::vector<Player>::iterator it;
+
+	for (it = this->players.begin(); it != this->players.end(); ++it) {
+		(*it).notify_health(worm);
+	}
 }
 
 void Game::notify_actual_player(int id) {

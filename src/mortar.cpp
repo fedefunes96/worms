@@ -64,7 +64,7 @@ Mortar::Mortar(Stage& stage
 }*/
 void Mortar::action(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<float>& params) {
+	, const std::vector<int>& params) {
 
 	b2Body* b = worm->get_body();
 
@@ -78,6 +78,8 @@ void Mortar::action(Worm* worm
 
 	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
 	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+
+	vec_velocity *= float(params[0])/100.0;
 
 	MortarMissile* missile = new MortarMissile(this->stage
 												, worm

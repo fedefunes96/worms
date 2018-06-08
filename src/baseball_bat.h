@@ -25,7 +25,7 @@ public:
 	virtual void action(
 		Worm* worm
 		, const b2Vec2& dest_pos
-		, const std::vector<float>& params) override;
+		, const std::vector<int>& params) override;
 
 	virtual int get_id() override;
 };

@@ -24,6 +24,7 @@ enum class MoveDirection : char {
 
 class Worm : public Movable {
 private:
+	Game& game;
 	Stage& stage;
 	static int id_worms;
     const int id_obj;
@@ -60,7 +61,8 @@ private:
 
 	bool is_on_ground();
 public:
-	Worm(Stage& stage
+	Worm(Game& game
+		, Stage& stage
 		, const float x
 		, const float y
 		, const float angle_rad
@@ -116,7 +118,7 @@ public:
 
 	void start_moving(MoveDirection mdirect);
 
-	void use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<float>& params);	
+	void use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int>& params);	
 };
 
 #endif

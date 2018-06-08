@@ -54,7 +54,6 @@ private:
 
 	void notify_actual_player(const int id);
 
-
 	void create_test_world();
 public:
 	Game(const std::string& stage_file, std::vector<Player> players);
@@ -62,7 +61,8 @@ public:
 
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);
 	void notify_removal(Ubicable* ubicable);
-
+	void notify_health(Worm* worm);
+	
 	float get_water_level();
 
 	void game_loop();

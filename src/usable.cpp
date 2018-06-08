@@ -23,7 +23,7 @@ Usable::Usable(Stage& stage, const int ammo) : stage(stage) {
 }*/
 void Usable::use(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<float>& params) {
+	, const std::vector<int>& params) {
 	//Check ammo
 	if (this->ammo > 0) {
 		this->action(worm, dest_pos, params);

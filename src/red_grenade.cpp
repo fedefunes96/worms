@@ -67,7 +67,7 @@ RedGrenade::RedGrenade(Stage& stage
 }*/
 void RedGrenade::action(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<float>& params) {
+	, const std::vector<int>& params) {
 
 	b2Body* b = worm->get_body();
 
@@ -82,7 +82,8 @@ void RedGrenade::action(Worm* worm
 	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
 	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
 
-	int time = static_cast<int>(params[1]);
+	vec_velocity *= float(params[0])/100.0;
+	int time = params[1];
 
 	RedGrenadeMissile* missile = new RedGrenadeMissile(this->stage
 												, worm

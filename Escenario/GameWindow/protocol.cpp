@@ -10,15 +10,29 @@ void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, fl
     TypeObj type;
     Commands cmd = Commands::POSITION;
 
-
     if (type_obj.compare("Worm")==0) {
         type = TypeObj::WORM;
     } else if (type_obj.compare("Girder")==0) {
         type = TypeObj::GIRDER;
     } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
+    } else if (type_obj.compare("Mortar")==0) {
+        type = TypeObj::MORTAR_M;
+    } else if (type_obj.compare("Fragment")==0) {
+        type = TypeObj::FRAGMENT_M;
+    } else if (type_obj.compare("GreenGrenade")==0) {
+        type = TypeObj::GREEN_GRENADE_M;
+    } else if (type_obj.compare("RedGrenade")==0) {
+        type = TypeObj::RED_GRENADE_M;
+    } else if (type_obj.compare("Banana")==0) {
+        type = TypeObj::BANANA_M;
+    } else if (type_obj.compare("HolyGrenade")==0) {
+        type = TypeObj::HOLY_GRENADE_M;
+    } else if (type_obj.compare("Dynamite")==0) {
+        type = TypeObj::DYNAMITE_M;
+    } else if (type_obj.compare("AerialAttack")==0) {
+        type = TypeObj::AERIAL_ATTACK_M;
     }
-
 
     int32_t conv_id = htonl(id_obj); 
     int32_t conv_posx = htonl(static_cast<int>(posX*10000));
@@ -54,7 +68,6 @@ void Protocol::sendWormId(int8_t id, int32_t health) {
 void Protocol::sendUsableId(int8_t id, int32_t ammo) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
-
     Commands cmd = Commands::ATTACH_USABLE_ID;
 
     int32_t conv_ammo = htonl(ammo);
@@ -87,8 +100,23 @@ void Protocol::sendRemove(std::string type_obj, int32_t id) {
         type = TypeObj::GIRDER;
     } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
+    } else if (type_obj.compare("Mortar")==0) {
+        type = TypeObj::MORTAR_M;
+    } else if (type_obj.compare("Fragment")==0) {
+        type = TypeObj::FRAGMENT_M;
+    } else if (type_obj.compare("GreenGrenade")==0) {
+        type = TypeObj::GREEN_GRENADE_M;
+    } else if (type_obj.compare("RedGrenade")==0) {
+        type = TypeObj::RED_GRENADE_M;
+    } else if (type_obj.compare("Banana")==0) {
+        type = TypeObj::BANANA_M;
+    } else if (type_obj.compare("HolyGrenade")==0) {
+        type = TypeObj::HOLY_GRENADE_M;
+    } else if (type_obj.compare("Dynamite")==0) {
+        type = TypeObj::DYNAMITE_M;
+    } else if (type_obj.compare("AerialAttack")==0) {
+        type = TypeObj::AERIAL_ATTACK_M;
     }
-
 
     int32_t conv_id = htonl(id); 
 
@@ -142,7 +170,7 @@ void Protocol::recvMove(int* id, int *dir) {
     conexion.recibir((char*)dir,1);
 }
 
-void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<float>& params) {
+void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<int>& params) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
     
     int8_t uid;
@@ -158,15 +186,55 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
     conexion.recibir((char*)&aux,4);
     *posy = ntohl(aux);
 
-    std::vector<float> extra_params;
+    std::vector<int> extra_params;
 
     UsableIds usid = static_cast<UsableIds>(uid);
 
     switch (usid) {
         case UsableIds::BAZOOKA: {
-            //Dont receive extra params for now
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back(float(ntohl(aux)));
             break;
         }
+        case UsableIds::MORTAR: {
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back(ntohl(aux));
+            break;
+        }  
+        case UsableIds::GREEN_GRENADE: {
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));            
+            break;
+        }   
+        case UsableIds::RED_GRENADE: {
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));            
+            break;
+        }   
+         case UsableIds::BANANA: {
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));           
+            break;
+        }   
+        case UsableIds::HOLY_GRENADE: {
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));
+            conexion.recibir((char*)&aux,4);
+            extra_params.push_back((ntohl(aux)));            
+            break;
+        } 
+        case UsableIds::DYNAMITE: {
+            conexion.recibir((char*)&aux,4);
+            params.push_back((ntohl(aux)));            
+            break;
+        }     
+        default: break;                                          
     }
 
     params = std::move(extra_params);

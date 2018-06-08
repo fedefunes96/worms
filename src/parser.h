@@ -15,7 +15,7 @@ public:
 	~Parser();
 
 	static void loadWorms(std::string& file, std::string &config, 
-		std::vector<Worm*>& worms, Stage& stage);
+		std::vector<Worm*>& worms, Stage& stage, Game& game);
 
     static void loadGirder(std::string& file,std::string &config,Stage& stage, 
     	std::vector<Ubicable*> &girders);
