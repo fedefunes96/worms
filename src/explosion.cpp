@@ -34,7 +34,7 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			}
 
 			float invDistance = 1 / distance;
-			float blastPower = 5.0;
+			float blastPower = 1.0;
 			float impulseMag = blastPower * invDistance * invDistance;
 
 			//((Worm*) ubicable)->set_slide(true);

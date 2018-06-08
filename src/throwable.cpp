@@ -7,6 +7,7 @@
 #include <string>
 #include "worm.h"
 #include <iostream>
+#include "query_callback.h"
 
 int Throwable::id_throwables = 0;
 
@@ -94,9 +95,7 @@ void Throwable::stop_contacting(Ubicable* ubicable) {
 }
 
 void Throwable::stop_contacting(Worm* worm) {
-	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner) {
-		this->stop_collide_owner = true;
-	}
+
 }
 
 //Whatever i hit, i must explode
@@ -153,15 +152,58 @@ bool Throwable::should_collide_with(Girder* girder) {
 	return true;
 }
 
+//bool Throwable::should_collide_with(Worm* worm) {
+	//if (worm->get_id() == this->owner->get_id() && !stop_collide_owner) {
+		/*QueryCallback queryCallback;
+		b2AABB aabb;
+		aabb.lowerBound = pos - b2Vec2(this->radius, this->radius);
+		aabb.upperBound = pos + b2Vec2(this->radius, this->radius);
+		this->stage.get_world().QueryAABB(&queryCallback, aabb);
+		  
+		if (queryCallback.foundBodies.size() > 0)	
+			return false;*/
+	//}
+
+	/*if (!this->stop_collide_owner) {
+		QueryCallback queryCallback;
+		b2AABB aabb;
+
+		b2Vec2 pos = this->body->GetPosition();
+
+		aabb.lowerBound = pos - b2Vec2(this->radius, this->radius);
+		aabb.upperBound = pos + b2Vec2(this->radius, this->radius);
+		this->stage.get_world().QueryAABB(&queryCallback, aabb);
+
+		if (queryCallback.foundBodies.size() - 1 > 0)	{
+			//printf("Inside worm: %d\n", (int) queryCallback.foundBodies.size());
+			return false;	
+		} else {
+			printf("Stop colliding worm\n");
+			this->stop_collide_owner = true;
+			return true;
+		}
+	}*/
 bool Throwable::should_collide_with(Worm* worm) {
-	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner)
-		return false;
+	if (worm->get_id() == this->owner->get_id()) {
+		QueryCallback queryCallback;
+		b2AABB aabb;
+
+		b2Vec2 pos = this->body->GetPosition();
+
+		aabb.lowerBound = pos - b2Vec2(this->radius, this->radius);
+		aabb.upperBound = pos + b2Vec2(this->radius, this->radius);
+		this->stage.get_world().QueryAABB(&queryCallback, aabb);
+
+		//Minus 1 because it'll count the throwable
+		if (queryCallback.foundBodies.size() - 1 > 0)
+			return false;
+	}
 
 	return true;
 }
 
 bool Throwable::should_collide_with(Sensor* sensor) {
-	return true;
+	return false;
 }
 
 bool Throwable::should_collide_with(Throwable* throwable) {
