@@ -94,3 +94,7 @@ bool Girder::should_collide_with(Worm* girder) {
 bool Girder::should_collide_with(Throwable* girder) {
 	return true;
 }
+
+bool Girder::should_collide_with(Sensor* sensor) {
+	return true;
+}

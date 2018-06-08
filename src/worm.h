@@ -88,6 +88,7 @@ public:
 	virtual bool should_collide_with(Girder* girder) override;
 	virtual bool should_collide_with(Worm* worm) override;
 	virtual bool should_collide_with(Throwable* throwable) override;
+	virtual bool should_collide_with(Sensor* sensor) override;
 	/*virtual void colision(Girder& girder) override;
 	virtual void colision(Worm& worm) override;	
 	virtual void colision(Throwable& throwable) override;*/
@@ -101,6 +102,7 @@ public:
 	virtual bool is_affected_by_wind() override;
 
 	void set_slide(bool slide);
+	void set_angle(float angle);
 
 	float get_longitude();
 	float get_height();

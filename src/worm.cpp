@@ -46,6 +46,7 @@ Worm::Worm(Stage& stage
 	this->dead = true;
 	this->jump_cooldown = 0;
 	this->should_slide = false;
+	this->angle_for_mov = 0.0;
 
 	this->last_position.Set(x, y);
 }
@@ -83,12 +84,10 @@ void Worm::start_moving(MoveDirection mdirect) {
 
 	this->move_direction = mdirect;
 
-	this->angle_for_mov = 0.0;
-
 	if (this->is_on_ground() && !this->jump_cooldown && !this->should_slide) {
 		//printf("Im on ground\n");
 		//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);	
-		printf("angle: %0.1f\n", angle_for_mov * 180/b2_pi);
+		//printf("angle: %0.1f\n", angle_for_mov * 180/b2_pi);
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
 				this->actual_velocity.Set(mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
@@ -96,7 +95,7 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}
 			case MoveDirection::LEFT: {
-				this->actual_velocity.Set(-mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
+				this->actual_velocity.Set(-mov_speed*cos(angle_for_mov), -mov_speed*sin(angle_for_mov));
 				this->facing_direction = MoveDirection::LEFT;
 				break;
 			}	
@@ -173,6 +172,10 @@ void Worm::move_step(float32 time_step) {
 	if(this->jump_cooldown > 0) {
 		this->jump_cooldown--;
 	}
+}
+
+void Worm::set_angle(float angle) {
+	this->angle_for_mov = angle;
 }
 
 void Worm::pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) {
@@ -338,5 +341,9 @@ bool Worm::should_collide_with(Worm* worm) {
 }
 
 bool Worm::should_collide_with(Throwable* throwable) {
+	return true;
+}
+
+bool Worm::should_collide_with(Sensor* sensor) {
 	return true;
 }

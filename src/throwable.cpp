@@ -6,6 +6,7 @@
 #include "explosion.h"
 #include <string>
 #include "worm.h"
+#include <iostream>
 
 int Throwable::id_throwables = 0;
 
@@ -122,9 +123,14 @@ void Throwable::move_step(float32 time_step) {
 	b2Vec2 actual_pos = this->body->GetPosition();
 	b2Vec2& last_pos = this->get_position();
 
-	float32 angle = atan2(last_pos.y - actual_pos.y, last_pos.x - actual_pos.x);
+	if (actual_pos.x == last_pos.x && actual_pos.y == last_pos.y) {
+		this->body->SetTransform(actual_pos, this->angle_rad);
+	} else {
+		float32 angle = atan2(actual_pos.y - last_pos.y, actual_pos.x - last_pos.x);
+		std::cout << "angle of throwable:" << angle*180/b2_pi << std::endl;
 
-	this->body->SetTransform(actual_pos, angle);
+		this->body->SetTransform(actual_pos, angle);
+	}
 }
 
 b2Body* Throwable::get_body() {
@@ -151,6 +157,10 @@ bool Throwable::should_collide_with(Worm* worm) {
 	if (worm->get_id() == this->owner->get_id() && !stop_collide_owner)
 		return false;
 
+	return true;
+}
+
+bool Throwable::should_collide_with(Sensor* sensor) {
 	return true;
 }
 

@@ -65,6 +65,7 @@ public:
 	virtual bool should_collide_with(Girder* girder) = 0;
 	virtual bool should_collide_with(Worm* worm) = 0;
 	virtual bool should_collide_with(Throwable* throwable) = 0;
+	virtual bool should_collide_with(Sensor* sensor) = 0;
 };
 
 #endif

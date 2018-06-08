@@ -17,7 +17,7 @@ void Sensor::add_at_position(b2Body* body, b2Vec2 pos, float longitude, float he
 	fixture_def.shape = &(body_shape);
 	fixture_def.density = 1.0;
 	
-    fixture_def.isSensor = true;
+    //fixture_def.isSensor = true;
 
     b2Fixture* sensor = body->CreateFixture(&fixture_def);
 
@@ -54,20 +54,22 @@ void Sensor::start_contacting(b2Contact* contact) {
 	b2WorldManifold worldManifold;
 	contact->GetWorldManifold(&worldManifold);
 
-	/*float angle = atan2(worldManifold.normal.y, worldManifold.normal.x) - b2_pi/2;
+	//printf("%0.1f %0.1f\n", worldManifold.normal.y, worldManifold.normal.x);
 
-	float angle_for_mov = angle;
+	float angle = atan2(worldManifold.normal.y, worldManifold.normal.x) - b2_pi/2;
 
-	if (b2_pi/4 <= fabs(angle_for_mov) &&  fabs(angle_for_mov) < b2_pi/2) {
+	this->worm.set_angle(angle);
+
+	if (b2_pi/4 <= fabs(angle) &&  fabs(angle) < b2_pi/2) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(true);
-	} else if (0 <= fabs(angle_for_mov) && fabs(angle_for_mov) < b2_pi/4) {
+	} else if (0 <= fabs(angle) && fabs(angle) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
 	} else {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(false);
-	}	*/
+	}	
 }
 
 void Sensor::stop_contacting(Ubicable* ubicable) {
@@ -96,7 +98,7 @@ void Sensor::force_death() {
 }
 
 bool Sensor::should_collide_with(Ubicable* ubicable) {
-	return true;
+	return ubicable->should_collide_with(this);
 }
 	
 bool Sensor::should_collide_with(Girder* girder) {
@@ -108,6 +110,10 @@ bool Sensor::should_collide_with(Worm* worm) {
 }
 
 bool Sensor::should_collide_with(Throwable* throwable) {
+	return false;
+}
+
+bool Sensor::should_collide_with(Sensor* sensor) {
 	return false;
 }
 
