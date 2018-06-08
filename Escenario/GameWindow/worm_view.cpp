@@ -152,6 +152,16 @@ int Worm_View::getWeaponId()
     return this->weapon;
 }
 
+bool Worm_View::isSelect()
+{
+   return this->selected;
+}
+
+void Worm_View::setSelect(bool cond)
+{
+    this->selected = cond;
+}
+
 std::pair<int, int> Worm_View::getDirWeapon()
 {
     std::pair<int,int> dir;

@@ -186,7 +186,7 @@ void GameClass::checkQueueEvent(QList<int> list)
 void GameClass::checkRound(int id){
     if(this->myPlayer->getId() != id){
         this->myTurn=false;
-        this->myPlayer->getWormActive()->setSelected(false);
+        this->myPlayer->getWormActive()->setSelect(false);
         this->myPlayer->setActive(false);
         return;
     }

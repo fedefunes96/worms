@@ -103,3 +103,13 @@ void MisilBazooka::setVisibility(bool vis)
     this->setVisible(vis);
 }
 
+bool MisilBazooka::isSelect()
+{
+    return this->selected;
+}
+
+void MisilBazooka::setSelect(bool cond)
+{
+    this->selected = cond;
+}
+

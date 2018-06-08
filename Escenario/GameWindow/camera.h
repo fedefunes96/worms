@@ -22,6 +22,7 @@ public:
     void addItemToFollow(MovableItem *item);
     void setVisibleButton(bool visible);
     void setPlayerActive(Player* player);
+    std::pair<int, int> getPosButton();
 signals:
 public slots:
     void handleButton();
@@ -38,6 +39,8 @@ private:
     Weapons_and_Tools* menuWeapon;
     std::stack<MovableItem*> itemsToFollow;
     Player* playerActive;
+    int limitScrollR;
+    int limitScrollU;
 
 };
 

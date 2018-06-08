@@ -20,6 +20,8 @@ public:
     void setPosition(int x, int y);
     void fire();
     void setVisibility(bool vis);
+    bool isSelect();
+    void setSelect(bool cond);
 
 
 private slots:

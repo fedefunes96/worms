@@ -47,6 +47,7 @@ public:
     void addPlayerActive(Player *player);
     int getWidth();
     int getHeight();
+    Worm_View* getWormActive2();
 };
 
 #endif // GAME_VIEW_H

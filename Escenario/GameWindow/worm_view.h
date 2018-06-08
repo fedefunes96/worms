@@ -33,6 +33,8 @@ public:
     void loadSpriteWeapon(int val);
     void movTargetAngle(int dir);
     int getWeaponId();
+    bool isSelect();
+    void setSelect(bool cond);
 
     std::pair<int,int> getDirWeapon();
 

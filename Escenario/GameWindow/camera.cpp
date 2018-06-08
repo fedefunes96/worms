@@ -36,9 +36,19 @@ Camera::Camera(QGraphicsScene *scene,int w, int h):QGraphicsView()
     scene->addWidget(this->boton);
     this->playerActive = nullptr;
 
+    this->limitScrollR = scene->width() - this->width() -2;
+
+
 
 }
 
+std::pair<int,int> Camera::getPosButton()
+{
+    std::pair<int,int> pos;
+    pos.first = this->boton->x();
+    pos.second = this->height()-45;
+    return pos;
+}
 
 void Camera::setVisibleButton(bool visible){
     this->boton->setVisible(visible);
@@ -63,13 +73,13 @@ void Camera::followObject()
         return;
     }
     MovableItem* item = this->itemsToFollow.top();
-    if(!item->isAlive() || !(item->isSelected())){
+    if(!item->isAlive() || !(item->isSelect())){
         this->itemsToFollow.pop();
         return;
     }
 
     //esta vivo y quiero aun seguirlo..
-    if(item->x() >= this->posXcamera_R && horizontalScrollBar()->value()!=2000)
+    if(item->x() >= this->posXcamera_R && horizontalScrollBar()->value()!=this->limitScrollR)
     {
         horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 1 );
         this->posXcamera_R += 1;

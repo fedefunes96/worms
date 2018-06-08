@@ -121,7 +121,7 @@ QGraphicsItem *Game_View::itemAt(int posx,int posy)
 
 
 
-Worm_View* Game_View::getWormActive()
+Worm_View* Game_View::getWormActive2()
 {
     QList<QGraphicsItem*> qlist = this->scene->selectedItems();
     QList<QGraphicsItem*>::iterator it;
@@ -131,10 +131,30 @@ Worm_View* Game_View::getWormActive()
             return static_cast<Worm_View*>(*it);
         }
     }
-    qDebug()<<"no encontre nada";
+    qDebug()<<"no encontre nada !!!!!!!!!!!!";
     return nullptr;
 }
 
+Worm_View* Game_View::getWormActive()
+{
+    QList<QGraphicsItem*> list_items = this->scene->items();
+
+    QList<QGraphicsItem*>::iterator it;
+    for (it=list_items.begin();it!=list_items.end();it++)
+    {
+
+        Worm_View* item =dynamic_cast<Worm_View*>(*it);
+        if(!item){// no es worm
+            continue;
+        }else{
+            if(item->isSelect()){
+                return item;
+            }
+        }
+
+    }
+    return nullptr;
+}
 
 void Game_View::addPlayerActive(Player* player){
     this->camera->setPlayerActive(player);
@@ -197,7 +217,7 @@ void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
 
 void Game_View::addItemToFollow(MovableItem* item)
 {
-    item->setSelected(true); // esto tendria que estar en la logica de cuando es mi turno...
+    item->setSelect(true); // esto tendria que estar en la logica de cuando es mi turno...
     this->camera->addItemToFollow(item);
 }
 

@@ -12,8 +12,11 @@ public:
     virtual bool isMovable()=0;
     virtual void moveTo(int angle, int posx,int posy)=0;
     virtual void setVisibility(bool vis)=0;
+    virtual bool isSelect()=0;
+    virtual void setSelect(bool cond)=0;
 protected:
     bool alive;
+    bool selected;
 };
 
 #endif // MOVABLEITEM_H

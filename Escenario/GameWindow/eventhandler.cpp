@@ -37,14 +37,16 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
 
 
     // SOLUCIONAR!!!!!!!!! , capaz captar signal click del mouse y conectar...
-    //if(event->type() == QEvent::MouseButtonPress){
-//        if(this->game->isMyTurn()){
-//            this->game->getWormActive()->hasClickeableTarget();
-//            mouseClickEvent(static_cast<QMouseEvent*>(event));
-//            return true;
-//        }
-//    }
-
+/*    if(event->type() == QEvent::MouseButtonPress){
+        mouseClickEvent(static_cast<QMouseEvent*>(event));
+        return true;
+        if(this->game->isMyTurn()){
+            this->game->getWormActive()->hasClickeableTarget();
+            mouseClickEvent(static_cast<QMouseEvent*>(event));
+            return true;
+        }
+    }
+*/
 
     return false;
 }
@@ -80,7 +82,7 @@ void EventHandler::mouseMoveEvent(QMouseEvent *m_event)
 
 void EventHandler::mouseClickEvent(QMouseEvent *m_event)
 {
-    /*
+/*
     if( m_event->button() ==  Qt::LeftButton)
     {
         int x = this->game->getCamera()->verticalScrollBar()->value();
@@ -88,29 +90,19 @@ void EventHandler::mouseClickEvent(QMouseEvent *m_event)
         qDebug()<<"left click";
         qDebug()<<"vertical valx:"<<x <<"vertical valy:"<<y;
         qDebug()<<"Mvalx:"<<m_event->x() <<" Mvaly:"<<m_event->y();
-        if(!(this->game->itemAt(m_event->x(),m_event->y())))
-        {
-            qDebug()<<"no hay worm";
-            return;
-        }
+//        if(!(this->game->itemAt(m_event->x(),m_event->y())))
+//        {
+//            qDebug()<<"no hay worm";
+//            return;
+//        }
         //this->view->itemAt() aca me devuelve el QgraphicsItem si yo le paso por parametro las posiciones ..
 
-        if((this->game->itemAt(m_event->x(),m_event->y()))->type()==Worm_View().type())
-        {
-            qDebug()<<"toque al worm";
-            Worm_View* worm = static_cast<Worm_View*>(this->game->itemAt(m_event->x(),m_event->y()));
-            worm->setSelected(true);
-            worm->setZValue(1);
-            if(this->worm_selected){
-                this->worm_selected->setSelected(false);
-                this->worm_selected->setZValue(0);
-            }
-            this->worm_selected = worm;
+        std::pair<int,int>pos= this->game->getCamera()->getPosButton();
+        if(m_event->x()>=pos.first && m_event->x()<pos.first+30 && m_event->y()>=pos.second && m_event->y()<pos.second+30){
+            this->game->getCamera()->handleButton();
         }
-    }
-    if( m_event->button() ==  Qt::RightButton)
-    {
-        qDebug()<<"right click";
+
+
     }
     */
 }
