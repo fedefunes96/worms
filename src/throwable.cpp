@@ -127,8 +127,9 @@ void Throwable::move_step(float32 time_step) {
 		this->body->SetTransform(actual_pos, this->angle_rad);
 	} else {
 		float32 angle = atan2(actual_pos.y - last_pos.y, actual_pos.x - last_pos.x);
-		std::cout << "angle of throwable:" << angle*180/b2_pi << std::endl;
-
+		if(angle < 0){
+			angle +=2*b2_pi;
+		}
 		this->body->SetTransform(actual_pos, angle);
 	}
 }
