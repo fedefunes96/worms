@@ -125,6 +125,9 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     aux.setNum(this->health);
     labelVida->setText(aux);
     labelVida->setGeometry(x()+22,y()-10,30,20);
+    if(x()<30){
+        labelVida->setVisible(false);
+    }
 
 
     if(this->targetVis){

@@ -37,7 +37,7 @@ void GameClass::attachWorm(int type,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY || this->game->getWidth()<posX){
+    if(this->game->getHeight()<posY){ // tiene sentido=? probar que sucede...
         return;
     }
     if(type==static_cast<int>(TypeObj::WORM)){
