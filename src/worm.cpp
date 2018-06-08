@@ -142,6 +142,12 @@ void Worm::start_moving(MoveDirection mdirect) {
 	}	
 }
 
+const MoveDirection& Worm::get_facing_direction() {
+	std::lock_guard<std::mutex> lock(this->direction_m);
+
+	return this->facing_direction;
+}
+
 void Worm::set_velocity(b2Vec2 velocity) {
 	this->actual_velocity = velocity;
 }

@@ -161,7 +161,7 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
              if (id == 7)
              {
              	float max_damg = config["Bate"][2].as<float>();
-             	BaseballBat *us = new BaseballBat(stage,ammo,max_damg);
+             	BaseballBat *us = new BaseballBat(stage,ammo,10.0,max_damg);
              	usables.push_back(us);
              }
              if (id == 8){

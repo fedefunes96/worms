@@ -9,11 +9,13 @@
 
 class BaseballBat : public Usable {
 private:
+	const float velocity;
 	const float dmg;
 
 public:
 	BaseballBat(Stage& stage
 	, const int ammo
+	, const float velocity
 	, const float dmg);
 
 	/*virtual void action(

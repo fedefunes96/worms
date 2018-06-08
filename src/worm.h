@@ -107,6 +107,8 @@ public:
 	void set_angle(float angle);
 	void set_velocity(b2Vec2 velocity);
 
+	const MoveDirection& get_facing_direction();
+
 	float get_longitude();
 	float get_height();
 
