@@ -29,16 +29,8 @@ private slots:
 private:
     QTimer* timer;
     QGraphicsItem* item;
-    int posXcamera;
-    int posYcamera;
     std::stack<MovableItem*> itemsToFollow;
     Player* playerActive;
-    int posXcamera_R;
-    int posXcamera_L;
-    int posYcamera_U;
-    int posYcamera_D;
-    int limitScrollR;
-    int limitScrollD;
 
 };
 
