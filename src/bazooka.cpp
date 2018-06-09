@@ -80,14 +80,13 @@ void Bazooka::action(Worm* worm
 	       |____|   ->   \___/     ->      | |____| |
 	                                       \________/
 	*/
-
-	printf("From: %0.1f %0.1f\n", from_pos.x, from_pos.y);
-	printf("Dest: %0.1f %0.1f\n", dest_pos.x, dest_pos.y);
 	//printf("Angle: %0.6f\n", angle);
 	//b2Vec2 where(from_pos.x + longitude*cos(angle), from_pos.y + height*sin(angle));
-	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+	printf("Vel %0.1f %d\n", this->velocity, params[1]);
+	float velocity_f = this->velocity * (float(params[1])/100.0);
+	printf("VelF %0.1f\n", velocity_f);
+	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 
-	vec_velocity *= float(params[0])/100.0;
 	//printf("Where: %0.1f %0.1f\n", where.x, where.y);
 
 	//printf("Final Velocity: %0.1f %0.1f\n", vec_velocity.x, vec_velocity.y);

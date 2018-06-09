@@ -85,11 +85,13 @@ void Player::game_loop() {
 
 				std::vector<int> params;
 
-				this->protocol.recvAttack(&id_usable, &id_worm, &posx, &posy, params);    
+				this->protocol.recvAttack(&id_usable, &id_worm, &posx, &posy, params);  
 
 				b2Vec2 dest(posx, posy);
 
-				this->counter.set_time(3);
+				//this->counter.set_time(3);
+
+				//params.push_back(100);
 
 				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(id_worm)->use(this->usables.at(id_usable), dest, params);

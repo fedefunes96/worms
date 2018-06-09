@@ -193,7 +193,7 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
     switch (usid) {
         case UsableIds::BAZOOKA: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back(float(ntohl(aux)));
+            extra_params.push_back(ntohl(aux));
             break;
         }
         case UsableIds::MORTAR: {

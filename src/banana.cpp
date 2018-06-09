@@ -59,17 +59,17 @@ void Banana::action(Worm* worm
 	b2Vec2 normalized_dest = dest_pos - from_pos;
 
 	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
+	
+	float velocity_f = this->velocity * (float(params[0])/100.0);
 
-	b2Vec2 where(from_pos.x + 2*worm->get_longitude()*cos(angle), from_pos.y + 2*worm->get_height()*sin(angle));
-	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 
-	vec_velocity *= float(params[0])/100.0;
 	int time = params[1];
 
 	BananaMissile* missile = new BananaMissile(this->stage
 												, worm
-												, where.x
-												, where.y
+												, from_pos.x
+												, from_pos.y
 												, angle
 												, vec_velocity
 												, this->angular_velocity

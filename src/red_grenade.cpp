@@ -72,23 +72,21 @@ void RedGrenade::action(Worm* worm
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();
-	float longitude = worm->get_longitude();
-	float height = worm->get_height();
 
 	b2Vec2 normalized_dest = dest_pos - from_pos;
 
 	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
 
-	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
-	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+	float velocity_f = this->velocity * (float(params[0])/100.0);
 
-	vec_velocity *= float(params[0])/100.0;
+	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
+
 	int time = params[1];
 
 	RedGrenadeMissile* missile = new RedGrenadeMissile(this->stage
 												, worm
-												, where.x
-												, where.y
+												, from_pos.x
+												, from_pos.y
 												, angle
 												, vec_velocity
 												, this->angular_velocity

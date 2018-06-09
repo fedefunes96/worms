@@ -40,6 +40,10 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			//((Worm*) ubicable)->set_slide(true);
 			//body->ApplyLinearImpulse(impulseMag * blastDir, bodyCom);
 			//Down cast	
+			if (impulseMag > 6.0) {
+				impulseMag = 6.0;
+			}
+			
 			((Worm*) ubicable)->receive_explosion(impulseMag * blastDir);
 			((Worm*) ubicable)->receive_dmg(max_dmg - (distance * max_dmg/radius));
 		}

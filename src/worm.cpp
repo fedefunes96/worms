@@ -149,6 +149,7 @@ const MoveDirection& Worm::get_facing_direction() {
 }
 
 void Worm::set_velocity(b2Vec2 velocity) {
+	//No need of mutex, calculated in time step	
 	this->actual_velocity = velocity;
 }
 
@@ -157,6 +158,9 @@ void Worm::set_slide(bool slide) {
 }
 
 void Worm::receive_explosion(const b2Vec2& impulse) {
+	//Mutex to prevent moving if it was going to set velocity
+	std::lock_guard<std::mutex> lock(this->direction_m);
+
 	this->body->ApplyLinearImpulse(impulse, this->body->GetWorldCenter());
 	this->jump_cooldown = JUMP_COOLDOWN;		
 }

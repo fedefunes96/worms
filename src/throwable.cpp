@@ -195,7 +195,7 @@ bool Throwable::should_collide_with(Worm* worm) {
 		this->stage.get_world().QueryAABB(&queryCallback, aabb);
 
 		//Minus 1 because it'll count the throwable
-		if (queryCallback.foundBodies.size() - 1 > 0)
+		if (queryCallback.foundBodies.size() - 1 > 0) 
 			return false;
 	}
 
