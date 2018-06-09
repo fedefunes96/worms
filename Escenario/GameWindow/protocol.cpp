@@ -175,13 +175,28 @@ void Protocol::sendWinner(int8_t id) {
     conexion.enviar((const char*)&id,1);
 }
 
-void Protocol::sendRooms(int8_t rooms)
-{
+void Protocol::sendWormHealth(int8_t id, int32_t health) {
+    Commands cmd = Commands::WORM_HEALTH;  
+
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
+
+    int32_t conv_h = htonl(health);
+
+    conexion.enviar((const char*)&conv_h,4); 
+}
+
+void Protocol::sendDisconnect() {
+    Commands cmd = Commands::DISCONNECT;  
+
+    conexion.enviar((const char*)&cmd,1);    
+}
+
+void Protocol::sendRooms(int8_t rooms) {
     conexion.enviar((const char*)&rooms,1);
 }
 
-void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual)
-{
+void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual) {
     conexion.enviar((const char*)&room,1);
     conexion.enviar((const char*)&cantMax,1);
     conexion.enviar((const char*)&cantActual,1);
@@ -258,8 +273,7 @@ void Protocol::recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>
     }
 }
 
-int8_t Protocol::recvRoomSel()
-{
+int8_t Protocol::recvRoomSel() {
     int8_t id;
     conexion.recibir((char*)&id,1);
     return id;
