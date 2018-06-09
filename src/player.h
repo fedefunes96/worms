@@ -9,6 +9,7 @@
 #include "protocol.h"
 #include "ubicable.h"
 #include "counter.h"
+#include "event_queue.h"
 
 class Player : public Thread {
 private:
@@ -29,10 +30,14 @@ private:
 	std::mutex turn_m;
 	std::mutex worms_m;
 
+	std::thread event_t;
+
 	bool should_i_receive();
 	void set_receive(bool state);
 	void check_if_worm_was_mine(Ubicable* ubicable);
 	void disconnected_player();
+	void process_events();
+
 public:
 	Player(Socket socket, const int id);
 	Player(Player&&);

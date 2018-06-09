@@ -28,5 +28,5 @@ std::string BazookaMissile::get_type() {
 }
 
 bool BazookaMissile::is_affected_by_wind() {
-	return false;
+	return true;
 }

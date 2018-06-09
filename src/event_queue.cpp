@@ -10,3 +10,6 @@ void EventQueue::add_event(std::shared_ptr<Event> event) {
 std::shared_ptr<Event> EventQueue::get_event() {
 	return this->block_queue.pop();
 }
+
+EventQueue::EventQueue(EventQueue&& other)
+ : block_queue(std::move(other.block_queue)) {}

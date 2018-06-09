@@ -4,7 +4,7 @@
 Protocol::Protocol(Socket& conexion) : conexion(conexion) {}
 //Server 
 //Server 
-void Protocol::sendPosition(std::string type_obj, int32_t id_obj, float posX, float posY, float angle) {
+void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float posX, float posY, float angle) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
     TypeObj type;
@@ -88,7 +88,7 @@ void Protocol::sendPlayerId(int8_t id) {
     conexion.enviar((const char*)&id,1);
 }
 
-void Protocol::sendRemove(std::string type_obj, int32_t id) {
+void Protocol::sendRemove(const std::string& type_obj, int32_t id) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
     Commands cmd = Commands::REMOVE;    

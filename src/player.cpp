@@ -17,6 +17,8 @@ Player::Player(Socket socket, const int id)
 	this->connected = true;
 	this->in_game = false;
 	this->id = id;
+
+	this->event_t = std::thread(&Player::process_events, this);
 }
 
 Player::Player(Player&& other)
@@ -28,6 +30,7 @@ Player::Player(Player&& other)
 	this->id = other.id;
 	this->should_receive = other.should_receive;
 	this->connected = other.connected;
+	this->event_t = std::move(other.event_t);
 }
 
 bool Player::should_i_receive() {
@@ -91,7 +94,7 @@ void Player::game_loop() {
 
 				//this->counter.set_time(3);
 
-				//params.push_back(100);
+				params.push_back(100);
 
 				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(id_worm)->use(this->usables.at(id_usable), dest, params);
@@ -110,6 +113,10 @@ void Player::game_loop() {
 			//Played disconnected
 			this->disconnected_player();
 	}
+}
+
+void Player::process_events() {
+	
 }
 
 void Player::disconnected_player() {
@@ -163,6 +170,7 @@ void Player::disconnect() {
 	//this->protocol.sendGameEnd();
 	this->connected = false;
 	this->in_game = false;
+	this->event_t.join();
 	this->socket.desconectar();
 }
 

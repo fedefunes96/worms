@@ -59,11 +59,11 @@ public:
     Protocol(Socket& conexion);
 
     //Server
-    void sendPosition(std::string type_obj, int32_t id_obj, float posX, float posY, float angle);
+    void sendPosition(const std::string& type_obj, int32_t id_obj, float posX, float posY, float angle);
     void sendWormId(int8_t id, int32_t health);
     void sendUsableId(int8_t id, int32_t ammo);
     void sendPlayerId(int8_t id);
-    void sendRemove(std::string type_obj, int32_t id);
+    void sendRemove(const std::string& type_obj, int32_t id);
     void sendGameEnd();
     void sendActualPlayer(int8_t id);
     void sendWinner(int8_t id);

@@ -5,6 +5,7 @@
 #include <Box2D/Box2D.h>
 #include "worm.h"
 
+#define AMMOUNT 6
 #define AERIAL_ATTACK_ID 8
 
 class AerialAttack : public Usable {
@@ -12,7 +13,7 @@ private:
 	const float velocity;
 	const float radius;
 	const float max_dmg;
-	const float highest_obj;
+	const float from_create_y;
 	const float max_pushback;
 	const float radius_expl;
 
@@ -22,7 +23,7 @@ public:
 	, const float velocity
 	, const float radius
 	, const float max_dmg
-	, const float highest_obj
+	, const float from_create
 	, const float max_pushback
 	, const float radius_expl);
 

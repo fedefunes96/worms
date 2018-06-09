@@ -6,8 +6,8 @@
 
 Wind::Wind() {
 	//Initialize random
-	this->change_wind();
 	this->direction = 0;
+	this->change_wind();
 }
 
 void Wind::change_wind() {
@@ -22,10 +22,13 @@ void Wind::change_wind() {
 
 void Wind::apply(Movable* movable) {
 	if (movable->is_affected_by_wind()) {
+		b2Body* body = movable->get_body();
+		b2Vec2 pos = body->GetWorldCenter();
+
 		if (this->direction == 0)
-			movable->get_body()->SetLinearVelocity(b2Vec2(this->wind_speed, 0));
+			movable->get_body()->ApplyForce(b2Vec2(this->wind_speed, 0), pos);
 		else if (this->direction == 1) {
-			movable->get_body()->SetLinearVelocity(b2Vec2(-this->wind_speed, 0));
+			movable->get_body()->ApplyForce(b2Vec2(-this->wind_speed, 0), pos);
 		}
 	}
 }

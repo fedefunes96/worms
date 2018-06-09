@@ -45,6 +45,10 @@ public:
 	//Cannot be copied
 	BlockQueue(const BlockQueue&) = delete;
 	BlockQueue &operator=(const BlockQueue&) = delete;
+	//Only move
+	BlockQueue(BlockQueue&& other) {
+		this->queue = std::move(other.queue);
+	}
 };
 
 #endif

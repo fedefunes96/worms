@@ -9,14 +9,14 @@ AerialAttack::AerialAttack(Stage& stage
 	, const float velocity
 	, const float radius
 	, const float max_dmg
-	, const float highest_obj
+	, const float from_create_y
 	, const float max_pushback
 	, const float radius_expl) 
 	: Usable(stage, ammo) 
 	, velocity(velocity)
 	, radius(radius)
 	, max_dmg(max_dmg)
-	, highest_obj(highest_obj)
+	, from_create_y(from_create_y)
 	, max_pushback(max_pushback)
 	, radius_expl(radius_expl) {}
 
@@ -24,31 +24,30 @@ void AerialAttack::action(Worm* worm
 	, const b2Vec2& dest_pos
 	, const std::vector<int>& params) {
 
-	/*b2Body* b = worm->get_body();
+	//6 radius between each missile (6 missile separation)
+	float separation = 6 * radius;
 
-	b2Vec2 from_pos = b->GetPosition();
-	float longitude = worm->get_longitude();
-	float height = worm->get_height();
+	for (int i = 0; i < AMMOUNT; i++) {
+		b2Vec2 where(dest_pos.x*separation*(i-2), from_create_y);
 
-	b2Vec2 normalized_dest = dest_pos - from_pos;
+		float32 angle = atan2(dest_pos.y - where.y, dest_pos.x - where.x);
 
-	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
+		//Only X axis, let the gravity do the rest
+		b2Vec2 vec_velocity(this->velocity*cos(angle), 0.0);
 
-	b2Vec2 where(from_pos.x + 2*longitude*cos(angle), from_pos.y + 2*height*sin(angle));
-	b2Vec2 vec_velocity(this->velocity * cos(angle), this->velocity * sin(angle));
+		AerialAttackMissile* missile = new AerialAttackMissile(this->stage
+														, worm
+														, where.x
+														, where.y
+														, angle
+														, vec_velocity
+														, this->radius
+														, this->max_dmg
+														, this->max_pushback
+														, this->radius_expl); 	
 
-	BazookaMissile* missile = new BazookaMissile(this->stage
-												, worm
-												, where.x
-												, where.y
-												, angle
-												, vec_velocity
-												, this->angular_velocity
-												, this->radius
-												, this->restitution
-												, this->max_dmg);
-
-	this->stage.insert(std::move(std::shared_ptr<Movable>(missile)));*/
+		this->stage.insert(std::move(std::shared_ptr<Movable>(missile)));											
+	}
 }
 
 int AerialAttack::get_id() {

@@ -11,6 +11,7 @@ private:
 public:
 	void add_event(std::shared_ptr<Event> event);
 	std::shared_ptr<Event> get_event();
+	EventQueue(EventQueue&& other);
 };
 
 
