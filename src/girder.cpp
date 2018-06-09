@@ -6,8 +6,8 @@
 int Girder::id_girders = 0;
 
 Girder::Girder(Stage& stage
-	, const int x
-	, const int y
+	, const float x
+	, const float y
 	, const float angle_rad
 	, const float longitude
 	, const float height) 

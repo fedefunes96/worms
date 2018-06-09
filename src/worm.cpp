@@ -23,7 +23,8 @@ Worm::Worm(Game& game
 	, const std::pair<float, float> forw_jump_speed
 	, const std::pair<float, float> back_jump_speed
 	, const float max_height_dmg
-	, const float min_height_for_dmg)
+	, const float min_height_for_dmg
+	, const float fall_dmg_per_meter)
 	: Movable(x, y)
 	, game(game)
 	, stage(stage)
@@ -39,6 +40,7 @@ Worm::Worm(Game& game
 	, back_jump_speed(back_jump_speed)
 	, max_height_dmg(max_height_dmg)
 	, min_height_for_dmg(min_height_for_dmg)
+	, fall_dmg_per_meter(fall_dmg_per_meter)
 	, longitude(longitude)
 	, height(height) {
 

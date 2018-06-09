@@ -15,15 +15,15 @@ private:
 
 	static int id_girders;
     const int id_obj;	
-    const int x;
-    const int y;
+    const float x;
+    const float y;
     const float angle_rad;
     const float longitude;
     const float height;
 public:
 	Girder(Stage& stage
-		, const int x
-		, const int y
+		, const float x
+		, const float y
 		, const float angle_rad
 		, const float longitude
 		, const float height);

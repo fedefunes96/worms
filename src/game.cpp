@@ -67,7 +67,8 @@ void Game::create_test_world() {
 		, std::make_pair (2.0, 7.0) //Forw jump
 		, std::make_pair (2.0, 7.0) //Back jump
 		, 25.0
-		, 10.0);
+		, 10.0
+		, 1.0);
 
 	std::shared_ptr<Worm> worm1_ptr = std::shared_ptr<Worm>(worm);
 	//Copy the shared ptr
@@ -90,7 +91,8 @@ void Game::create_test_world() {
 		, std::make_pair (2.0,7.0) //Forw jump
 		, std::make_pair (2.0,7.0) //Back jump
 		, 25.0
-		, 10.0);
+		, 10.0
+		, 1.0);
 
 	std::shared_ptr<Worm> worm2_ptr = std::shared_ptr<Worm>(worm2);
 

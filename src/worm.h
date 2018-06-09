@@ -43,6 +43,7 @@ private:
 	const std::pair<float, float> back_jump_speed;
 	const float max_height_dmg;
 	const float min_height_for_dmg;
+	const float fall_dmg_per_meter;
 	const float longitude;
 	const float height;
 	int actual_health;
@@ -74,7 +75,8 @@ public:
 		, const std::pair<float, float> forw_jump_speed
 		, const std::pair<float, float> back_jump_speed
 		, const float max_height_dmg
-		, const float min_height_for_dmg);
+		, const float min_height_for_dmg
+		, const float fall_dmg_per_meter);
 
 	virtual std::string get_type() override;
 	virtual int get_id() override;
