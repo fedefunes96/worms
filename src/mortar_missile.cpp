@@ -8,15 +8,13 @@ MortarMissile::MortarMissile(Stage& stage
 	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
-	, const float angular_velocity
 	, const float radius
-	, const float restitution
 	, const float max_dmg
+	, const float max_pushback
+	, const float radius_expl
 	, const int ammount_fragments
 	, const float velocity_frag
-	, const float angular_velocity_frag
 	, const float radius_frag
-	, const float restitution_frag
 	, const float max_dmg_frag) 
 	: Throwable(stage
 		, owner
@@ -24,16 +22,17 @@ MortarMissile::MortarMissile(Stage& stage
 		, y
 		, angle_rad
 		, velocity
-		, angular_velocity
 		, radius
-		, restitution
-		, max_dmg)
+		, 0.0
+		, max_dmg
+		, max_pushback
+		, radius_expl)
 	, ammount_fragments(ammount_fragments)
 	, velocity_frag(velocity_frag)
-	, angular_velocity_frag(angular_velocity_frag)
 	, radius_frag(radius_frag)
-	, restitution_frag(restitution_frag)
-	, max_dmg_frag(max_dmg_frag) {}
+	, max_dmg_frag(max_dmg_frag)
+	, max_pushback(max_pushback)
+	, radius_expl(radius_expl) {}
 
 std::string MortarMissile::get_type() {
 	return MORTAR_TYPE;
@@ -66,10 +65,10 @@ void MortarMissile::create_fragments() {
 													, pos.y
 													, angle
 													, velocity_missile
-													, this->angular_velocity_frag
 													, this->radius_frag
-													, this->restitution_frag
-													, this->max_dmg_frag);
+													, this->max_dmg_frag
+													, this->max_pushback
+													, this->radius_expl);
 
 		this->stage.insert(std::move(std::shared_ptr<Movable>(missile)));
 	}

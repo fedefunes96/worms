@@ -17,10 +17,11 @@ Throwable::Throwable(Stage& stage
 	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
-	, const float angular_velocity
 	, const float radius
 	, const float restitution
-	, const float max_dmg)
+	, const float max_dmg
+	, const float max_pushback
+	, const float radius_expl)
 	: Movable(x, y)
 	, stage(stage)
 	, owner(owner)
@@ -29,10 +30,11 @@ Throwable::Throwable(Stage& stage
 	, y(y)
 	, angle_rad(angle_rad)
 	, velocity(velocity)
-	, angular_velocity(angular_velocity)
 	, radius(radius)
 	, restitution(restitution)
-	, max_dmg(max_dmg) {
+	, max_dmg(max_dmg)
+	, max_pushback(max_pushback)
+	, radius_expl(radius_expl) {
 
 	this->dead = false;
 	this->stop_collide_owner = false;
@@ -42,7 +44,7 @@ void Throwable::explode() {
 	//Explode in place
 	Explosion explosion(this->stage
 		, this->body->GetPosition()
-		, 2.0
+		, this->radius_expl
 		, this->max_dmg);
 
 	//Now i dissapear
@@ -72,8 +74,6 @@ void Throwable::create_myself(b2World& world) {
 	fixture->SetUserData(this);
 
 	this->body->ApplyLinearImpulse(velocity, this->body->GetWorldCenter());
-
-	this->body->ApplyAngularImpulse(angular_velocity);
 }
 
 void Throwable::delete_myself(b2World& world) {

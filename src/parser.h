@@ -11,7 +11,7 @@
 class Parser
 {
 public:
-	Parser();
+	/*Parser();
 	~Parser();
 
 	static void loadWorms(std::string& file, std::string &config, 
@@ -29,7 +29,7 @@ public:
 
     static float airMinSpeed(std::string& file);
 
-    static float airMaxSpeed(std::string& file);
+    static float airMaxSpeed(std::string& file);*/
 	
 };
 

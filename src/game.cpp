@@ -100,10 +100,10 @@ void Game::create_test_world() {
 
 	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO
 												, 2.5
-												, 0.0
 												, 0.25
-												, 0
-												, 50.0));	
+												, 50.0
+												, 8.0
+												, 2.0));	
 	//this->players[0].attach_worm(worm);
 	//this->players[0].attach_worm(worm2);
 	this->players[0].attach_usable(std::move(ptr));

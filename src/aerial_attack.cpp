@@ -7,16 +7,18 @@
 AerialAttack::AerialAttack(Stage& stage
 	, const int ammo
 	, const float velocity
-	, const float angular_velocity
 	, const float radius
-	, const float restitution
-	, const float max_dmg) 
+	, const float max_dmg
+	, const float highest_obj
+	, const float max_pushback
+	, const float radius_expl) 
 	: Usable(stage, ammo) 
 	, velocity(velocity)
-	, angular_velocity(angular_velocity)
 	, radius(radius)
-	, restitution(restitution)
-	, max_dmg(max_dmg) {}
+	, max_dmg(max_dmg)
+	, highest_obj(highest_obj)
+	, max_pushback(max_pushback)
+	, radius_expl(radius_expl) {}
 
 void AerialAttack::action(Worm* worm
 	, const b2Vec2& dest_pos

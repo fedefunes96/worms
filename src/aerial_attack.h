@@ -10,26 +10,22 @@
 class AerialAttack : public Usable {
 private:
 	const float velocity;
-	const float angular_velocity;
 	const float radius;
-	const float restitution;
 	const float max_dmg;
+	const float highest_obj;
+	const float max_pushback;
+	const float radius_expl;
 
 public:
 	AerialAttack(Stage& stage
 	, const int ammo
 	, const float velocity
-	, const float angular_velocity
 	, const float radius
-	, const float restitution
-	, const float max_dmg);
+	, const float max_dmg
+	, const float highest_obj
+	, const float max_pushback
+	, const float radius_expl);
 
-	/*virtual void action(
-		const float longitude
-		, const float height
-		, const b2Vec2& from_pos
-		, const b2Vec2& dest_pos
-		, const std::vector<float>& params) override;*/
 	virtual void action(
 		Worm* worm
 		, const b2Vec2& dest_pos

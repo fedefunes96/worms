@@ -18,12 +18,6 @@ public:
 	, const float velocity
 	, const float dmg);
 
-	/*virtual void action(
-		const float longitude
-		, const float height
-		, const b2Vec2& from_pos
-		, const b2Vec2& dest_pos
-		, const std::vector<float>& params) override;*/
 	virtual void action(
 		Worm* worm
 		, const b2Vec2& dest_pos

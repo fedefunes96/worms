@@ -20,10 +20,11 @@ protected:
     const float y;
     const float angle_rad;
     const b2Vec2 velocity;
-	const float angular_velocity;
 	const float radius;
 	const float restitution;
 	const float max_dmg;
+	const float max_pushback;
+	const float radius_expl;
 
 	bool dead;
 	bool stop_collide_owner;
@@ -36,10 +37,11 @@ public:
 	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
-	, const float angular_velocity
 	, const float radius
 	, const float restitution
-	, const float max_dmg);
+	, const float max_dmg
+	, const float max_pushback
+	, const float radius_expl);
 
 	virtual std::string get_type() = 0;
 	virtual int get_id() override;

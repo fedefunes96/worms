@@ -7,10 +7,11 @@ GreenGrenadeMissile::GreenGrenadeMissile(Stage& stage
 	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
-	, const float angular_velocity
 	, const float radius
 	, const float restitution
 	, const float max_dmg
+	, const float max_pushback
+	, const float radius_expl
 	, const int time) 
 	: DelayedThrowable(stage
 		, owner
@@ -18,10 +19,11 @@ GreenGrenadeMissile::GreenGrenadeMissile(Stage& stage
 		, y
 		, angle_rad
 		, velocity
-		, angular_velocity
 		, radius
 		, restitution
 		, max_dmg
+		, max_pushback
+		, radius_expl
 		, time) {}
 
 std::string GreenGrenadeMissile::get_type() {

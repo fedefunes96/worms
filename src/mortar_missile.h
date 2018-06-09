@@ -9,10 +9,10 @@ class MortarMissile : public Throwable {
 private:
 	const int ammount_fragments;
 	const float velocity_frag;
-	const float angular_velocity_frag;
 	const float radius_frag;
-	const float restitution_frag;
 	const float max_dmg_frag;
+	const float max_pushback;
+	const float radius_expl;
 
 	void create_fragments();
 
@@ -23,15 +23,13 @@ public:
 	, const float y
 	, const float angle_rad
 	, const b2Vec2 velocity
-	, const float angular_velocity
 	, const float radius
-	, const float restitution
 	, const float max_dmg
+	, const float max_pushback
+	, const float radius_expl
 	, const int ammount_fragments
 	, const float velocity_frag
-	, const float angular_velocity_frag
 	, const float radius_frag
-	, const float restitution_frag
 	, const float max_dmg_frag	
 	);
 
