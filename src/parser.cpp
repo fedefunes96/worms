@@ -13,7 +13,20 @@
 #include <yaml-cpp/yaml.h>
 #include <string>
 
-/*void Parser::loadWorms(std::string &file, std::string &config, 
+enum Weapons{
+    BAZOOKA = 0,
+    MORTAR = 1,
+    GREEN_GRENADE = 2,
+    RED_GRENADE = 3,
+    BANANA = 4,
+    HLOY_GRENADE = 5,
+    DYNAMITE = 6,
+    BASEBALL_BAT = 7,
+    AIR_ATTACK = 8,
+    TELETRANPORTER = 9
+};
+
+void Parser::loadWorms(std::string &file, std::string &config, 
 	std::vector<Worm*> &worms, Stage& stage, Game& game)
 {
     YAML::Node editor = YAML::LoadFile(file);
@@ -37,10 +50,10 @@
             float backJumY  = cfg["Worm"][8].as<float>();
             std::pair<float,float> back_jump(backJumX,backJumY);
             int alturaMax = cfg["Worm"][9].as<int>();
-            //int dkgPorM = cfg["Worm"][10].as<int>();
+            int dkgPorM = cfg["Worm"][10].as<int>();
             int damgMax = cfg["Worm"][11].as<int>();
             worms[i] = new Worm(game, stage,x,y,angl,longitud,height, restitution,
-            	health,speed,forw_jump,back_jump,damgMax,alturaMax);
+            	health,speed,forw_jump,back_jump,damgMax,alturaMax,dkgPorM);
         }
     }
 }
@@ -74,107 +87,113 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
              const YAML::Node& usable = *it;
              int id = usable[0].as<int>();
              int ammo = usable[1].as<int>();
-             if (id == 0)
+             if (id == BAZOOKA)
              {
-             	float radius = config["Bazooka"][0].as<float>();
-    			float restitution = config["Bazooka"][1].as<float>();
-    			float max_damg = config["Bazooka"][2].as<float>();
-    			float VDisparo = config["Bazooka"][3].as<float>();
-    			float VAngular = config["Bazooka"][4].as<float>();
-    			Bazooka* bazooka = new Bazooka(stage,ammo,VDisparo,VAngular,radius,restitution,max_damg);
+             	float VDisparo = config["Bazooka"][0].as<float>();
+                float radius = config["Bazooka"][1].as<float>();
+                float max_damg = config["Bazooka"][2].as<float>();
+                float max_push = config["Bazooka"][3].as<float>();
+                float rad_expl = config["Bazooka"][4].as<float>();
+    			Bazooka* bazooka = new Bazooka(stage,ammo,VDisparo,radius,
+                    max_damg, max_push,rad_expl);
     			usables.push_back(bazooka);
              }
-             if (id == 1){
-             	float radius = config["Mortar"][0].as<float>();
-    			float rest = config["Mortar"][1].as<float>();
-    			float max_damg = config["Mortar"][2].as<float>();
-    			float VDisparo = config["Mortar"][3].as<float>();
-    			float VAngular = config["Mortar"][4].as<float>();
-    			int cant = config["Mortar"][5].as<float>();
-    			float radiusFrag = config["Mortar"][6].as<float>();
-    			float restFrag = config["Mortar"][7].as<float>();
-    			float max_damgFrag = config["Mortar"][8].as<float>();
-    			float VDisparoFrag = config["Mortar"][9].as<float>();
-    			float VAngularFrag = config["Mortar"][10].as<float>();
-    			Mortar* mor = new Mortar(stage,ammo,VDisparo,VAngular,radius,
-    				rest,max_damg,cant,VDisparoFrag,VAngularFrag,radiusFrag,
-    				restFrag,max_damgFrag);
+             if (id == MORTAR){
+             	float vel = config["Mortar"][0].as<float>();
+                float rad = config["Mortar"][1].as<float>();
+                float max_dmg = config["Mortar"][2].as<float>();
+                float max_push = config["Mortar"][3].as<float>();
+                float rad_expl = config["Mortar"][4].as<float>();
+                int cant_frag = config["Mortar"][5].as<int>();
+                float vel_frag = config["Mortar"][6].as<float>();
+                float rad_frag = config["Mortar"][7].as<float>();
+                float max_dmg_frag = config["Mortar"][8].as<float>();
+    			Mortar* mor = new Mortar(stage,ammo,vel,rad,max_dmg,max_push,
+                    rad_expl,cant_frag,vel_frag,rad_frag,max_dmg_frag);
     			usables.push_back(mor);
              }
-             if (id == 2){
-             	float radius = config["GreenGrenade"][0].as<float>();
-    			float restitution = config["GreenGrenade"][1].as<float>();
-    			float max_damg = config["GreenGrenade"][2].as<float>();
-    			float VDisparo = config["GreenGrenade"][3].as<float>();
-    			float VAngular = config["GreenGrenade"][4].as<float>();
-    			GreenGrenade* gre = new GreenGrenade(stage,ammo,VDisparo,
-    				VAngular,radius,restitution,max_damg);
+             if (id == GREEN_GRENADE){
+             	float vel = config["GreenGrenade"][0].as<float>();
+                float rad = config["GreenGrenade"][1].as<float>();
+                float restitution = config["GreenGrenade"][2].as<float>();
+                float max_dmg = config["GreenGrenade"][3].as<float>();
+                float max_push = config["GreenGrenade"][4].as<float>();
+                float rad_expl = config["GreenGrenade"][5].as<float>();
+    			GreenGrenade* gre = new GreenGrenade(stage,ammo,vel,rad,
+                    restitution,max_dmg,max_push,rad_expl);
     			usables.push_back(gre);
              }
-             if (id == 3){
-             	float radius = config["RedGrenade"][0].as<float>();
-    			float rest = config["RedGrenade"][1].as<float>();
-    			float max_damg = config["RedGrenade"][2].as<float>();
-    			float VDisparo = config["RedGrenade"][3].as<float>();
-    			float VAngular = config["RedGrenade"][4].as<float>();
-    			int cant = config["RedGrenade"][5].as<float>();
-    			float radiusFrag = config["RedGrenade"][6].as<float>();
-    			float restFrag = config["RedGrenade"][7].as<float>();
-    			float max_damgFrag = config["RedGrenade"][8].as<float>();
-    			float VDisparoFrag = config["RedGrenade"][9].as<float>();
-    			float VAngularFrag = config["RedGrenade"][10].as<float>();
-    			RedGrenade* gre = new RedGrenade(stage,ammo,VDisparo,VAngular,
-    				radius,rest,max_damg,cant,VDisparoFrag,VAngularFrag,
-    				radiusFrag,restFrag,max_damgFrag);
+             if (id == RED_GRENADE){
+             	
+                float vel = config["RedGrenade"][0].as<float>();
+                float rad = config["RedGrenade"][1].as<float>();
+                float restitution = config["RedGrenade"][2].as<float>();
+                float max_dmg = config["RedGrenade"][3].as<float>();
+                float max_push = config["RedGrenade"][4].as<float>();
+                float rad_expl = config["RedGrenade"][5].as<float>();
+                int cant_frag = config["RedGrenade"][6].as<float>();
+                float vel_frag = config["RedGrenade"][7].as<float>();
+                float rad_frag = config["RedGrenade"][8].as<float>();
+                float max_dmg_frag = config["RedGrenade"][9].as<float>();
+    			RedGrenade* gre = new RedGrenade(stage,ammo,vel,rad,restitution,
+                    max_dmg,max_push,rad_expl,cant_frag,vel_frag,rad_frag,
+                    max_dmg_frag);
     			usables.push_back(gre);
              }
-             if (id == 4)
+             if (id == BANANA)
              {
-             	float radius = config["Banana"][0].as<float>();
-    			float restitution = config["Banana"][1].as<float>();
-    			float max_damg = config["Banana"][2].as<float>();
-    			float VDisparo = config["Banana"][3].as<float>();
-    			float VAngular = config["Banana"][4].as<float>();
-    			Banana *us = new Banana(stage,ammo, VDisparo,VAngular,radius,
-    				restitution,max_damg);
+             	float vel = config["Banana"][0].as<float>();
+                float rad = config["Banana"][1].as<float>();
+                float restitution = config["Banana"][2].as<float>();
+                float max_dmg = config["Banana"][3].as<float>();
+                float max_push = config["Banana"][4].as<float>();
+                float rad_expl = config["Banana"][5].as<float>();
+    			Banana *us = new Banana(stage,ammo, vel,rad,restitution,
+                    max_dmg,max_push,rad_expl);
     			usables.push_back(us);
              }
-             if (id == 5)
+             if (id == HLOY_GRENADE)
              {
-             	float radius = config["HolyGrenade"][0].as<float>();
-    			float restitution = config["HolyGrenade"][1].as<float>();
-    			float max_damg = config["HolyGrenade"][2].as<float>();
-    			float VDisparo = config["HolyGrenade"][3].as<float>();
-    			float VAngular = config["HolyGrenade"][4].as<float>();
-    			HolyGrenade *us = new HolyGrenade(stage,ammo, VDisparo,VAngular,radius,
-    				restitution,max_damg);
+             	float vel = config["HolyGrenade"][0].as<float>();
+                float rad = config["HolyGrenade"][1].as<float>();
+                float restitution = config["HolyGrenade"][2].as<float>();
+                float max_dmg = config["HolyGrenade"][3].as<float>();
+                float max_push = config["HolyGrenade"][4].as<float>();
+                float rad_expl = config["HolyGrenade"][5].as<float>();
+    			HolyGrenade *us = new HolyGrenade(stage,ammo,vel,rad,
+                    restitution,max_dmg,max_push,rad_expl);
     			usables.push_back(us);
              }
-             if (id == 6)
+             if (id == DYNAMITE)
              {
-             	float radius = config["Dynimite"][0].as<float>();
-    			float restitution = config["Dynimite"][1].as<float>();
-    			float max_damg = config["Dynimite"][2].as<float>();
-    			Dynamite* us = new Dynamite(stage,ammo,radius,restitution,max_damg);
+             	float rad = config["Dynimite"][0].as<float>();
+                float restitution = config["Dynimite"][1].as<float>();
+                float max_dmg = config["Dynimite"][2].as<float>();
+                float max_push = config["Dynimite"][3].as<float>();
+                float rad_expl = config["Dynimite"][4].as<float>();
+    			Dynamite* us = new Dynamite(stage,ammo,rad,restitution,
+                    max_dmg,max_push,rad_expl);
     			usables.push_back(us);
              }
-             if (id == 7)
+             if (id == BASEBALL_BAT)
              {
-             	float max_damg = config["Bate"][2].as<float>();
-             	BaseballBat *us = new BaseballBat(stage,ammo,10.0,max_damg);
+                float vel = config["Bate"][0].as<float>();
+             	float max_damg = config["Bate"][1].as<float>();
+             	BaseballBat *us = new BaseballBat(stage,ammo,vel,max_damg);
              	usables.push_back(us);
              }
-             if (id == 8){
-             	float radius = config["AirAttack"][0].as<float>();
-    			float restitution = config["AirAttack"][1].as<float>();
-    			float max_damg = config["AirAttack"][2].as<float>();
-    			float VDisparo = config["AirAttack"][3].as<float>();
-    			float VAngular = config["AirAttack"][4].as<float>();
-    			AerialAttack *us = new AerialAttack(stage,ammo, VDisparo,VAngular,radius,
-    				restitution,max_damg);
+             if (id == AIR_ATTACK){
+             	float vel = config["AirAttack"][0].as<float>();
+                float rad =config["AirAttack"][1].as<float>();
+                float max_dmg = config["AirAttack"][2].as<float>();
+                float from = config["AirAttack"][3].as<float>();
+                float max_push = config["AirAttack"][4].as<float>();
+                float rad_expl = config["AirAttack"][5].as<float>();
+    			AerialAttack *us = new AerialAttack(stage,ammo, vel,rad,max_dmg,
+                    from,max_push,rad_expl);
     			usables.push_back(us);
              }
-             if (id == 9){
+             if (id == TELETRANPORTER){
              	Teleportation * us = new Teleportation(stage,ammo);
              	usables.push_back(us);
              }
@@ -204,4 +223,4 @@ float Parser::airMaxSpeed(std::string &file)
 {
     YAML::Node config = YAML::LoadFile(file);
     return config["Wind"][1].as<int>();
-}*/
+}
