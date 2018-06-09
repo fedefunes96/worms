@@ -13,6 +13,8 @@
 #include <condition_variable>
 //#include "game.h"
 
+#define TIME_STEP_MS 25
+
 class Game;
 
 class Stage {
@@ -42,6 +44,8 @@ private:
 	std::mutex movable_m;
 	std::mutex something_moving_m;
 
+	std::mutex step_m;
+
 	bool continue_drawing;
 	std::condition_variable something_moving;
 
@@ -51,6 +55,8 @@ private:
 
 	void pre_initialize();
 	void nothing_moving();
+
+	void step();
 public:
 	Stage(const std::string& stage_file
 		, const float32 time_step
@@ -66,6 +72,8 @@ public:
 
 	void insert(std::unique_ptr<Ubicable> ubicable);
 	void insert(std::shared_ptr<Movable> movable);
+
+	void set_position(Ubicable* ubicable, const b2Vec2 pos);
 
 	b2World& get_world();
 

@@ -122,7 +122,7 @@ void Stage::draw() {
  				++it;
  				continue;
  			}
- 			
+
  			(*it)->set_position(pos);
 
  			float angle = b->GetAngle();
@@ -154,21 +154,36 @@ void Stage::draw() {
 
   		this->remove_deads();
 
-		this->world.Step(
-			this->time_step
-			, this->velocity_iterations
-			, this->position_iterations);	
+  		this->step();
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(25));
+		std::this_thread::sleep_for(std::chrono::milliseconds(TIME_STEP_MS));
 	}
 
 	printf("End of world draw\n");
 }
 
-void Stage::nothing_moving() {
-		std::unique_lock<std::mutex> mlock(this->something_moving_m);
+void Stage::step() {
+	std::lock_guard<std::mutex> lock(this->step_m);
 
-		this->something_moving.notify_one();	
+	this->world.Step(
+		this->time_step
+		, this->velocity_iterations
+		, this->position_iterations);		
+}
+
+void Stage::set_position(Ubicable* ubicable, const b2Vec2 pos) {
+	std::lock_guard<std::mutex> lock(this->step_m);
+
+	b2Body* b = ubicable->get_body();
+	float32 angle = b->GetAngle();
+
+	ubicable->get_body()->SetTransform(pos, angle);
+}
+
+void Stage::nothing_moving() {
+	std::unique_lock<std::mutex> mlock(this->something_moving_m);
+
+	this->something_moving.notify_one();	
 }
 
 void Stage::wait_stop_moving() {
