@@ -15,6 +15,9 @@
 #include "bazooka.h"
 #include "mortar.h"
 #include "dynamite.h"
+#include "parser.h"
+
+#define EXTRA_HEALTH 100
 
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
  : stage(stage_file, 1.0/20.0, 6, 2, *this) 
@@ -217,8 +220,9 @@ void Game::create_test_world() {
 		, 0.8)));										
 }
 
+
+
 void Game::initialize_game(const std::string& stage_file) {
-	this->create_test_world();
 	//First, create every object in the stage
 
 	//Read stage and create ubicables
@@ -226,41 +230,68 @@ void Game::initialize_game(const std::string& stage_file) {
 
 
 	//Reserve a list with a reference to worms & usables
-	//std::vector<Worms&> worms_to_attach
-	//std::vector<std::unique_ptr<Usable&>> usables_to_attach
+	std::vector<Worm*> worms_to_attach;
+	std::string map = "../yaml/basico.yaml";
+	std::string config =  "../yaml/config.yaml";
+	
+	int waterLvl = Parser::waterLvl(config);
+	float airMin = Parser::airMinSpeed(config);
+	float airMax = Parser::airMaxSpeed(config);
 
-	//int cant_worms = worms_to_attach.size()
-	//int cant_players = this->players.size()
+	stage.set_wind(airMin,airMax);
+	stage.set_water(waterLvl);
+
+	Parser::loadWorms(map,config,worms_to_attach,this->stage,this);
+	int cant_worms = worms_to_attach.size();
+	int cant_players = this->players.size();
 
 	// if (cant_players > cant_worms)
 	//		invalid_game
 
-	//int remu_worms = (cant_worms % cant_players);
-	//int worms_per_player = cant_worms / cant_players;
-	//int players_with_less_worms = cant_players - remu_worms
-	/*
+	int remu_worms = (cant_worms % cant_players);
+	int worms_per_player = cant_worms / cant_players;
+	int players_with_less_worms = cant_players - remu_worms;
+	
 	int i;
 	int j = 0;
+
 
 	//Attach now to players that will have less worms
 	//Give extra health to the worms
 	for (i = 0; i < players_with_less_worms; i++) {
 		for (; j < worms_per_player*(i+1); j++) {
-			Worm& worm = worms_to_attach[j];
-			worm.add_health(EXTRA_HEALTH);
-			this->players[i].attach_worm(std::move(worm));
+			Worm* worm = worms_to_attach[j];
+			if (remu_worms > 0){
+				worm->add_health(EXTRA_HEALTH);
+			}
+			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worm);
+			this->players[i].attach_worm(worm_ptr);
+			this->stage.insert(std::move(worm_ptr));
 		}
 	}
 
 	//Attach now to players that will have more worms
 	for (; i < cant_players; i++) {
-		for (; j < worms_to_attach*(i+1)+1; j++) {
-			Worm& worm = worms_to_attach[j];
-			this->players[i].attach_worm(std::move(worm));
-		}		
+		for (; j < worms_per_player*(i+1)+1; j++) {
+			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worms_to_attach[j]);
+			this->players[i].attach_worm(worm_ptr);
+			this->stage.insert(std::move(worm_ptr));
+		}	
+	}
+	std::vector<Ubicable*> girders;
+	Parser::loadGirder(map,config,this->stage,girders);
+	for (unsigned int i = 0; i < girders.size();++i){
+		this->stage.insert(std::unique_ptr<Ubicable>(girders[i]));
 	}
 
-	*/
+
+	for (int i = 0; i < cant_players; ++i){
+		std::vector<Usable*> usables;
+		Parser::loadWeapon(map,config,stage,usables);
+		for (unsigned int j = 0; j< usables.size(); ++j){
+			this->players[i].attach_usable(std::move(std::unique_ptr<Usable>(usables[j])));
+		}
+	}
 }
 
 void Game::run() {

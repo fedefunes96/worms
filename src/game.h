@@ -51,8 +51,8 @@ private:
 	void start_game();
 
 	void notify_actual_player(const int id);
-
 	void create_test_world();
+
 public:
 	Game(const std::string& stage_file, std::vector<Player> players);
 	~Game();

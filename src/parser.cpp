@@ -27,7 +27,7 @@ enum Weapons{
 };
 
 void Parser::loadWorms(std::string &file, std::string &config, 
-	std::vector<Worm*> &worms, Stage& stage, Game& game)
+	std::vector<Worm*> &worms, Stage& stage, Game* game)
 {
     YAML::Node editor = YAML::LoadFile(file);
     YAML::Node cfg = YAML::LoadFile(config);
@@ -39,9 +39,9 @@ void Parser::loadWorms(std::string &file, std::string &config,
             int y = worm[1].as<int>();
             int health = worm[2].as<int>();
             float angl = cfg["Worm"][0].as<float>();
-            int longitud = cfg["Worm"][1].as<int>();
-            int height = cfg["Worm"][2].as<int>();
-            int restitution = cfg["Worm"][3].as<int>();
+            float longitud = cfg["Worm"][1].as<float>();
+            float height = cfg["Worm"][2].as<float>();
+            float restitution = cfg["Worm"][3].as<float>();
             float speed = cfg["Worm"][4].as<float>();
             float fowJumX  = cfg["Worm"][5].as<float>();
             float fowJumY  = cfg["Worm"][6].as<float>();
@@ -49,11 +49,12 @@ void Parser::loadWorms(std::string &file, std::string &config,
             float backJumX  = cfg["Worm"][7].as<float>();
             float backJumY  = cfg["Worm"][8].as<float>();
             std::pair<float,float> back_jump(backJumX,backJumY);
-            int alturaMax = cfg["Worm"][9].as<int>();
-            int dkgPorM = cfg["Worm"][10].as<int>();
-            int damgMax = cfg["Worm"][11].as<int>();
-            worms[i] = new Worm(game, stage,x,y,angl,longitud,height, restitution,
+            float alturaMax = cfg["Worm"][9].as<float>();
+            float dkgPorM = cfg["Worm"][10].as<float>();
+            float damgMax = cfg["Worm"][11].as<float>();
+            Worm *worm2 = new Worm(*game, stage,x,y,angl,longitud,height, restitution,
             	health,speed,forw_jump,back_jump,damgMax,alturaMax,dkgPorM);
+            worms.push_back(worm2);
         }
     }
 }
@@ -73,7 +74,8 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
             float angle = girder[2].as<float>();
             float longitud = girder[3].as<float>();
             float height = cfg["Girder"][0].as<float>();
-            girders[i] = new Girder(stage,x,y,angle,longitud,height);
+            Girder *gir = new Girder(stage,x,y,angle,longitud,height);
+            girders.push_back(gir);
         }
     }
 }
@@ -201,10 +203,10 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
     }
 }
 
-int Parser::waterLvl(std::string &file)
+float Parser::waterLvl(std::string &file)
 {
     YAML::Node config = YAML::LoadFile(file);
-    return config["Water"].as<int>();
+    return config["Water"].as<float>();
 }
 
 int Parser::cantidad(std::string &file)
@@ -216,11 +218,11 @@ int Parser::cantidad(std::string &file)
 float Parser::airMinSpeed(std::string &file)
 {
     YAML::Node config = YAML::LoadFile(file);
-    return config["Wind"][0].as<int>();
+    return config["Wind"][0].as<float>();
 }
 
 float Parser::airMaxSpeed(std::string &file)
 {
     YAML::Node config = YAML::LoadFile(file);
-    return config["Wind"][1].as<int>();
+    return config["Wind"][1].as<float>();
 }
