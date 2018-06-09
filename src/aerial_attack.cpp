@@ -28,7 +28,7 @@ void AerialAttack::action(Worm* worm
 	float separation = 6 * radius;
 
 	for (int i = 0; i < AMMOUNT; i++) {
-		b2Vec2 where(dest_pos.x*separation*(i-2), from_create_y);
+		b2Vec2 where(dest_pos.x+separation*(i-2), from_create_y);
 
 		float32 angle = atan2(dest_pos.y - where.y, dest_pos.x - where.x);
 
