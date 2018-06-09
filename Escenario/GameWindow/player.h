@@ -38,6 +38,7 @@ public:
     void setActive(bool active);
     bool isMyTurn();
     void setTurn(bool turn);
+    std::vector<Worm_View *> getWormsAlive();
 private:
     std::vector<Worm_View*> worms_list;
     int id;

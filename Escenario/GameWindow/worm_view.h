@@ -26,7 +26,7 @@ public:
     int getAngle();
     void moveTo(int angle, int posx, int posy);
     void setVisibility(bool vis);
-
+    int getHealth();
     void setHealth(int health);
     void setAngle(int angle);
     virtual void setPosition(int x, int y) override;

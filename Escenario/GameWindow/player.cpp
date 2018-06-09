@@ -29,7 +29,7 @@ Worm_View *Player::getWormToPlay()
         qDebug()<<"lista vacia";
         return nullptr;
     }
-
+    //if(!(this->worms_list[this->it])->isAlive())
     if(this->worms_list.size() == this->it){
         this->it=0;
     }
@@ -42,6 +42,9 @@ Worm_View *Player::getWormToPlay()
 
 Worm_View* Player::getWormActive(){
     //qDebug()<<"id worm activo player!!!!!!!!!!!"<<this->wormActive->getId();
+    if(!this->wormActive->isAlive()){
+        return nullptr;
+    }
     return this->wormActive;
 }
 
@@ -100,3 +103,20 @@ void Player::fireWeapon(int type)
         }
     }
 }
+
+
+
+
+
+std::vector<Worm_View*> Player::getWormsAlive()
+{
+    std::vector<Worm_View*> lista;
+    for (unsigned int var = 0; var < this->worms_list.size(); ++var) {
+        if(this->worms_list[var]->isAlive()){
+            lista.push_back(this->worms_list[var]);
+        }
+    }
+    return lista;
+}
+
+

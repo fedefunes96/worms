@@ -1,15 +1,33 @@
 #include "gamewindow.h"
 #include "ui_gamewindow.h"
 
+
 GameWindow::GameWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
     this->playerActive=nullptr;
+    this->timer = new QTimer();
+    this->timer->start(500);// no hace falta chequear tan seguido...
+    connect(this->timer,&QTimer::timeout,this,&GameWindow::refreshBox);
 }
 
 
+
+void GameWindow::refreshBox()
+{
+    ui->textBrowser->clear();
+    std::vector<Worm_View*> lista = this->playerActive->getWormsAlive();
+    for (unsigned int var = 0; var < lista.size(); ++var) {
+        QString aux;
+        aux = "Worm:";
+        aux += QString::number(lista[var]->getId());
+        aux += "   vida:";
+        aux += QString::number(lista[var]->getHealth());
+        ui->textBrowser->append(aux);
+    }
+}
 
 void GameWindow::addGameScene(Game_View *gameScene)
 {

@@ -7,6 +7,7 @@
 #include "game_view.h"
 #include "weapons_and_tools.h"
 #include "player.h"
+#include <QTimer>
 
 namespace Ui {
 class GameWindow;
@@ -26,11 +27,13 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void refreshBox();
 private:
     Ui::GameWindow *ui;
     Game_View *gameScene;
     Weapons_and_Tools *menuWeapons;
     Player *playerActive;
+    QTimer *timer;
 };
 
 #endif // GAMEWINDOW_H

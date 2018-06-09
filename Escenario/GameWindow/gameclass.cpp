@@ -48,7 +48,7 @@ void GameClass::attachWorm(int type,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY ){
+    if(this->game->getHeight()<posY || this->game->getWidth()<posX){
         return;
     }
     if(type==static_cast<int>(TypeObj::WORM)){
@@ -75,6 +75,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -207,7 +208,7 @@ void GameClass::checkDeadItem()
     for (it=list_items.begin();it!=list_items.end();it++)
     {
 
-        MovableItem* item =dynamic_cast<MovableItem*>(*it);
+        Projectile* item =dynamic_cast<Projectile*>(*it);
         if(!item){// no es movible
             continue;
         }else if(!item->isAlive()){
@@ -265,7 +266,6 @@ void GameClass::checkQueueEvent(QList<int> list)
 void GameClass::checkRound(int id){
     if(this->myPlayer->getId() != id){
         this->myTurn=false;
-        this->myPlayer->setTurn(false);
         this->myPlayer->getWormActive()->setSelect(false);
         this->myPlayer->setActive(false);
         return;

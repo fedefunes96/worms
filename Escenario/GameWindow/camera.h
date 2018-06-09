@@ -22,20 +22,23 @@ public:
     void setPlayerActive(Player* player);
     void mousePressEvent(QMouseEvent *event);
     void addScene(QGraphicsScene *scene);
-
+protected:
+    void resizeEvent(QResizeEvent *event);
 private slots:
     void followObject();
 private:
     QTimer* timer;
     QGraphicsItem* item;
-    int posXcamera_L;
-    int posXcamera_R;
-    int posYcamera_U;
-    int posYcamera_D;
+    int posXcamera;
+    int posYcamera;
     std::stack<MovableItem*> itemsToFollow;
     Player* playerActive;
+    int posXcamera_R;
+    int posXcamera_L;
+    int posYcamera_U;
+    int posYcamera_D;
     int limitScrollR;
-    int limitScrollU;
+    int limitScrollD;
 
 };
 
