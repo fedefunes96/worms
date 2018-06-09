@@ -20,8 +20,7 @@ private:
 public:
 	//virtual void start_contacting(Ubicable* ubicable) = 0;
 	virtual void start_contacting(b2Contact* contact) = 0;
-	virtual void stop_contacting(Ubicable* ubicable) = 0;
-	virtual void stop_contacting(Worm* worm) = 0;
+	virtual void stop_contacting(b2Contact* contact) = 0;
 	virtual void create_myself(b2World& world) = 0;	
 	virtual void delete_myself(b2World& world) = 0;
 

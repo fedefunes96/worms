@@ -90,12 +90,8 @@ void Throwable::start_contacting(b2Contact* contact) {
 	//printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
 }
 
-void Throwable::stop_contacting(Ubicable* ubicable) {
+void Throwable::stop_contacting(b2Contact* contact) {
 	//Do nothing
-}
-
-void Throwable::stop_contacting(Worm* worm) {
-
 }
 
 //Whatever i hit, i must explode

@@ -91,10 +91,8 @@ void Worm::start_moving(MoveDirection mdirect) {
 
 	this->move_direction = mdirect;
 
-	if (this->is_on_ground() && !this->jump_cooldown && !this->should_slide) {
-		//printf("Im on ground\n");
-		//printf("Actual speed: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);	
-		//printf("angle: %0.1f\n", angle_for_mov * 180/b2_pi);
+	if (/*this->is_on_ground() && */!this->jump_cooldown /*&& !this->should_slide*/) {
+
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
 				this->actual_velocity.Set(mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
@@ -107,33 +105,37 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}	
 			case MoveDirection::JUMP_FORW: {
-				this->actual_velocity.Set(0, 0);
-				this->body->SetLinearVelocity(this->actual_velocity);
-				b2Vec2 impulse_speed;
+				if (this->is_on_ground() && !this->should_slide) {
+					this->actual_velocity.Set(0, 0);
+					this->body->SetLinearVelocity(this->actual_velocity);
+					b2Vec2 impulse_speed;
 
-				if(this->facing_direction == MoveDirection::LEFT) {
-					impulse_speed.Set(-forw_jump_speed.first, forw_jump_speed.second);
+					if(this->facing_direction == MoveDirection::LEFT) {
+						impulse_speed.Set(-forw_jump_speed.first, forw_jump_speed.second);
+					}
+					else if (this->facing_direction == MoveDirection::RIGHT) {
+						impulse_speed.Set(forw_jump_speed.first, forw_jump_speed.second);
+					}
+					this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
+					this->jump_cooldown = JUMP_COOLDOWN;
 				}
-				else if (this->facing_direction == MoveDirection::RIGHT) {
-					impulse_speed.Set(forw_jump_speed.first, forw_jump_speed.second);
-				}
-				this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
-				this->jump_cooldown = JUMP_COOLDOWN;
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
-				this->actual_velocity.Set(0, 0);	
-				this->body->SetLinearVelocity(this->actual_velocity);
-				b2Vec2 impulse_speed;
+				if (this->is_on_ground() && !this->should_slide) {
+					this->actual_velocity.Set(0, 0);	
+					this->body->SetLinearVelocity(this->actual_velocity);
+					b2Vec2 impulse_speed;
 
-				if(this->facing_direction == MoveDirection::LEFT) {
-					impulse_speed.Set(back_jump_speed.first, back_jump_speed.second);
-				}
-				else if (this->facing_direction == MoveDirection::RIGHT) {
-					impulse_speed.Set(-back_jump_speed.first, back_jump_speed.second);
-				}
-				this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
-				this->jump_cooldown = JUMP_COOLDOWN;			
+					if(this->facing_direction == MoveDirection::LEFT) {
+						impulse_speed.Set(back_jump_speed.first, back_jump_speed.second);
+					}
+					else if (this->facing_direction == MoveDirection::RIGHT) {
+						impulse_speed.Set(-back_jump_speed.first, back_jump_speed.second);
+					}
+					this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
+					this->jump_cooldown = JUMP_COOLDOWN;		
+				}	
 				break;
 			}										
 			case MoveDirection::NONE: {
@@ -141,7 +143,7 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}
 		}
-	}	
+	}
 }
 
 const MoveDirection& Worm::get_facing_direction() {
@@ -177,7 +179,7 @@ void Worm::move_step(float32 time_step) {
 	}*/
 
 	if (this->is_on_ground()) {
-		if (this->jump_cooldown == 0) {
+		if (this->jump_cooldown == 0 && !this->should_slide) {
 			this->body->SetLinearVelocity(this->actual_velocity);
 		}
 
@@ -281,7 +283,7 @@ void Worm::create_myself(b2World& world) {
 	this->sensor_for_jump.add_at_position(body
 										, b2Vec2(0, -height)
 										, longitude*0.95
-										, height*0.1);
+										, height*0.2);
 
 }
 
@@ -314,15 +316,9 @@ void Worm::start_contacting(b2Contact* contact) {
 	//printf("angle: %0.1f\n", angle * 180/b2_pi);
 }
 
-void Worm::stop_contacting(Ubicable* ubicable) {
+void Worm::stop_contacting(b2Contact* contact) {
 	/*this->set_gravity(DEFAULT_GRAVITY);
 	this->should_slide = false;*/
-
-	ubicable->stop_contacting(this);
-}
-
-void Worm::stop_contacting(Worm* worm) {
-	//Do nothing
 }
 
 /*void Worm::colision(Girder& girder) {

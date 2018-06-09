@@ -4,6 +4,8 @@
 #include "throwable.h"
 #include <Box2D/Box2D.h>
 
+#define SECOND_IN_MILLISECOND 1000
+
 class DelayedThrowable : public Throwable {
 private:
 	int counter;

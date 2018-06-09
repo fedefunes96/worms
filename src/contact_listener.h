@@ -33,8 +33,8 @@ public:
 		Ubicable* fixt_a = (Ubicable*) contact->GetFixtureA()->GetUserData();
 		Ubicable* fixt_b = (Ubicable*) contact->GetFixtureB()->GetUserData();
 
-		fixt_a->stop_contacting(fixt_b);
-		fixt_b->stop_contacting(fixt_a);
+		fixt_a->stop_contacting(contact);
+		fixt_b->stop_contacting(contact);
 	}
 
 	/*void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) {

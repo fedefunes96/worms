@@ -54,11 +54,7 @@ void Girder::start_contacting(b2Contact* contact) {
 	//Do nothing
 }
 
-void Girder::stop_contacting(Ubicable* ubicable) {
-	//Do nothing
-}
-
-void Girder::stop_contacting(Worm* worm) {
+void Girder::stop_contacting(b2Contact* contact) {
 	//Do nothing
 }
 

@@ -15,7 +15,7 @@ void Sensor::add_at_position(b2Body* body, b2Vec2 pos, float longitude, float he
 	body_shape.SetAsBox(longitude, height, pos, 0);
 
 	fixture_def.shape = &(body_shape);
-	fixture_def.density = 1.0;
+	fixture_def.density = 0.1;
 	
     //fixture_def.isSensor = true;
 
@@ -60,31 +60,27 @@ void Sensor::start_contacting(b2Contact* contact) {
 
 	this->worm.set_angle(angle);
 
-	if (b2_pi/4 <= fabs(angle) &&  fabs(angle) < b2_pi/2) {
+	if (b2_pi/4 <= fabs(angle) && fabs(angle) < b2_pi/2) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(true);
 		this->worm.set_velocity(b2Vec2(0, 0));
 	} else if (0 <= fabs(angle) && fabs(angle) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
-		
 	} else {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
-		this->worm.set_slide(false);
-		
+		this->worm.set_slide(false);	
 	}
 }
 
-void Sensor::stop_contacting(Ubicable* ubicable) {
+void Sensor::stop_contacting(b2Contact* contact) {
 	this->object_count--;
 
-	this->worm.set_gravity(DEFAULT_GRAVITY);
-	this->worm.set_slide(false);
-}
-
-void Sensor::stop_contacting(Worm* worm) {
-	//Do nothing
-	//Count once
+	//Only set gravity if its in the air
+	if (!this->object_count) {
+		this->worm.set_gravity(DEFAULT_GRAVITY);
+		this->worm.set_slide(false);
+	}
 }
 
 b2Body* Sensor::get_body() {

@@ -35,11 +35,11 @@ void DelayedThrowable::explode() {
 }
 
 void DelayedThrowable::move_step(float32 time_step) {
-	//This is called once per time_step, so...
+	//This is called once per time_step, so... (ms unit)
 	if (this->counter > 0) {
 		this->conversor++;
 
-		if (this->conversor == 1/time_step) {
+		if (this->conversor == SECOND_IN_MILLISECOND/time_step) {
 			this->counter--;
 			this->conversor = 0;
 		}

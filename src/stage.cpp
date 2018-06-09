@@ -106,7 +106,7 @@ void Stage::draw() {
  		std::vector<std::shared_ptr<Movable>>::iterator it = this->movables.begin();
 
  		while (it != this->movables.end()) {
- 			(*it)->move_step(this->time_step);
+ 			(*it)->move_step(TIME_STEP_MS);
  			
  			wind.apply((*it).get());
 
