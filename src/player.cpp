@@ -74,6 +74,9 @@ void Player::game_loop() {
 
 				this->protocol.recvMove(&id, &dir);
 
+				if (!this->should_i_receive())
+					continue;
+
 				MoveDirection mdir = static_cast<MoveDirection>(dir);
 
 				//Should check if worm exists
@@ -89,6 +92,9 @@ void Player::game_loop() {
 				std::vector<int> params;
 
 				this->protocol.recvAttack(&id_usable, &id_worm, &posx, &posy, params);  
+
+				if (!this->should_i_receive())
+					continue;
 
 				b2Vec2 dest(posx, posy);
 
@@ -173,6 +179,11 @@ void Player::disconnect() {
 }
 
 void Player::notify_actual_player(int id) {
+
+	if (id == this->id) {
+		//Its my turn
+		
+	}
 
 	printf("Actual Player id: %d\n", id);
 	this->protocol.sendActualPlayer(id);

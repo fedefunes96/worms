@@ -5,7 +5,7 @@ class Water {
 private:
 	float water_level;
 public:
-	Water();
+	Water(const float water_level);
 
 	void set_water_level(const float water_level);
 	float get_water_level();

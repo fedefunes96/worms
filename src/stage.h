@@ -10,6 +10,7 @@
 #include "movable.h"
 #include <mutex>
 #include "wind.h"
+#include "water.h"
 #include <condition_variable>
 //#include "game.h"
 
@@ -33,6 +34,7 @@ private:
 
 	Game& game;
 	Wind wind;
+	Water water;
 
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
 	std::vector<std::shared_ptr<Movable>> movables;
@@ -74,6 +76,9 @@ public:
 	void insert(std::shared_ptr<Movable> movable);
 
 	void set_position(Ubicable* ubicable, const b2Vec2 pos);
+
+	void set_wind(const float min, const float max);
+	void set_water(const float water_level);
 
 	b2World& get_world();
 

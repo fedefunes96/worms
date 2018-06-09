@@ -27,8 +27,6 @@ private:
 	Stage stage;
 	std::vector<Player> players;
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
-	Water water;
-
 	//std::vector<std::unique_ptr<Worm>> worms;
 	//std::vector<std::unique_ptr<Girder>> girders;
 
@@ -63,8 +61,6 @@ public:
 	void notify_removal(Ubicable* ubicable);
 	void notify_health(Worm* worm);
 	
-	float get_water_level();
-
 	void game_loop();
 	virtual void run() override;
 	bool game_finished();

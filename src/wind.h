@@ -9,11 +9,16 @@
 
 class Wind {
 private:
+	float min_wind_speed;
+	float max_wind_speed;
+
 	float wind_speed;
 	int direction;
 
 public:
-	Wind();
+	Wind(const float min_wind_speed, const float max_wind_speed);
+
+	void set_wind_limits(const float min_wind_speed, const float max_wind_speed);
 
 	void change_wind();
 	void apply(Movable* movable);

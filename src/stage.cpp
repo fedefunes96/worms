@@ -21,7 +21,9 @@ Stage::Stage(const std::string& stage_file
 	, position_iterations(position_iterations)
 	, gravity(0.0f, 0.0f)
 	, world(this->gravity, true)
-	, game(game) {
+	, game(game)
+	, wind(0.1, 1.0)
+	, water(0.0) {
 
 	this->world.SetContactListener(&this->contact_listener);
 	this->world.SetContactFilter(&this->contact_filter);
@@ -135,7 +137,7 @@ void Stage::draw() {
  			/*if ((*it)->get_type().compare("Worm") == 0)
  				printf("angle %0.1f\n", angle);*/
 
- 			if (pos.y < 0.0) {
+ 			if (pos.y < this->water.get_water_level()) {
  				(*it)->force_death();
  			}
 
@@ -151,10 +153,9 @@ void Stage::draw() {
   		if (cant_objects_moving == 0)
   			this->nothing_moving();
 
+  		this->step();
 
   		this->remove_deads();
-
-  		this->step();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(TIME_STEP_MS));
 	}
@@ -228,6 +229,14 @@ void Stage::stop_drawing() {
 
 b2World& Stage::get_world() {
 	return this->world;
+}
+
+void Stage::set_wind(const float min, const float max) {
+	this->wind.set_wind_limits(min, max);
+}
+
+void Stage::set_water(const float water_level) {
+	this->water.set_water_level(water_level);
 }
 
 Stage::~Stage() {}

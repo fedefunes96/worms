@@ -13,6 +13,8 @@
 #include "girder.h"
 #include "worm.h"
 #include "bazooka.h"
+#include "mortar.h"
+#include "dynamite.h"
 
 Game::Game(const std::string& stage_file, std::vector<Player> players) 
  : stage(stage_file, 1.0/20.0, 6, 2, *this) 
@@ -101,15 +103,37 @@ void Game::create_test_world() {
 	//this->stage.insert(std::shared_ptr<Movable>(worm2));
 
 	std::unique_ptr<Usable> ptr = std::unique_ptr<Usable>(new Bazooka(this->stage, INFINITY_AMMO
-												, 2.5
+												, 6.0
 												, 0.25
 												, 50.0
 												, 8.0
 												, 2.0));	
+
+	std::unique_ptr<Usable> ptr2 = std::unique_ptr<Usable>(new Mortar(this->stage
+												, INFINITY_AMMO
+												, 2.5
+												, 0.25
+												, 90.0
+												, 5.0
+												, 2.0
+												, 6
+												, 2.5
+												, 0.15
+												, 10.0));
+
+
+	std::unique_ptr<Usable> ptr3 = std::unique_ptr<Usable>(new Dynamite(this->stage
+												, INFINITY_AMMO
+												, 0.25
+												, 0.0
+												, 50.0
+												, 6.0
+												, 2.0));
 	//this->players[0].attach_worm(worm);
 	//this->players[0].attach_worm(worm2);
 	this->players[0].attach_usable(std::move(ptr));
-
+	this->players[0].attach_usable(std::move(ptr2));
+	this->players[0].attach_usable(std::move(ptr3));
 	//Create 3 girders
 
 	this->stage.insert(
@@ -364,10 +388,6 @@ void Game::notify_removal(Ubicable* ubicable) {
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_removal(ubicable);
 	}
-}
-
-float Game::get_water_level() {
-	return this->water.get_water_level();
 }
 
 Game::~Game() {

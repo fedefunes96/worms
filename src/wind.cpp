@@ -4,8 +4,10 @@
 #include <time.h> 
 #include <Box2D/Box2D.h>
 
-Wind::Wind() {
+Wind::Wind(const float min_wind_speed, const float max_wind_speed){
 	//Initialize random
+	this->min_wind_speed = min_wind_speed;
+	this->max_wind_speed = max_wind_speed;
 	this->direction = 0;
 	this->change_wind();
 }
@@ -26,9 +28,15 @@ void Wind::apply(Movable* movable) {
 		b2Vec2 pos = body->GetWorldCenter();
 
 		if (this->direction == 0)
-			movable->get_body()->ApplyForce(b2Vec2(this->wind_speed, 0), pos);
+			movable->get_body()->ApplyForce(b2Vec2(this->wind_speed*body->GetMass(), 0), pos);
 		else if (this->direction == 1) {
-			movable->get_body()->ApplyForce(b2Vec2(-this->wind_speed, 0), pos);
+			movable->get_body()->ApplyForce(b2Vec2(-this->wind_speed*body->GetMass(), 0), pos);
 		}
 	}
+}
+
+void Wind::set_wind_limits(const float min_wind_speed
+	, const float max_wind_speed) {
+	this->min_wind_speed = min_wind_speed;
+	this->max_wind_speed = max_wind_speed;
 }
