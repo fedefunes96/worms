@@ -104,6 +104,60 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
         }
+    }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
+        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/mortar.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::AERIAL_ATTACK_M)){
+        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/airmisil.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::HOLY_GRENADE_M)){
+        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/hgranade.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
     }
 }
 
