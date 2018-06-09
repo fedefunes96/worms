@@ -23,6 +23,9 @@ void Server::end_game(std::unique_ptr<Game> game) {
 }
 
 void Server::check_active_users() {
+	//Dont disconnect players that are trying to initialize game
+	std::lock_guard<std::mutex> lock(this->room_m);
+
 	std::unordered_map<int, std::unique_ptr<Player>>::iterator it;
 
 	it = this->players.begin();
@@ -126,7 +129,7 @@ std::vector<std::string> Server::get_rooms() {
 		++it;
 	}
 
-	return rooms_names;
+	return std::move(rooms_names);
 }
 
 std::vector<std::string>& Server::get_maps() {

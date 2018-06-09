@@ -60,6 +60,7 @@ public:
 
     //Server
     void sendPosition(const std::string& type_obj, int32_t id_obj, float posX, float posY, float angle);
+    void sendActualWorm(int8_t id);
     void sendWormId(int8_t id, int32_t health);
     void sendUsableId(int8_t id, int32_t ammo);
     void sendPlayerId(int8_t id);
@@ -69,8 +70,8 @@ public:
     void sendWinner(int8_t id);
     void sendRooms(int8_t rooms);
     void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
-    void recvMove(int* id, int *dir);
-    void recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<int>& params); 
+    void recvMove(int *dir);
+    void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params); 
     int8_t recvRoomSel();   
     //------------
 

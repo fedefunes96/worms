@@ -19,6 +19,8 @@ private:
 	bool connected;
 	bool in_game;
 
+	int id_actual_worm;
+
 	Counter counter;
 
 	Socket socket;
@@ -27,6 +29,8 @@ private:
 	//std::unordered_map<int, Worm*> worms;
 	std::unordered_map<int, std::shared_ptr<Worm>> worms;
 
+	std::vector<int> worms_ids;
+
 	std::mutex turn_m;
 	std::mutex worms_m;
 
@@ -34,9 +38,9 @@ private:
 
 	bool should_i_receive();
 	void set_receive(bool state);
-	void check_if_worm_was_mine(Ubicable* ubicable);
 	void disconnected_player();
 	void process_events();
+	int get_actual_worm();
 
 public:
 	Player(Socket socket, const int id);

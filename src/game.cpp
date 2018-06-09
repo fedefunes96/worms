@@ -25,6 +25,7 @@ Game::Game(const std::string& stage_file, std::vector<Player> players)
  	this->id_player_list = 0;
  	this->is_over = false;
 
+ 	//Remove this, use run when creating game
  	this->initialize_players();
  	this->initialize_game(stage_file);
  	this->start_game();
@@ -220,8 +221,6 @@ void Game::create_test_world() {
 		, 0.8)));										
 }
 
-
-
 void Game::initialize_game(const std::string& stage_file) {
 	//First, create every object in the stage
 
@@ -254,7 +253,6 @@ void Game::initialize_game(const std::string& stage_file) {
 	
 	int i;
 	int j = 0;
-
 
 	//Attach now to players that will have less worms
 	//Give extra health to the worms

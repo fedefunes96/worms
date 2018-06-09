@@ -12,9 +12,7 @@ Room::Room(Server& server
 }
 
 void Room::add_player(const int id) {
-	this->player_ids.erase(
-		std::remove(this->player_ids.begin(), this->player_ids.end(), id)
-		, this->player_ids.end());
+	this->player_ids.push_back(id);
 }
 
 bool Room::has_player(const int id) {
@@ -26,7 +24,9 @@ bool Room::has_player(const int id) {
 }
 
 void Room::remove_player(const int id) {
-	this->player_ids.push_back(id);
+	this->player_ids.erase(
+		std::remove(this->player_ids.begin(), this->player_ids.end(), id)
+		, this->player_ids.end());	
 }
 
 int Room::get_ammount_players() {

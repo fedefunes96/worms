@@ -65,6 +65,10 @@ void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float p
     //std::cout << "angulo:" <<angle*100 << "-" << id_obj << "-" << posX << "-" << posY << std::endl;
 }
 
+void Protocol::sendActualWorm(int8_t id) {
+    conexion.enviar((const char*)&id,1);
+}
+
 void Protocol::sendWormId(int8_t id, int32_t health) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
@@ -183,21 +187,18 @@ void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual)
     conexion.enviar((const char*)&cantActual,1);
 }
 
-void Protocol::recvMove(int* id, int *dir) {
+void Protocol::recvMove(int *dir) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
 
-    conexion.recibir((char*)id,1);
     conexion.recibir((char*)dir,1);
 }
 
-void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, std::vector<int>& params) {
+void Protocol::recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
     
     int8_t uid;
     conexion.recibir((char*)&uid,1);
     *id_weapon = uid;
-
-    conexion.recibir((char*)id_worm,1);
 
     int32_t aux;
 
