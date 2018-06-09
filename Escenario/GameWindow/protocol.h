@@ -20,7 +20,9 @@ enum class Commands : uint8_t {
     ATTACK,
     SHOW_ROOMS,
     JOIN_ROOM,
-    EXIT_ROOM
+    EXIT_ROOM,
+    WORM_HEALTH,
+    DISCONNECT
 };
 
 enum class TypeObj : uint8_t {
@@ -70,6 +72,9 @@ public:
     void sendWinner(int8_t id);
     void sendRooms(int8_t rooms);
     void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
+    void sendWormHealth(int8_t id, int32_t health);
+    void sendDisconnect();
+
     void recvMove(int *dir);
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params); 
     int8_t recvRoomSel();   
