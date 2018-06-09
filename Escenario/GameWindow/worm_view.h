@@ -35,12 +35,15 @@ public:
     int getWeaponId();
     bool isSelect();
     void setSelect(bool cond);
+    void setAlive(bool alive);
 
     std::pair<int,int> getDirWeapon();
 
     bool hasClickeableTarget();
     int getTargetAngle();
     int getTimeWeapon();
+    void setTimeWeapon(int time);
+    void setClickDir(int x, int y);
 private slots:
     void runSpriteWeapon();
 
@@ -61,6 +64,7 @@ private:
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
     int currentFrame;   // Coordinates X, which starts the next frame of the sprite
 
+    // innecesarios creo... ////////////////////////////
     int count;
     int x1;
     int x2;
@@ -72,6 +76,7 @@ private:
     bool firstX;
     int up;
     int right;
+////////////////////////////////////////////
 
     void setSprite();
     void setVarsMove(int x1, int x2, int rep, int rep2, bool movUP, bool movR);
@@ -82,6 +87,9 @@ private:
     void setVars(int cant1, int cant2, int up, int right, bool firsX);
     void moveStep();
     void stepSprite();
+
+
+
     int weapon;
     void loadSprite(QString& path_L,QString& path_U,QString path_D,QString path_Fly="",QString path_Fall="");
     Target* target;
@@ -91,6 +99,9 @@ private:
     bool moving;
     bool loadingWeapon;
     bool targetClick;
+    bool weaponCountDwn;
+    int countDown;
+    std::pair<int,int> clickTarget;
 
 
 

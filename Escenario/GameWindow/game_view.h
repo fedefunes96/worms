@@ -44,10 +44,11 @@ public:
     bool containsItem(int8_t id_typ, int32_t id);
     Items *getItem(int8_t id_type, int32_t id);
     QGraphicsScene *getScene();
-    void addPlayerActive(Player *player);
+    void setPlayerActive(Player *player);
     int getWidth();
     int getHeight();
     Worm_View* getWormActive2();
+    void addCamera(Camera *camera);
 };
 
 #endif // GAME_VIEW_H

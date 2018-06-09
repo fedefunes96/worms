@@ -385,7 +385,7 @@ void Protocol::recvWinner(int8_t* id)
 }
 
 
-void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY)
+void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY, std::vector<int32_t> vect)
 {
     Commands cmd = Commands::ATTACK;
     conexion.enviar((const char*)&cmd,1);
@@ -396,7 +396,11 @@ void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_
     conv = htonl(convPxToMt(posY));
     conexion.enviar((const char*)&conv,4);
 
-    //std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;
+    for (unsigned int var = 0; var < vect.size(); ++var) {
+        conexion.enviar((const char*)&vect[var],4);
+        std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
+    }
+    std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;
 
 }
 

@@ -76,7 +76,7 @@ public:
 
     void sendMove(int8_t id_worm, int8_t dir);
     void sendJump(int8_t id_worm,int8_t dir);
-    void sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY);
+    void sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY, std::vector<int32_t> vect);
 
 
     int8_t recvCmd();

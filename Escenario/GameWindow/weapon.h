@@ -1,8 +1,6 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include <QGraphicsScene>
-
 class Weapon
 {
 public:
@@ -11,11 +9,11 @@ public:
     int getIdObj();
     void setAmmo(int ammo);
     int getAmmo();
-    virtual void fire()=0;
+    void fire();
 protected:
     int idObj;
     int ammo;
-    //faltarian los 3 path para los sprites --> mejora
+    //faltarian los 3 path para los sprites? --> mejora
 };
 
 #endif

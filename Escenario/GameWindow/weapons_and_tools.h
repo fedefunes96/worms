@@ -39,8 +39,6 @@ private slots:
 
     void on_bazooka_clicked();
 
-    void on_punch_clicked();
-
 private:
     Ui::Weapons_and_Tools *ui;
     Player* player;

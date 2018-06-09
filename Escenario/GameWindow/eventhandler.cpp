@@ -14,6 +14,7 @@ EventHandler::EventHandler(QObject *parent) : QObject(parent)
 EventHandler::EventHandler(QObject *parent, GameClass *game, Protocol* protocol) : QObject(parent), game(game), protocol(protocol)
 {
     this->worm_selected = nullptr;
+    this->power=10;
 }
 
 bool EventHandler::eventFilter(QObject *obj, QEvent *event)
@@ -34,6 +35,7 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
         return true;
     }
 */
+
 
 
     // SOLUCIONAR!!!!!!!!! , capaz captar signal click del mouse y conectar...
@@ -121,26 +123,8 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(k_event->isAutoRepeat()){
                 return;
             }
-            qDebug() << "Espacio"; //JUMP worm
-            if(this->game->isMyTurn()){
-                std::vector<int> vect = this->game->fireWeapon();
-                
-                if(vect.empty()){
-                    qDebug()<<"vector vacio --> no arma seleccionada o disponible";
-                    return;
-                }
-                //std::vector<int> vect2;
-                protocol->sendAttack(vect[0],vect[1],vect[2],vect[3]);
-                qDebug()<<"dispare! event";
-            }
-            break;
-        }
-        case Qt::Key_M:
-        {
-            if(!this->game->isMyTurn()){
-                return;
-            }
-            this->game->getCamera()->handleButton();
+            qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
+            this->power=10;
             break;
         }
 
@@ -235,6 +219,73 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             break;
         }
 
+        case Qt::Key_1:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+            if(!this->game->isMyTurn()){
+                return;
+            }
+            Worm_View* worm = this->game->getWormActive();
+            worm->setTimeWeapon(1);
+            break;
+        }
+        case Qt::Key_2:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+            if(!this->game->isMyTurn()){
+                return;
+            }
+
+            Worm_View* worm = this->game->getWormActive();
+            worm->setTimeWeapon(2);
+            break;
+
+        }
+        case Qt::Key_3:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+            if(!this->game->isMyTurn()){
+                return;
+            }
+
+            Worm_View* worm = this->game->getWormActive();
+            worm->setTimeWeapon(3);
+            break;
+
+        }
+        case Qt::Key_4:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+            if(!this->game->isMyTurn()){
+                return;
+            }
+
+            Worm_View* worm = this->game->getWormActive();
+            worm->setTimeWeapon(4);
+            break;
+
+        }
+        case Qt::Key_5:
+        {
+            if(k_event->isAutoRepeat()){
+                return;
+            }
+            if(!this->game->isMyTurn()){
+                return;
+            }
+
+            Worm_View* worm = this->game->getWormActive();
+            worm->setTimeWeapon(5);
+            break;
+        }
         default:
         {
             qDebug() << "Unhandled"; //sin definir aun
@@ -280,7 +331,28 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
         case Qt::Key_Space:
         {
             if(k_event->isAutoRepeat()){ // para saber si es repetitiva
+                if(this->power<100){
+                    qDebug()<< "power:"<<this->power;
+                    this->power+=10;
+                }
                 return;
+            }
+
+            qDebug() << "Espacio"; //JUMP worm
+            if(this->game->isMyTurn()){
+                std::vector<int> vect = this->game->fireWeapon();
+
+                if(vect.empty()){
+                    qDebug()<<"vector vacio --> no arma seleccionada o disponible";
+                    return;
+                }
+                std::vector<int> vect2;
+                vect2.push_back(this->power);
+                if(vect.size()==5){
+                    vect2.push_back(vect[4]);
+                }
+                protocol->sendAttack(vect[0],vect[1],vect[2],vect[3],vect2);
+                qDebug()<<"dispare! event";
             }
             qDebug()<<"solte Espacio";
             break;
@@ -321,8 +393,8 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
 
 
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 

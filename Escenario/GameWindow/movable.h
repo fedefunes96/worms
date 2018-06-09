@@ -9,6 +9,7 @@ class MovableItem:public QGraphicsItem,public Items
 public:
     MovableItem();
     virtual bool isAlive()=0;
+    virtual void setAlive(bool alive)=0;
     virtual bool isMovable()=0;
     virtual void moveTo(int angle, int posx,int posy)=0;
     virtual void setVisibility(bool vis)=0;

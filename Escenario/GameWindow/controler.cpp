@@ -81,7 +81,7 @@ void Controler::run()
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::POSITION)){
-            //qDebug()<<"position";
+            qDebug()<<"position";
             int8_t obj_type=0;
             int32_t id_obj=0;
             int32_t posX=0;

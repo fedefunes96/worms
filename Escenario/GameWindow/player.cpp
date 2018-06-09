@@ -2,8 +2,9 @@
 #include <QDebug>
 Player::Player()
 {
-    it=0;
+    this->it=0;
     this->wormActive=nullptr;
+    this->myturn=false;
 }
 
 void Player::addWorm(Worm_View *worm)
@@ -32,7 +33,7 @@ Worm_View *Player::getWormToPlay()
     if(this->worms_list.size() == this->it){
         this->it=0;
     }
-    qDebug()<<this->it;
+    //chequear si no esta vivo no devolverlo...
     this->wormActive = this->worms_list[this->it];
     this->it++;
     return this->wormActive;
@@ -52,21 +53,24 @@ void Player::setActive(bool active){
     this->isactive = active;
 }
 
+bool Player::isMyTurn()
+{
+    return this->myturn;
+}
+
+void Player::setTurn(bool turn)
+{
+    this->myturn=turn;
+}
+
 void Player::addWeapon(int type,int ammo)
 {
-    Weapon* weapon;
-    switch (type) {
-    case static_cast<int>(WeaponType::BAZOOKA_ID):
-        weapon = new Bazooka();
-        weapon->setIdObj(0);
-        if(ammo<0){
-            weapon->setAmmo(9999);
-        }else{
-            weapon->setAmmo(ammo);
-        }
-        break;
-    default:
-        return;
+    Weapon* weapon = new Weapon();
+    weapon->setIdObj(type);
+    if(ammo<0){
+        weapon->setAmmo(9999);
+    }else{
+       weapon->setAmmo(ammo);
     }
     this->listWeapons.append(weapon);
 }

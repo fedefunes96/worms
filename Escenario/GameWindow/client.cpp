@@ -12,7 +12,6 @@
 
 #include <QLabel>
 
-#include "mybutton.h"
 #include <iostream>
 
 #include "protocol.h"

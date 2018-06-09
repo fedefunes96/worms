@@ -7,7 +7,12 @@ void Weapon::setAmmo(int ammo)
 
 int Weapon::getAmmo()
 {
-	return this->ammo;
+    return this->ammo;
+}
+
+void Weapon::fire()
+{
+    this->ammo--;
 }
 
 

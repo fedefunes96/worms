@@ -9,38 +9,35 @@ Weapons_and_Tools::Weapons_and_Tools(QWidget *parent,Player* player) :
     player(player)
 {
     ui->setupUi(this);
-    if(!this->player->canFire(static_cast<int>(WeaponType::AIRMISIL_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::AERIAL_ATTACK))){
         ui->misil->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::BAZOOKA_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BAZOOKA))){
         ui->bazooka->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::BANANA_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BANANA))){
         ui->banana->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::MORTER_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::MORTAR))){
         ui->morter->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::BAT_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BASEBALL_BAT))){
         ui->bat->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::DINAMITE_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::DYNAMITE))){
         ui->dinamite->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::GRANADE_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::GREEN_GRENADE))){
         ui->granade->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::FRAG_GRANADE_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::RED_GRENADE))){
         ui->fragGranade->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::HOLY_GRANADE_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::HOLY_GRENADE))){
         ui->holyGranade->setEnabled(false);
     }
-    if(!this->player->canFire(static_cast<int>(WeaponType::TELEPORT_ID))){
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::TELEPORTATION))){
         ui->teleport->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponType::PUNCH_ID))){
-        ui->punch->setEnabled(false);
     }
 
 }
@@ -56,66 +53,61 @@ Weapons_and_Tools::~Weapons_and_Tools()
 
 void Weapons_and_Tools::on_misil_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::AIRMISIL_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::AERIAL_ATTACK));
     close();
 }
 
 void Weapons_and_Tools::on_bat_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::BAT_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::BASEBALL_BAT));
     close();
 }
 
 void Weapons_and_Tools::on_banana_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::BANANA_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::BANANA));
     close();
 }
 
 void Weapons_and_Tools::on_dinamite_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::DINAMITE_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::DYNAMITE));
     close();
 }
 
 void Weapons_and_Tools::on_fragGranade_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::FRAG_GRANADE_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::RED_GRENADE));
     close();
 }
 
 void Weapons_and_Tools::on_granade_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::GRANADE_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::GREEN_GRENADE));
     close();
 }
 
 void Weapons_and_Tools::on_holyGranade_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::HOLY_GRANADE_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::HOLY_GRENADE));
     close();
 }
 
 void Weapons_and_Tools::on_morter_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::MORTER_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::MORTAR));
     close();
 }
 
 void Weapons_and_Tools::on_teleport_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::TELEPORT_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::TELEPORTATION));
     close();
 }
 
 void Weapons_and_Tools::on_bazooka_clicked()
 {
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::BAZOOKA_ID));
+    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponsIds::BAZOOKA));
     close();
 }
 
-void Weapons_and_Tools::on_punch_clicked()
-{
-    this->player->getWormActive()->loadSpriteWeapon(static_cast<int>(WeaponType::PUNCH_ID));
-    close();
-}

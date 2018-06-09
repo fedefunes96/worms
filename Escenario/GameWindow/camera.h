@@ -8,24 +8,21 @@
 #include <QTimer>
 #include <QList>
 #include <QScrollBar>
-#include "mybutton.h"
 #include "movable.h"
 #include <stack>
 #include "weapons_and_tools.h"
 #include "player.h"
+#include <QMouseEvent>
 
 class Camera : public QGraphicsView
 {
 public:
     Camera(QWidget *parent = 0 );
-    Camera(QGraphicsScene* scene, int w, int h);
     void addItemToFollow(MovableItem *item);
-    void setVisibleButton(bool visible);
     void setPlayerActive(Player* player);
-    std::pair<int, int> getPosButton();
-signals:
-public slots:
-    void handleButton();
+    void mousePressEvent(QMouseEvent *event);
+    void addScene(QGraphicsScene *scene);
+
 private slots:
     void followObject();
 private:
@@ -35,8 +32,6 @@ private:
     int posXcamera_R;
     int posYcamera_U;
     int posYcamera_D;
-    MyButton* boton;
-    Weapons_and_Tools* menuWeapon;
     std::stack<MovableItem*> itemsToFollow;
     Player* playerActive;
     int limitScrollR;

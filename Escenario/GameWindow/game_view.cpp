@@ -19,8 +19,15 @@ Game_View::Game_View(QRect screen,int w,int h)
 
     this->scene->setSceneRect(0,0,w,h); //tam escenario
 
-    this->camera = new Camera(this->scene,screen.width(),screen.height());
+    //this->camera = new Camera(this->scene,screen.width(),screen.height());
 }
+
+
+void Game_View::addCamera(Camera *camera)
+{
+    this->camera = camera;
+}
+
 
 QGraphicsScene* Game_View::getScene()
 {
@@ -90,8 +97,8 @@ Items* Game_View::getItem(int8_t id_type, int32_t id)
 void Game_View::del_Item(Items* item)
 {
     MovableItem * aux = static_cast<MovableItem*>(item);
-    //this->scene->removeItem(aux);
-    aux->setVisible(false);
+    this->scene->removeItem(aux);
+    delete(aux);
 }
 
 void Game_View::setBackground(std::string &path)
@@ -156,7 +163,7 @@ Worm_View* Game_View::getWormActive()
     return nullptr;
 }
 
-void Game_View::addPlayerActive(Player* player){
+void Game_View::setPlayerActive(Player* player){
     this->camera->setPlayerActive(player);
 }
 

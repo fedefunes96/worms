@@ -5,25 +5,22 @@
 #include "worm_view.h"
 #include "weapon.h"
 #include <QGraphicsScene>
-#include "bazooka.h"
 #include <QList>
 
 
 
-enum class WeaponType : uint8_t {
-    BAZOOKA_ID = 0,
-    AIRMISIL_ID,
-    BANANA_ID,
-    MORTER_ID,
-    BAT_ID,
-    DINAMITE_ID,
-    GRANADE_ID,
-    FRAG_GRANADE_ID,
-    HOLY_GRANADE_ID,
-    TELEPORT_ID,
-    PUNCH_ID
+enum class WeaponsIds : uint8_t {
+    BAZOOKA = 0,
+    MORTAR,
+    GREEN_GRENADE,
+    RED_GRENADE,
+    BANANA,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    AERIAL_ATTACK,
+    TELEPORTATION
 };
-
 
 class Player
 {
@@ -39,6 +36,8 @@ public:
     Worm_View *getWormActive();
     bool isActive();
     void setActive(bool active);
+    bool isMyTurn();
+    void setTurn(bool turn);
 private:
     std::vector<Worm_View*> worms_list;
     int id;
@@ -46,6 +45,7 @@ private:
     Worm_View* wormActive;
     bool isactive;
     unsigned int it;
+    bool myturn;
 
 };
 

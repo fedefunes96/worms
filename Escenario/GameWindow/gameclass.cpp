@@ -1,15 +1,26 @@
 #include "gameclass.h"
 #include "girder_view.h"
 #include <QDebug>
-#include "misilBazooka.h"
+#include "projectile.h"
+
+
 GameClass::GameClass(QRect screen,int w,int h)
 {
+    this->window = new GameWindow();
     this->game = new Game_View(screen,w,h);
+    this->window->addGameScene(this->game);
+    this->game->addCamera(this->window->getCamera());
     std::string path("../../images/intro2.jpg");
+    this->window->showMaximized();
     this->game->setBackground(path);
     this->myTurn=true;
     this->myPlayer = new Player();
-    this->game->addPlayerActive(this->myPlayer);
+    this->game->setPlayerActive(this->myPlayer);
+    this->window->addPlayer(this->myPlayer);
+
+    this->deadItemCollector = new QTimer();
+    this->deadItemCollector->start(10);
+    connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
 }
 
 Camera* GameClass::getCamera()
@@ -37,7 +48,7 @@ void GameClass::attachWorm(int type,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY){ // tiene sentido=? probar que sucede...
+    if(this->game->getHeight()<posY ){
         return;
     }
     if(type==static_cast<int>(TypeObj::WORM)){
@@ -66,9 +77,29 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             i->moveTo(-angle,posX,posY);
         }else{
             qDebug()<<"no contiene";
-            MisilBazooka *misil = new MisilBazooka();
+            Projectile *misil = new Projectile();
             misil->setIdObj(type);
             misil->setId(id);
+            std::string path("../../images/misil.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::GREEN_GRENADE_M)){
+        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/granade.png");
+            misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
         }
@@ -118,19 +149,23 @@ std::vector<int> GameClass::fireWeapon()
         }
         //puedo disparar el arma...
 
-        //std::pair<int,int> posW = this->game->getWormActive()->getDir();
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
 
         int id = this->game->getWormActive()->getId();
         std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
-        //int timeW = this->game->getWormActive()->getTimeWeapon();
+        int time = this->game->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
         vect.push_back(id);
         vect.push_back(pos.first);
         vect.push_back(pos.second);
-        //vect.push_back(timeW);
-        //falta el power que esta en el release
+        if(idWeapon==static_cast<int>(WeaponsIds::BANANA) ||
+                idWeapon==static_cast<int>(WeaponsIds::DYNAMITE) ||
+                idWeapon==static_cast<int>(WeaponsIds::GREEN_GRENADE) ||
+                idWeapon==static_cast<int>(WeaponsIds::HOLY_GRENADE) ||
+                idWeapon==static_cast<int>(WeaponsIds::RED_GRENADE)){
+            vect.push_back(time);
+        }
     }
     return vect;
 }
@@ -145,7 +180,47 @@ void GameClass::removeItem(int type,int id)
 {
     MovableItem* item = static_cast<MovableItem*>(this->game->getItem(type,id));
     item->setVisibility(false);
+    item->setSelect(false);
+    Worm_View* worm = dynamic_cast<Worm_View*>(item);
+    Projectile *p = dynamic_cast<Projectile*>(item);
+    if(!worm){
+        if(!p){
+            // no se que es... no deberia entrar nunca
+        }else{
+            p->explote();// ANALIZAR QUE PASA SI SE MANDA OTRO ID IGUAL...
+        }
+        return;
+    }
+    item->setAlive(false);
 }
+
+
+
+void GameClass::checkDeadItem()
+{
+
+    QGraphicsScene *scene = this->game->getScene();
+
+    QList<QGraphicsItem*> list_items = scene->items();
+
+    QList<QGraphicsItem*>::iterator it;
+    for (it=list_items.begin();it!=list_items.end();it++)
+    {
+
+        MovableItem* item =dynamic_cast<MovableItem*>(*it);
+        if(!item){// no es movible
+            continue;
+        }else if(!item->isAlive()){
+            scene->removeItem(item);
+            delete(item);
+            qDebug()<<"ELIMINE ELEMENTO MUERTO !!!!!!!!!!!!!";
+        }
+    }
+}
+
+
+
+
 
 void GameClass::checkQueueEvent(QList<int> list)
 {
@@ -190,6 +265,7 @@ void GameClass::checkQueueEvent(QList<int> list)
 void GameClass::checkRound(int id){
     if(this->myPlayer->getId() != id){
         this->myTurn=false;
+        this->myPlayer->setTurn(false);
         this->myPlayer->getWormActive()->setSelect(false);
         this->myPlayer->setActive(false);
         return;

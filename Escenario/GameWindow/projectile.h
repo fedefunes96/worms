@@ -1,19 +1,17 @@
-#ifndef MISIL_BAZOOKA_H
-#define MISIL_BAZOOKA_H
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
 
 #include <QObject>
-#include <QGraphicsItem>
+#include "movable.h"
 #include <QTimer>
-#include <QPixmap>
 #include <QPainter>
 
-#include "movable.h"
-
-class MisilBazooka: public QObject,public MovableItem
+class Projectile : public QObject,public MovableItem
 {
     Q_OBJECT
 public:
-    MisilBazooka();
+    Projectile();
+    ~Projectile();
     void moveTo(int angle, int posx,int posy);
     bool isMovable();
     bool isAlive();
@@ -22,7 +20,9 @@ public:
     void setVisibility(bool vis);
     bool isSelect();
     void setSelect(bool cond);
-
+    void setAlive(bool alive);
+    void explote();
+    void setSpriteBullet(std::string &path);
 
 private slots:
     void nextFameImpact();
@@ -30,9 +30,8 @@ private slots:
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
-    bool colliding();
-    void explote();
-    
+
+
     int currentFrame;
     QTimer *timer;      // Timer for turning images into QPixmap
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
@@ -40,4 +39,4 @@ private:
 
 };
 
-#endif
+#endif // PROJECTILE_H

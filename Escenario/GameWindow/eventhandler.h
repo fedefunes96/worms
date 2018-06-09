@@ -29,6 +29,7 @@ private:
     void keyReleaseEvent(QKeyEvent *k_event);
     bool keyPress;
     Protocol* protocol;
+    int power;
 };
 
 #endif // EVENTHANDLER_H

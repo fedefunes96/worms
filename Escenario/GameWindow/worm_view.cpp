@@ -6,7 +6,6 @@
 #include "girder_view.h"
 
 #include <QGraphicsScene>
-#include "bazooka.h"
 
 #include <string>
 #include <QString>
@@ -15,21 +14,18 @@
 #include <QTransform>
 #include <math.h>
 
-enum class WeaponType : uint8_t {
-    BAZOOKA_ID = 0,
-    AIRMISIL_ID,
-    BANANA_ID,
-    MORTER_ID,
-    BAT_ID,
-    DINAMITE_ID,
-    GRANADE_ID,
-    FRAG_GRANADE_ID,
-    HOLY_GRANADE_ID,
-    TELEPORT_ID,
-    PUNCH_ID
+enum class WeaponsIds : uint8_t {
+    BAZOOKA = 0,
+    MORTAR,
+    GREEN_GRENADE,
+    RED_GRENADE,
+    BANANA,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    AERIAL_ATTACK,
+    TELEPORTATION
 };
-
-
 
 Worm_View::Worm_View(QObject *parent) :
     QObject(parent), MovableItem()
@@ -37,6 +33,7 @@ Worm_View::Worm_View(QObject *parent) :
 
 
     this->weapon=-1; //wormwait
+    this->weaponCountDwn=false;
     setIdObj(0);
     setFlag(QGraphicsItem::ItemIsSelectable);
     currentFrame = 0;
@@ -59,6 +56,7 @@ Worm_View::Worm_View(QObject *parent) :
 
     setAngle(0);
     this->selected=false;
+    this->countDown=0;
 
 
 }
@@ -166,16 +164,27 @@ void Worm_View::setSelect(bool cond)
     this->selected = cond;
 }
 
+void Worm_View::setAlive(bool alive)
+{
+    this->alive = alive;
+}
+
+void Worm_View::setClickDir(int x, int y)
+{/////////////////CHEQUEAR LO QUE DA EL CLICK DEL TELETRANSPORTAR
+    this->clickTarget.first=x;
+    this->clickTarget.second=y;
+}
+
 std::pair<int, int> Worm_View::getDirWeapon()
 {
     std::pair<int,int> dir;
     if(!this->targetClick){
         dir.first=this->target->boundingRect().width();  //tam target x. =150
-        qDebug()<<"ancho target"<<dir.first;
-        qDebug()<<this->currentDir.first<<this->currentDir.second;
+        //qDebug()<<"ancho target"<<dir.first;
+        //qDebug()<<this->currentDir.first<<this->currentDir.second;
         float aux = (tan( this->targetAngle * 3.1416 / 180 ))*dir.first;
         dir.second = abs(aux);
-        qDebug()<<"nadsjksda"<<dir.second;
+        //qDebug()<<"nadsjksda"<<dir.second;
         if(this->targetAngle<-90 && this->targetAngle>=-270){
             dir.first = -dir.first;
             if(this->targetAngle<-180){
@@ -187,15 +196,19 @@ std::pair<int, int> Worm_View::getDirWeapon()
         int w = this->scene()->width();
         dir.first = dir.first + this->currentDir.first;
         dir.second = w - this->currentDir.second + dir.second;
-        qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
+        //qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
     }else{
-        //stear segun click..
+        return this->clickTarget;
     }
     return dir;
 }
 
 int Worm_View::getTimeWeapon(){
-    return 0;
+    return this->countDown;
+}
+
+void Worm_View::setTimeWeapon(int time){
+    this->countDown = time;
 }
 
 bool Worm_View::isMovable()
@@ -248,6 +261,8 @@ void Worm_View::nextFrame(){
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
     this->targetVis=false;
+    this->targetClick=false;
+    this->weaponCountDwn=false;
     this->weapon=-1;
     this->loadSpriteWeapon(this->weapon);
     setDestDir(posx,posy);
@@ -260,13 +275,12 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     this->setPosition(posx,sc->height()-posy);
     this->moving=false;
 	return;
-    
-
 }
 
 void Worm_View::setVisibility(bool vis)
 {
     this->setVisible(vis);
+    this->targetVis=false;
     this->labelVida->setVisible(vis);
 }
 
@@ -358,14 +372,14 @@ void Worm_View::loadSpriteWeapon(int val)
     this->weapon=val;
     qDebug()<<"weapon id"<<this->weapon;
     timer->disconnect();
-    
+    this->countDown=0;
 
     QString path1;
     QString path2;
     QString path3;
 
     switch (val) {
-    case static_cast<int>(WeaponType::AIRMISIL_ID):
+    case static_cast<int>(WeaponsIds::AERIAL_ATTACK):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wairlnk.png";
@@ -374,7 +388,7 @@ void Worm_View::loadSpriteWeapon(int val)
         loadSprite(path1,path2,path3);
         this->targetClick=true;
         break;
-    case static_cast<int>(WeaponType::BAT_ID):
+    case static_cast<int>(WeaponsIds::BASEBALL_BAT):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbsblnk.png";
@@ -383,7 +397,7 @@ void Worm_View::loadSpriteWeapon(int val)
         loadSprite(path1,path2,path3);
         this->targetVis=true;
         break;
-    case static_cast<int>(WeaponType::BANANA_ID):
+    case static_cast<int>(WeaponsIds::BANANA):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbanlnk.png";
@@ -391,16 +405,20 @@ void Worm_View::loadSpriteWeapon(int val)
         path3 ="../../images/wbanlnkd.png";
         loadSprite(path1,path2,path3);
         this->targetVis=true;
+        this->weaponCountDwn=true;
+        this->countDown=5;
         break;
-    case static_cast<int>(WeaponType::DINAMITE_ID):
+    case static_cast<int>(WeaponsIds::DYNAMITE):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wdynlnk.png";
         path2 ="../../images/wdynlnku.png";
         path3 ="../../images/wdynlnkd.png";
         loadSprite(path1,path2,path3);
+        this->weaponCountDwn=true;
+        this->countDown=5;
         break;
-    case static_cast<int>(WeaponType::FRAG_GRANADE_ID):
+    case static_cast<int>(WeaponsIds::RED_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wclslnk.png";
@@ -408,8 +426,10 @@ void Worm_View::loadSpriteWeapon(int val)
         path3 ="../../images/wclslnkd.png";
         loadSprite(path1,path2,path3);
         this->targetVis=true;
+        this->weaponCountDwn=true;
+        this->countDown=5;
         break;
-    case static_cast<int>(WeaponType::GRANADE_ID):
+    case static_cast<int>(WeaponsIds::GREEN_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wgrnlnk.png";
@@ -417,8 +437,10 @@ void Worm_View::loadSpriteWeapon(int val)
         path3 ="../../images/wgrnlnkd.png";
         loadSprite(path1,path2,path3);
         this->targetVis=true;
+        this->weaponCountDwn=true;
+        this->countDown=5;
         break;
-    case static_cast<int>(WeaponType::HOLY_GRANADE_ID):
+    case static_cast<int>(WeaponsIds::HOLY_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/whgrlnk.png";
@@ -426,8 +448,10 @@ void Worm_View::loadSpriteWeapon(int val)
         path3 ="../../images/whgrlnkd.png";
         loadSprite(path1,path2,path3);
         this->targetVis=true;
+        this->weaponCountDwn=true;
+        this->countDown=5;
         break;
-    case static_cast<int>(WeaponType::MORTER_ID):
+    case static_cast<int>(WeaponsIds::MORTAR):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbazlnk.png";
@@ -436,7 +460,7 @@ void Worm_View::loadSpriteWeapon(int val)
         loadSprite(path1,path2,path3);
         this->targetVis=true;
         break;
-    case static_cast<int>(WeaponType::TELEPORT_ID):
+    case static_cast<int>(WeaponsIds::TELEPORTATION):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wtellnk.png";
@@ -445,7 +469,7 @@ void Worm_View::loadSpriteWeapon(int val)
         loadSprite(path1,path2,path3);
         this->targetClick=true;
         break;
-    case static_cast<int>(WeaponType::BAZOOKA_ID):
+    case static_cast<int>(WeaponsIds::BAZOOKA):
     	currentFrame=0;
         timer->setInterval(35);
         path1 ="../../images/wbazlnk.png";
@@ -454,10 +478,6 @@ void Worm_View::loadSpriteWeapon(int val)
         loadSprite(path1,path2,path3);
         this->targetVis=true;
         break;
-    case static_cast<int>(WeaponType::PUNCH_ID):
-        //aca dejo al worm ocmo estaba en su pos...
-        this->spriteImage = new QPixmap("../../images/wormwait.png");
-        return;
 
     default:
         path1 ="../../images/wwalk.png";
