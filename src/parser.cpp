@@ -14,7 +14,7 @@
 #include <string>
 
 void Parser::loadWorms(std::string &file, std::string &config, 
-	std::vector<Worm*> &worms, Stage& stage, Game& game)
+	std::vector<Worm*> &worms, Stage& stage)
 {
     YAML::Node editor = YAML::LoadFile(file);
     YAML::Node cfg = YAML::LoadFile(config);
@@ -22,8 +22,8 @@ void Parser::loadWorms(std::string &file, std::string &config,
         int i= 0;
         for (YAML::iterator it = editor["Worm"].begin(); it != editor["Worm"].end(); ++it,++i){
             const YAML::Node& worm = *it;
-            int x = worm[0].as<int>()*6/140;
-            int y = worm[1].as<int>()*6/140;
+            int x = worm[0].as<int>();
+            int y = worm[1].as<int>();
             int health = worm[2].as<int>();
             float angl = cfg["Worm"][0].as<float>();
             int longitud = cfg["Worm"][1].as<int>();
@@ -39,7 +39,7 @@ void Parser::loadWorms(std::string &file, std::string &config,
             int alturaMax = cfg["Worm"][9].as<int>();
             //int dkgPorM = cfg["Worm"][10].as<int>();
             int damgMax = cfg["Worm"][11].as<int>();
-            worms[i] = new Worm(game, stage,x,y,angl,longitud,height, restitution,
+            worms[i] = new Worm(stage,x,y,angl,longitud,height, restitution,
             	health,speed,forw_jump,back_jump,damgMax,alturaMax);
         }
     }
@@ -161,7 +161,7 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
              if (id == 7)
              {
              	float max_damg = config["Bate"][2].as<float>();
-             	BaseballBat *us = new BaseballBat(stage,ammo,10.0,max_damg);
+             	BaseballBat *us = new BaseballBat(stage,ammo,max_damg);
              	usables.push_back(us);
              }
              if (id == 8){
