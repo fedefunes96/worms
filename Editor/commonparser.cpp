@@ -47,10 +47,11 @@ void commonParser::saveConfig()
     out <<YAML::Key<<"Worm";
     out <<YAML::BeginSeq;
     out << angle_rad;
+    //total health
     out << longitudW;
     out << alto;
     out <<restitucion;
-    out << velocidad;
+    out<<velocidad;
     out << velocidadSaltoAX;
     out <<velocidadSaltoAY;
     out << velocidadSaltoRX;
@@ -67,91 +68,95 @@ void commonParser::saveConfig()
 
     out<<YAML::Key<<"Bazooka";
     out<<YAML::BeginSeq;
-    out<<2;
-    out<<0;
-    out<<50;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<50;//max dmg
+    out<<2;//pusback
+    out<<2;//exp rad
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"Mortar";
     out<<YAML::BeginSeq;
-    out<<2;
-    out<<0;
-    out<<50;
-    out<<10;
-    out<<5;
-    out<<6;
-    out<<2;
-    out<<0;
-    out<<10;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<50;//max dmg
+    out<<2;//pusback
+    out<<2;//exp rad
+    out<<6;//cant frag
+    out<<5;//V frag
+    out<<1;//rad frag
+    out<<10;//max dm frag
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"GreenGrenade";
     out<<YAML::BeginSeq;
-    out<<2;
-    out<<0.5;
-    out<<30;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<0.5;//restitution
+    out<<30;//max dmg
+    out<<2;//pusback
+    out<<2;//exp rad
     out <<YAML::EndSeq;
 
 
     out<<YAML::Key<<"RedGrenade";
     out<<YAML::BeginSeq;
-    out<<2;
-    out<<0.5;
-    out<<30;
-    out<<10;
-    out<<5;
-    out<<6;
-    out<<2;
-    out<<0.5;
-    out<<10;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<0.5;//restitution
+    out<<30;//max dmg
+    out<<2;//pusback
+    out<<2;//exp rad
+    out<<6;//cant frag
+    out<<5;//V frag
+    out<<1;//rad frag
+    out<<10;//max dm frag
     out <<YAML::EndSeq;
 
 
     out<<YAML::Key<<"Banana";
     out<<YAML::BeginSeq;
-    out<<4;
-    out<<1;
-    out<<70;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<1;//restitution
+    out<<70;//max dmg
+    out<<2;//pusback
+    out<<4;//exp rad
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"HolyGrenade";
     out<<YAML::BeginSeq;
-    out<<8;
-    out<<0.5;
-    out<<110;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<0.5;//restitution
+    out<<110;//max dmg
+    out<<2;//pusback
+    out<<8;//exp rad
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"Dynimite";
     out<<YAML::BeginSeq;
-    out<<4;
-    out<<0;
-    out<<50;
+    out<<1;//rad
+    out<<0;//restitution
+    out<<50;//max dmg
+    out<<2;//pusback
+    out<<4;//exp rad
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"Bate";
     out<<YAML::BeginSeq;
-    out<<10;
+    out<<10;//V
+    out<<10;//dmg
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"AirAttack";
     out<<YAML::BeginSeq;
-    out<<2;
-    out<<0;
-    out<<40;
-    out<<10;
-    out<<5;
+    out<<10;//V
+    out<<2;//rad
+    out<<40;//max dmg
+    out<<420;//from create
+    out<<2;//pusback
+    out<<2;//exp rad
     out <<YAML::EndSeq;
 
     out <<YAML::EndMap;
