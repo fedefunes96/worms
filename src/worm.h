@@ -121,7 +121,7 @@ public:
 
 	void start_moving(MoveDirection mdirect);
 
-	void use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int>& params);	
+	void use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int> params);	
 };
 
 #endif

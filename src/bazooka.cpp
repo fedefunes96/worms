@@ -20,7 +20,7 @@ Bazooka::Bazooka(Stage& stage
 
 void Bazooka::action(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<int>& params) {
+	, const std::vector<int> params) {
 
 	b2Body* b = worm->get_body();
 
@@ -44,9 +44,8 @@ void Bazooka::action(Worm* worm
 	*/
 	//printf("Angle: %0.6f\n", angle);
 	//b2Vec2 where(from_pos.x + longitude*cos(angle), from_pos.y + height*sin(angle));
-	printf("Vel %0.1f %d\n", this->velocity, params[1]);
-	float velocity_f = this->velocity * (float(params[1])/100.0);
-	printf("VelF %0.1f\n", velocity_f);
+	float velocity_f = this->velocity * (float(params[0])/100.0);
+
 	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 
 	//printf("Where: %0.1f %0.1f\n", where.x, where.y);

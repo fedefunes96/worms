@@ -34,10 +34,21 @@ void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float p
         type = TypeObj::AERIAL_ATTACK_M;
     }
 
+    int8_t posx_sign = 1;
+    int8_t posy_sign = 1;
+    int8_t angle_sign = 1;
+
+    if (posX < 0)
+        posx_sign = 0;
+    if (posY < 0)
+        posy_sign = 0;
+    if (angle_sign < 0)
+        angle_sign = 0;
+
     int32_t conv_id = htonl(id_obj); 
-    int32_t conv_posx = htonl(static_cast<int>(posX*10000));
-    int32_t conv_posy = htonl(static_cast<int>(posY*10000));
-    int32_t conv_angle = htonl(static_cast<int>(angle*100));
+    int32_t conv_posx = htonl((abs(static_cast<int>(posX*10000))));
+    int32_t conv_posy = htonl((abs(static_cast<int>(posY*10000))));
+    int32_t conv_angle = htonl((abs(static_cast<int>(angle*100))));
 
     //char c = static_cast<std::underlying_type<Commands>::type>(cmd);
 
@@ -45,8 +56,11 @@ void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float p
     conexion.enviar((const char*)&type,1);
     conexion.enviar((const char*)&conv_id,4);
     conexion.enviar((const char*)&conv_posx,4);
+    conexion.enviar((const char*)&posx_sign,1);
     conexion.enviar((const char*)&conv_posy,4);
+    conexion.enviar((const char*)&posy_sign,1);
     conexion.enviar((const char*)&conv_angle,4);
+    conexion.enviar((const char*)&angle_sign,1);
 
     //std::cout << "angulo:" <<angle*100 << "-" << id_obj << "-" << posX << "-" << posY << std::endl;
 }
@@ -70,11 +84,17 @@ void Protocol::sendUsableId(int8_t id, int32_t ammo) {
 
     Commands cmd = Commands::ATTACH_USABLE_ID;
 
-    int32_t conv_ammo = htonl(ammo);
+    int8_t ammo_sign = 1;
+
+    if (ammo < 0)
+        ammo_sign = 0;
+
+    int32_t conv_ammo = htonl(abs(ammo));
 
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&id,1);
-    conexion.enviar((const char*)&conv_ammo,4);       
+    conexion.enviar((const char*)&conv_ammo,4);    
+    conexion.enviar((const char*)&ammo_sign,1);   
 }
 
 void Protocol::sendPlayerId(int8_t id) {
@@ -186,47 +206,46 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
     conexion.recibir((char*)&aux,4);
     *posy = ntohl(aux);
 
-    std::vector<int> extra_params;
-
     UsableIds usid = static_cast<UsableIds>(uid);
 
     switch (usid) {
         case UsableIds::BAZOOKA: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back(ntohl(aux));
+            int32_t aux2 = ntohl(aux);
+            params.push_back(aux2);
             break;
         }
         case UsableIds::MORTAR: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back(ntohl(aux));
+            params.push_back(ntohl(aux));
             break;
         }  
         case UsableIds::GREEN_GRENADE: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));
+            params.push_back((ntohl(aux)));
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));            
+            params.push_back((ntohl(aux)));            
             break;
         }   
         case UsableIds::RED_GRENADE: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));
+            params.push_back((ntohl(aux)));
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));            
+            params.push_back((ntohl(aux)));            
             break;
         }   
          case UsableIds::BANANA: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));
+            params.push_back((ntohl(aux)));
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));           
+            params.push_back((ntohl(aux)));           
             break;
         }   
         case UsableIds::HOLY_GRENADE: {
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));
+            params.push_back((ntohl(aux)));
             conexion.recibir((char*)&aux,4);
-            extra_params.push_back((ntohl(aux)));            
+            params.push_back((ntohl(aux)));            
             break;
         } 
         case UsableIds::DYNAMITE: {
@@ -236,8 +255,6 @@ void Protocol::recvAttack(int* id_weapon, int* id_worm, int* posx, int* posy, st
         }     
         default: break;                                          
     }
-
-    params = std::move(extra_params);
 }
 
 int8_t Protocol::recvRoomSel()
@@ -299,20 +316,35 @@ void Protocol::sendMove(int8_t id_worm,int8_t dir)
 }
 
 
-void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle)
-{
-    conexion.recibir((char*)type_obj,1);
+void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle) {
     int32_t aux;
+    int8_t sign;
+    int mult;
+
+    conexion.recibir((char*)type_obj,1);
     conexion.recibir((char*)&aux,4);
     *id_obj = ntohl(aux);
     conexion.recibir((char*)&aux,4);
-    *posX = convMtToPx(ntohl(aux)/10000.0);
+    conexion.recibir((char*)&sign,1);
+
+    mult = (sign == 1) ? 1 : -1;
+
+    *posX = convMtToPx(ntohl(aux)*mult/10000.0);
+
     conexion.recibir((char*)&aux,4);
-    *posY = convMtToPx(ntohl(aux)/10000.0);
+    conexion.recibir((char*)&sign,1);
+
+    mult = (sign == 1) ? 1 : -1;
+    *posY = convMtToPx(ntohl(aux)*mult/10000.0);
+
     conexion.recibir((char*)&aux,4);
-    float aux2=(ntohl(aux)*57.2958/100)+0.5;
+    conexion.recibir((char*)&sign,1);
+
+    mult = (sign == 1) ? 1 : -1;
+    float aux2=(ntohl(aux)*mult*57.2958/100)+0.5;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
+
 }
 
 
@@ -342,8 +374,14 @@ void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
 {
     conexion.recibir((char*)id,1);
     int32_t aux;
+    int8_t sign;
+    int mult;
     conexion.recibir((char*)&aux,4);
-    *ammo= ntohl(aux);
+    conexion.recibir((char*)&sign,1);
+
+    mult = (sign == 1) ? 1 : -1;
+
+    *ammo= ntohl(aux)*mult;
 }
 
 int8_t Protocol::recvRooms()
@@ -397,7 +435,8 @@ void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_
     conexion.enviar((const char*)&conv,4);
 
     for (unsigned int var = 0; var < vect.size(); ++var) {
-        conexion.enviar((const char*)&vect[var],4);
+        int32_t aux = htonl(vect[var]);
+        conexion.enviar((const char*)&aux,4);
         std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
     }
     std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;

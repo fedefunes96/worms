@@ -233,13 +233,13 @@ bool Worm::is_on_ground() {
 	return this->sensor_for_jump.get_number_colisions() > 0;
 }
 
-void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int>& params) {
+void Worm::use(std::unique_ptr<Usable>& usable, const b2Vec2& dest, const std::vector<int> params) {
 	if (this->dead)
 		return;
 
 	//b2Vec2 pos = this->body->GetPosition();
 
-	usable->use(this, dest, params);
+	usable->use(this, dest, std::move(params));
 }
 
 std::string Worm::get_type() {

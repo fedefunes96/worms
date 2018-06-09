@@ -22,7 +22,7 @@ AerialAttack::AerialAttack(Stage& stage
 
 void AerialAttack::action(Worm* worm
 	, const b2Vec2& dest_pos
-	, const std::vector<int>& params) {
+	, const std::vector<int> params) {
 
 	//6 radius between each missile (6 missile separation)
 	float separation = 6 * radius;
