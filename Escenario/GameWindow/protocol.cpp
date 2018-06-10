@@ -263,6 +263,28 @@ void Protocol::recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>
     }
 }
 
+void Protocol::recvCreateRoom(std::string &name, std::string &stage_file)
+{
+    char tam;
+    conexion.recibir((char*)&tam,1);
+    char buf[256];
+    conexion.recibir(buf,tam);
+    name = buf;
+    char buf2[256];
+    conexion.recibir((char*)&tam,1);
+    conexion.recibir(buf2,tam);
+    stage_file = buf2;
+}
+
+void Protocol::recvSelectRoom(std::string &name)
+{
+    char tam;
+    conexion.recibir((char*)&tam,1);
+    char buf[256];
+    conexion.recibir(buf,tam);
+    name = buf;
+}
+
 //------------------------------------
 
 
@@ -302,15 +324,13 @@ int convPxToMt(int px){
 
 
 
-void Protocol::sendMove(int8_t id_worm,int8_t dir)
+void Protocol::sendMove(int8_t dir)
 {
     //state --> 1 = END     0 = START
     //dir --> 1 = RIGHT     0 = LEFT
-    std::cout << "id:" << static_cast<int16_t>(id_worm) << "dir" << static_cast<int16_t>(dir) << std::endl;
 
     Commands cmd = Commands::MOVE;
     conexion.enviar((const char*)&cmd,1);
-    conexion.enviar((const char*)&id_worm,1);
     conexion.enviar((const char*)&dir,1);
 }
 
@@ -403,12 +423,11 @@ void Protocol::recvWinner(int8_t* id)
 }
 
 
-void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY, std::vector<int32_t> vect)
+void Protocol::sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vector<int32_t> vect)
 {
     Commands cmd = Commands::ATTACK;
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&id_weapon,1);
-    conexion.enviar((const char*)&id_worm,1);
     int32_t conv = htonl(convPxToMt(posX));
     conexion.enviar((const char*)&conv,4);
     conv = htonl(convPxToMt(posY));
@@ -419,13 +438,28 @@ void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_
         conexion.enviar((const char*)&aux,4);
         std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
     }
-    std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;
+    std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "posX:"<<posX <<"posY:"<<posY << std::endl;
 
 }
 
 void Protocol::sendCreateRoom(std::string &name, std::string &stage_file)
 {
-    //Commands cmd = Commands::JOIN_ROOM;
+    Commands cmd = Commands::CREATE_ROOM;
+    conexion.enviar((const char*)&cmd,1);
+    char tam = name.size();
+    conexion.enviar((const char*)&tam,1);
+    conexion.enviar(name.c_str(),name.size());
+    tam = stage_file.size();
+    conexion.enviar((const char*)&tam,1);
+    conexion.enviar(stage_file.c_str(),stage_file.size());
+}
 
+void Protocol::seendSelectRoom(std::string &name)
+{
+    Commands cmd = Commands::JOIN_ROOM;
+    conexion.enviar((const char*)&cmd,1);
+    char tam = name.size();
+    conexion.enviar((const char*)&tam,1);
+    conexion.enviar(name.c_str(),name.size());
 }
 

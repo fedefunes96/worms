@@ -75,13 +75,13 @@ public:
     void sendDisconnect();
     void recvMove(int *dir);
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);
-    void recvCreateRoom();
-    void recvSelectRoom();
+    void recvCreateRoom(std::string &name, std::string &stage_file);
+    void recvSelectRoom(std::string &name);
     //------------
 
-    void sendMove(int8_t id_worm, int8_t dir);
-    void sendJump(int8_t id_worm,int8_t dir);
-    void sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY, std::vector<int32_t> vect);
+    void sendMove( int8_t dir);
+    void sendJump(int8_t dir);
+    void sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vector<int32_t> vect);
     void sendCreateRoom(std::string &name,std::string &stage_file);
     void seendSelectRoom(std::string &name);
 
