@@ -180,7 +180,7 @@ bool Throwable::should_collide_with(Girder* girder) {
 		}
 	}*/
 bool Throwable::should_collide_with(Worm* worm) {
-	if (worm->get_id() == this->owner->get_id()) {
+	if (worm->get_id() == this->owner->get_id() && !this->stop_collide_owner) {
 		QueryCallback queryCallback;
 		b2AABB aabb;
 
@@ -191,10 +191,20 @@ bool Throwable::should_collide_with(Worm* worm) {
 		this->stage.get_world().QueryAABB(&queryCallback, aabb);
 
 		//Minus 1 because it'll count the throwable
-		if (queryCallback.foundBodies.size() - 1 > 0) 
-			return false;
-	}
+		/*if (queryCallback.foundBodies.size() - 1 > 0) {
 
+			return false;
+		}*/
+
+		for (int i = 0; i < (int) queryCallback.foundBodies.size(); i++) {
+			Ubicable* ubicable = (Ubicable*) queryCallback.foundBodies[i]->GetUserData();
+			if (ubicable->get_id() == worm->get_id()
+				&& ubicable->get_type().compare("Worm")==0) {
+				return false;
+			}
+		}
+	}
+	this->stop_collide_owner = true;
 	return true;
 }
 
