@@ -16,9 +16,10 @@
 #include "event_queue.h"
 
 #define CANT_PLAYERS 50
+#define TERMINAR_SERVIDOR "q"
 
 int main(int argc, char* argv[]) {
-	std::string port("7777");
+	/*std::string port("7777");
 
 	Server serv("8888", 50);
 
@@ -42,7 +43,28 @@ int main(int argc, char* argv[]) {
 
 	printf("Creating a game\n");
 
-	Game game("hi", std::move(players), std::move(event_queues));
+	Game game("hi", std::move(players), std::move(event_queues));*/
+
+	//LO DE ARRIBA ES LO VIEJO
+
+	Server server("7777", 50);
+
+	bool esperar_quit = true;
+
+	std::thread t(&Server::start, &server);
+
+	while(esperar_quit) {
+		std::string input;
+		std::cin >> input;
+
+		if (!input.compare("q")) {
+			server.interrupt_server();
+			esperar_quit = false;
+		}
+	}
+
+	t.join();	
+
 
 	return 0;
 }
