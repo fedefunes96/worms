@@ -88,7 +88,6 @@ public:
     void sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vector<int32_t> vect);
     void sendCreateRoom(std::string &name,std::string &stage_file);
     void sendSelectRoom(std::string &name);
-
     int8_t recvCmd();
     void recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle);
     void recvPlayerId(int8_t *id);
@@ -98,7 +97,7 @@ public:
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
     int8_t recvCantRooms();
-
+    void recvWormHealth(int8_t *id, int32_t *health);
 };
 
 #endif // PROTOCOL_H

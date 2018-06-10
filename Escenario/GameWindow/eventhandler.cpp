@@ -303,9 +303,16 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                     return;
                 }
                 std::vector<int> vect2;
-                vect2.push_back(this->power);
-                if(vect.size()==4){
-                    vect2.push_back(vect[3]);
+                if(vect[0]==static_cast<int>(UsableIds::BANANA)||
+                        vect[0]==static_cast<int>(UsableIds::BAZOOKA)||
+                        vect[0]==static_cast<int>(UsableIds::GREEN_GRENADE)||
+                        vect[0]==static_cast<int>(UsableIds::HOLY_GRENADE)||
+                        vect[0]==static_cast<int>(UsableIds::MORTAR)||
+                        vect[0]==static_cast<int>(UsableIds::RED_GRENADE)){
+                    vect2.push_back(this->power);
+                    if(vect.size()==4){
+                        vect2.push_back(vect[3]);
+                    }
                 }
                 protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
                 qDebug()<<"dispare! event";

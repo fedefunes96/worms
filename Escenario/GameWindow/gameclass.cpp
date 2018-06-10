@@ -75,7 +75,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -85,6 +84,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::GREEN_GRENADE_M)){
         qDebug()<<"crear granada!!!!!!!!!!!";
@@ -94,7 +94,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -104,6 +103,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
         qDebug()<<"crear mortar!!!!!!!!!!!";
@@ -113,7 +113,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -123,16 +122,16 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::AERIAL_ATTACK_M)){
         qDebug()<<"crear aerial attack!!!!!!!!!!!";
         qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
         if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
+            qDebug()<<"lo contiene lo muevo";
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -142,6 +141,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::HOLY_GRENADE_M)){
         qDebug()<<"crear holy granade!!!!!!!!!!!";
@@ -151,7 +151,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -161,6 +160,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::FRAGMENT_M)){
         qDebug()<<"crear fragment!!!!!!!!!!!";
@@ -170,7 +170,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -180,6 +179,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::RED_GRENADE_M)){
         qDebug()<<"crear red granade!!!!!!!!!!!";
@@ -189,7 +189,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -199,6 +198,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }else if(type==static_cast<int>(TypeObj::BANANA_M)){
         qDebug()<<"crear banana!!!!!!!!!!!";
@@ -208,7 +208,6 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             Items* item = this->game->getItem(type,id);
             MovableItem *i = static_cast<MovableItem*>(item);
             i->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(i);
         }else{
             qDebug()<<"no contiene";
             Projectile *misil = new Projectile();
@@ -218,6 +217,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
         }
     }
 }
@@ -292,19 +292,14 @@ bool GameClass::isMyTurn(){
 void GameClass::removeItem(int type,int id)
 {
     MovableItem* item = static_cast<MovableItem*>(this->game->getItem(type,id));
-    item->setVisibility(false);
-    item->setSelect(false);
-    Worm_View* worm = dynamic_cast<Worm_View*>(item);
     Projectile *p = dynamic_cast<Projectile*>(item);
-    if(!worm){
-        if(!p){
-            // no se que es... no deberia entrar nunca
-        }else{
-            p->explote();// ANALIZAR QUE PASA SI SE MANDA OTRO ID IGUAL...
-        }
+    if(p){
+        p->explote();
         return;
     }
     item->setAlive(false);
+    item->setVisibility(false);
+    item->setSelect(false);
 }
 
 

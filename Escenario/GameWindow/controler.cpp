@@ -18,23 +18,20 @@ void Controler::prueba(){
 
 void Controler::run()
 {
-
     bool gameRunning=true;
-    while(gameRunning){ // temporal
+    while(gameRunning){
         QList<int> list;
         int8_t cmd = this->protocol->recvCmd();
         list.push_back(cmd);
         if(cmd== static_cast<int>(Commands::GAME_END)){
             qDebug()<<"game end";
             gameRunning=false;
-            //avisar a game con emit
             return;
         }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
             qDebug()<<"attach player id";
             int8_t id;
             this->protocol->recvPlayerId(&id);
             list.push_back(id);
-            //this->game->addEvent(event);
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
@@ -44,7 +41,6 @@ void Controler::run()
             this->protocol->recvUsableId(&id_weapon,&ammo);
             list.push_back(id_weapon);
             list.push_back(ammo);
-            //this->game->addEvent(event);  UPDATE WEAPON TO USE
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
@@ -65,8 +61,6 @@ void Controler::run()
             list.push_back(id);            
             list.push_back(health);
             qDebug()<<"id:"<<id<<"vida"<<health;
-
-            //this->game->addEvent(event);    DEFINE WORM
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
@@ -89,23 +83,23 @@ void Controler::run()
             int32_t posY=0;
             int32_t angle=0;
             this->protocol->recvPosition(&obj_type,&id_obj,&posX,&posY,&angle);
-
             list.push_back(obj_type);
             list.push_back(id_obj);
             list.push_back(posX);
             list.push_back(posY);
             list.push_back(angle);
-
-            //this->game->addEvent(event);
-            if(id_obj==0 && obj_type==0){
-                qDebug()<<"--> x:"<<posX<<"y:"<<posY;
-            }
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-            //this->game->addEvent(event);
             gameRunning=false;
+            emit eventCreated(list);
+        }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
+            int8_t id;
+            int32_t health;
+            this->protocol->recvWormHealth(&id,&health);
+            list.push_back(id);
+            list.push_back(health);
             emit eventCreated(list);
         }
     }

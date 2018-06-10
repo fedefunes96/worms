@@ -469,3 +469,12 @@ void Protocol::sendSelectRoom(std::string &name)
     conexion.enviar(name.c_str(),name.size());
 }
 
+
+void Protocol::recvWormHealth(int8_t *id, int32_t *health) {
+    conexion.recibir((char*)id,1);
+    int32_t aux;
+    conexion.recibir((char*)&aux,4);
+    *health = ntohl(aux);
+}
+
+
