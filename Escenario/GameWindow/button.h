@@ -20,6 +20,7 @@ private:
     QPushButton* but;
     Protocol *protocol;
     QLineEdit* lines;
+    std::string name;
 
 private slots:
     void conectarse();

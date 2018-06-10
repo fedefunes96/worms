@@ -85,7 +85,7 @@ public:
     void sendJump(int8_t dir);
     void sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vector<int32_t> vect);
     void sendCreateRoom(std::string &name,std::string &stage_file);
-    void seendSelectRoom(std::string &name);
+    void sendSelectRoom(std::string &name);
 
     int8_t recvCmd();
     void recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle);

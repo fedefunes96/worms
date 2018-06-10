@@ -29,10 +29,15 @@ button::~button()
 
 void button::conectarse()
 {
-    //mandar nombre de la sala
+    protocol->sendSelectRoom(name);
 }
 
 void button::create()
 {
-    //creo la sala
+    std::string nombre = lines->text().toUtf8().constData();
+    if (nombre.size() == 0){
+
+    } else {
+        protocol->sendCreateRoom(nombre,name);
+    }
 }

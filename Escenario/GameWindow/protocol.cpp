@@ -306,15 +306,6 @@ void Protocol::senCantRooms(int8_t cant)
 
 
 
-
-
-
-
-
-
-
-
-
 // Client
 
 // Client
@@ -468,7 +459,7 @@ void Protocol::sendCreateRoom(std::string &name, std::string &stage_file)
     conexion.enviar(stage_file.c_str(),stage_file.size());
 }
 
-void Protocol::seendSelectRoom(std::string &name)
+void Protocol::sendSelectRoom(std::string &name)
 {
     Commands cmd = Commands::JOIN_ROOM;
     conexion.enviar((const char*)&cmd,1);

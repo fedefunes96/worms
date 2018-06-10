@@ -65,7 +65,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->setAngle(-180);
-            this->protocol->sendMove((int8_t)worm->getId(),2);
+            this->protocol->sendMove(2);
             break;
         }
         case Qt::Key_Right:
@@ -84,7 +84,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->setAngle(0);
-            this->protocol->sendMove(worm->getId(),1);
+            this->protocol->sendMove(1);
             break;
         }
         case Qt::Key_Up:
@@ -132,7 +132,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->setAngle(worm->getAngle());
-            this->protocol->sendMove(worm->getId(),3);
+            this->protocol->sendMove(3);
             break;
         }
 
@@ -152,7 +152,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->setAngle(worm->getAngle());
-            this->protocol->sendMove(worm->getId(),4);
+            this->protocol->sendMove(4);
             break;
         }
 
@@ -265,7 +265,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
-            this->protocol->sendMove(worm->getId(),0);
+            this->protocol->sendMove(0);
             break;
         }
         case Qt::Key_Right:
@@ -282,7 +282,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
-            this->protocol->sendMove(worm->getId(),0);
+            this->protocol->sendMove(0);
             break;
         }
 
@@ -309,7 +309,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 if(vect.size()==5){
                     vect2.push_back(vect[4]);
                 }
-                protocol->sendAttack(vect[0],vect[1],vect[2],vect[3],vect2);
+                protocol->sendAttack(vect[0],vect[2],vect[3],vect2);
                 qDebug()<<"dispare! event";
             }
             qDebug()<<"solte Espacio";
@@ -331,7 +331,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
-            this->protocol->sendMove(worm->getId(),0);
+            this->protocol->sendMove(0);
             break;
         }
 
@@ -350,7 +350,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
-            this->protocol->sendMove(worm->getId(),0);
+            this->protocol->sendMove(0);
             break;
         }
 
