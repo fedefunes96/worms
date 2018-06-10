@@ -191,10 +191,13 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &viga : vigas){
         out<<YAML::Flow;
         out<<YAML::BeginSeq;
-        out<<viga.second.getX()*6/144;
-        out<<viga.second.getY()*6/144;
+        int tam = viga.second.get_tam();
+        float x = viga.second.getX()*6/144 + tam/2;
+        float y = viga.second.getY()*6/144;
+        out<<x;
+        out<<y;
         out<<viga.second.get_angulo();
-        out<<viga.second.get_tam();
+        out<<tam;
         out<<YAML::EndSeq;
     }
     out <<YAML::EndSeq;
@@ -222,11 +225,13 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Girder"]){
             for (YAML::iterator it = config["Girder"].begin(); it != config["Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = girder[0].as<int>()*144/6;
+                int x = girder[0].as<int>();
                 int y = girder[1].as<int>()*144/6;
                 y = -y;
                 float angulo = girder[2].as<float>();
                 int longitud = girder[3].as<int>();
+                x -= longitud/2 +0.5;
+                x = x *144/6;
                 int id;
                 if (longitud == 3){
                     id = editor->agregar_viga_chica(x,y);

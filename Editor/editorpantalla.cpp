@@ -18,8 +18,8 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::EditorPantalla)
 {
-    xscene = 2000;
-    yscene = 1000;
+    xscene = 3000;
+    yscene = 10000;
     ui->setupUi(this);
     this->setWindowState(Qt::WindowMaximized);
     this->setWindowTitle("Nuevo mapa");
@@ -344,6 +344,7 @@ void EditorPantalla::aumetar_angulo(int id)
         vaciarCeldas(x1,y1,3);
     }
     vigas[id].aumentarAngulo(5);
+    items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
     items[id]->setRotation(items[id]->rotation() - 5);
 }
 
@@ -366,7 +367,6 @@ void EditorPantalla::mousePressEvent(QMouseEvent * evento)
         xscene += 400 ;
         this->scene->setSceneRect(0,-yscene,xscene,yscene);
     }
-
     if (estado == 0){
         int celdaX = x/24;
         int celdaY = -y/24 +1;
@@ -428,12 +428,14 @@ void EditorPantalla::on_mas_clicked()
         int y1 = -y/24;
         if (vigas[current_id].get_tam() == 6){
             vaciarCeldas(x1,y1,6);
+             celdas[std::make_pair((x1+3),y1)] = current_id;
         } else {
             vaciarCeldas(x1,y1,3);
+            celdas[std::make_pair((x1+1),y1)] = current_id;
         }
         vigas[current_id].aumentarAngulo(5);
+        items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() - 5);
-
     }
 }
 
@@ -448,10 +450,13 @@ void EditorPantalla::on_menos_clicked()
         int y1 = -y/24;
         if (vigas[current_id].get_tam() == 6){
             vaciarCeldas(x1,y1,6);
+            this->celdas[std::make_pair(x1+3,y)] = this->current_id;
         } else {
             vaciarCeldas(x1,y1,3);
+            this->celdas[std::make_pair(x1+1,y)] = this->current_id;
         }
         vigas[current_id].aumentarAngulo(-5);
+        items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() + 5);
 
     }
