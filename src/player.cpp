@@ -26,12 +26,14 @@ Player::Player(Player&& other)
 	: socket(std::move(other.socket))
 	, protocol(this->socket)
 	, usables(std::move(other.usables))
-	, worms(std::move(other.worms)) {
+	, worms(std::move(other.worms))
+	, worms_ids(std::move(other.worms_ids)) {
 
 	this->id = other.id;
 	this->should_receive = other.should_receive;
 	this->connected = other.connected;
 	this->event_t = std::move(other.event_t);
+	this->id_actual_worm = 0;
 }
 
 bool Player::should_i_receive() {
