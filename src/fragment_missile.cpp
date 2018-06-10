@@ -14,7 +14,7 @@ FragmentMissile::FragmentMissile(Stage& stage
 	: Throwable(stage
 		, owner
 		, x
-		, y
+		, y + 0.25
 		, angle_rad
 		, velocity
 		, radius

@@ -148,7 +148,7 @@ void Server::create_room(const int id, const std::string name, const std::string
 	this->rooms.emplace(name, std::move(room));
 }
 
-bool Server::join_room(const int id, const std::string& name) {
+void Server::join_room(const int id, const std::string& name) {
 	//Join room if it can
 	std::lock_guard<std::mutex> lock(this->room_m);
 
@@ -158,10 +158,14 @@ bool Server::join_room(const int id, const std::string& name) {
 
 	if (it != this->rooms.end()) {
 		it->second.add_player(id);
-		return true;
+		//Add event bool could join
+		//this->players[id].sendCouldJoin(true);
+		//For each player in room
+		//Send new ammount of players
+		//return true;
 	}
-
-	return false;
+	//this->players[id].sendCouldJoin(false);
+	//return false;
 }
 
 void Server::exit_room(const int id) {

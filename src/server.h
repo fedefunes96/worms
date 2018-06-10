@@ -39,7 +39,7 @@ public:
 	std::vector<std::string>& get_maps();
 	void create_room(const int id, const std::string name, const std::string stage_file);
 	void start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file);
-	bool join_room(const int id, const std::string& name);
+	void join_room(const int id, const std::string& name);
 	void exit_room(const int id);
 };
 

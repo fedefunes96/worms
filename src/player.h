@@ -18,6 +18,7 @@ private:
 	bool should_receive;
 	bool connected;
 	bool in_game;
+	bool can_attack;
 
 	int id_actual_worm;
 
