@@ -75,179 +75,53 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             this->game->add_Item(girder,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::BAZOOKA_M)){
-        qDebug()<<"crear misil!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/misil.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/misil.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::GREEN_GRENADE_M)){
-        qDebug()<<"crear granada!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/granade.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/granade.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
-        qDebug()<<"crear mortar!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/mortar.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/mortar.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::AERIAL_ATTACK_M)){
-        qDebug()<<"crear aerial attack!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene lo muevo";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/airmisil.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/airmisil.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::HOLY_GRENADE_M)){
-        qDebug()<<"crear holy granade!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/hgranade.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/hgranade.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::FRAGMENT_M)){
-        qDebug()<<"crear fragment!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/hgranade.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/hgranade.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::RED_GRENADE_M)){
-        qDebug()<<"crear red granade!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/cluster.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/cluster.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::BANANA_M)){
-        qDebug()<<"crear banana!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/banana.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/banana.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::DYNAMITE_M)){
-        qDebug()<<"crear banana!!!!!!!!!!!";
-        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
-        if(this->game->containsItem(type,id)){
-            qDebug()<<"lo contiene";
-            Items* item = this->game->getItem(type,id);
-            MovableItem *i = static_cast<MovableItem*>(item);
-            i->moveTo(-angle,posX,posY);
-        }else{
-            qDebug()<<"no contiene";
-            Projectile *misil = new Projectile();
-            misil->setIdObj(type);
-            misil->setId(id);
-            std::string path("../../images/dynamite.png");
-            misil->setSpriteBullet(path);
-            this->game->add_Item(misil,posX,posY);
-            misil->moveTo(-angle,posX,posY);
-            this->game->addItemToFollow(misil);
-        }
+        std::string path("../../images/dynamite.png");
+        this->throwProjectile(type,id,posX,posY,angle,path);
     }
 }
 
+
+
+void GameClass::throwProjectile(int type,int id,int posX,int posY,int angle,std::string &path)
+{
+    if(this->game->containsItem(type,id)){
+        Items* item = this->game->getItem(type,id);
+        MovableItem *i = static_cast<MovableItem*>(item);
+        i->moveTo(-angle,posX,posY);
+    }else{
+        Projectile *misil = new Projectile();
+        misil->setIdObj(type);
+        misil->setId(id);
+        misil->setSpriteBullet(path);
+        this->game->add_Item(misil,posX,posY);
+        misil->moveTo(-angle,posX,posY);
+        this->game->addItemToFollow(misil);
+    }
+}
 
 
 void GameClass::updatePlayer(int type, int id, int ammo, Worm_View *worm)

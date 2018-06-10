@@ -41,6 +41,7 @@ private:
     GameWindow *window;
 
     void recvWormHealth(int id, int health);
+    void throwProjectile(int type, int id, int posX, int posY, int angle, std::string &path);
 };
 
 #endif // GAMECLASS_H
