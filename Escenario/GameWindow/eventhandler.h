@@ -20,6 +20,8 @@ public:
     EventHandler(QObject *parent, GameClass *game, Protocol *protocol);
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
+private slots:
+    void fireWithClick();
 private:
     void mouseMoveEvent(QMouseEvent *m_event);
     void keyPressEvent(QKeyEvent *k_event);

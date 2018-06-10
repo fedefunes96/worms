@@ -35,8 +35,9 @@ void Camera::mousePressEvent(QMouseEvent *event)
 {
     if(this->playerActive->isActive()){
         Worm_View* worm = this->playerActive->getWormActive();
-        qDebug()<<"click posX:"<<event->x()<<"posY:"<<event->y();
-        worm->setClickDir(event->x(),event->y());
+        worm->setClickDir(event->x()+horizontalScrollBar()->value(),
+                          this->scene()->height()-(event->y()+verticalScrollBar()->value()));
+        emit mouseClick();
     }
 }
 
@@ -57,16 +58,16 @@ void Camera::followObject()
 
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 10 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 5 );
     }else if(item->x() < horizontalScrollBar()->value()+200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 10 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 5 );
     }
 
 
     if(item->y() > verticalScrollBar()->value()+200 && item->y()>verticalScrollBar()->value()+this->height()-200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + 10 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() + 5 );
     }else if(item->y() < verticalScrollBar()->value()+200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() - 10 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() - 5 );
     }
 
 }

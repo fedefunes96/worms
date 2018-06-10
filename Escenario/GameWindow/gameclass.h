@@ -40,6 +40,7 @@ private:
 
     GameWindow *window;
 
+    void recvWormHealth(int id, int health);
 };
 
 #endif // GAMECLASS_H

@@ -16,12 +16,15 @@
 
 class Camera : public QGraphicsView
 {
+    Q_OBJECT
 public:
     Camera(QWidget *parent = 0 );
     void addItemToFollow(MovableItem *item);
     void setPlayerActive(Player* player);
     void mousePressEvent(QMouseEvent *event);
     void addScene(QGraphicsScene *scene);
+signals:
+    void mouseClick();
 protected:
     void resizeEvent(QResizeEvent *event);
 private slots:

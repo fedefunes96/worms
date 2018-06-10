@@ -15,6 +15,7 @@ EventHandler::EventHandler(QObject *parent, GameClass *game, Protocol* protocol)
 {
     this->worm_selected = nullptr;
     this->power=10;
+    connect(game->getCamera(),SIGNAL(mouseClick()),this,SLOT(fireWithClick()));
 }
 
 bool EventHandler::eventFilter(QObject *obj, QEvent *event)
@@ -32,6 +33,17 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
+
+void EventHandler::fireWithClick()
+{
+    std::vector<int> vect = this->game->fireWeapon();
+    if(vect.empty()){
+        qDebug()<<"vector vacio --> no arma seleccionada o disponible";
+        return;
+    }
+    std::vector<int> vect2;
+    protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
+}
 
 
 

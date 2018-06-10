@@ -33,6 +33,13 @@ void GameClass::connectController(Controler *controler)
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
 }
 
+void GameClass::recvWormHealth(int id,int health)
+{
+    Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),id);
+    Worm_View *worm = static_cast<Worm_View*>(item);
+    worm->setHealth(health);
+}
+
 void GameClass::attachWorm(int type,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
@@ -366,6 +373,9 @@ void GameClass::checkQueueEvent(QList<int> list)
         qDebug()<<"winner leido!";
         this->myPlayer->setActive(false);
         this->myTurn=false;
+    }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
+        qDebug()<<"recibi daño";
+        this->recvWormHealth(list[1],list[2]);
     }
 
 }
