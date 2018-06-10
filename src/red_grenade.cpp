@@ -48,6 +48,8 @@ void RedGrenade::action(Worm* worm
 
 	int time = params[1];
 
+	printf("Time setted: %d\n", time);
+
 	RedGrenadeMissile* missile = new RedGrenadeMissile(this->stage
 												, worm
 												, from_pos.x

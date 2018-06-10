@@ -69,7 +69,7 @@ void Protocol::sendActualWorm(int8_t id) {
     conexion.enviar((const char*)&id,1);
 }
 
-void Protocol::sendWormId(int8_t id, int32_t health) {
+void Protocol::sendWormId(int8_t id, int8_t id_worm, int32_t health) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
     int32_t conv_health = htonl(health); 
@@ -80,6 +80,7 @@ void Protocol::sendWormId(int8_t id, int32_t health) {
 
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&id,1);
+    conexion.enviar((const char*)&id_worm,1);
     conexion.enviar((const char*)&conv_health,4);    
 }
 

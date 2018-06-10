@@ -30,6 +30,8 @@ void Dynamite::action(Worm* worm
 
 	int time = params[0];
 
+	printf("Time setted: %d\n", time);
+
 	DynamiteMissile* missile = new DynamiteMissile(this->stage
 												, worm
 												, from_pos.x

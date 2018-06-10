@@ -9,10 +9,11 @@
 
 class EventAttachWorm : public Event {
 private:
+	const int id;
 	std::shared_ptr<Worm> worm;
 
 public:
-	EventAttachWorm(std::shared_ptr<Worm> worm);
+	EventAttachWorm(const int id, std::shared_ptr<Worm> worm);
 
 	virtual void process(Player& player, Protocol& protocol) override;
 };

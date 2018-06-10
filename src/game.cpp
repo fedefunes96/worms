@@ -32,7 +32,7 @@ Game::Game(const std::string& stage_file
  , std::vector<EventQueue*> event_queues) 
  : players(std::move(players))
  , event_queues(std::move(event_queues))
- , stage(stage_file, 1.0/20.0, 6, 2, *this, this->event_queues)  {
+ , stage(stage_file, 1.0/20.0, 6, 2, *this, this->event_queues) {
  	this->id_player_list = 0;
  	this->is_over = false;
 
@@ -113,10 +113,11 @@ void Game::initialize_game(const std::string& stage_file) {
 			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worm);
 			//this->players[i].attach_worm(worm_ptr);
 			
-			std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
+			std::shared_ptr<Event> event(new EventAttachWorm(this->players[i]->get_id(), worm_ptr));
 
-			//Its one event unique per player
-			this->event_queues[i]->add_event(std::move(event));
+			//Send event to everyone
+			for (int k = 0; k < (int) this->event_queues.size(); k++)
+				this->event_queues[k]->add_event(std::move(event));
 
 			this->stage.insert(std::move(worm_ptr));
 		}
@@ -127,10 +128,11 @@ void Game::initialize_game(const std::string& stage_file) {
 		for (; j < worms_per_player*(i+1)+1; j++) {
 			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worms_to_attach[j]);
 			//this->players[i].attach_worm(worm_ptr);
-			std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
+			std::shared_ptr<Event> event(new EventAttachWorm(this->players[i]->get_id(), worm_ptr));
 
-			//Its one event unique per player
-			this->event_queues[i]->add_event(std::move(event));
+			//Send event to everyone
+			for (int k = 0; k < (int) this->event_queues.size(); k++)
+				this->event_queues[k]->add_event(std::move(event));
 
 			this->stage.insert(std::move(worm_ptr));
 		}	
