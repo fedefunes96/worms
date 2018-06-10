@@ -285,6 +285,13 @@ void Protocol::recvSelectRoom(std::string &name)
     name = buf;
 }
 
+void Protocol::senCantRooms(int8_t cant)
+{
+    Commands cmd = Commands::CANT_ROOMS;
+    conexion.enviar((const char *)&cmd,1);
+    conexion.enviar((const char*)&cant,1);
+}
+
 //------------------------------------
 
 
@@ -403,6 +410,13 @@ void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
     *ammo= ntohl(aux)*mult;
 }
 
+int8_t Protocol::recvCantRooms()
+{
+    int8_t aux;
+    conexion.recibir((char*)&aux,1);
+    return aux;
+}
+
 void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
 {
     conexion.recibir((char*)id_obj,1);
@@ -444,7 +458,7 @@ void Protocol::sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vec
 
 void Protocol::sendCreateRoom(std::string &name, std::string &stage_file)
 {
-    Commands cmd = Commands::CREATE_ROOM;
+    Commands cmd = Commands::SHOW_ROOMS;
     conexion.enviar((const char*)&cmd,1);
     char tam = name.size();
     conexion.enviar((const char*)&tam,1);

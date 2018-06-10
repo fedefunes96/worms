@@ -23,7 +23,8 @@ enum class Commands : uint8_t {
     EXIT_ROOM,
     WORM_HEALTH,
     DISCONNECT,
-    CREATE_ROOM
+    CANT_ROOMS
+
 };
 
 enum class TypeObj : uint8_t {
@@ -77,6 +78,7 @@ public:
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);
     void recvCreateRoom(std::string &name, std::string &stage_file);
     void recvSelectRoom(std::string &name);
+    void senCantRooms(int8_t cant);
     //------------
 
     void sendMove( int8_t dir);
@@ -93,6 +95,7 @@ public:
     void recvActualPlayer(int8_t *id);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
+    int8_t recvCantRooms();
 
 };
 
