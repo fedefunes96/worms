@@ -101,6 +101,24 @@ void Controler::run()
             list.push_back(id);
             list.push_back(health);
             emit eventCreated(list);
+        } else if (cmd==static_cast<int>(Commands::MAP_LIST)){
+            //pasarle las cosas a create room
+        	std::vector<std::string> names;
+        	this->protocol->recvMaps(names);
+        } else if (cmd==static_cast<int>(Commands::SHOW_ROOMS)){
+            //pasarle las cosas a map selection
+        	std::vector<std::string> names;
+        	this->protocol->recvRomms(names);
+        } else if (cmd==static_cast<int>(Commands::COULD_JOIN)){
+            //pasarle a map salection que pudo conectarse
+        	int8_t conecto = this->protocol->recvCouldJoinRoom();
+        	list.push_back(conecto);
+        } else if (cmd==static_cast<int>(Commands::PLAYERS_IN_ROOM)){
+        	//pasarselo a wait room
+        	int8_t cant = this->protocol->recvPlayersInRoom();
+        	list.push_back(cant);
+        } else if (cmd==static_cast<int>(Commands::START_GAME)){
+        	//pasarselo a wait room
         }
     }
 

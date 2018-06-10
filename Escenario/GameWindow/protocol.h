@@ -30,7 +30,6 @@ enum class Commands : uint8_t {
     MAP_LIST,
     COULD_JOIN,
     PLAYERS_IN_ROOM,
-    CANT_ROOMS
 };
 
 enum class TypeObj : uint8_t {
@@ -89,7 +88,6 @@ public:
     void recvMove(int *dir);
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);
     void recvCreateRoom(std::string& room_name, std::string& stage_file);
-    void senCantRooms(int8_t cant);
     //------------
 
     void sendMove( int8_t dir);
@@ -105,8 +103,11 @@ public:
     void recvActualPlayer(int8_t *id, int8_t *id_worm);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
-    int8_t recvCantRooms();
     void recvWormHealth(int8_t *id, int32_t *health);
+    int8_t recvCouldJoinRoom();
+    int8_t recvPlayersInRoom();
+    void recvRomms(std::vector<std::string>& rooms_name);
+    void recvMaps(std::vector<std::string>& rooms_name);
 };
 
 #endif // PROTOCOL_H

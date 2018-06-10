@@ -12,7 +12,7 @@ MapSelection::MapSelection(Protocol* protocol, QWidget *parent) :
     this->protocol = protocol;  
     ui->setupUi(this);
     this->setWindowTitle("Worms Map Selection");
-    char cant = protocol->recvCantRooms();
+    char cant = 5;
     for (int i = 0; i< cant; ++i){
         //recivo los nobres
         std::string name;
