@@ -37,11 +37,12 @@ private:
 
 	std::thread event_t;
 
+	EventQueue event_queue;
+
 	bool should_i_receive();
 	void set_receive(bool state);
 	void disconnected_player();
 	void process_events();
-	int get_actual_worm();
 
 public:
 	Player(Socket socket, const int id);
@@ -67,7 +68,22 @@ public:
 
 	bool is_in_game();
 	void disconnect();
+	void shutdown();
+	void stop_events();
+	void set_connected(bool state);
+
 	bool is_disconnected();
+
+	EventQueue* get_event_queue();
+
+	std::unordered_map<int, std::unique_ptr<Usable>>& get_usables();
+
+	std::unordered_map<int, std::shared_ptr<Worm>>& get_worms();
+
+	std::vector<int>& get_worms_ids();	
+
+	int get_actual_worm();
+	void new_worm_id();
 };
 
 #endif

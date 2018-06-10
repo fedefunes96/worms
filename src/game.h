@@ -13,6 +13,7 @@
 #include "girder.h"
 #include "worm.h"
 #include "throwable.h"
+#include "event_queue.h"
 
 class Stage;
 
@@ -25,8 +26,9 @@ enum Game_status {
 class Game : public Thread {
 private:
 	Stage stage;
-	std::vector<Player> players;
+	std::vector<Player*> players;
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
+	std::vector<EventQueue*>& event_queues;
 	//std::vector<std::unique_ptr<Worm>> worms;
 	//std::vector<std::unique_ptr<Girder>> girders;
 
@@ -40,7 +42,7 @@ private:
 	//Player winner;
 	//std::vector<Player>::iterator it_actual_player;
 
-	Player& get_actual_player();
+	Player* get_actual_player();
 	void end_game(Game_status game_status);
 	void notify_winner(); 
 	Game_status check_for_winner();
@@ -51,10 +53,11 @@ private:
 	void start_game();
 
 	void notify_actual_player(const int id);
-	void create_test_world();
 
 public:
-	Game(const std::string& stage_file, std::vector<Player> players);
+	Game(const std::string& stage_file
+		, std::vector<Player*> players
+		, std::vector<EventQueue*>& event_queues);
 	~Game();
 
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);

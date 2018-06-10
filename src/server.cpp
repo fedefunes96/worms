@@ -162,9 +162,10 @@ void Server::join_room(const int id, const std::string& name) {
 		//this->players[id].sendCouldJoin(true);
 		//For each player in room
 		//Send new ammount of players
+		//return true;		
 		//return true;
 	}
-	//this->players[id].sendCouldJoin(false);
+
 	//return false;
 }
 

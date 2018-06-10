@@ -3,12 +3,14 @@
 #include "event.h"
 #include <string>
 
+EventQueue::EventQueue() {}
+
 void EventQueue::add_event(std::shared_ptr<Event> event) {
 	this->block_queue.push(std::move(event));
 }
 
 std::shared_ptr<Event> EventQueue::get_event() {
-	return this->block_queue.pop();
+	return std::move(this->block_queue.pop());
 }
 
 EventQueue::EventQueue(EventQueue&& other)

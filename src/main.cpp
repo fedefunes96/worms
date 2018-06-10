@@ -13,6 +13,7 @@
 #include "protocol.h"
 
 #include "counter.h"
+#include "event_queue.h"
 
 #define CANT_PLAYERS 50
 
@@ -23,17 +24,23 @@ int main(int argc, char* argv[]) {
 
 	Socket skt = server.aceptar();
 
-	std::vector<Player> players;
+	std::vector<Player*> players;
 
 	//Protocol protocol(skt);
 
-	Player player(std::move(skt), 0);
+	Player player(std::move(skt), 1);
 
-	players.push_back(std::move(player));
+	std::vector<EventQueue*> event_queues;
+
+	event_queues.push_back(player.get_event_queue());
+
+	//players.push_back(std::move(player));
+
+	players.push_back(&player);
 
 	printf("Creating a game\n");
 
-	Game game("hi", std::move(players));
+	Game game("hi", std::move(players), event_queues);
 
 	return 0;
 }

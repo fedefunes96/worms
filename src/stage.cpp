@@ -10,18 +10,24 @@
 #include <algorithm>
 #include "wind.h"
 #include <condition_variable>
+#include "event_queue.h"
+#include "event_position.h"
+#include "event_remove.h"
+#include <iostream>
 
 Stage::Stage(const std::string& stage_file
 	, const float32 time_step
 	, const int32 velocity_iterations
 	, const int32 position_iterations
-	, Game& game)
+	, Game& game
+	, std::vector<EventQueue*>& event_queues)
 	: time_step(time_step)
 	, velocity_iterations(velocity_iterations) 
 	, position_iterations(position_iterations)
 	, gravity(0.0f, 0.0f)
 	, world(this->gravity, true)
 	, game(game)
+	, event_queues(event_queues)
 	, wind(0.1, 1.0)
 	, water(0.0) {
 
@@ -37,7 +43,18 @@ void Stage::remove_deads() {
 	while (it != this->movables.end()) {
 		if ((*it)->im_dead()) {
 			(*it)->delete_myself(this->world);
-			this->game.notify_removal((*it).get());
+			//this->game.notify_removal((*it).get());
+
+			std::shared_ptr<Event> event(new EventRemove((*it)->get_type()
+														, (*it)->get_id()));
+
+			for (int i = 0; i < (int) this->event_queues.size(); i++) {
+				//Copy share pointers to everyone
+				//Destroy the event when all the players
+				//process it
+				this->event_queues[i]->add_event(event);
+			}
+
 			it = this->movables.erase(it);
 		} else {
 			++it;
@@ -141,7 +158,20 @@ void Stage::draw() {
  				(*it)->force_death();
  			}
 
- 			this->game.notify_position((*it).get(), pos.x, pos.y, angle);
+ 			//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
+
+ 			std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
+														, (*it)->get_id()
+ 														, pos.x
+ 														, pos.y
+ 														, angle));
+
+			for (int i = 0; i < (int) this->event_queues.size(); i++) {
+				//Copy share pointers to everyone
+				//Destroy the event when all the players
+				//process it
+				this->event_queues[i]->add_event(event);
+			}
 
  			//if (b->IsAwake())
  			cant_objects_moving++;
@@ -153,9 +183,9 @@ void Stage::draw() {
   		if (cant_objects_moving == 0)
   			this->nothing_moving();
 
-  		this->step();
-
   		this->remove_deads();
+
+  		this->step();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(TIME_STEP_MS));
 	}
@@ -204,7 +234,19 @@ void Stage::pre_initialize() {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
 
- 		this->game.notify_position((*it).get(), pos.x, pos.y, angle);
+ 		//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
+ 		std::cout << (*it)->get_type() << (*it)->get_id() << std::endl;
+ 		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
+													, (*it)->get_id()
+ 													, pos.x
+ 													, pos.y
+ 													, angle));
+		for (int i = 0; i < (int) this->event_queues.size(); i++) {
+			//Copy share pointers to everyone
+			//Destroy the event when all the players
+			//process it
+			this->event_queues[i]->add_event(event);
+		}
 
  		++it;
   	}	
@@ -217,10 +259,21 @@ void Stage::pre_initialize() {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
 
- 		this->game.notify_position((*it_mov).get(), pos.x, pos.y, angle);
+ 		//this->game.notify_position((*it_mov).get(), pos.x, pos.y, angle);
 
+ 		std::shared_ptr<Event> event(new EventPosition((*it_mov)->get_type()
+													, (*it_mov)->get_id()
+ 													, pos.x
+ 													, pos.y
+ 													, angle));
+		for (int i = 0; i < (int) this->event_queues.size(); i++) {
+			//Copy share pointers to everyone
+			//Destroy the event when all the players
+			//process it
+			this->event_queues[i]->add_event(event);
+		}
  		++it_mov;
-  	}	  	
+  	}	 	
 }
 
 void Stage::stop_drawing() {

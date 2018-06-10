@@ -13,6 +13,7 @@ void EventActualPlayer::process(Player& player, Protocol& protocol) {
 	//Its my turn, send worm id
 	if (id == player.get_id()) {
 		printf("Sending id worm: ");
+		player.new_worm_id();
 		int actual_worm = player.get_actual_worm();
 
 		while (player.get_worms().at(actual_worm)->im_dead()) {
@@ -21,8 +22,6 @@ void EventActualPlayer::process(Player& player, Protocol& protocol) {
 		}
 
 		printf("%d\n", actual_worm);
-		
-		player.new_worm_id();
 
 		protocol.sendActualWorm(actual_worm);
 	}

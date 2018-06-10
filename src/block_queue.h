@@ -14,12 +14,12 @@ private:
 	std::condition_variable cond_var;
 
 public:
-	void push(const T& obj) {
+	/*void push(const T& obj) {
 		std::unique_lock<std::mutex> mlock(this->m);
 		this->queue.push(obj);
 		mlock.unlock();
 		this->cond_var.notify_one();	
-	}
+	}*/
 
 	void push(T&& obj) {
 		std::unique_lock<std::mutex> mlock(this->m);
@@ -39,10 +39,11 @@ public:
 
 		this->queue.pop();
 
-		return obj;		
+		return std::move(obj);		
 	}
 
 	//Cannot be copied
+	BlockQueue() {}
 	BlockQueue(const BlockQueue&) = delete;
 	BlockQueue &operator=(const BlockQueue&) = delete;
 	//Only move

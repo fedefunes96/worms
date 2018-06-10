@@ -12,6 +12,7 @@
 #include "wind.h"
 #include "water.h"
 #include <condition_variable>
+#include "event_queue.h"
 //#include "game.h"
 
 #define TIME_STEP_MS 25
@@ -33,6 +34,9 @@ private:
 	ContactFilter contact_filter;
 
 	Game& game;
+
+	std::vector<EventQueue*>& event_queues;
+
 	Wind wind;
 	Water water;
 
@@ -65,6 +69,7 @@ public:
 		, const int32 velocity_iterations
 		, const int32 position_iterations
 		, Game& game
+		, std::vector<EventQueue*>& event_queues
 		);
 
 	void draw();
