@@ -16,6 +16,7 @@
 - 6) Hacer animacion worm ahogandose + colocar agua
 - 8) Documentacion
 - 9) Testings
+- 10) Cambiar ventana maximizable de seleccion de armas
 
 - Cliente editor
 - 1) Finalizar creador de ecenarios (problemas con el dragg)
