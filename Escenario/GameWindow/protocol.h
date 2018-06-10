@@ -22,7 +22,8 @@ enum class Commands : uint8_t {
     JOIN_ROOM,
     EXIT_ROOM,
     WORM_HEALTH,
-    DISCONNECT
+    DISCONNECT,
+    CREATE_ROOM
 };
 
 enum class TypeObj : uint8_t {
@@ -70,20 +71,19 @@ public:
     void sendGameEnd();
     void sendActualPlayer(int8_t id);
     void sendWinner(int8_t id);
-    void sendRooms(int8_t rooms);
-    void sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual);
     void sendWormHealth(int8_t id, int32_t health);
     void sendDisconnect();
-
     void recvMove(int *dir);
-    void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params); 
-    int8_t recvRoomSel();   
+    void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);
+    void recvCreateRoom();
+    void recvSelectRoom();
     //------------
 
     void sendMove(int8_t id_worm, int8_t dir);
     void sendJump(int8_t id_worm,int8_t dir);
     void sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_t posY, std::vector<int32_t> vect);
-
+    void sendCreateRoom(std::string &name,std::string &stage_file);
+    void seendSelectRoom(std::string &name);
 
     int8_t recvCmd();
     void recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle);
@@ -93,9 +93,7 @@ public:
     void recvActualPlayer(int8_t *id);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
-    int8_t recvRooms();
-    void recvRoomCaratc(int8_t* room, int8_t* cantMax, int8_t* cantActual);
-    void sendRoomSel(int8_t id);
+
 };
 
 #endif // PROTOCOL_H

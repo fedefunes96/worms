@@ -192,16 +192,6 @@ void Protocol::sendDisconnect() {
     conexion.enviar((const char*)&cmd,1);    
 }
 
-void Protocol::sendRooms(int8_t rooms) {
-    conexion.enviar((const char*)&rooms,1);
-}
-
-void Protocol::sendRoomCaract(int8_t room, int8_t cantMax, int8_t cantActual) {
-    conexion.enviar((const char*)&room,1);
-    conexion.enviar((const char*)&cantMax,1);
-    conexion.enviar((const char*)&cantActual,1);
-}
-
 void Protocol::recvMove(int *dir) {
     std::lock_guard<std::mutex> lock(this->server_recv_m);
 
@@ -271,12 +261,6 @@ void Protocol::recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>
         }     
         default: break;                                          
     }
-}
-
-int8_t Protocol::recvRoomSel() {
-    int8_t id;
-    conexion.recibir((char*)&id,1);
-    return id;
 }
 
 //------------------------------------
@@ -399,25 +383,6 @@ void Protocol::recvUsableId(int8_t* id,int32_t* ammo)
     *ammo= ntohl(aux)*mult;
 }
 
-int8_t Protocol::recvRooms()
-{
-    int8_t rooms;
-    conexion.recibir((char*)&rooms,1);
-    return rooms;
-}
-
-void Protocol::recvRoomCaratc(int8_t *room, int8_t *cantMax, int8_t *cantActual)
-{
-    conexion.recibir((char*)room,1);
-    conexion.recibir(( char*)cantMax,1);
-    conexion.recibir(( char*)cantActual,1);
-}
-
-void Protocol::sendRoomSel(int8_t id)
-{
-    conexion.enviar((const char*) &id,1);
-}
-
 void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
 {
     conexion.recibir((char*)id_obj,1);
@@ -455,6 +420,12 @@ void Protocol::sendAttack(int8_t id_weapon, int8_t id_worm, int32_t posX, int32_
         std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
     }
     std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "id_worm:" << static_cast<int16_t>(id_worm) << "posX:"<<posX <<"posY:"<<posY << std::endl;
+
+}
+
+void Protocol::sendCreateRoom(std::string &name, std::string &stage_file)
+{
+    //Commands cmd = Commands::JOIN_ROOM;
 
 }
 

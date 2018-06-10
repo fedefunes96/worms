@@ -31,7 +31,11 @@ SOURCES +=\
     controler.cpp \
     weapon.cpp \
     projectile.cpp \
-    gamewindow.cpp
+    gamewindow.cpp \
+    roomcreator.cpp \
+    mapSelection.cpp \
+    client.cpp \
+    button.cpp
 
 HEADERS  += \
     game_view.h \
@@ -50,8 +54,15 @@ HEADERS  += \
     controler.h \
     weapon.h \
     projectile.h \
-    gamewindow.h
+    gamewindow.h \
+    roomcreator.h \
+    mapSelection.h \
+    clientmainwindow.h \
+    button.h
 
 FORMS    += \
     weapons_and_tools.ui \
-    gamewindow.ui
+    gamewindow.ui \
+    roomcreator.ui \
+    mapSelection.ui \
+    clientmainwindow.ui
