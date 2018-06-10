@@ -36,13 +36,21 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
 
 void EventHandler::fireWithClick()
 {
-    std::vector<int> vect = this->game->fireWeapon();
-    if(vect.empty()){
-        qDebug()<<"vector vacio --> no arma seleccionada o disponible";
+    Worm_View* worm = this->game->getWormActive();
+    if(worm==nullptr){
         return;
     }
-    std::vector<int> vect2;
-    protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
+    int idWeapon = worm->getWeaponId();
+    if(idWeapon==static_cast<int>(UsableIds::AERIAL_ATTACK)||
+            idWeapon==static_cast<int>(UsableIds::TELEPORTATION)){
+        std::vector<int> vect = this->game->fireWeapon();
+        if(vect.empty()){
+            qDebug()<<"vector vacio --> no arma seleccionada o disponible";
+            return;
+        }
+        std::vector<int> vect2;
+        protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
+    }
 }
 
 
