@@ -7,6 +7,8 @@
 #include <vector>
 #include <mutex>
 
+#define BYTES_RECEIVE 50
+
 enum class Commands : uint8_t {
     POSITION = 0,
     ATTACH_WORM_ID,
@@ -23,10 +25,12 @@ enum class Commands : uint8_t {
     EXIT_ROOM,
     WORM_HEALTH,
     DISCONNECT,
-    CANT_ROOMS,
     CREATE_ROOM,
     START_GAME,
-    MAP_LIST
+    MAP_LIST,
+    COULD_JOIN,
+    PLAYERS_IN_ROOM,
+    CANT_ROOMS
 };
 
 enum class TypeObj : uint8_t {
@@ -76,10 +80,15 @@ public:
     void sendWinner(int8_t id);
     void sendWormHealth(int8_t id, int32_t health);
     void sendDisconnect();
+    void sendCouldJoinRoom(int8_t id);
+    void sendPlayersInRoom(int8_t size);
+    void sendStartGame();
+    void sendRooms(const std::vector<std::string>& rooms_name);
+    void sendMaps(const std::vector<std::string>&maps);
+    void recvRoom(std::string& room_name);
     void recvMove(int *dir);
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);
-    void recvCreateRoom(std::string &name, std::string &stage_file);
-    void recvSelectRoom(std::string &name);
+    void recvCreateRoom(std::string& room_name, std::string& stage_file);
     void senCantRooms(int8_t cant);
     //------------
 

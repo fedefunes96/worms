@@ -8,9 +8,11 @@
 #include <thread>
 #include <string>
 #include "common_socket_exception.h"
+#include "server.h"
 
-Player::Player(Socket socket, const int id) 
-	: socket(std::move(socket))
+Player::Player(Server& server, Socket socket, const int id) 
+	: server(server)
+	, socket(std::move(socket))
 	, protocol(this->socket) {
 
 	this->should_receive = true;
@@ -27,7 +29,8 @@ Player::Player(Socket socket, const int id)
 }
 
 Player::Player(Player&& other)
-	: socket(std::move(other.socket))
+	: server(other.server)
+	, socket(std::move(other.socket))
 	, protocol(this->socket)
 	, usables(std::move(other.usables))
 	, worms(std::move(other.worms))
@@ -145,39 +148,32 @@ void Player::game_loop() {
  				this->worms.at(this->get_actual_worm())->use(this->usables.at(id_usable), dest, std::move(params));
 
 			} else if (cmd == Commands::SHOW_ROOMS) {
-				/*std::vector<std::string> rooms_name = this->server.get_rooms();
+				std::vector<std::string> rooms_name = this->server.get_rooms();
 				
 				this->protocol.sendRooms(rooms_name);
 
-				*/ 
-
 			} else if (cmd == Commands::JOIN_ROOM) {
-				/*
 				std::string room_name;
 
-				this->protocol.recvRooms(&room_name);
+				this->protocol.recvRoom(room_name);
 
 				this->server.join_room(this->get_id(), room_name);
-
-				*/				
+			
 			} else if (cmd == Commands::CREATE_ROOM) {
-				/* 
 				std::string room_name;
 				std::string stage_file;
 
-				this->protocol.recvCreateRoom(&room_name, &stage_file);
+				this->protocol.recvCreateRoom(room_name, stage_file);
 
 				this->server.create_room(this->get_id(), room_name, stage_file);
-				*/
+
 			} else if (cmd == Commands::MAP_LIST) {
+				std::vector<std::string>& maps = this->server.get_maps();
 
-				/*std::string& maps = this->server.get_maps();
-
-				this->protocol.sendMaps(maps);*/
+				this->protocol.sendMaps(maps);
 
 			} else if (cmd == Commands::EXIT_ROOM) {
-
-				//this->stage.exit_room(this->get_id());
+				this->server.exit_room(this->get_id());
 
 			} else {
 				//Player's cheating

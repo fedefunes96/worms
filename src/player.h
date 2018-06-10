@@ -11,6 +11,8 @@
 #include "counter.h"
 #include "event_queue.h"
 
+class Server;
+
 class Player : public Thread {
 private:
 	int id;
@@ -24,6 +26,7 @@ private:
 
 	Counter counter;
 
+	Server& server;
 	Socket socket;
 	Protocol protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>> usables;
@@ -43,7 +46,7 @@ private:
 	void process_events();
 
 public:
-	Player(Socket socket, const int id);
+	Player(Server& server, Socket socket, const int id);
 	Player(Player&&);
 
 	void play();

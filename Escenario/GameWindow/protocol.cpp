@@ -66,6 +66,8 @@ void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float p
 }
 
 void Protocol::sendActualWorm(int8_t id) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
     conexion.enviar((const char*)&id,1);
 }
 
@@ -177,6 +179,8 @@ void Protocol::sendWinner(int8_t id) {
 }
 
 void Protocol::sendWormHealth(int8_t id, int32_t health) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
     Commands cmd = Commands::WORM_HEALTH;  
 
     conexion.enviar((const char*)&cmd,1);
@@ -188,9 +192,122 @@ void Protocol::sendWormHealth(int8_t id, int32_t health) {
 }
 
 void Protocol::sendDisconnect() {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
     Commands cmd = Commands::DISCONNECT;  
 
     conexion.enviar((const char*)&cmd,1);    
+}
+
+void Protocol::sendCouldJoinRoom(int8_t id) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
+    Commands cmd = Commands::COULD_JOIN;  
+
+    conexion.enviar((const char*)&cmd,1); 
+    conexion.enviar((const char*)&id,1);      
+}
+
+void Protocol::sendPlayersInRoom(int8_t size) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
+    Commands cmd = Commands::PLAYERS_IN_ROOM;  
+
+    conexion.enviar((const char*)&cmd,1); 
+    conexion.enviar((const char*)&size,1);  
+}
+
+void Protocol::sendStartGame() {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
+    Commands cmd = Commands::START_GAME;  
+
+    conexion.enviar((const char*)&cmd,1); 
+}
+
+void Protocol::sendRooms(const std::vector<std::string>& rooms_name) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
+    Commands cmd = Commands::SHOW_ROOMS;  
+
+    int8_t size = (int8_t) rooms_name.size();
+
+    conexion.enviar((const char*)&cmd,1); 
+    conexion.enviar((const char*)&size,1); 
+
+    for (int i = 0; i < (int) rooms_name.size(); i++) {
+        size = (int8_t) rooms_name[i].size();
+
+        conexion.enviar((const char*)&size,1); 
+        conexion.enviar(rooms_name[i].c_str(), size);
+    }
+}
+
+void Protocol::sendMaps(const std::vector<std::string>&maps) {
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+
+    Commands cmd = Commands::SHOW_ROOMS;  
+
+    int8_t size = (int8_t) maps.size();
+
+    conexion.enviar((const char*)&cmd,1); 
+    conexion.enviar((const char*)&size,1); 
+
+    for (int i = 0; i < (int) maps.size(); i++) {
+        size = (int8_t) maps[i].size();
+
+        conexion.enviar((const char*)&size,1); 
+        conexion.enviar(maps[i].c_str(), size);
+    }   
+}
+
+void Protocol::recvRoom(std::string& room_name) {
+    std::lock_guard<std::mutex> lock(this->server_recv_m);
+
+    int8_t size;
+
+    conexion.recibir((char*)&size,1);
+
+    char buff[BYTES_RECEIVE+1];
+
+    while (size > BYTES_RECEIVE) {
+        conexion.recibir(buff, BYTES_RECEIVE);
+        room_name.append(buff, BYTES_RECEIVE);
+        size -= BYTES_RECEIVE;
+    }
+
+    conexion.recibir(buff, size);
+    room_name.append(buff, size);   
+}
+
+void Protocol::recvCreateRoom(std::string& room_name, std::string& stage_file) {
+    std::lock_guard<std::mutex> lock(this->server_recv_m);    
+
+    int8_t size;
+
+    conexion.recibir((char*)&size,1);
+
+    char buff[BYTES_RECEIVE+1];
+
+    while (size > BYTES_RECEIVE) {
+        conexion.recibir(buff, BYTES_RECEIVE);
+        room_name.append(buff, BYTES_RECEIVE);
+        size -= BYTES_RECEIVE;
+    }
+
+    conexion.recibir(buff, size);
+    room_name.append(buff, size);  
+
+    conexion.recibir((char*)&size,1);
+
+    while (size > BYTES_RECEIVE) {
+        conexion.recibir(buff, BYTES_RECEIVE);
+        stage_file.append(buff, BYTES_RECEIVE);
+        size -= BYTES_RECEIVE;
+    }
+
+    conexion.recibir(buff, size);
+    stage_file.append(buff, size);          
 }
 
 void Protocol::recvMove(int *dir) {
@@ -262,28 +379,6 @@ void Protocol::recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>
         }     
         default: break;                                          
     }
-}
-
-void Protocol::recvCreateRoom(std::string &name, std::string &stage_file)
-{
-    char tam;
-    conexion.recibir((char*)&tam,1);
-    char buf[256];
-    conexion.recibir(buf,tam);
-    name = buf;
-    char buf2[256];
-    conexion.recibir((char*)&tam,1);
-    conexion.recibir(buf2,tam);
-    stage_file = buf2;
-}
-
-void Protocol::recvSelectRoom(std::string &name)
-{
-    char tam;
-    conexion.recibir((char*)&tam,1);
-    char buf[256];
-    conexion.recibir(buf,tam);
-    name = buf;
 }
 
 void Protocol::senCantRooms(int8_t cant)

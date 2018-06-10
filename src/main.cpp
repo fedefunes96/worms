@@ -11,7 +11,7 @@
 #include "game.h"
 #include "socket.h"
 #include "protocol.h"
-
+#include "server.h"
 #include "counter.h"
 #include "event_queue.h"
 
@@ -19,6 +19,8 @@
 
 int main(int argc, char* argv[]) {
 	std::string port("7777");
+
+	Server serv("8888", 50);
 
 	Socket server(port, 50);
 
@@ -28,7 +30,7 @@ int main(int argc, char* argv[]) {
 
 	//Protocol protocol(skt);
 
-	Player player(std::move(skt), 1);
+	Player player(serv, std::move(skt), 1);
 
 	std::vector<EventQueue*> event_queues;
 
