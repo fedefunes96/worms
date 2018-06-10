@@ -50,10 +50,11 @@ void Controler::run()
         }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
             qDebug()<<"actual player";
             int8_t id;
-            this->protocol->recvActualPlayer(&id);
+            int8_t id_worm;
+            this->protocol->recvActualPlayer(&id,&id_worm);
             //Enable key control..
             list.push_back(id);
-            //this->game->addEvent(event);    ACTUAL PLAYER
+            list.push_back(id_worm);
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){

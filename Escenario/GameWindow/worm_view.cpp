@@ -143,6 +143,15 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 }
 
+
+void Worm_View::setColor(QColor color){
+    qDebug()<<"entre";
+    //this->labelVida->setStyleSheet("color: #" + QString::number(color.rgb(), 16));
+}
+
+
+
+
 QRectF Worm_View::boundingRect() const
 {
     return QRectF(0,0,60,60);//tamaño del worm
@@ -371,6 +380,7 @@ void Worm_View::runSpriteWeapon()
 
 void Worm_View::loadSpriteWeapon(int val)
 {
+    this->targetVis = false;
     if(this->isMoving()){
         return;
     }

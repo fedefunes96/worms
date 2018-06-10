@@ -13,6 +13,7 @@
 #include "movable.h"
 #include "target.h"
 
+#include <QColor>
 
 class Worm_View: public QObject, public MovableItem
 {
@@ -44,6 +45,7 @@ public:
     int getTimeWeapon();
     void setTimeWeapon(int time);
     void setClickDir(int x, int y);
+    void setColor(QColor color);
 private slots:
     void runSpriteWeapon();
 

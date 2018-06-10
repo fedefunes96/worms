@@ -19,7 +19,7 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->window->addPlayer(this->myPlayer);
 
     this->deadItemCollector = new QTimer();
-    this->deadItemCollector->start(10);
+    this->deadItemCollector->start(100);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
 }
 
@@ -105,7 +105,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->moveTo(-angle,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
-        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"crear mortar!!!!!!!!!!!";
         qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
         if(this->game->containsItem(type,id)){
             qDebug()<<"lo contiene";
@@ -123,7 +123,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->moveTo(-angle,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::AERIAL_ATTACK_M)){
-        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"crear aerial attack!!!!!!!!!!!";
         qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
         if(this->game->containsItem(type,id)){
             qDebug()<<"lo contiene";
@@ -141,7 +141,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->moveTo(-angle,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::HOLY_GRENADE_M)){
-        qDebug()<<"crear granada!!!!!!!!!!!";
+        qDebug()<<"crear holy granade!!!!!!!!!!!";
         qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
         if(this->game->containsItem(type,id)){
             qDebug()<<"lo contiene";
@@ -154,6 +154,42 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->setIdObj(type);
             misil->setId(id);
             std::string path("../../images/hgranade.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::FRAGMENT_M)){
+        qDebug()<<"crear fragment!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/hgranade.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::RED_GRENADE_M)){
+        qDebug()<<"crear red granade!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/cluster.png");
             misil->setSpriteBullet(path);
             this->game->add_Item(misil,posX,posY);
             misil->moveTo(-angle,posX,posY);
@@ -195,7 +231,6 @@ std::vector<int> GameClass::fireWeapon()
 {
     std::vector<int> vect;
     if(isMyTurn()){
-
         int idWeapon = this->game->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
         //int angle = this->game->getWormActive()->getTargetAngle();
         if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
@@ -206,12 +241,10 @@ std::vector<int> GameClass::fireWeapon()
 
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
 
-        int id = this->game->getWormActive()->getId();
         std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
         int time = this->game->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
-        vect.push_back(id);
         vect.push_back(pos.first);
         vect.push_back(pos.second);
         if(idWeapon==static_cast<int>(WeaponsIds::BANANA) ||
@@ -266,8 +299,9 @@ void GameClass::checkDeadItem()
         if(!item){// no es movible
             continue;
         }else if(!item->isAlive()){
+            qDebug()<<"a remover proyectil type:"<<item->getIdObj()<<"id:"<<item->getId();
             scene->removeItem(item);
-            delete(item);
+            //delete(item);
             qDebug()<<"ELIMINE ELEMENTO MUERTO !!!!!!!!!!!!!";
         }
     }
@@ -280,7 +314,7 @@ void GameClass::checkDeadItem()
 void GameClass::checkQueueEvent(QList<int> list)
 {
     int cmd = list[0];
-    qDebug()<<cmd;
+    qDebug()<<"gameclass comando:"<<cmd;
     if(cmd== static_cast<int>(Commands::GAME_END)){
        //terminar juego
         qDebug()<<"game end";
@@ -296,7 +330,7 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
         //mensaje con el id del jugador en turno
         qDebug()<<"actual player setting";
-        checkRound(list[1]);
+        checkRound(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
         // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
         this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2]);
@@ -317,17 +351,30 @@ void GameClass::checkQueueEvent(QList<int> list)
 }
 
 
-void GameClass::checkRound(int id){
+void GameClass::checkRound(int id,int id_worm){
+
+
     if(this->myPlayer->getId() != id){
         this->myTurn=false;
-        this->myPlayer->getWormActive()->setSelect(false);
         this->myPlayer->setActive(false);
+        Worm_View* worm = this->myPlayer->getWormActive();
+        if(worm){
+            worm->setSelect(false);
+        }
+        this->myPlayer->setWormActive(nullptr);
         return;
     }
+    Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),id_worm);
+    Worm_View* worm = static_cast<Worm_View*>(i);
     this->myTurn=true;
-    Worm_View* worm = this->myPlayer->getWormToPlay();    
     this->myPlayer->setActive(true);
+    worm->setSelect(true);
+    QColor color = "black";
+    worm->setColor(color);
+    qDebug()<<"asdmsaldmk";
+    this->myPlayer->setWormActive(worm);
     this->game->addItemToFollow(worm);
+
 }
 
 

@@ -92,7 +92,7 @@ public:
     void recvPlayerId(int8_t *id);
     void recvWormId(int8_t *id, int32_t *health);
     void recvWinner(int8_t *id);
-    void recvActualPlayer(int8_t *id);
+    void recvActualPlayer(int8_t *id, int8_t *id_worm);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
     int8_t recvCantRooms();

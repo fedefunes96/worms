@@ -4,7 +4,6 @@ Player::Player()
 {
     this->it=0;
     this->wormActive=nullptr;
-    this->myturn=false;
 }
 
 void Player::addWorm(Worm_View *worm)
@@ -22,26 +21,12 @@ int Player::getId()
     return this->id;
 }
 
-Worm_View *Player::getWormToPlay()
+void Player::setWormActive(Worm_View* worm)
 {
-    //qDebug()<<"pido worm para jugar";
-    if(this->worms_list.empty()){
-        qDebug()<<"lista vacia";
-        return nullptr;
-    }
-    //if(!(this->worms_list[this->it])->isAlive())
-    if(this->worms_list.size() == this->it){
-        this->it=0;
-    }
-    //chequear si no esta vivo no devolverlo...
-    this->wormActive = this->worms_list[this->it];
-    this->it++;
-    return this->wormActive;
+    this->wormActive = worm;
 }
 
-
 Worm_View* Player::getWormActive(){
-    //qDebug()<<"id worm activo player!!!!!!!!!!!"<<this->wormActive->getId();
     if(!this->wormActive->isAlive()){
         return nullptr;
     }
@@ -56,15 +41,6 @@ void Player::setActive(bool active){
     this->isactive = active;
 }
 
-bool Player::isMyTurn()
-{
-    return this->myturn;
-}
-
-void Player::setTurn(bool turn)
-{
-    this->myturn=turn;
-}
 
 void Player::addWeapon(int type,int ammo)
 {

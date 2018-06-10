@@ -5,6 +5,7 @@
 #include "controler.h"
 #include "gamewindow.h"
 #include <QTimer>
+#include <QColor>
 
 class GameClass : public QObject
 {
@@ -18,7 +19,7 @@ public:
 
     std::vector<int> fireWeapon();
     bool isMyTurn();
-    void checkRound(int id);
+    void checkRound(int id, int id_worm);
     Camera *getCamera();
     Worm_View *getWormActive();
     void connectController(Controler *controler);

@@ -293,10 +293,8 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                     qDebug()<< "power:"<<this->power;
                     this->power+=10;
                 }
-                return;
+                break;
             }
-
-            qDebug() << "Espacio"; //JUMP worm
             if(this->game->isMyTurn()){
                 std::vector<int> vect = this->game->fireWeapon();
 
@@ -306,10 +304,10 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 }
                 std::vector<int> vect2;
                 vect2.push_back(this->power);
-                if(vect.size()==5){
-                    vect2.push_back(vect[4]);
+                if(vect.size()==4){
+                    vect2.push_back(vect[3]);
                 }
-                protocol->sendAttack(vect[0],vect[2],vect[3],vect2);
+                protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
                 qDebug()<<"dispare! event";
             }
             qDebug()<<"solte Espacio";

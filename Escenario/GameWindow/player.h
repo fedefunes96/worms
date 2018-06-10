@@ -29,16 +29,14 @@ public:
     void addWorm(Worm_View*worm);
     void setId(int id);
     int getId();
-    Worm_View* getWormToPlay(); // me devuelve algun worm de la lista...
     void addWeapon(int type, int ammo);
     bool canFire(int type);
     void fireWeapon(int type);
     Worm_View *getWormActive();
     bool isActive();
     void setActive(bool active);
-    bool isMyTurn();
-    void setTurn(bool turn);
     std::vector<Worm_View *> getWormsAlive();
+    void setWormActive(Worm_View *worm);
 private:
     std::vector<Worm_View*> worms_list;
     int id;
@@ -46,7 +44,6 @@ private:
     Worm_View* wormActive;
     bool isactive;
     unsigned int it;
-    bool myturn;
 
 };
 

@@ -416,9 +416,10 @@ void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
     *id=ntohl(aux);
 }
 
-void Protocol::recvActualPlayer(int8_t* id)
+void Protocol::recvActualPlayer(int8_t* id, int8_t* id_worm)
 {
     conexion.recibir((char*)id,1);
+    conexion.recibir((char*)id_worm,1);
 }
 
 
