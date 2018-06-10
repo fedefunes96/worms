@@ -27,7 +27,11 @@ enum class WeaponsIds : uint8_t {
     TELEPORTATION
 };
 
-Worm_View::Worm_View(QObject *parent) :
+Worm_View::Worm_View()
+{
+}
+
+Worm_View::Worm_View(QObject *parent, QString color) :
     QObject(parent), MovableItem()
 {
 
@@ -57,6 +61,8 @@ Worm_View::Worm_View(QObject *parent) :
     setAngle(0);
     this->selected=false;
     this->countDown=0;
+    qDebug()<<"color en worm"<<color;
+    this->color = color;
 
 
 }
@@ -115,7 +121,11 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
-        labelVida->setStyleSheet("QLabel {color : red; }");
+        QString color;
+        color += "QLabel {color : ";
+        color += this->color;
+        color += "; }";
+        labelVida->setStyleSheet(color);
         labelset=true;
         scene()->addWidget(labelVida);
     }
@@ -142,14 +152,6 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(widget);
 
 }
-
-
-void Worm_View::setColor(QColor color){
-    qDebug()<<"entre";
-    //this->labelVida->setStyleSheet("color: #" + QString::number(color.rgb(), 16));
-}
-
-
 
 
 QRectF Worm_View::boundingRect() const

@@ -6,6 +6,7 @@
 #include "button.h"
 #include <QLineEdit>
 #include <QDialog>
+#include "controler.h"
 
 namespace Ui {
 class RoomCreator;
@@ -18,6 +19,10 @@ class RoomCreator : public QDialog
 public:
     explicit RoomCreator(Protocol* protocol,QWidget *parent = nullptr);
     ~RoomCreator();
+    void connectControler(Controler *controler);
+
+public slots:
+    void recvMaps(std::vector<std::string> list);
 
 private:
     Ui::RoomCreator *ui;

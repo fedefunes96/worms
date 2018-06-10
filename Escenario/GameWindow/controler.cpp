@@ -57,8 +57,10 @@ void Controler::run()
             qDebug()<<"attach worm id";
             int8_t id;
             int32_t health;
-            this->protocol->recvWormId(&id,&health);
-            list.push_back(id);            
+            int8_t id_player;
+            this->protocol->recvWormId(&id_player,&id,&health);
+            list.push_back(id_player);
+            list.push_back(id);
             list.push_back(health);
             qDebug()<<"id:"<<id<<"vida"<<health;
             emit eventCreated(list);
@@ -105,20 +107,25 @@ void Controler::run()
             //pasarle las cosas a create room
         	std::vector<std::string> names;
         	this->protocol->recvMaps(names);
+            emit recvMap(names);
         } else if (cmd==static_cast<int>(Commands::SHOW_ROOMS)){
             //pasarle las cosas a map selection
         	std::vector<std::string> names;
         	this->protocol->recvRomms(names);
+            emit recvRomms(names);
         } else if (cmd==static_cast<int>(Commands::COULD_JOIN)){
             //pasarle a map salection que pudo conectarse
         	int8_t conecto = this->protocol->recvCouldJoinRoom();
         	list.push_back(conecto);
+            emit join(conecto);
         } else if (cmd==static_cast<int>(Commands::PLAYERS_IN_ROOM)){
         	//pasarselo a wait room
         	int8_t cant = this->protocol->recvPlayersInRoom();
         	list.push_back(cant);
+            emit playersInRoom(cant);
         } else if (cmd==static_cast<int>(Commands::START_GAME)){
         	//pasarselo a wait room
+            emit startGame();
         }
     }
 

@@ -98,7 +98,7 @@ public:
     int8_t recvCmd();
     void recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, int32_t *posY, int32_t *angle);
     void recvPlayerId(int8_t *id);
-    void recvWormId(int8_t *id, int32_t *health);
+    void recvWormId(int8_t *id_player, int8_t *id, int32_t *health);
     void recvWinner(int8_t *id);
     void recvActualPlayer(int8_t *id, int8_t *id_worm);
     void recvRemove(int8_t *id_obj, int32_t *id);

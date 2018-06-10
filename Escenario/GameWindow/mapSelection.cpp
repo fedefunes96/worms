@@ -25,3 +25,21 @@ MapSelection::~MapSelection()
 {
     delete ui;
 }
+
+void MapSelection::recvRooms(std::vector<std::__cxx11::string> list)
+{
+
+}
+
+void MapSelection::join(int cant)
+{
+
+}
+
+
+
+void MapSelection::connectControler(Controler *controler)
+{
+    connect(controler,SIGNAL(join(int)),this,SLOT(join(int)));
+    connect(controler,SIGNAL(recvMap(std::vector<std::string>)),this,SLOT(recvRooms(std::vector<std::string>)));
+}

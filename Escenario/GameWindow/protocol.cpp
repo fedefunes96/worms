@@ -462,8 +462,9 @@ int8_t Protocol::recvCmd() {
     return cmd;
 }
 
-void Protocol::recvWormId(int8_t *id, int32_t *health)
+void Protocol::recvWormId(int8_t* id_player,int8_t *id, int32_t *health)
 {
+    conexion.recibir((char*)id_player,1);
     conexion.recibir((char*)id,1);
     int32_t aux;
     conexion.recibir((char*)&aux,4);

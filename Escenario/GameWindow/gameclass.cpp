@@ -3,6 +3,8 @@
 #include <QDebug>
 #include "projectile.h"
 
+#include <QColor>
+#include <QCoreApplication>
 
 GameClass::GameClass(QRect screen,int w,int h)
 {
@@ -21,6 +23,14 @@ GameClass::GameClass(QRect screen,int w,int h)
     this->deadItemCollector = new QTimer();
     this->deadItemCollector->start(100);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
+    this->color_list.append("red");
+    this->color_list.append("yellow");
+    this->color_list.append("green");
+    this->color_list.append("blue");
+    this->color_list.append("orange");
+    this->color_list.append("purple");
+    this->color_list.append("cyan");
+    this->color_list.append("darkBlue");
 }
 
 Camera* GameClass::getCamera()
@@ -40,16 +50,18 @@ void GameClass::recvWormHealth(int id,int health)
     worm->setHealth(health);
 }
 
-void GameClass::attachWorm(int type,int id, int health)
+void GameClass::attachWorm(int type,int id_player,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
-        Worm_View *worm = new Worm_View();
+        Worm_View *worm = new Worm_View(this,this->color_list[id_player]);
         qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
         worm->setHealth(health);
         worm->setId(id);
         worm->setIdObj(type);
         this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
-        this->myPlayer->addWorm(worm);
+        if(id_player==this->myPlayer->getId()){
+            this->myPlayer->addWorm(worm);
+        }
     }
 }
 
@@ -253,7 +265,7 @@ void GameClass::checkQueueEvent(QList<int> list)
         checkRound(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
         // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
-        this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2]);
+        this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2],list[3]);
     }else if(cmd==static_cast<int>(Commands::REMOVE)){
         // item a remover de la vista
         qDebug()<<"remove !!";
@@ -292,9 +304,6 @@ void GameClass::checkRound(int id,int id_worm){
     this->myTurn=true;
     this->myPlayer->setActive(true);
     worm->setSelect(true);
-    QColor color = "black";
-    worm->setColor(color);
-    qDebug()<<"asdmsaldmk";
     this->myPlayer->setWormActive(worm);
     this->game->addItemToFollow(worm);
 

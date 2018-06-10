@@ -7,6 +7,7 @@
 #include "button.h"
 #include <vector>
 #include <QThread>
+#include "controler.h"
 
 namespace Ui {
 class MapSelection;
@@ -20,7 +21,10 @@ public:
     explicit MapSelection(Protocol* protocol, QWidget *parent = nullptr);
     ~MapSelection();
 
+    void connectControler(Controler *controler);
 private slots:
+    void recvRooms(std::vector<std::string> list);
+    void join(int cant);
 
 private:
     Ui::MapSelection *ui;

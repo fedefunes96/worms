@@ -19,7 +19,8 @@ class Worm_View: public QObject, public MovableItem
 {
     Q_OBJECT
 public:
-    explicit Worm_View(QObject* parent = 0);
+    Worm_View();
+    Worm_View(QObject* parent, QString color);
     bool isMoving();
     bool isAlive();
     bool isMovable();
@@ -45,7 +46,7 @@ public:
     int getTimeWeapon();
     void setTimeWeapon(int time);
     void setClickDir(int x, int y);
-    void setColor(QColor color);
+    void setColor(std::string &color);
 private slots:
     void runSpriteWeapon();
 
@@ -104,6 +105,7 @@ private:
     bool weaponCountDwn;
     int countDown;
     std::pair<int,int> clickTarget;
+    QString color;
 
 
 

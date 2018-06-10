@@ -29,3 +29,14 @@ RoomCreator::~RoomCreator()
     }
     delete ui;
 }
+
+void RoomCreator::recvMaps(std::vector<std::string> list)
+{
+    // trabajar la lista
+}
+
+
+void RoomCreator::connectControler(Controler *controler)
+{
+    connect(controler,SIGNAL(recvMap(std::vector<std::string>)),this,SLOT(recvMaps(std::vector<std::string>)));
+}
