@@ -15,5 +15,6 @@ EventPosition::EventPosition(const std::string type
 	, angle(angle) {}
 
 void EventPosition::process(Player& player, Protocol& protocol) {
-	//protocol.sendPosition(type, id, x, y, angle);
+	printf("Sending position\n");
+	protocol.sendPosition(type, id, x, y, angle);
 }

@@ -26,7 +26,7 @@ enum Game_status {
 class Game : public Thread {
 private:
 	Stage stage;
-	std::vector<Player> players;
+	std::vector<Player*> players;
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
 	std::vector<EventQueue*> event_queues;
 	//std::vector<std::unique_ptr<Worm>> worms;
@@ -42,7 +42,7 @@ private:
 	//Player winner;
 	//std::vector<Player>::iterator it_actual_player;
 
-	Player& get_actual_player();
+	Player* get_actual_player();
 	void end_game(Game_status game_status);
 	void notify_winner(); 
 	Game_status check_for_winner();
@@ -56,7 +56,7 @@ private:
 
 public:
 	Game(const std::string& stage_file
-		, std::vector<Player> players
+		, std::vector<Player*> players
 		, std::vector<EventQueue*> event_queues);
 	~Game();
 

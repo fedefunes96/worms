@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
 	Socket skt = server.aceptar();
 
-	std::vector<Player> players;
+	std::vector<Player*> players;
 
 	//Protocol protocol(skt);
 
@@ -34,7 +34,9 @@ int main(int argc, char* argv[]) {
 
 	event_queues.push_back(player.get_event_queue());
 
-	players.push_back(std::move(player));
+	//players.push_back(std::move(player));
+
+	players.push_back(&player);
 
 	printf("Creating a game\n");
 

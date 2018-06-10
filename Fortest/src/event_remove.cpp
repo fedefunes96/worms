@@ -8,5 +8,5 @@ EventRemove::EventRemove(const std::string type, const int id)
 
 void EventRemove::process(Player& player, Protocol& protocol) {
 	printf("Sending Remove object\n");
-	//protocol.sendRemove(type, id);
+	protocol.sendRemove(type, id);
 }

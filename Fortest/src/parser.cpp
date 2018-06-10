@@ -35,9 +35,9 @@ void Parser::loadWorms(std::string &file, std::string &config,
         int i= 0;
         for (YAML::iterator it = editor["Worm"].begin(); it != editor["Worm"].end(); ++it,++i){
             const YAML::Node& worm = *it;
-            int x = worm[0].as<int>();
-            int y = worm[1].as<int>();
-            int health = worm[2].as<int>();
+            float x = worm[0].as<float>();
+            float y = worm[1].as<float>();
+            float health = worm[2].as<float>();
             float angl = cfg["Worm"][0].as<float>();
             float longitud = cfg["Worm"][1].as<float>();
             float height = cfg["Worm"][2].as<float>();
@@ -69,8 +69,8 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
         for (YAML::iterator it = editor["Girder"].begin();
          it != editor["Girder"].end(); ++it, ++i){
             const YAML::Node& girder = *it;
-            int x = girder[0].as<int>();
-            int y = girder[1].as<int>();
+            float x = girder[0].as<float>();
+            float y = girder[1].as<float>();
             float angle = girder[2].as<float>();
             float longitud = girder[3].as<float>();
             float height = cfg["Girder"][0].as<float>();

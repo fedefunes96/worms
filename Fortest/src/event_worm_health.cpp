@@ -8,5 +8,5 @@ EventWormHealth::EventWormHealth(const int id, const int health)
 
 void EventWormHealth::process(Player& player, Protocol& protocol) {
 	printf("Sending new health: %d %d\n", id, health);
-	//protocol.sendWormHealth(id, health);
+	protocol.sendWormHealth(id, health);
 }

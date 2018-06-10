@@ -28,7 +28,7 @@
 #define EXTRA_HEALTH 100
 
 Game::Game(const std::string& stage_file
- , std::vector<Player> players
+ , std::vector<Player*> players
  , std::vector<EventQueue*> event_queues) 
  : stage(stage_file, 1.0/20.0, 6, 2, *this, event_queues) 
  , players(std::move(players))
@@ -49,7 +49,7 @@ void Game::start_game() {
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players_t.push_back(
-			std::thread(&Player::game_loop, &this->players[i])
+			std::thread(&Player::game_loop, this->players[i])
 		);
 	}
 
@@ -67,16 +67,6 @@ void Game::initialize_players() {
 	/*for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].set_id(i+1);
 	}*/
-
-	/*for (int i = 0; i < (int) this->event_queues.size(); i++) {
- 		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
-													, (*it)->get_id()
- 													, pos.x
- 													, pos.y
- 													, angle));
-
-		this->event_queues[i]->add_event(std::move(event));
-	}	*/
 }
 
 void Game::initialize_game(const std::string& stage_file) {
@@ -122,11 +112,11 @@ void Game::initialize_game(const std::string& stage_file) {
 			}
 			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worm);
 			//this->players[i].attach_worm(worm_ptr);
-
-			/*std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
+			
+			std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
 
 			//Its one event unique per player
-			this->event_queues[i]->add_event(std::move(event));*/
+			this->event_queues[i]->add_event(std::move(event));
 
 			this->stage.insert(std::move(worm_ptr));
 		}
@@ -137,10 +127,10 @@ void Game::initialize_game(const std::string& stage_file) {
 		for (; j < worms_per_player*(i+1)+1; j++) {
 			std::shared_ptr<Worm> worm_ptr = std::shared_ptr<Worm>(worms_to_attach[j]);
 			//this->players[i].attach_worm(worm_ptr);
-			/*std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
+			std::shared_ptr<Event> event(new EventAttachWorm(worm_ptr));
 
 			//Its one event unique per player
-			this->event_queues[i]->add_event(std::move(event));*/
+			this->event_queues[i]->add_event(std::move(event));
 
 			this->stage.insert(std::move(worm_ptr));
 		}	
@@ -158,10 +148,10 @@ void Game::initialize_game(const std::string& stage_file) {
 		for (unsigned int j = 0; j< usables.size(); ++j){
 			//this->players[i].attach_usable(std::move(std::unique_ptr<Usable>(usables[j])));
 
-			/*std::shared_ptr<Event> event(new EventAttachUsable(std::move(std::unique_ptr<Usable>(usables[j]))));
+			std::shared_ptr<Event> event(new EventAttachUsable(std::move(std::unique_ptr<Usable>(usables[j]))));
 
 			//Its one event unique per player
-			this->event_queues[i]->add_event(std::move(event));*/
+			this->event_queues[i]->add_event(std::move(event));
 		}
 	}
 }
@@ -179,13 +169,13 @@ void Game::game_loop() {
 	this->is_over = false;
 
 	while (game_status == UNDEFINED) {
-		Player& actual_player = this->get_actual_player();
+		Player* actual_player = this->get_actual_player();
 
 		try {
 			//Notify everyone whose turn it is
-			this->notify_actual_player(actual_player.get_id());
+			this->notify_actual_player(actual_player->get_id());
 
-			actual_player.play();
+			actual_player->play();
 		} catch(const SocketException& e) {
 			//Player disconnected
 		}
@@ -200,28 +190,28 @@ void Game::game_loop() {
 	this->end_game(game_status);
 }
 
-Player& Game::get_actual_player() {
+Player* Game::get_actual_player() {
 	return this->players[this->id_player_list];
 }
 
 void Game::notify_winner() {
-	/*int id_winner = 0;
+	int id_winner = 0;
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
-		if (!this->players[i].lost()) {
-			id_winner = this->players[i].get_id();
+		if (!this->players[i]->lost()) {
+			id_winner = this->players[i]->get_id();
 			break;
 		}
-	}*/
+	}
 
 	/*for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i].notify_winner(id_winner);
 	}*/
- 	/*std::shared_ptr<Event> event(new EventWinner(id_winner));
+ 	std::shared_ptr<Event> event(new EventWinner(id_winner));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
 		this->event_queues[i]->add_event(event);
-	} */	
+	} 	
 }
 
 void Game::end_game(Game_status game_status) {
@@ -240,7 +230,7 @@ Game_status Game::check_for_winner() {
 	int cant_players_alive = 0;
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
-		if (!this->players[i].lost()) {
+		if (!this->players[i]->lost()) {
 			cant_players_alive++;
 		}
 	}
@@ -272,11 +262,11 @@ void Game::notify_health(Worm* worm) {
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_health(worm);
 	}*/
-	/*std::shared_ptr<Event> event(new EventWormHealth(worm->get_id(), worm->get_health()));
+	std::shared_ptr<Event> event(new EventWormHealth(worm->get_id(), worm->get_health()));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
 		this->event_queues[i]->add_event(event);
-	}*/
+	}
 }
 
 void Game::notify_actual_player(int id) {
@@ -285,27 +275,27 @@ void Game::notify_actual_player(int id) {
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_actual_player(id);
 	}*/
-	/*std::shared_ptr<Event> event(new EventActualPlayer(id));
+	std::shared_ptr<Event> event(new EventActualPlayer(id));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
 		this->event_queues[i]->add_event(event);
-	}*/
+	}
 }
 
 void Game::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-	std::vector<Player>::iterator it;
+/*	std::vector<Player>::iterator it;
 
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_position(ubicable, x, y, angle);
-	}
+	}*/
 }
 
 void Game::notify_removal(Ubicable* ubicable) {
-	std::vector<Player>::iterator it;
+	/*std::vector<Player>::iterator it;
 
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_removal(ubicable);
-	}
+	}*/
 }
 
 Game::~Game() {
@@ -318,12 +308,12 @@ Game::~Game() {
 	std::shared_ptr<Event> event(new EventDisconnect());
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
-		this->players[i].disconnect();
-		//this->event_queues[i]->add_event(event);
-		printf("add disconnect event\n");
-		this->players[i].get_event_queue()->add_event(event);
-		printf("stop event\n");
-		this->players[i].stop_events();
+		this->players[i]->disconnect();
+		this->event_queues[i]->add_event(event);
+		//printf("add disconnect event\n");
+		//this->players[i].get_event_queue()->add_event(event);
+		//printf("stop event\n");
+		this->players[i]->stop_events();
 
 		this->players_t[i].join();
 	}

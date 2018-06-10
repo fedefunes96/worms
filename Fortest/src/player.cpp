@@ -18,6 +18,7 @@ Player::Player(Socket socket, const int id)
 	this->in_game = false;
 	this->id = id;
 	this->id_actual_worm = 0;
+	this->can_attack = false;
 
 	printf("Sending player id: %d\n", id);
 	//this->protocol.sendPlayerId(id);
@@ -36,7 +37,10 @@ Player::Player(Player&& other)
 	this->id = other.id;
 	this->should_receive = other.should_receive;
 	this->connected = other.connected;
-	this->event_t = std::move(other.event_t);
+	this->in_game = other.in_game;
+ 	this->event_t = std::move(other.event_t);
+	this->id_actual_worm = other.id_actual_worm;
+	this->can_attack = other.can_attack;
 }
 
 bool Player::should_i_receive() {
@@ -70,9 +74,10 @@ void Player::play() {
 
 	this->protocol.sendActualWorm(actual_worm);*/
 
+	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(3);
+	this->counter.set_time(40);
 
 	printf("Starts turn of 40 secs\n");
 
@@ -91,7 +96,7 @@ void Player::game_loop() {
 	try {
 		while (this->connected) {	
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
-			printf("Out\n");
+
 			if (cmd == Commands::MOVE) {
 				int dir = 0;
 
@@ -118,12 +123,39 @@ void Player::game_loop() {
 				if (!this->should_i_receive())
 					continue;
 
-				b2Vec2 dest(posx, posy);
+				if (!this->can_attack)
+					continue;
 
+				this->can_attack = false;
+
+ 				b2Vec2 dest(posx, posy);
+ 
 				this->counter.set_time(3);
+				this->counter.set_time(15);
 
-				std::lock_guard<std::mutex> lock(this->worms_m);
-				this->worms.at(this->get_actual_worm())->use(this->usables.at(id_usable), dest, std::move(params));
+				printf("Usable id %d\n", id_usable);
+ 
+ 				std::lock_guard<std::mutex> lock(this->worms_m);
+ 				this->worms.at(this->get_actual_worm())->use(this->usables.at(id_usable), dest, std::move(params));
+
+			} else if (cmd == Commands::SHOW_ROOMS) {
+				/*std::vector<std::string> rooms_name = this->server.get_rooms();
+				
+				this->protocol.sendRooms(rooms_name);
+
+				*/
+			} else if (cmd == Commands::JOIN_ROOM) {
+				/*std::vector<std::string> rooms_name = this->server.get_rooms();
+				
+				std::string room_name;
+
+				this->protocol.recvRooms(&room_name);
+
+				bool success = this->server.join_room(this->get_id(), room_name);
+
+				this->protocol.sendCouldJoin(success);
+
+				*/				
 			} else {
 				//Player's cheating
 				//Disconnect him
@@ -137,11 +169,9 @@ void Player::game_loop() {
 		}
 	} catch(SocketException& e) {
 			//Played disconnected
-			printf("EXCEPTION\n");
 			this->disconnected_player();
 	}
 
-	printf("Stop game loop player\n");
 }
 
 int Player::get_actual_worm() {

@@ -13,6 +13,7 @@
 #include "event_queue.h"
 #include "event_position.h"
 #include "event_remove.h"
+#include <iostream>
 
 Stage::Stage(const std::string& stage_file
 	, const float32 time_step
@@ -44,7 +45,7 @@ void Stage::remove_deads() {
 			(*it)->delete_myself(this->world);
 			//this->game.notify_removal((*it).get());
 
-			/*std::shared_ptr<Event> event(new EventRemove((*it)->get_type()
+			std::shared_ptr<Event> event(new EventRemove((*it)->get_type()
 														, (*it)->get_id()));
 
 			for (int i = 0; i < (int) this->event_queues.size(); i++) {
@@ -52,7 +53,7 @@ void Stage::remove_deads() {
 				//Destroy the event when all the players
 				//process it
 				this->event_queues[i]->add_event(event);
-			}*/
+			}
 
 			it = this->movables.erase(it);
 		} else {
@@ -143,7 +144,7 @@ void Stage::draw() {
 
  			(*it)->set_position(pos);
 
- 			//float angle = b->GetAngle();
+ 			float angle = b->GetAngle();
 
  			//Movable* movable = (Movable*) b->GetUserData();
 
@@ -159,7 +160,7 @@ void Stage::draw() {
 
  			//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
 
- 			/*std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
+ 			std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
 														, (*it)->get_id()
  														, pos.x
  														, pos.y
@@ -170,7 +171,7 @@ void Stage::draw() {
 				//Destroy the event when all the players
 				//process it
 				this->event_queues[i]->add_event(event);
-			}*/
+			}
 
  			//if (b->IsAwake())
  			cant_objects_moving++;
@@ -182,9 +183,9 @@ void Stage::draw() {
   		if (cant_objects_moving == 0)
   			this->nothing_moving();
 
-  		this->step();
-
   		this->remove_deads();
+
+  		this->step();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(TIME_STEP_MS));
 	}
@@ -225,7 +226,7 @@ void Stage::wait_stop_moving() {
 void Stage::pre_initialize() {
 	//Lets notify every player for every object
 	//in the world (only static ones)
- 	/*std::vector<std::unique_ptr<Ubicable>>::iterator it = this->ubicables.begin();
+ 	std::vector<std::unique_ptr<Ubicable>>::iterator it = this->ubicables.begin();
 
  	while (it != this->ubicables.end()) {
  		b2Body* b = (*it)->get_body();
@@ -234,7 +235,7 @@ void Stage::pre_initialize() {
  		float angle = b->GetAngle();
 
  		//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
-
+ 		std::cout << (*it)->get_type() << (*it)->get_id() << std::endl;
  		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
 													, (*it)->get_id()
  													, pos.x
@@ -259,12 +260,12 @@ void Stage::pre_initialize() {
  		float angle = b->GetAngle();
 
  		//this->game.notify_position((*it_mov).get(), pos.x, pos.y, angle);
- 		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
-													, (*it)->get_id()
+
+ 		std::shared_ptr<Event> event(new EventPosition((*it_mov)->get_type()
+													, (*it_mov)->get_id()
  													, pos.x
  													, pos.y
  													, angle));
-
 		for (int i = 0; i < (int) this->event_queues.size(); i++) {
 			//Copy share pointers to everyone
 			//Destroy the event when all the players
@@ -272,7 +273,7 @@ void Stage::pre_initialize() {
 			this->event_queues[i]->add_event(event);
 		}
  		++it_mov;
-  	}	 */ 	
+  	}	 	
 }
 
 void Stage::stop_drawing() {

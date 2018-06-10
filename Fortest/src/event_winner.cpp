@@ -8,5 +8,5 @@ EventWinner::EventWinner(const int id)
 
 void EventWinner::process(Player& player, Protocol& protocol) {
 	printf("Sending Winner\n");
-	//protocol.sendWinner(id);
+	protocol.sendWinner(id);
 }

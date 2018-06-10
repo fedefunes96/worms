@@ -12,7 +12,7 @@ void EventAttachWorm::process(Player& player, Protocol& protocol) {
 
 	printf("Sending Worm id: %d %d\n", worm->get_id(), worm->get_health());
 	player.get_worms().emplace(worm->get_id(), worm);
-	//protocol.sendWormId(worm->get_id(), worm->get_health());
+	protocol.sendWormId(worm->get_id(), worm->get_health());
 
 	//printf("Rompe\n");
 }
