@@ -25,10 +25,10 @@ enum Game_status {
 
 class Game : public Thread {
 private:
-	Stage stage;
 	std::vector<Player*> players;
 	std::vector<std::unique_ptr<Ubicable>> ubicables;
-	std::vector<EventQueue*>& event_queues;
+	std::vector<EventQueue*> event_queues;
+	Stage stage;
 	//std::vector<std::unique_ptr<Worm>> worms;
 	//std::vector<std::unique_ptr<Girder>> girders;
 
@@ -57,7 +57,7 @@ private:
 public:
 	Game(const std::string& stage_file
 		, std::vector<Player*> players
-		, std::vector<EventQueue*>& event_queues);
+		, std::vector<EventQueue*> event_queues);
 	~Game();
 
 	void notify_position(Ubicable* ubicable, float x, float y, float angle);

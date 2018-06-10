@@ -149,19 +149,36 @@ void Player::game_loop() {
 				
 				this->protocol.sendRooms(rooms_name);
 
-				*/
+				*/ 
+
 			} else if (cmd == Commands::JOIN_ROOM) {
-				/*std::vector<std::string> rooms_name = this->server.get_rooms();
-				
+				/*
 				std::string room_name;
 
 				this->protocol.recvRooms(&room_name);
 
-				bool success = this->server.join_room(this->get_id(), room_name);
-
-				this->protocol.sendCouldJoin(success);
+				this->server.join_room(this->get_id(), room_name);
 
 				*/				
+			} else if (cmd == Commands::CREATE_ROOM) {
+				/* 
+				std::string room_name;
+				std::string stage_file;
+
+				this->protocol.recvCreateRoom(&room_name, &stage_file);
+
+				this->server.create_room(this->get_id(), room_name, stage_file);
+				*/
+			} else if (cmd == Commands::MAP_LIST) {
+
+				/*std::string& maps = this->server.get_maps();
+
+				this->protocol.sendMaps(maps);*/
+
+			} else if (cmd == Commands::EXIT_ROOM) {
+
+				//this->stage.exit_room(this->get_id());
+
 			} else {
 				//Player's cheating
 				//Disconnect him
@@ -190,9 +207,9 @@ EventQueue* Player::get_event_queue() {
 
 void Player::process_events() {
 	while (this->connected) {
-		std::shared_ptr<Event> event = this->event_queue.get_event();
-
 		try {
+			std::shared_ptr<Event> event = this->event_queue.get_event();
+
 			event->process(*this, this->protocol);
 		} catch(SocketException& e) {
 			this->connected = false;
@@ -222,7 +239,9 @@ void Player::disconnected_player() {
 bool Player::is_in_game() {
 	return this->in_game;
 }
-
+void Player::set_in_game(bool state) {
+	this->in_game = state;
+}
 /*void Player::notify_start_game() {
 	this->in_game = true;
 	this->protocol.sendGameStart();
@@ -252,11 +271,12 @@ void Player::set_connected(bool state) {
 
 void Player::stop_events() {
 	this->event_t.join();
-	printf("JOined succes\n");
+	//this->in_game = false;
 }
 
 void Player::shutdown() {
 	this->socket.desconectar();
+	this->in_game = false;
 }
 
 void Player::notify_actual_player(int id) {

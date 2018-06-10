@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 	printf("Creating a game\n");
 
-	Game game("hi", std::move(players), event_queues);
+	Game game("hi", std::move(players), std::move(event_queues));
 
 	return 0;
 }

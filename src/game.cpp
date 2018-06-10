@@ -29,10 +29,10 @@
 
 Game::Game(const std::string& stage_file
  , std::vector<Player*> players
- , std::vector<EventQueue*>& event_queues) 
- : stage(stage_file, 1.0/20.0, 6, 2, *this, event_queues) 
- , players(std::move(players))
- , event_queues(event_queues) {
+ , std::vector<EventQueue*> event_queues) 
+ : players(std::move(players))
+ , event_queues(std::move(event_queues))
+ , stage(stage_file, 1.0/20.0, 6, 2, *this, this->event_queues)  {
  	this->id_player_list = 0;
  	this->is_over = false;
 

@@ -1,18 +1,25 @@
 #include "room.h"
 #include <algorithm>
+#include "server.h"
 
 Room::Room(Server& server
+	, const std::string name
 	, const std::string stage_file
 	, const int max_players)
 	: server(server)
+	, name(name)
 	, stage_file(stage_file)
 	, max_players(max_players) {
-
-	this->ammount_players = 0;
 }
 
 void Room::add_player(const int id) {
 	this->player_ids.push_back(id);
+
+	if ((int) this->player_ids.size() == max_players) {
+		server.start_new_game(std::move(this->player_ids)
+			, this->name
+			, this->stage_file);
+	}
 }
 
 bool Room::has_player(const int id) {
@@ -29,6 +36,6 @@ void Room::remove_player(const int id) {
 		, this->player_ids.end());	
 }
 
-int Room::get_ammount_players() {
-	return this->ammount_players;
+std::vector<int>& Room::get_players_ids() {
+	return this->player_ids;
 }

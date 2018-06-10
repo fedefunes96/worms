@@ -39,7 +39,6 @@ private:
 
 	EventQueue event_queue;
 
-	void set_receive(bool state);
 	void disconnected_player();
 	void process_events();
 
@@ -66,10 +65,12 @@ public:
 	int get_id();
 
 	bool is_in_game();
+	void set_in_game(bool state);
 	void disconnect();
 	void shutdown();
 	void stop_events();
 	void set_connected(bool state);
+	void set_receive(bool state);
 	bool should_i_receive();
 	void stop_turn();
 

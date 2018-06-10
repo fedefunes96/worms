@@ -6,6 +6,8 @@
 #include <mutex>
 #include "player.h"
 #include "common_socket_exception.h"
+#include "event_queue.h"
+#include "event_disconnect.h"
 
 Server::Server(const std::string& port, int cant_users)
  : skt(port, cant_users) {
@@ -15,6 +17,11 @@ Server::Server(const std::string& port, int cant_users)
 }
 
 void Server::end_user(std::unique_ptr<Player> player) {
+	//Add event disconnect
+	std::shared_ptr<Event> event(new EventDisconnect());
+
+	player->get_event_queue()->add_event(event);	
+	player->stop_events();
 	player->join();
 }
 
@@ -141,7 +148,7 @@ void Server::create_room(const int id, const std::string name, const std::string
 	//Read stage file and get ammount of players
 	int ammount_players = 2;
 
-	Room room(*this, stage_file, ammount_players);
+	Room room(*this, name, stage_file, ammount_players);
 
 	room.add_player(id);
 
@@ -157,16 +164,26 @@ void Server::join_room(const int id, const std::string& name) {
 	it = this->rooms.find(name);
 
 	if (it != this->rooms.end()) {
-		it->second.add_player(id);
 		//Add event bool could join
-		//this->players[id].sendCouldJoin(true);
+		/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(true));
+		this->players[id]->get_event_queue()->add_event(std::move(event_join));
 		//For each player in room
 		//Send new ammount of players
-		//return true;		
-		//return true;
-	}
 
-	//return false;
+		std::vector<int> ids = it->second.get_players_ids();
+
+		std::shared_ptr<Event> event(new EventPlayersInRoom(ids.size()));
+
+		for (int i = 0; i < (int) ids.size(); i++) {
+			this->players[ids[i]]->get_event_queue()->add_event(event);
+		}*/
+		//Send him too
+		//this->players[id]->get_event_queue()->add_event(event);
+
+		it->second.add_player(id);
+	}
+	/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(false));
+	this->players[id]->get_event_queue()->add_event(std::move(event_join));*/
 }
 
 void Server::exit_room(const int id) {
@@ -183,8 +200,16 @@ void Server::exit_room(const int id) {
 
 			//No players left in the room
 			//Remove it
-			if (it->second.get_ammount_players() == 0) {
+			if (it->second.get_players_ids().size() == 0) {
 				this->rooms.erase(it);
+			} else {
+				/*
+				std::vector<int> ids = it->second.get_players_ids();
+				std::shared_ptr<Event> event(new EventPlayersInRoom(ids.size()));
+
+				for (int i = 0; i < (int) ids.size(); i++) {
+					this->players[ids[i]]->get_event_queue()->add_event(event);
+				}	*/			
 			}
 
 			break;
@@ -194,8 +219,6 @@ void Server::exit_room(const int id) {
 }
 
 void Server::start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file) {
-	std::lock_guard<std::mutex> lock(this->room_m);
-
 	std::unordered_map<std::string, Room>::iterator it;
 
 	it = this->rooms.find(name);
@@ -204,12 +227,24 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 		this->rooms.erase(it);
 
 		std::vector<Player*> players_for_game;
+		std::vector<EventQueue*> event_queues;
+
+		//std::shared_ptr<Event> event(new EventStartGame());
 
 		for (int i = 0; i < (int) ids.size(); i++) {
 			//Player* a = this->players.at(i).get();
-			players_for_game.push_back(this->players.at(i).get());
+			Player* player = this->players.at(i).get();
+			player->set_in_game(true);
+			player->set_receive(false);
+			players_for_game.push_back(player);
+
+			EventQueue* queue = player->get_event_queue();
+			//queue->add_event(event);
+			event_queues.push_back(queue);
 		}
 
-		//this->games.push_back(std::unique_ptr<Game>(new Game(stage_file, players_for_game)))
+		this->games.push_back(std::unique_ptr<Game>(new Game(stage_file 
+			, std::move(players_for_game)
+			, std::move(event_queues))));
 	}	
 }

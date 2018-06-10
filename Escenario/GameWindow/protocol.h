@@ -23,8 +23,10 @@ enum class Commands : uint8_t {
     EXIT_ROOM,
     WORM_HEALTH,
     DISCONNECT,
-    CANT_ROOMS
-
+    CANT_ROOMS,
+    CREATE_ROOM,
+    START_GAME,
+    MAP_LIST
 };
 
 enum class TypeObj : uint8_t {
