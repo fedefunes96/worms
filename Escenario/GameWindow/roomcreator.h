@@ -22,7 +22,7 @@ public:
     void connectControler(Controler *controler);
 
 public slots:
-    void recvMaps(std::vector<std::string> list);
+    void recvMaps(QVector<std::string> list);
 
 private:
     Ui::RoomCreator *ui;

@@ -246,7 +246,7 @@ void Protocol::sendRooms(const std::vector<std::string>& rooms_name) {
 void Protocol::sendMaps(const std::vector<std::string>&maps) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
-    Commands cmd = Commands::SHOW_ROOMS;  
+    Commands cmd = Commands::MAP_LIST;
 
     int8_t size = (int8_t) maps.size();
 
@@ -608,6 +608,18 @@ void Protocol::recvMaps(std::vector<std::string>& rooms_name){
         }
         rooms_name.push_back(name);
     }
+}
+
+void Protocol::sendJoinRoom()
+{
+   Commands cmd = Commands::SHOW_ROOMS;
+   conexion.enviar((const char*)&cmd,1);
+}
+
+void Protocol::sendCreateRoom()
+{
+    Commands cmd = Commands::MAP_LIST;
+    conexion.enviar((const char*)&cmd,1);
 }
 
 

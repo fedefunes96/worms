@@ -108,6 +108,8 @@ public:
     int8_t recvPlayersInRoom();
     void recvRomms(std::vector<std::string>& rooms_name);
     void recvMaps(std::vector<std::string>& rooms_name);
+    void sendJoinRoom();
+    void sendCreateRoom();
 };
 
 #endif // PROTOCOL_H

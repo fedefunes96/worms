@@ -23,7 +23,7 @@ public:
 
     void connectControler(Controler *controler);
 private slots:
-    void recvRooms(std::vector<std::string> list);
+    void recvRooms(QVector<std::string> list);
     void join(int cant);
 
 private:

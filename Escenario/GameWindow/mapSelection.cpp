@@ -12,13 +12,7 @@ MapSelection::MapSelection(Protocol* protocol, QWidget *parent) :
     this->protocol = protocol;  
     ui->setupUi(this);
     this->setWindowTitle("Worms Map Selection");
-    char cant = 5;
-    for (int i = 0; i< cant; ++i){
-        //recivo los nobres
-        std::string name;
-        button *b = new button(protocol,this,name,i*100,0);
-        buttons.push_back(b);
-    }
+    
 }
 
 MapSelection::~MapSelection()
@@ -26,14 +20,23 @@ MapSelection::~MapSelection()
     delete ui;
 }
 
-void MapSelection::recvRooms(std::vector<std::__cxx11::string> list)
+void MapSelection::recvRooms(QVector<std::string> list)
 {
-
+    int cant = list.size();
+    for (int i = 0; i< cant; ++i){
+        std::string name = list[i];
+        button *b = new button(protocol,this,name,i*100,0);
+        buttons.push_back(b);
+    }
 }
 
 void MapSelection::join(int cant)
 {
-
+    if (cant){
+        printf("conecto");
+    } else {
+        printf("no conecto");
+    }
 }
 
 

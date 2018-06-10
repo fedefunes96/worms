@@ -107,12 +107,14 @@ void Controler::run()
             //pasarle las cosas a create room
         	std::vector<std::string> names;
         	this->protocol->recvMaps(names);
-            emit recvMap(names);
+            QVector<std::string> name = QVector<std::string>::fromStdVector(names);
+            emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::SHOW_ROOMS)){
             //pasarle las cosas a map selection
         	std::vector<std::string> names;
         	this->protocol->recvRomms(names);
-            emit recvRomms(names);
+            QVector<std::string> name = QVector<std::string>::fromStdVector(names);
+            emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::COULD_JOIN)){
             //pasarle a map salection que pudo conectarse
         	int8_t conecto = this->protocol->recvCouldJoinRoom();

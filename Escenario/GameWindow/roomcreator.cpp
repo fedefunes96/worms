@@ -8,18 +8,7 @@ RoomCreator::RoomCreator(Protocol* protocol,QWidget *parent) :
 {
     ui->setupUi(this);
     this->protocol = protocol;
-    //recivo cant
-    int cant = 5;
-    for (int i = 0; i < cant; ++i){
-        //recivo stage file
-        QLineEdit *line = new QLineEdit(this);
-        line->move(i*100,40);
-        line->show();
-        lines.push_back(line);
-        std::string name = "hola";
-        button *b = new button(protocol,this,name,line,i*100,0);
-        buttons.push_back(b);
-    }
+    this->setWindowTitle("Create Room");
 }
 
 RoomCreator::~RoomCreator()
@@ -30,9 +19,18 @@ RoomCreator::~RoomCreator()
     delete ui;
 }
 
-void RoomCreator::recvMaps(std::vector<std::string> list)
+void RoomCreator::recvMaps(QVector<std::string> list)
 {
-    // trabajar la lista
+    int cant = list.size();
+    for (int i = 0; i < cant; ++i){
+        QLineEdit *line = new QLineEdit(this);
+        line->move(i*100,40);
+        line->show();
+        lines.push_back(line);
+        std::string name = list[i];
+        button *b = new button(protocol,this,name,line,i*100,0);
+        buttons.push_back(b);
+    }
 }
 
 

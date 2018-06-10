@@ -36,7 +36,8 @@ SOURCES +=\
     mapSelection.cpp \
     client.cpp \
     button.cpp \
-    waitRoom.cpp
+    waitRoom.cpp \
+    clientmainwindow.cpp
 
 HEADERS  += \
     game_view.h \
