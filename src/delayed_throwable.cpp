@@ -29,9 +29,10 @@ DelayedThrowable::DelayedThrowable(Stage& stage
 		this->conversor = 0;
 }
 
-void DelayedThrowable::explode() {
-	if (this->counter == 0)
-		Throwable::explode();
+void DelayedThrowable::start_contacting(b2Contact* contact) {
+	if (!this->dead && this->counter == 0)
+		this->explode();
+	//printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
 }
 
 void DelayedThrowable::move_step(float32 time_step) {

@@ -11,7 +11,7 @@ private:
 	int counter;
 	float conversor;
 protected:
-	virtual void explode() override;
+	//virtual void explode() override;
 public:
 	DelayedThrowable(Stage& stage
 	, Worm* owner	
@@ -29,6 +29,7 @@ public:
 	virtual std::string get_type() = 0;
 	virtual bool is_affected_by_wind() = 0;
 	virtual void move_step(float32 time_step) override;
+	virtual void start_contacting(b2Contact* contact) override;
 };
 
 #endif

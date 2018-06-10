@@ -39,7 +39,6 @@ private:
 
 	EventQueue event_queue;
 
-	bool should_i_receive();
 	void set_receive(bool state);
 	void disconnected_player();
 	void process_events();
@@ -71,6 +70,8 @@ public:
 	void shutdown();
 	void stop_events();
 	void set_connected(bool state);
+	bool should_i_receive();
+	void stop_turn();
 
 	bool is_disconnected();
 

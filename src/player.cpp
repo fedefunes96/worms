@@ -86,6 +86,12 @@ void Player::play() {
 	printf("Ends turn of 40 secs\n");
 
 	this->set_receive(false);
+	//Stop his worm from moving
+	this->worms.at(this->get_actual_worm())->start_moving(MoveDirection::NONE);
+}
+
+void Player::stop_turn() {
+	this->counter.set_time(0);
 }
 
 void Player::run() {
