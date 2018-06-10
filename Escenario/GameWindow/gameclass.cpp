@@ -226,6 +226,25 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             misil->moveTo(-angle,posX,posY);
             this->game->addItemToFollow(misil);
         }
+    }else if(type==static_cast<int>(TypeObj::DYNAMITE_M)){
+        qDebug()<<"crear banana!!!!!!!!!!!";
+        qDebug()<<"type:"<<type<<"id:"<<id<<"posx:"<<posX<<"posy:"<<posY<<"angle:"<<-angle;
+        if(this->game->containsItem(type,id)){
+            qDebug()<<"lo contiene";
+            Items* item = this->game->getItem(type,id);
+            MovableItem *i = static_cast<MovableItem*>(item);
+            i->moveTo(-angle,posX,posY);
+        }else{
+            qDebug()<<"no contiene";
+            Projectile *misil = new Projectile();
+            misil->setIdObj(type);
+            misil->setId(id);
+            std::string path("../../images/dynamite.png");
+            misil->setSpriteBullet(path);
+            this->game->add_Item(misil,posX,posY);
+            misil->moveTo(-angle,posX,posY);
+            this->game->addItemToFollow(misil);
+        }
     }
 }
 
@@ -270,7 +289,7 @@ std::vector<int> GameClass::fireWeapon()
             return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
-
+        qDebug()<<"arma a disparar ------->"<<idWeapon;
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
 
         std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();

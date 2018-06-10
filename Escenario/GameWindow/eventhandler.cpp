@@ -330,9 +330,9 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                         vect[0]==static_cast<int>(UsableIds::MORTAR)||
                         vect[0]==static_cast<int>(UsableIds::RED_GRENADE)){
                     vect2.push_back(this->power);
-                    if(vect.size()==4){
-                        vect2.push_back(vect[3]);
-                    }
+                }
+                if(vect.size()==4){
+                    vect2.push_back(vect[3]);
                 }
                 protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
                 qDebug()<<"dispare! event";
