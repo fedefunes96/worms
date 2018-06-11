@@ -2,6 +2,7 @@
 
 #include <QTimer>
 #include "worm_view.h"
+#include <iostream>
 
 Controler::Controler(Protocol *protocol)
 {
@@ -106,14 +107,18 @@ void Controler::run()
         } else if (cmd==static_cast<int>(Commands::MAP_LIST)){
             //pasarle las cosas a create room
         	std::vector<std::string> names;
+            printf("Map_list\n");
+            for (unsigned long i = 0; i < names.size();++i){
+                std::cout<<names[i]<<std::endl;
+            }
         	this->protocol->recvMaps(names);
-            QVector<std::string> name = QVector<std::string>::fromStdVector(names);
+            QList<std::string> name = QList<std::string>::fromVector(QVector<std::string>::fromStdVector(names));
             emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::SHOW_ROOMS)){
             //pasarle las cosas a map selection
         	std::vector<std::string> names;
         	this->protocol->recvRomms(names);
-            QVector<std::string> name = QVector<std::string>::fromStdVector(names);
+            QList<std::string> name = QList<std::string>::fromVector(QVector<std::string>::fromStdVector(names));
             emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::COULD_JOIN)){
             //pasarle a map salection que pudo conectarse

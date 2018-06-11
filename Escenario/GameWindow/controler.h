@@ -18,8 +18,8 @@ private slots:
 
 signals:
     void eventCreated(QList<int> list);
-    void recvMap(QVector<std::string> list);
-    void recvRomms(QVector<std::string> list);
+    void recvMap(QList<std::string> list);
+    void recvRomms(QList<std::string> list);
     void join(int cant);
     void playersInRoom(int cant);
     void startGame();
