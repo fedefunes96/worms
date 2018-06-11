@@ -22,11 +22,13 @@ clientMainWindow::~clientMainWindow()
 void clientMainWindow::on_mapSelection_clicked()
 {
     this->protocol->sendJoinRoom();
+    this->close();
     this->map->exec();
 }
 
 void clientMainWindow::on_pushButton_clicked()
 {
     this->protocol->sendCreateRoom();
+    this->close();
     this->room->exec();
 }

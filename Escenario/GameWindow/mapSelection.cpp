@@ -34,6 +34,7 @@ void MapSelection::recvRooms(QList<std::string> list)
 void MapSelection::join(int cant)
 {
     if (cant){
+        this->close();
         this->wait->exec();
     } else {
         printf("no conecto");
