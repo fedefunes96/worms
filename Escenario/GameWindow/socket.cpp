@@ -191,11 +191,13 @@ void Socket::enviar(const char msj[], const size_t tam_msj) {
 }
 
 Socket::~Socket() {
-	this->desconectar();
-	close(this->skt);
+	if (this->skt != -1) {
+		this->desconectar();
+		close(this->skt);
+	}
 }
 
 Socket::Socket(Socket&& other) {
 	this->skt = other.skt;
-	other.skt = 0;
+	other.skt = -1;
 }
