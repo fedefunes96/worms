@@ -80,7 +80,7 @@ void Player::play() {
 	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(5);
+	this->counter.set_time(10);
 
 	printf("Starts turn of 40 secs\n");
 
@@ -217,13 +217,18 @@ void Player::process_events() {
 void Player::disconnected_player() {
 	//Remove each of his worms
 	//std::lock_guard<std::mutex> lock(this->worms_m);
-	this->counter.stop();
 	this->set_receive(false);
-	
+		
 	if (this->is_in_game()) {
+		//Stop counter if it was my turn
+		this->counter.stop();
+
 		std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
 
+		it = this->worms.begin();
+
 		while (it != this->worms.end()) {
+			printf("Killing worm id: %d\n", it->second->get_id());
 			it->second->force_death();
 
 			//it = this->worms.erase(it);
@@ -336,8 +341,10 @@ bool Player::lost() {
 	it = this->worms.begin();
 
 	if (it != this->worms.end()) {
-		if(!it->second->im_dead())
+		if(!it->second->im_dead()) {
+			printf("Worm alive\n");
 			return false;
+		}
 
 		++it;
 	}	

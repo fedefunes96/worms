@@ -51,6 +51,7 @@ private:
 	void initialize_players();
 	void initialize_game(const std::string& stage_file);
 	void start_game();
+	void new_player();
 
 	void notify_actual_player(const int id);
 

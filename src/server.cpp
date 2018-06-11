@@ -30,7 +30,9 @@ void Server::end_user(std::unique_ptr<Player> player) {
 }
 
 void Server::end_game(std::unique_ptr<Game> game) {
-	game->join();
+	//printf("Destroying game bef\n");
+	//game->join();
+	//printf("Destroying game\n");
 }
 
 void Server::check_active_users() {
@@ -103,6 +105,15 @@ void Server::end_server() {
 	//And disconnect every player that is not playing
 	std::lock_guard<std::mutex> lock(this->disconnect_m);
 
+	std::vector<std::unique_ptr<Game>>::iterator it_g; 
+
+	it_g = this->games.begin();
+	while (it_g != this->games.end()) {
+		this->end_game(std::move((*it_g)));
+		it_g = this->games.erase(it_g);
+	}
+
+
 	std::unordered_map<int, std::unique_ptr<Player>>::iterator it;
 
 	it = this->players.begin();
@@ -110,16 +121,7 @@ void Server::end_server() {
 	while (it != this->players.end()) {
 		this->end_user(std::move(it->second));
 		it = this->players.erase(it);
-	}	
-
-	std::vector<std::unique_ptr<Game>>::iterator it_g; 
-
-	it_g = this->games.begin();
-
-	while (it_g != this->games.end()) {
-		this->end_game(std::move((*it_g)));
-		it_g = this->games.erase(it_g);
-	}
+	}		
 }
 
 void Server::interrupt_server() {
@@ -163,7 +165,7 @@ std::vector<std::string> Server::get_maps() {
 
 void Server::create_room(const int id, const std::string name, const std::string stage_file) {
 	this->check_active_users();
-	
+
 	std::lock_guard<std::mutex> lock(this->room_m);
 
 	//Don't create a room if it already exists one
@@ -290,6 +292,9 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 			event_queues.push_back(queue);
 		}
 
+		printf("10 seconds before launching game\n");
+		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+		printf("Launching game\n");
 		this->games.push_back(std::unique_ptr<Game>(new Game(stage_file 
 			, std::move(players_for_game)
 			, std::move(event_queues))));

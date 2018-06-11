@@ -223,7 +223,9 @@ void Game::end_game(Game_status game_status) {
 	}*/
 	this->notify_winner();
 	this->is_over = true;
-	//printf("Game ended\n");
+	this->stage.stop_drawing();
+	this->stage_t.join();
+	printf("Game ended\n");
 	//Show message "Loser" to all losers
 	//this->notify_losers();
 }
@@ -246,14 +248,25 @@ Game_status Game::check_for_winner() {
 	return UNDEFINED;
 }
 
+void Game::new_player() {
+		if (this->id_player_list+1 >= (int) this->players.size()) {
+			this->id_player_list = 0;
+		} else {
+			this->id_player_list++;
+		}
+}
+
 Game_status Game::round_over() {
 
 	printf("Round is over!\n");
 
 	Game_status game_status = check_for_winner();
 
-	(this->id_player_list+1 >= (int) this->players.size() 
-	? this->id_player_list = 0 : ++this->id_player_list);
+	if (game_status == UNDEFINED) {
+		do {
+			this->new_player();
+		} while (this->get_actual_player()->lost());
+	}
 
 	return game_status;
 }
@@ -304,10 +317,10 @@ Game::~Game() {
 	//for (int i = 0; i < this->players.size(); i++)
 	//	this->players.join();
 
-	this->stage.stop_drawing();
-	this->stage_t.join();
+	/*this->stage.stop_drawing();
+	this->stage_t.join();*/
 	//this->game_t.join();
-	std::shared_ptr<Event> event(new EventDisconnect());
+	//std::shared_ptr<Event> event(new EventDisconnect());
 
 	/*for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i]->disconnect();
@@ -323,6 +336,4 @@ Game::~Game() {
 	/*for (int i = 0; i < (int) this->players_t.size(); i++) {
 		this->players_t[i].join();
 	}*/
-
-	this->is_over = true;
 }
