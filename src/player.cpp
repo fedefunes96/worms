@@ -59,7 +59,7 @@ void Player::set_receive(bool state) {
 }
 
 void Player::new_worm_id() {
-	if (this->id_actual_worm + 1 > (int) this->worms_ids.size()) {
+	if (this->id_actual_worm + 1 >= (int) this->worms_ids.size()) {
 		this->id_actual_worm = 0;
 	} else {
 		this->id_actual_worm++;
@@ -80,7 +80,7 @@ void Player::play() {
 	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(40);
+	this->counter.set_time(2);
 
 	printf("Starts turn of 40 secs\n");
 

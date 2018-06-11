@@ -6,5 +6,6 @@
 EventStartGame::EventStartGame() {}
 
 void EventStartGame::process(Player& player, Protocol& protocol) {
+	printf("Se envio empezar juego\n");
 	protocol.sendStartGame();
 }

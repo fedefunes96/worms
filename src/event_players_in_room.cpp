@@ -2,12 +2,13 @@
 #include "event.h"
 #include "protocol.h"
 #include "player.h"
+#include <iostream>
 
 EventPlayersInRoom::EventPlayersInRoom(const int size)
 	: size(size) {}
 
 void EventPlayersInRoom::process(Player& player, Protocol& protocol) {
 	//printf("Sending position\n");
-
+	printf("size %i\n",size );
 	protocol.sendPlayersInRoom(size);
 }

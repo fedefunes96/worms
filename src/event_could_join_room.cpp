@@ -8,5 +8,6 @@ EventCouldJoinRoom::EventCouldJoinRoom(const bool could)
  : could(could) {}
 
 void EventCouldJoinRoom::process(Player& player, Protocol& protocol) {
+	printf("intente unirme %i\n",static_cast<int>(could));
 	protocol.sendCouldJoinRoom(could);
 }

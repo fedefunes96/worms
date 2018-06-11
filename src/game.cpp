@@ -117,7 +117,7 @@ void Game::initialize_game(const std::string& stage_file) {
 
 			//Send event to everyone
 			for (int k = 0; k < (int) this->event_queues.size(); k++)
-				this->event_queues[k]->add_event(std::move(event));
+				this->event_queues[k]->add_event(event);
 
 			this->stage.insert(std::move(worm_ptr));
 		}
@@ -132,7 +132,7 @@ void Game::initialize_game(const std::string& stage_file) {
 
 			//Send event to everyone
 			for (int k = 0; k < (int) this->event_queues.size(); k++)
-				this->event_queues[k]->add_event(std::move(event));
+				this->event_queues[k]->add_event(event);
 
 			this->stage.insert(std::move(worm_ptr));
 		}	
