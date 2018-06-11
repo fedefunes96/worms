@@ -47,11 +47,11 @@ void Game::start_game() {
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
 	//this->game_t = std::thread(&Game::game_loop, this);
 
-	for (int i = 0; i < (int) this->players.size(); i++) {
+	/*for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players_t.push_back(
 			std::thread(&Player::game_loop, this->players[i])
 		);
-	}
+	}*/
 
 	this->game_loop();
 	//printf("Waiting 20 secs to end game\n");
@@ -309,7 +309,7 @@ Game::~Game() {
 	//this->game_t.join();
 	std::shared_ptr<Event> event(new EventDisconnect());
 
-	for (int i = 0; i < (int) this->players.size(); i++) {
+	/*for (int i = 0; i < (int) this->players.size(); i++) {
 		this->players[i]->disconnect();
 		this->event_queues[i]->add_event(event);
 		//printf("add disconnect event\n");
@@ -318,9 +318,11 @@ Game::~Game() {
 		this->players[i]->stop_events();
 
 		this->players_t[i].join();
-	}
+	}*/
 
 	/*for (int i = 0; i < (int) this->players_t.size(); i++) {
 		this->players_t[i].join();
 	}*/
+
+	this->is_over = true;
 }

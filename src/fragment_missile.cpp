@@ -28,5 +28,5 @@ std::string FragmentMissile::get_type() {
 }
 
 bool FragmentMissile::is_affected_by_wind() {
-	return false;
+	return true;
 }

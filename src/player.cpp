@@ -80,7 +80,7 @@ void Player::play() {
 	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(2);
+	this->counter.set_time(5);
 
 	printf("Starts turn of 40 secs\n");
 
@@ -94,7 +94,7 @@ void Player::play() {
 }
 
 void Player::stop_turn() {
-	this->counter.set_time(0);
+	this->counter.stop();
 }
 
 void Player::run() {
@@ -217,7 +217,7 @@ void Player::process_events() {
 void Player::disconnected_player() {
 	//Remove each of his worms
 	//std::lock_guard<std::mutex> lock(this->worms_m);
-
+	this->counter.stop();
 	this->set_receive(false);
 	
 	if (this->is_in_game()) {
@@ -231,7 +231,6 @@ void Player::disconnected_player() {
 			++it;
 		}
 	}
-
 	this->connected = false;
 }
 

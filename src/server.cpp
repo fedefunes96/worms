@@ -42,6 +42,7 @@ void Server::check_active_users() {
 
 	while (it != this->players.end()) {
 		if (it->second->is_disconnected() && !it->second->is_in_game()) {
+			printf("Player disconnected, removing from room\n");
 			this->exit_room(it->first);
 			this->end_user(std::move(it->second));
 			it = this->players.erase(it);
@@ -100,6 +101,8 @@ void Server::start() {
 void Server::end_server() {
 	//Wait for every game to end
 	//And disconnect every player that is not playing
+	std::lock_guard<std::mutex> lock(this->disconnect_m);
+
 	std::unordered_map<int, std::unique_ptr<Player>>::iterator it;
 
 	it = this->players.begin();
@@ -159,18 +162,37 @@ std::vector<std::string> Server::get_maps() {
 }
 
 void Server::create_room(const int id, const std::string name, const std::string stage_file) {
+	this->check_active_users();
+	
 	std::lock_guard<std::mutex> lock(this->room_m);
-	//Read stage file and get ammount of players
-	int ammount_players = 2;
-	//Room room(*this, name, stage_file, ammount_players);
-	Room room(*this, name, maps.at(stage_file), ammount_players);
 
-	room.add_player(id);
+	//Don't create a room if it already exists one
+	//with it's name
+	std::unordered_map<std::string, Room>::iterator it;
 
-	this->rooms.emplace(name, std::move(room));
+	it = this->rooms.find(name);
+
+	if (it == this->rooms.end()) {
+		//Read stage file and get ammount of players
+		int ammount_players = 2;
+		//Room room(*this, name, stage_file, ammount_players);
+		Room room(*this, name, maps.at(stage_file), ammount_players);
+
+		room.add_player(id);
+
+		this->rooms.emplace(name, std::move(room));
+
+		/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(true));
+		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));	*/	
+	} else {
+		/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(False));
+		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));	*/			
+	}
 }
 
 void Server::join_room(const int id, const std::string& name) {
+	this->check_active_users();
+
 	//Join room if it can
 	std::lock_guard<std::mutex> lock(this->room_m);
 
@@ -220,7 +242,9 @@ void Server::exit_room(const int id) {
 
 			//No players left in the room
 			//Remove it
+			printf("Player removed\n");
 			if (it->second.get_players_ids().size() == 0) {
+				printf("Remove empty room\n");
 				this->rooms.erase(it);
 			} else {
 				
