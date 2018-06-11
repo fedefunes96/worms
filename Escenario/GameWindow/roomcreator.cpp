@@ -36,8 +36,8 @@ void RoomCreator::recvMaps(QList<std::string> list)
 
 void RoomCreator::createRoom()
 {
-    this->wait->exec();
     this->close();
+    this->wait->exec();    
 }
 
 

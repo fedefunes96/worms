@@ -3,16 +3,17 @@
 #include "protocol.h"
 #include <QCollator>
 #include <string>
+#include "waitRoom.h"
 #include <QPushButton>
 
-MapSelection::MapSelection(Protocol* protocol, QWidget *parent) :
+MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapSelection)
 {
     this->protocol = protocol;  
     ui->setupUi(this);
     this->setWindowTitle("Worms Map Selection");
-    
+    this->wait = wait;
 }
 
 MapSelection::~MapSelection()
@@ -33,7 +34,7 @@ void MapSelection::recvRooms(QList<std::string> list)
 void MapSelection::join(int cant)
 {
     if (cant){
-        printf("conecto");
+        this->wait->exec();
     } else {
         printf("no conecto");
     }

@@ -8,6 +8,7 @@
 #include <vector>
 #include <QThread>
 #include "controler.h"
+#include "waitRoom.h"
 
 namespace Ui {
 class MapSelection;
@@ -18,7 +19,7 @@ class MapSelection : public QDialog
     Q_OBJECT
 
 public:
-    explicit MapSelection(Protocol* protocol, QWidget *parent = nullptr);
+    explicit MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent = nullptr);
     ~MapSelection();
 
     void connectControler(Controler *controler);
@@ -30,6 +31,7 @@ private:
     Ui::MapSelection *ui;
     Protocol* protocol;
     std::vector<button*> buttons;
+    WaitRoom* wait;
     void adjustView();
 };
 

@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     Controler controler(&protocol);
 
     WaitRoom wait(&protocol);
-    MapSelection map(&protocol);
+    MapSelection map(&wait,&protocol);
     RoomCreator room(&wait,&protocol);
     map.connectControler(&controler);
     room.connectControler(&controler);

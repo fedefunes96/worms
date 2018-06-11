@@ -34,6 +34,7 @@ button::~button()
 
 void button::conectarse()
 {
+    std::string name = but->text().toUtf8().constData();
     protocol->sendSelectRoom(name);
     //widget->close();
 }
