@@ -44,6 +44,7 @@ void button::create()
     if (nombre.size() == 0){
 
     } else {
+        std::string name = but->text().toUtf8().constData();
         protocol->sendCreateRoom(nombre,name);
         //widget->close();
     }

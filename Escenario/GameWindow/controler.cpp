@@ -107,10 +107,6 @@ void Controler::run()
         } else if (cmd==static_cast<int>(Commands::MAP_LIST)){
             //pasarle las cosas a create room
         	std::vector<std::string> names;
-            printf("Map_list\n");
-            for (unsigned long i = 0; i < names.size();++i){
-                std::cout<<names[i]<<std::endl;
-            }
         	this->protocol->recvMaps(names);
             QList<std::string> name = QList<std::string>::fromVector(QVector<std::string>::fromStdVector(names));
             emit recvMap(name);

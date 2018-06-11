@@ -299,15 +299,16 @@ void Protocol::recvCreateRoom(std::string& room_name, std::string& stage_file) {
     room_name.append(buff, size);  
 
     conexion.recibir((char*)&size,1);
+    char buff2[BYTES_RECEIVE+1];
 
     while (size > BYTES_RECEIVE) {
-        conexion.recibir(buff, BYTES_RECEIVE);
-        stage_file.append(buff, BYTES_RECEIVE);
+        conexion.recibir(buff2, BYTES_RECEIVE);
+        stage_file.append(buff2, BYTES_RECEIVE);
         size -= BYTES_RECEIVE;
     }
 
-    conexion.recibir(buff, size);
-    stage_file.append(buff, size);          
+    conexion.recibir(buff2, size);
+    stage_file.append(buff2, size);          
 }
 
 void Protocol::recvMove(int *dir) {
@@ -535,6 +536,8 @@ void Protocol::sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vec
 void Protocol::sendCreateRoom(std::string &name, std::string &stage_file)
 {
     Commands cmd = Commands::CREATE_ROOM;
+    printf("%s\n", stage_file.c_str());
+    printf("%s\n", name.c_str());
     conexion.enviar((const char*)&cmd,1);
     char tam = name.size();
     conexion.enviar((const char*)&tam,1);
