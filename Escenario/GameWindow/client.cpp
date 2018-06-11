@@ -25,15 +25,15 @@
 #include "mapSelection.h"
 #include "roomcreator.h"
 #include "waitRoom.h"
-#include "clientmainwindow.h"
+#include "window.h"
 
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     qRegisterMetaType<QList<std::string>>("QList<std::string>");
-    //
-    //QRect rect = a.desktop()->screenGeometry();
+
+    QRect rect = a.desktop()->screenGeometry();
 
     std::string ip("127.0.0.1");
     std::string puerto("7777");
@@ -54,12 +54,17 @@ int main(int argc, char *argv[])
 
     //game.connectController(&controler);
     controler.start();
-    clientMainWindow c(&map,&room,&protocol);
-    c.show();
-    //EventHandler *filter = new EventHandler(&a,&game,&protocol);
-    //a.installEventFilter(filter);
+    Window c(&map,&room,&protocol);
+    c.connectControler(&controler);
+    c.exec();
+    qDebug()<<" PASEEEEEEEEEEEEEEEEEEEEEEEEEEE EJECUCION";
+    GameClass game(rect,10000,10000,c.getId());
+    game.connectController(&controler);
+    EventHandler *filter = new EventHandler(&a,&game,&protocol);
+    a.installEventFilter(filter);
 
 
+    //return 0;
     return a.exec();
 }
 

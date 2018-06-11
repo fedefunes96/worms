@@ -10,7 +10,7 @@ RoomCreator::RoomCreator(WaitRoom *wait, Protocol* protocol, QWidget *parent) :
     ui->setupUi(this);
     this->protocol = protocol;
     this->wait = wait;
-    this->setWindowTitle("Create Room");
+    this->setWindowTitle("Worms Armageddon - Creador sala");
 }
 
 RoomCreator::~RoomCreator()

@@ -80,7 +80,7 @@ void Player::play() {
 	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(10);
+	this->counter.set_time(40);
 
 	printf("Starts turn of 40 secs\n");
 
@@ -104,12 +104,16 @@ void Player::run() {
 void Player::game_loop() {
 	try {
 		while (this->connected) {	
+			std::cout << "antes de recibir"  << std::endl;
 			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
 
+			std::cout << "comando recibido:" << static_cast<int>(cmd) << std::endl;
 			if (cmd == Commands::MOVE) {
 				int dir = 0;
 
 				this->protocol.recvMove(&dir);
+
+				std::cout << "movimiento recibido:" << dir << std::endl;
 
 				if (!this->should_i_receive())
 					continue;
@@ -190,6 +194,7 @@ void Player::game_loop() {
 			//Played disconnected
 			this->disconnected_player();
 	}
+	std::cout << "termine!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
 
 }
 

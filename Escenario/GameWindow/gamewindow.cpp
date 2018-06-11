@@ -11,6 +11,7 @@ GameWindow::GameWindow(QWidget *parent) :
     this->timer = new QTimer();
     this->timer->start(500);// no hace falta chequear tan seguido...
     connect(this->timer,&QTimer::timeout,this,&GameWindow::refreshBox);
+    this->setWindowTitle("Worms Armageddon");
 }
 
 

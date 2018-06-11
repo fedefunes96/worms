@@ -11,7 +11,7 @@ class GameClass : public QObject
 {
     Q_OBJECT
 public:
-    GameClass(QRect screen,int w,int h);
+    GameClass(QRect screen,int w,int h,int idply);
 
 
     Player* getPlayer();
@@ -19,7 +19,7 @@ public:
 
     std::vector<int> fireWeapon();
     bool isMyTurn();
-    void checkRound(int id, int id_worm);
+    void checkRound(QList<int> list);
     Camera *getCamera();
     Worm_View *getWormActive();
     void connectController(Controler *controler);

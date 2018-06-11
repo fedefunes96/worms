@@ -75,17 +75,21 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             keyPress = true;
             qDebug() << "Left"; //moveLeft worm
-
+            this->protocol->sendMove(2);
+            /*
             if(!this->game->isMyTurn()){
+                qDebug()<<"no es mi turno";
                 return;
             }
-
+*/
             Worm_View* worm = this->game->getWormActive();
             if(worm==nullptr){
+                qDebug()<<"worm nulo";
                 return;
             }
             worm->setAngle(-180);
             this->protocol->sendMove(2);
+            qDebug()<< "id worm a mover:"<<worm->getId();
             break;
         }
         case Qt::Key_Right:

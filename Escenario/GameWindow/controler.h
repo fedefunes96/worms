@@ -20,12 +20,14 @@ signals:
     void eventCreated(QList<int> list);
     void recvMap(QList<std::string> list);
     void recvRomms(QList<std::string> list);
-    void join(int cant);
+    void joinR(int cant);
     void playersInRoom(int cant);
     void startGame();
+    void playerId(int id);
 private:
     Protocol *protocol;
     QTimer *timer;
+    int mi_id;
 };
 
 #endif // CONTROLER_H

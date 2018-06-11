@@ -100,7 +100,7 @@ public:
     void recvPlayerId(int8_t *id);
     void recvWormId(int8_t *id_player, int8_t *id, int32_t *health);
     void recvWinner(int8_t *id);
-    void recvActualPlayer(int8_t *id, int8_t *id_worm);
+    void recvActualPlayer(int8_t *id);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
     void recvWormHealth(int8_t *id, int32_t *health);
@@ -111,6 +111,7 @@ public:
     void sendJoinRoom();
     void sendCreateRoom();
     void sendExitRoom();
+    void recvActualWorm(int8_t *id);
 };
 
 #endif // PROTOCOL_H

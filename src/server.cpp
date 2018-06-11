@@ -31,7 +31,7 @@ void Server::end_user(std::unique_ptr<Player> player) {
 
 void Server::end_game(std::unique_ptr<Game> game) {
 	//printf("Destroying game bef\n");
-	//game->join();
+	game->join();
 	//printf("Destroying game\n");
 }
 
@@ -290,11 +290,15 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 			event_queues.push_back(queue);
 		}
 
-		printf("10 seconds before launching game\n");
-		std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		printf("Launching game\n");
-		this->games.push_back(std::unique_ptr<Game>(new Game(stage_file 
+
+		Game *game = new Game(stage_file 
 			, std::move(players_for_game)
-			, std::move(event_queues))));
+			, std::move(event_queues));
+
+		game->start();
+
+		this->games.push_back(std::unique_ptr<Game>(game));
 	}	
 }

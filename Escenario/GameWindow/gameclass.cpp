@@ -6,7 +6,7 @@
 #include <QColor>
 #include <QCoreApplication>
 
-GameClass::GameClass(QRect screen,int w,int h)
+GameClass::GameClass(QRect screen,int w,int h,int idply)
 {
     this->window = new GameWindow();
     this->game = new Game_View(screen,w,h);
@@ -15,8 +15,9 @@ GameClass::GameClass(QRect screen,int w,int h)
     std::string path("../../images/intro2.jpg");
     this->window->showMaximized();
     this->game->setBackground(path);
-    this->myTurn=true;
+    this->myTurn=false;
     this->myPlayer = new Player();
+    this->myPlayer->setId(idply);
     this->game->setPlayerActive(this->myPlayer);
     this->window->addPlayer(this->myPlayer);
 
@@ -60,6 +61,7 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
         worm->setIdObj(type);
         this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
         if(id_player==this->myPlayer->getId()){
+            qDebug()<<"es mi Worm";
             this->myPlayer->addWorm(worm);
         }
     }
@@ -262,8 +264,9 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
         //mensaje con el id del jugador en turno
         qDebug()<<"actual player setting";
-        checkRound(list[1],list[2]);
+        checkRound(list);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
+        qDebug()<<"agregar worm con vida";
         // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
         this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2],list[3]);
     }else if(cmd==static_cast<int>(Commands::REMOVE)){
@@ -286,25 +289,30 @@ void GameClass::checkQueueEvent(QList<int> list)
 }
 
 
-void GameClass::checkRound(int id,int id_worm){
+void GameClass::checkRound(QList<int> list){
+    qDebug()<<"jugador id:"<<list[1];
 
-
-    if(this->myPlayer->getId() != id){
+    if(this->myPlayer->getId() != list[1]){
+        qDebug()<<"NO es mi turno";
         this->myTurn=false;
         this->myPlayer->setActive(false);
         Worm_View* worm = this->myPlayer->getWormActive();
-        if(worm){
+        if(worm!=nullptr){
+            qDebug()<<"entre";
             worm->setSelect(false);
         }
         this->myPlayer->setWormActive(nullptr);
         return;
     }
-    Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),id_worm);
+    qDebug()<<"es mi turno";
+    qDebug()<<"idworm:"<<list[2];
+    Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
     this->myTurn=true;
     this->myPlayer->setActive(true);
     worm->setSelect(true);
     this->myPlayer->setWormActive(worm);
+    qDebug()<<"setee worm activo id:"<<worm->getId();
     this->game->addItemToFollow(worm);
 
 }

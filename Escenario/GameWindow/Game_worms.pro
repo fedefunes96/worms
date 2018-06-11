@@ -37,7 +37,8 @@ SOURCES +=\
     client.cpp \
     button.cpp \
     waitRoom.cpp \
-    clientmainwindow.cpp
+    clientmainwindow.cpp \
+    window.cpp
 
 HEADERS  += \
     game_view.h \
@@ -61,7 +62,8 @@ HEADERS  += \
     mapSelection.h \
     clientmainwindow.h \
     button.h \
-    waitRoom.h
+    waitRoom.h \
+    window.h
 
 FORMS    += \
     weapons_and_tools.ui \
@@ -69,4 +71,5 @@ FORMS    += \
     roomcreator.ui \
     mapSelection.ui \
     clientmainwindow.ui \
-    waitRoom.ui
+    waitRoom.ui \
+    window.ui

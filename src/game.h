@@ -36,6 +36,8 @@ private:
 	int id_player_list;
 	bool is_over;
 
+	std::string stage_file;
+
 	std::thread stage_t;
 	//std::thread game_t;
 	std::vector<std::thread> players_t;

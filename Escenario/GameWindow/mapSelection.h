@@ -25,7 +25,7 @@ public:
     void connectControler(Controler *controler);
 private slots:
     void recvRooms(QList<std::string> list);
-    void join(int cant);
+    void goWaitRoom(int cant);
 
 private:
     Ui::MapSelection *ui;

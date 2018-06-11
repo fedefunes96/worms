@@ -27,6 +27,9 @@ void Player::setWormActive(Worm_View* worm)
 }
 
 Worm_View* Player::getWormActive(){
+    if(!this->wormActive){
+        return nullptr;
+    }
     if(!this->wormActive->isAlive()){
         return nullptr;
     }

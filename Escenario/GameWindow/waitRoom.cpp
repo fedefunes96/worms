@@ -7,6 +7,7 @@ WaitRoom::WaitRoom(Protocol *protocol,QWidget *parent) :
 {
     ui->setupUi(this);
     this->protocol = protocol;
+    this->setWindowTitle("Worms Armageddon - Sala de espera");
 }
 
 WaitRoom::~WaitRoom()
@@ -22,6 +23,8 @@ void WaitRoom::plysInRoom(int cant)
 void WaitRoom::startGameView()
 {
     // iniciar el juego  la vista
+    this->close();
+
 }
 
 

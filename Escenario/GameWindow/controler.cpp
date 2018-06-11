@@ -32,8 +32,10 @@ void Controler::run()
             qDebug()<<"attach player id";
             int8_t id;
             this->protocol->recvPlayerId(&id);
-            list.push_back(id);
-            emit eventCreated(list);
+            this->mi_id=id;
+            //list.push_back(id);
+            //emit eventCreated(list);
+            emit playerId(id);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
             qDebug()<<"attach usable id";
@@ -48,10 +50,13 @@ void Controler::run()
             qDebug()<<"actual player";
             int8_t id;
             int8_t id_worm;
-            this->protocol->recvActualPlayer(&id,&id_worm);
-            //Enable key control..
+            this->protocol->recvActualPlayer(&id);
             list.push_back(id);
-            list.push_back(id_worm);
+            if(id==this->mi_id){
+                this->protocol->recvActualWorm(&id_worm);
+                list.push_back(id_worm);
+            }
+            //Enable key control..
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
@@ -98,6 +103,7 @@ void Controler::run()
             gameRunning=false;
             emit eventCreated(list);
         }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
+            qDebug()<<"worm vida update";
             int8_t id;
             int32_t health;
             this->protocol->recvWormHealth(&id,&health);
@@ -106,27 +112,32 @@ void Controler::run()
             emit eventCreated(list);
         } else if (cmd==static_cast<int>(Commands::MAP_LIST)){
             //pasarle las cosas a create room
+            qDebug()<<"map list para el crear sala";
         	std::vector<std::string> names;
         	this->protocol->recvMaps(names);
             QList<std::string> name = QList<std::string>::fromVector(QVector<std::string>::fromStdVector(names));
             emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::SHOW_ROOMS)){
             //pasarle las cosas a map selection
+            qDebug()<<" salas para mostrar en conectarse a sala";
         	std::vector<std::string> names;
         	this->protocol->recvRomms(names);
             QList<std::string> name = QList<std::string>::fromVector(QVector<std::string>::fromStdVector(names));
             emit recvMap(name);
         } else if (cmd==static_cast<int>(Commands::COULD_JOIN)){
             //pasarle a map salection que pudo conectarse
+            qDebug()<<" pasarle a seleccion de sala que pudo conectarse";
         	int8_t conecto = this->protocol->recvCouldJoinRoom();
         	list.push_back(conecto);
-            emit join(conecto);
+            emit joinR(conecto);
         } else if (cmd==static_cast<int>(Commands::PLAYERS_IN_ROOM)){
         	//pasarselo a wait room
+            qDebug()<<" recibir cantidad jugadores en sala";
         	int8_t cant = this->protocol->recvPlayersInRoom();
         	list.push_back(cant);
             emit playersInRoom(cant);
         } else if (cmd==static_cast<int>(Commands::START_GAME)){
+            qDebug()<<" se inicia el juego";
         	//pasarselo a wait room
             emit startGame();
         }

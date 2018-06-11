@@ -36,7 +36,7 @@ void button::conectarse()
 {
     std::string name = but->text().toUtf8().constData();
     protocol->sendSelectRoom(name);
-    //widget->close();
+    widget->close();
 }
 
 void button::create()
@@ -47,6 +47,6 @@ void button::create()
     } else {
         std::string name = but->text().toUtf8().constData();
         protocol->sendCreateRoom(nombre,name);
-        //widget->close();
+        widget->close();
     }
 }

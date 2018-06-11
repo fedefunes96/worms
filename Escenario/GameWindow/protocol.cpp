@@ -421,6 +421,7 @@ void Protocol::sendMove(int8_t dir)
     Commands cmd = Commands::MOVE;
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&dir,1);
+    std::cout << "en protocolo envio movimiento:"<<static_cast<int>(cmd)<<"en direccion:"<<static_cast<int>(dir)<<std::endl;
 }
 
 
@@ -501,10 +502,13 @@ void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
     *id=ntohl(aux);
 }
 
-void Protocol::recvActualPlayer(int8_t* id, int8_t* id_worm)
+void Protocol::recvActualPlayer(int8_t* id)
 {
     conexion.recibir((char*)id,1);
-    conexion.recibir((char*)id_worm,1);
+}
+
+void Protocol::recvActualWorm(int8_t *id){
+    conexion.recibir((char*)id,1);
 }
 
 
@@ -593,6 +597,7 @@ void Protocol::recvRomms(std::vector<std::string>& rooms_name){
         }
         conexion.recibir(buff,tam);
         name.append(buff,tam);
+        std::cout << "nombre recibido" << name << std::endl;
         rooms_name.push_back(name);
     }
 }
@@ -613,6 +618,7 @@ void Protocol::recvMaps(std::vector<std::string>& rooms_name){
         }
         conexion.recibir(buff,tam);
         name.append(buff,tam);
+        std::cout << "nombre "<<name << std::endl;
         rooms_name.push_back(name);
     }
 }

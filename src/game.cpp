@@ -35,11 +35,10 @@ Game::Game(const std::string& stage_file
  , stage(stage_file, 1.0/20.0, 6, 2, *this, this->event_queues) {
  	this->id_player_list = 0;
  	this->is_over = false;
+ 	this->stage_file= stage_file;
 
  	//Remove this, use run when creating game
- 	this->initialize_players();
- 	this->initialize_game(stage_file);
- 	this->start_game();
+ 	
 }
 
 void Game::start_game() {
@@ -159,7 +158,10 @@ void Game::initialize_game(const std::string& stage_file) {
 }
 
 void Game::run() {
-	this->game_loop();
+	//this->game_loop();
+	this->initialize_players();
+ 	this->initialize_game(this->stage_file);
+ 	this->start_game();
 }
 
 bool Game::game_finished() {
