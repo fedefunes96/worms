@@ -23,6 +23,7 @@ private:
 	std::unordered_map<std::string, std::string> maps;
 
 	std::mutex room_m;
+	std::mutex disconnect_m;
 
 	void check_active_users();
 	void check_active_games();

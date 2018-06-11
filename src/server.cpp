@@ -33,6 +33,8 @@ void Server::end_game(std::unique_ptr<Game> game) {
 }
 
 void Server::check_active_users() {
+	std::lock_guard<std::mutex> lock(this->disconnect_m);
+
 	std::unordered_map<int, std::unique_ptr<Player>>::iterator it;
 
 	it = this->players.begin();
@@ -233,6 +235,8 @@ void Server::exit_room(const int id) {
 }
 
 void Server::start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file) {
+	std::lock_guard<std::mutex> lock(this->disconnect_m);
+	
 	std::unordered_map<std::string, Room>::iterator it;
 
 	it = this->rooms.find(name);
