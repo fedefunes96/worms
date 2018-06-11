@@ -168,7 +168,7 @@ void Player::game_loop() {
 				this->server.create_room(this->get_id(), room_name, stage_file);
 
 			} else if (cmd == Commands::MAP_LIST) {
-				std::vector<std::string>& maps = this->server.get_maps();
+				std::vector<std::string> maps = this->server.get_maps();
 
 				this->protocol.sendMaps(maps);
 
@@ -208,7 +208,8 @@ void Player::process_events() {
 
 			event->process(*this, this->protocol);
 		} catch(SocketException& e) {
-			this->connected = false;
+			//this->connected = false;
+			this->disconnected_player();
 		}
 	}
 }
@@ -219,14 +220,16 @@ void Player::disconnected_player() {
 
 	this->set_receive(false);
 	
-	std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
+	if (this->is_in_game()) {
+		std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
 
-	while (it != this->worms.end()) {
-		it->second->force_death();
+		while (it != this->worms.end()) {
+			it->second->force_death();
 
-		//it = this->worms.erase(it);
+			//it = this->worms.erase(it);
 
-		++it;
+			++it;
+		}
 	}
 
 	this->connected = false;

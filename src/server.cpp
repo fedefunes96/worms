@@ -142,8 +142,20 @@ std::vector<std::string> Server::get_rooms() {
 	return std::move(rooms_names);
 }
 
-std::vector<std::string>& Server::get_maps() {
-	return this->maps;
+std::vector<std::string> Server::get_maps() {
+	std::vector<std::string> map_names;
+
+	std::unordered_map<std::string, std::string>::iterator it;
+
+	it = this->maps.begin();
+
+	while (it != this->maps.end()) {
+		map_names.push_back(it->first);
+		++it;
+	}
+
+	return std::move(map_names);	
+	//return this->maps;
 }
 
 void Server::create_room(const int id, const std::string name, const std::string stage_file) {
@@ -151,7 +163,8 @@ void Server::create_room(const int id, const std::string name, const std::string
 	//Read stage file and get ammount of players
 	int ammount_players = 2;
 
-	Room room(*this, name, stage_file, ammount_players);
+	//Room room(*this, name, stage_file, ammount_players);
+	Room room(*this, name, maps.at(stage_file), ammount_players);
 
 	room.add_player(id);
 

@@ -50,9 +50,9 @@ void MortarMissile::explode() {
 void MortarMissile::create_fragments() {
 	//Create fragments between pi/4 and 3pi/4 (45° and 135°)
 
-	float32 dist = ((3/4*b2_pi)-(b2_pi/4));
+	float32 dist = ((3*b2_pi/4)-(b2_pi/4));
 
-	for (int i = 1; i <= this->ammount_fragments; i++) {
+	for (int i = 0; i < this->ammount_fragments; i++) {
 		float32 angle = dist * i/this->ammount_fragments + b2_pi/4;
 
 		b2Vec2 pos = this->body->GetPosition();
@@ -62,7 +62,7 @@ void MortarMissile::create_fragments() {
 		FragmentMissile* missile = new FragmentMissile(this->stage
 													, this->owner
 													, pos.x
-													, pos.y
+													, pos.y+1.0
 													, angle
 													, velocity_missile
 													, this->radius_frag
