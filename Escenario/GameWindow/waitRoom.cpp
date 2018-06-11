@@ -1,11 +1,12 @@
 #include "waitRoom.h"
 #include "ui_waitRoom.h"
 
-WaitRoom::WaitRoom(QWidget *parent) :
-    QWidget(parent),
+WaitRoom::WaitRoom(Protocol *protocol,QWidget *parent) :
+    QDialog(parent),
     ui(new Ui::WaitRoom)
 {
     ui->setupUi(this);
+    this->protocol = protocol;
 }
 
 WaitRoom::~WaitRoom()
@@ -15,7 +16,7 @@ WaitRoom::~WaitRoom()
 
 void WaitRoom::plysInRoom(int cant)
 {
-    // hacer algo con la cantidad de jugadoress....
+    ui->jugadores->setText(QString::number(cant));
 }
 
 void WaitRoom::startGameView()
@@ -29,4 +30,9 @@ void WaitRoom::connectControler(Controler *controler)
 {
     connect(controler,SIGNAL(playersInRoom(int)),this,SLOT(plysInRoom(int)));
     connect(controler,SIGNAL(startGame()),this,SLOT(startGameView()));
+}
+
+void WaitRoom::on_pushButton_clicked()
+{
+    this->protocol->sendExitRoom();
 }

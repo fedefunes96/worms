@@ -20,7 +20,7 @@ MapSelection::~MapSelection()
     delete ui;
 }
 
-void MapSelection::recvRooms(QVector<std::string> list)
+void MapSelection::recvRooms(QList<std::string> list)
 {
     int cant = list.size();
     for (int i = 0; i< cant; ++i){
@@ -44,5 +44,5 @@ void MapSelection::join(int cant)
 void MapSelection::connectControler(Controler *controler)
 {
     connect(controler,SIGNAL(join(int)),this,SLOT(join(int)));
-    connect(controler,SIGNAL(recvMap(std::vector<std::string>)),this,SLOT(recvRooms(std::vector<std::string>)));
+    connect(controler,SIGNAL(recvMap(QList<std::string>)),this,SLOT(recvRooms(QList<std::string>)));
 }

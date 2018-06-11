@@ -21,6 +21,7 @@ private:
     Protocol *protocol;
     QLineEdit* lines;
     std::string name;
+    QWidget* widget;
 
 private slots:
     void conectarse();
