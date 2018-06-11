@@ -139,7 +139,7 @@ void Player::game_loop() {
 
  				b2Vec2 dest(posx, posy);
  
-				this->counter.set_time(3);
+				//this->counter.set_time(3);
 				this->counter.set_time(15);
 
 				printf("Usable id %d\n", id_usable);

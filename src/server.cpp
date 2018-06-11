@@ -198,8 +198,6 @@ void Server::join_room(const int id, const std::string& name) {
 	//Join room if it can
 	std::lock_guard<std::mutex> lock(this->room_m);
 
-	printf("me uni\n");
-
 	std::unordered_map<std::string, Room>::iterator it;
 
 	it = this->rooms.find(name);
