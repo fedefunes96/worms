@@ -63,6 +63,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->countDown=0;
     qDebug()<<"color en worm"<<color;
     this->color = color;
+    this->countFrame=0;
 
 
 }
@@ -262,10 +263,6 @@ void Worm_View::setDestDir(int x, int y)
 
 void Worm_View::nextFrame(){
     currentFrame += 60;
-    if(currentFrame >= spriteImage->height())
-    {
-        currentFrame=0;
-    }
     this->update(0,0,60,60);
 }
 
@@ -284,6 +281,15 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     //checkAngle(angle);
     QGraphicsScene* sc = scene();
     this->setPosition(posx,sc->height()-posy);
+    this->countFrame +=30;
+    qDebug()<<"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ  --> "<<this->countFrame;
+    if((this->spriteImage->height()-60)<=this->countFrame){
+        this->countFrame=0;
+        this->currentFrame=0;
+        qDebug()<<"holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    }else if((this->countFrame%60)==0){
+        this->nextFrame();
+    }
     this->moving=false;
 	return;
 }
@@ -321,6 +327,8 @@ bool Worm_View::isMoving()
 
 void Worm_View::setSprite()
 {
+    this->countFrame=0;
+    this->currentFrame=0;
     if(spriteImage)
     {
         delete(spriteImage);

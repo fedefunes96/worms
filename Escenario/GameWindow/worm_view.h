@@ -106,6 +106,7 @@ private:
     int countDown;
     std::pair<int,int> clickTarget;
     QString color;
+    int countFrame;
 
 
 
