@@ -255,7 +255,7 @@ void Protocol::sendMaps(const std::vector<std::string>&maps) {
 
     for (int i = 0; i < (int) maps.size(); i++) {
         size = (int8_t) maps[i].size();
-
+        printf("%s\n",maps[i].c_str());
         conexion.enviar((const char*)&size,1); 
         conexion.enviar(maps[i].c_str(), size);
     }   
@@ -583,11 +583,13 @@ void Protocol::recvRomms(std::vector<std::string>& rooms_name){
         int8_t tam;
         conexion.recibir((char*)&tam,1);
         std::string name;
-        while (tam > BYTES_RECEIVE){ 
+        while (tam > BYTES_RECEIVE){
             conexion.recibir(buff,BYTES_RECEIVE);
             name.append(buff,BYTES_RECEIVE);
             tam -= BYTES_RECEIVE;
         }
+        conexion.recibir(buff,tam);
+        name.append(buff,tam);
         rooms_name.push_back(name);
     }
 }
@@ -601,11 +603,13 @@ void Protocol::recvMaps(std::vector<std::string>& rooms_name){
         int8_t tam;
         conexion.recibir((char*)&tam,1);
         std::string name;
-        while (tam > BYTES_RECEIVE){ 
+        while (tam > BYTES_RECEIVE){
             conexion.recibir(buff,BYTES_RECEIVE);
             name.append(buff,BYTES_RECEIVE);
             tam -= BYTES_RECEIVE;
         }
+        conexion.recibir(buff,tam);
+        name.append(buff,tam);
         rooms_name.push_back(name);
     }
 }
@@ -619,6 +623,12 @@ void Protocol::sendJoinRoom()
 void Protocol::sendCreateRoom()
 {
     Commands cmd = Commands::MAP_LIST;
+    conexion.enviar((const char*)&cmd,1);
+}
+
+void Protocol::sendExitRoom()
+{
+    Commands cmd = Commands::EXIT_ROOM;
     conexion.enviar((const char*)&cmd,1);
 }
 

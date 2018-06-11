@@ -110,6 +110,7 @@ public:
     void recvMaps(std::vector<std::string>& rooms_name);
     void sendJoinRoom();
     void sendCreateRoom();
+    void sendExitRoom();
 };
 
 #endif // PROTOCOL_H
