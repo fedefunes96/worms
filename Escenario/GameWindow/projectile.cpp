@@ -27,6 +27,7 @@ void Projectile::nextFameImpact()
         timer->stop();
         this->alive=false;
         this->setVisible(false);
+        this->selected=false;
         return;
     }
     this->update(0,0,60,60);
@@ -120,4 +121,9 @@ void Projectile::setAlive(bool alive)
 
 void Projectile::setSpriteBullet(std::string &path){
     this->spriteImage = new QPixmap(path.c_str());
+}
+
+bool Projectile::isMoving()
+{
+    return this->moving;
 }

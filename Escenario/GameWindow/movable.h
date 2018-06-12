@@ -15,9 +15,11 @@ public:
     virtual void setVisibility(bool vis)=0;
     virtual bool isSelect()=0;
     virtual void setSelect(bool cond)=0;
+    virtual bool isMoving()=0;
 protected:
     bool alive;
     bool selected;
+    bool moving;
 };
 
 #endif // MOVABLEITEM_H

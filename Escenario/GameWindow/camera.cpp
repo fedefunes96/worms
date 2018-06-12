@@ -45,17 +45,28 @@ void Camera::mousePressEvent(QMouseEvent *event)
 
 void Camera::followObject()
 {
-    //while item alive & moving -> follow
 
-    if(this->itemsToFollow.empty()){
-        return;
-    }
-    MovableItem* item = this->itemsToFollow.top();
-    if(!item->isAlive() || !(item->isSelect())){
-        this->itemsToFollow.pop();
-        return;
-    }
 
+
+    MovableItem *item;
+    if(!this->projectileToFollow.empty()){
+        qDebug()<<" saque un proyectil a seguir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+        item = this->projectileToFollow.top();
+        if( (!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
+            this->projectileToFollow.pop();
+            return;
+        }
+    }else{
+        if(this->itemsToFollow.empty()){
+            return;
+        }
+        qDebug()<<" w a seguir !!!!!!!!!!!!! ??????????????";
+        item= this->itemsToFollow.top();
+        if( (!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
+            this->itemsToFollow.pop();
+            return;
+        }
+    }
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
         horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 5 );
@@ -80,8 +91,35 @@ void Camera::setPlayerActive(Player *player)
 void Camera::addItemToFollow(MovableItem *item)
 {
     this->itemsToFollow.push(item);
+    this->vectorItems.push_back(item);
+}
+
+
+void Camera::addProjectileToFollow(MovableItem *item){
+    this->projectileToFollow.push(item);
+    this->vectorItems.push_back(item);
 }
 
 
 
+void Camera::delItemToFollow(MovableItem *item)
+{
+    for (unsigned int var = 0; var < this->vectorItems.size(); ++var) {
+        if(this->vectorItems[var]->getId()==item->getId() &&
+                this->vectorItems[var]->getIdObj()==item->getIdObj()){
+            this->vectorItems.erase(this->vectorItems.begin() + var);
+            return;
+        }
+    }
+}
 
+bool Camera::containsitemToFollow(MovableItem *item)
+{
+    for (unsigned int var = 0; var < this->vectorItems.size(); ++var) {
+        if(this->vectorItems[var]->getId()==item->getId() &&
+                this->vectorItems[var]->getIdObj()==item->getIdObj()){
+            return true;
+        }
+    }
+    return false;
+}

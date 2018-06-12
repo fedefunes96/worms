@@ -72,7 +72,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     qDebug()<<"color en worm"<<color;
     this->color = color;
     this->countFrame=0;
-
+    this->last_on_ground=1;
 
 }
 
@@ -124,17 +124,27 @@ void Worm_View::setHealth(int vida)
 
 void Worm_View::setStatus(int on_ground, int dir)
 {
-    /*
+    qDebug()<<" valor ground ant:"<<this->last_on_ground<<"valor de dir ant:"<<this->last_dir;
+    qDebug()<<" valor ground:"<<on_ground<<"valor de dir:"<<dir;
     if(this->last_on_ground!=on_ground || this->last_dir!=dir){
+        this->targetVis=false;
+        this->targetClick=false;
+        this->weaponCountDwn=false;
+        this->weapon=-1;
+        this->loadSpriteWeapon(this->weapon);
         this->moving=true;
-    }else if(this->last_on_ground==on_ground && dir=static_cast<int>()){
-
-    }*/
+    }
+    if(this->last_on_ground==on_ground && dir==static_cast<int>(MoveDirection::NONE)){
+        this->moving = false;
+        this->last_dir=dir;
+        return;
+    }
 
     switch (dir) {
     case 1:
         //RIGHT
         if(this->angle==0){
+            qDebug()<<"setee";
             break;
         }
         setAngle(0);
@@ -160,11 +170,19 @@ void Worm_View::setStatus(int on_ground, int dir)
 
 
 
+    this->last_on_ground=on_ground;
+    this->last_dir=dir;
+
 
 
     //setear ahora si esta en aire o piso..
-    if(this->last_on_ground && on_ground==0 && dir!=3 && dir!=4){
+    if(this->last_on_ground==1 && on_ground==0 && dir!=3 && dir!=4){
         // me dispararon o estaba caminando y me cai
+        if(dir==1 || dir==2){
+            //estaba caminando y me cai
+        }else{
+            //me dispararon
+        }
     }else if(this->last_on_ground && on_ground==0 && dir==3){
         // salte hacia adelante en la dir que apunte
     }else if(this->last_on_ground && on_ground==0 && dir==4){
@@ -333,12 +351,11 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     this->targetClick=false;
     this->weaponCountDwn=false;
     this->weapon=-1;
-    this->loadSpriteWeapon(this->weapon);
     setDestDir(posx,posy);
     if(this->currentDir==this->destDir){
         return;
     }
-    this->moving=true;
+    //this->moving=true;
     //checkAngle(angle);
     QGraphicsScene* sc = scene();
     this->setPosition(posx,sc->height()-posy);
@@ -349,7 +366,6 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     }else if((this->countFrame%60)==0){
         this->nextFrame();
     }
-    this->moving=false;
 	return;
 }
 
@@ -451,6 +467,7 @@ void Worm_View::loadSpriteWeapon(int val)
 {
     this->targetVis = false;
     if(this->isMoving()){
+        qDebug()<<"se esta moviendo al cargar el arma";
         return;
     }
     this->weapon=val;

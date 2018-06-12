@@ -87,7 +87,7 @@ Items* Game_View::getItem(int8_t id_type, int32_t id)
     for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
         Items* item = static_cast<Items*>(*it);
         if((item->getId()==id) && (item->getIdObj()==id_type)){
-            qDebug()<<"type:"<<item->getIdObj()<<"id:"<<item->getId();
+            //qDebug()<<"type:"<<item->getIdObj()<<"id:"<<item->getId();
             return static_cast<Items*>(item);
         }
     }
@@ -224,8 +224,8 @@ void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
 
 void Game_View::addItemToFollow(MovableItem* item)
 {
-    qDebug()<<"id worm a seguir"<<item->getId();
-    item->setSelect(true); // esto tendria que estar en la logica de cuando es mi turno...
+    qDebug()<<"id  a seguir"<<item->getId();
+    //item->setSelect(true); // esto tendria que estar en la logica de cuando es mi turno...
     this->camera->addItemToFollow(item);
 }
 

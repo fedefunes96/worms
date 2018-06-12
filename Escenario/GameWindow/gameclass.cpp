@@ -69,7 +69,7 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY){
+    if(this->game->getHeight()<posY || this->game->getWidth() < posX){
         return;
     }
     if(type==static_cast<int>(TypeObj::WORM)){
@@ -127,13 +127,15 @@ void GameClass::throwProjectile(int type,int id,int posX,int posY,int angle,std:
         MovableItem *i = static_cast<MovableItem*>(item);
         i->moveTo(-angle,posX,posY);
     }else{
+        qDebug()<<"cree proyectil";
         Projectile *misil = new Projectile();
         misil->setIdObj(type);
         misil->setId(id);
         misil->setSpriteBullet(path);
         this->game->add_Item(misil,posX,posY);
         misil->moveTo(-angle,posX,posY);
-        this->game->addItemToFollow(misil);
+        misil->setSelect(true);
+        this->game->getCamera()->addProjectileToFollow(misil);
     }
 }
 
@@ -228,6 +230,24 @@ void GameClass::checkDeadItem()
     QList<QGraphicsItem*>::iterator it;
     for (it=list_items.begin();it!=list_items.end();it++)
     {
+        MovableItem *itemMov = dynamic_cast<MovableItem*>(*it);
+        if(!itemMov){
+            continue;
+        }
+        if(itemMov->isAlive() && !itemMov->isSelect()){
+            if(itemMov->isMoving()){
+                if(!this->game->getCamera()->containsitemToFollow(itemMov)){
+                    this->game->getCamera()->addItemToFollow(itemMov);
+                    qDebug()<<"agregue item"<<itemMov->getId();
+                }
+            }else{
+                if(this->game->getCamera()->containsitemToFollow(itemMov)){
+                    this->game->getCamera()->delItemToFollow(itemMov);
+                    qDebug()<<"borre item"<<itemMov->getId();
+                }
+            }
+
+        }
 
         Projectile* item =dynamic_cast<Projectile*>(*it);
         if(!item){// no es movible

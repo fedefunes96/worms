@@ -23,6 +23,7 @@ public:
     void setAlive(bool alive);
     void explote();
     void setSpriteBullet(std::string &path);
+    bool isMoving();
 
 private slots:
     void nextFameImpact();

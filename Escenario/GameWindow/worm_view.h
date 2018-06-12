@@ -99,8 +99,7 @@ private:
     Target* target;
     void setTarget();
     bool targetVis;
-    int targetAngle;
-    bool moving;
+    int targetAngle;   
     bool loadingWeapon;
     bool targetClick;
     bool weaponCountDwn;

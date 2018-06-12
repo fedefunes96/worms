@@ -23,6 +23,9 @@ public:
     void setPlayerActive(Player* player);
     void mousePressEvent(QMouseEvent *event);
     void addScene(QGraphicsScene *scene);
+    void delItemToFollow(MovableItem *item);
+    bool containsitemToFollow(MovableItem *item);
+    void addProjectileToFollow(MovableItem *item);
 signals:
     void mouseClick();
 protected:
@@ -33,6 +36,8 @@ private:
     QTimer* timer;
     QGraphicsItem* item;
     std::stack<MovableItem*> itemsToFollow;
+    std::stack<MovableItem*> projectileToFollow;
+    std::vector<MovableItem*> vectorItems;
     Player* playerActive;
 
 };
