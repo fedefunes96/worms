@@ -64,10 +64,25 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
 {
     YAML::Node editor = YAML::LoadFile(file);
     YAML::Node cfg = YAML::LoadFile(config);
-    if (editor["Girder"]){
+    if (editor["Small Girder"]){
     	int i = 0;
-        for (YAML::iterator it = editor["Girder"].begin();
-         it != editor["Girder"].end(); ++it, ++i){
+        for (YAML::iterator it = editor["Small Girder"].begin();
+         it != editor["Small Girder"].end(); ++it, ++i){
+            const YAML::Node& girder = *it;
+            float x = girder[0].as<float>();
+            float y = girder[1].as<float>();
+            float angle = girder[2].as<float>();
+            float longitud = girder[3].as<float>();
+            float height = cfg["Girder"][0].as<float>();
+            Girder *gir = new Girder(stage,x,y,angle,longitud,height);
+            girders.push_back(gir);
+        }
+    }
+
+    if (editor["Big Girder"]){
+        int i = 0;
+        for (YAML::iterator it = editor["Big Girder"].begin();
+         it != editor["Big Girder"].end(); ++it, ++i){
             const YAML::Node& girder = *it;
             float x = girder[0].as<float>();
             float y = girder[1].as<float>();
@@ -225,4 +240,11 @@ float Parser::airMaxSpeed(std::string &file)
 {
     YAML::Node config = YAML::LoadFile(file);
     return config["Wind"][1].as<float>();
+}
+
+
+std::string Parser::loadBackground(std::string& file){
+    YAML::Node config = YAML::LoadFile(file);
+    std::string background = config["Background"].as<std::string>();
+    return background;
 }

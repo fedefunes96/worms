@@ -30,6 +30,8 @@ public:
     static float airMinSpeed(std::string& file);
 
     static float airMaxSpeed(std::string& file);
+
+    static std::string loadBackground(std::string& file);
 	
 };
 
