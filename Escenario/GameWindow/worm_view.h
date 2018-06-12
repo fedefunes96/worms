@@ -47,7 +47,7 @@ public:
     void setTimeWeapon(int time);
     void setClickDir(int x, int y);
     void setColor(std::string &color);
-    void setStatus(int on_ground, int dir);
+    void setStatus(int last_on_ground, int dir);
 private slots:
     void runSpriteWeapon();
 
@@ -108,7 +108,8 @@ private:
     std::pair<int,int> clickTarget;
     QString color;
     int countFrame;
-    bool on_ground;
+    int last_on_ground;
+    int last_dir;
 
 
 

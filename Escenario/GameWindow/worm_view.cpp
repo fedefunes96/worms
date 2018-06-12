@@ -27,6 +27,14 @@ enum class WeaponsIds : uint8_t {
     TELEPORTATION
 };
 
+enum class MoveDirection : char {
+    NONE = 0,
+    RIGHT,
+    LEFT,
+    JUMP_FORW,
+    JUMP_BACK
+};
+
 Worm_View::Worm_View()
 {
 }
@@ -35,7 +43,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     QObject(parent), MovableItem()
 {
 
-    this->on_ground=true; //default
+    this->last_on_ground=true; //default
     this->weapon=-1; //wormwait
     this->weaponCountDwn=false;
     setIdObj(0);
@@ -116,6 +124,13 @@ void Worm_View::setHealth(int vida)
 
 void Worm_View::setStatus(int on_ground, int dir)
 {
+    /*
+    if(this->last_on_ground!=on_ground || this->last_dir!=dir){
+        this->moving=true;
+    }else if(this->last_on_ground==on_ground && dir=static_cast<int>()){
+
+    }*/
+
     switch (dir) {
     case 1:
         //RIGHT
@@ -143,14 +158,18 @@ void Worm_View::setStatus(int on_ground, int dir)
         break;
     }
 
+
+
+
+
     //setear ahora si esta en aire o piso..
-    if(this->on_ground && on_ground==0 && dir!=3 && dir!=4){
+    if(this->last_on_ground && on_ground==0 && dir!=3 && dir!=4){
         // me dispararon o estaba caminando y me cai
-    }else if(this->on_ground && on_ground==0 && dir==3){
+    }else if(this->last_on_ground && on_ground==0 && dir==3){
         // salte hacia adelante en la dir que apunte
-    }else if(this->on_ground && on_ground==0 && dir==4){
+    }else if(this->last_on_ground && on_ground==0 && dir==4){
         // salte hacia atras en la dir que apunte
-    }else if(!this->on_ground && on_ground==1){
+    }else if(!this->last_on_ground && on_ground==1){
         // estaba en el aire y ahora en el piso... ver en que dir estaba apuntando anteriormente
     }
 }

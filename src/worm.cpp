@@ -182,7 +182,7 @@ void Worm::move_step(float32 time_step) {
 	}*/
 	
 	if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
-		this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->facing_direction);
+		this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
 
 	if (this->is_on_ground()) {
 		if (this->jump_cooldown == 0 && !this->should_slide) {
