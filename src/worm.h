@@ -51,6 +51,8 @@ private:
 	bool dead;
 	bool should_slide;
 	bool sliding;
+	bool last_on_ground;
+	MoveDirection last_direction;
 	float angle_for_mov;
 
 	std::mutex direction_m;

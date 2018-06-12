@@ -8,5 +8,5 @@ EventWormStatus::EventWormStatus(const int id, bool ground, MoveDirection dir)
 	: id(id), ground(ground), dir(dir) {}
 
 void EventWormStatus::process(Player& player, Protocol& protocol) {
-	protocol.sendWormStatus(id,ground,static_cast<int>(dir));
+	protocol.sendWormStatus(id, ground, static_cast<int>(dir));
 }

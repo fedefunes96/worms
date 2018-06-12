@@ -53,6 +53,9 @@ Worm::Worm(Game& game
 	this->should_slide = false;
 	this->angle_for_mov = 0.0;
 
+	this->last_on_ground = false;
+	this->last_direction = MoveDirection::NONE;
+
 	this->last_position.Set(x, y);
 }
 
@@ -177,8 +180,9 @@ void Worm::move_step(float32 time_step) {
 	} else {
 		//this->body->SetLinearVelocity(this->actual_velocity);
 	}*/
-
-	this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->facing_direction);
+	
+	if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
+		this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->facing_direction);
 
 	if (this->is_on_ground()) {
 		if (this->jump_cooldown == 0 && !this->should_slide) {
@@ -202,6 +206,9 @@ void Worm::move_step(float32 time_step) {
 	if(this->jump_cooldown > 0) {
 		this->jump_cooldown--;
 	}
+
+	this->last_direction = this->move_direction;
+	this->last_on_ground = this->is_on_ground();
 }
 
 void Worm::set_angle(float angle) {
@@ -287,6 +294,8 @@ void Worm::create_myself(b2World& world) {
 										, longitude*0.95
 										, height*0.2);
 
+	this->last_on_ground = this->is_on_ground();
+	this->last_direction = MoveDirection::NONE;	
 }
 
 void Worm::delete_myself(b2World& world) {

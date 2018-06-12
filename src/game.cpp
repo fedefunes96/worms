@@ -301,9 +301,8 @@ void Game::notify_actual_player(int id) {
 }
 
 
-void Game::notify_worm_status(int id,bool ground,MoveDirection facing_direction)
-{
-	std::shared_ptr<Event> event(new EventWormStatus(id,ground,facing_direction));
+void Game::notify_worm_status(int id, bool ground, MoveDirection facing_direction) {
+	std::shared_ptr<Event> event(new EventWormStatus(id, ground, facing_direction));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
 		this->event_queues[i]->add_event(event);
