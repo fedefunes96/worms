@@ -63,3 +63,8 @@ void GameWindow::on_pushButton_clicked()
     this->menuWeapons->exec();
     this->menuWeapons=nullptr;
 }
+
+void GameWindow::setButtonEnable(bool enable)
+{
+    this->ui->pushButton->setEnabled(enable);
+}

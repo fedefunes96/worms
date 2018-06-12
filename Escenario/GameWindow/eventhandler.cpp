@@ -30,8 +30,49 @@ bool EventHandler::eventFilter(QObject *obj, QEvent *event)
         keyReleaseEvent(static_cast<QKeyEvent*>(event));
         return true;
     }
+/*
+    if(this->game->isMyTurn()){
+        if(event->type() == QEvent::MouseMove){
+               mouseMoveEvent(static_cast<QMouseEvent*>(event));
+               return true;
+           }
+    }
+    */
     return false;
 }
+
+/*
+oid EventHandler::mouseMoveEvent(QMouseEvent *m_event)
+{
+    qDebug()<<"posx:"<<m_event->x()<<"   posy:"<<m_event->y();
+
+    Camera* view = this->game->getCamera();
+    if(m_event->x() >= (view->width()-100))//move_der cam
+    {
+        int width = this->game->getCamera()->width();
+        qDebug()<<"mov_der";
+        int y = this->game->getCamera()->horizontalScrollBar()->value();
+        qDebug()<<y;
+        if(!(y+10>=width)){
+            view->horizontalScrollBar()->setValue( view->horizontalScrollBar()->value() + 10 );
+        }
+
+    }
+    if(m_event->x() <= 10)//mov_izq cam
+    {
+        qDebug()<<"mov_izq";
+        int y = this->game->getCamera()->horizontalScrollBar()->value();
+        qDebug()<<y;
+        if(!(y-10<0)){
+            view->horizontalScrollBar()->setValue( view->horizontalScrollBar()->value() - 10 );
+        }
+    }
+
+}
+
+*/
+
+
 
 
 void EventHandler::fireWithClick()
@@ -75,19 +116,17 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             keyPress = true;
             qDebug() << "Left"; //moveLeft worm
-            this->protocol->sendMove(2);
-            /*
+
             if(!this->game->isMyTurn()){
                 qDebug()<<"no es mi turno";
                 return;
             }
-*/
             Worm_View* worm = this->game->getWormActive();
             if(worm==nullptr){
                 qDebug()<<"worm nulo";
                 return;
             }
-            worm->setAngle(-180);
+            //worm->setAngle(-180);
             this->protocol->sendMove(2);
             qDebug()<< "id worm a mover:"<<worm->getId();
             break;
@@ -107,7 +146,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
-            worm->setAngle(0);
+            //worm->setAngle(0);
             this->protocol->sendMove(1);
             break;
         }

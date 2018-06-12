@@ -178,6 +178,8 @@ void Worm::move_step(float32 time_step) {
 		//this->body->SetLinearVelocity(this->actual_velocity);
 	}*/
 
+	this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->facing_direction);
+
 	if (this->is_on_ground()) {
 		if (this->jump_cooldown == 0 && !this->should_slide) {
 			this->body->SetLinearVelocity(this->actual_velocity);

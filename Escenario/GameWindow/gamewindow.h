@@ -24,6 +24,7 @@ public:
     void addPlayer(Player *player);
     void addGameScene(Game_View *gameScene);
     Camera *getCamera();
+    void setButtonEnable(bool enable);
 private slots:
     void on_pushButton_clicked();
 

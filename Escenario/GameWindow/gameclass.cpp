@@ -22,12 +22,12 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->window->addPlayer(this->myPlayer);
 
     this->deadItemCollector = new QTimer();
-    this->deadItemCollector->start(100);
+    this->deadItemCollector->start(1);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
     this->color_list.append("red");
     this->color_list.append("yellow");
-    this->color_list.append("green");
     this->color_list.append("blue");
+    this->color_list.append("green");
     this->color_list.append("orange");
     this->color_list.append("purple");
     this->color_list.append("cyan");
@@ -69,7 +69,7 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY || this->game->getWidth()<posX){
+    if(this->game->getHeight()<posY){
         return;
     }
     if(type==static_cast<int>(TypeObj::WORM)){
@@ -248,30 +248,24 @@ void GameClass::checkDeadItem()
 void GameClass::checkQueueEvent(QList<int> list)
 {
     int cmd = list[0];
-    qDebug()<<"gameclass comando:"<<cmd;
     if(cmd== static_cast<int>(Commands::GAME_END)){
        //terminar juego
-        qDebug()<<"game end";
         this->myPlayer->setActive(false);
         this->myTurn=false;
     }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
         // asignar id del jugador
-        qDebug()<<"attach player id event";
         this->updatePlayer(cmd,list[1]);
     }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
         //agregar arma al player para que el worm pueda usar
         this->updatePlayer(cmd,list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
         //mensaje con el id del jugador en turno
-        qDebug()<<"actual player setting";
         checkRound(list);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
-        qDebug()<<"agregar worm con vida";
         // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
         this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2],list[3]);
     }else if(cmd==static_cast<int>(Commands::REMOVE)){
         // item a remover de la vista
-        qDebug()<<"remove !!";
         this->removeItem(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::POSITION)){
         // actual item position
@@ -282,12 +276,24 @@ void GameClass::checkQueueEvent(QList<int> list)
         this->myPlayer->setActive(false);
         this->myTurn=false;
     }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
-        qDebug()<<"recibi daño";
         this->recvWormHealth(list[1],list[2]);
+    }else if(cmd==static_cast<int>(Commands::WORM_STATUS)){
+        setStatusWorm(list);
     }
 
 }
 
+
+void GameClass::setStatusWorm(QList<int> list)
+{
+    Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),list[1]);
+    if(!item){
+        qDebug()<<"no deberia suceder esto en estatus";
+        return;
+    }
+    Worm_View *worm = static_cast<Worm_View*>(item);
+    worm->setStatus(list[2],list[3]);
+}
 
 void GameClass::checkRound(QList<int> list){
     qDebug()<<"jugador id:"<<list[1];
@@ -295,6 +301,7 @@ void GameClass::checkRound(QList<int> list){
     if(this->myPlayer->getId() != list[1]){
         qDebug()<<"NO es mi turno";
         this->myTurn=false;
+        this->window->setButtonEnable(false);
         this->myPlayer->setActive(false);
         Worm_View* worm = this->myPlayer->getWormActive();
         if(worm!=nullptr){
@@ -309,6 +316,7 @@ void GameClass::checkRound(QList<int> list){
     Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
     this->myTurn=true;
+    this->window->setButtonEnable(true);
     this->myPlayer->setActive(true);
     worm->setSelect(true);
     this->myPlayer->setWormActive(worm);

@@ -35,7 +35,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     QObject(parent), MovableItem()
 {
 
-
+    this->on_ground=true; //default
     this->weapon=-1; //wormwait
     this->weaponCountDwn=false;
     setIdObj(0);
@@ -114,11 +114,49 @@ void Worm_View::setHealth(int vida)
     this->health = vida;
 }
 
+void Worm_View::setStatus(int on_ground, int dir)
+{
+    switch (dir) {
+    case 1:
+        //RIGHT
+        if(this->angle==0){
+            break;
+        }
+        setAngle(0);
+        break;
+    case 2:
+        //LEFT
+        if(this->angle==-180){
+            break;
+        }
+        setAngle(-180);
+        break;
+    case 3:
+        //JMPFW --> cargar imagen de salto
+        qDebug()<<"#######################################################################################salte hacia adelante";
+        break;
+    case 4:
+        //JMPBACK --> cargar imagen de salto
+        break;
+    default:
+        //NOT DEFINE or NONE
+        break;
+    }
+
+    //setear ahora si esta en aire o piso..
+    if(this->on_ground && on_ground==0 && dir!=3 && dir!=4){
+        // me dispararon o estaba caminando y me cai
+    }else if(this->on_ground && on_ground==0 && dir==3){
+        // salte hacia adelante en la dir que apunte
+    }else if(this->on_ground && on_ground==0 && dir==4){
+        // salte hacia atras en la dir que apunte
+    }else if(!this->on_ground && on_ground==1){
+        // estaba en el aire y ahora en el piso... ver en que dir estaba apuntando anteriormente
+    }
+}
 
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
-    
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
@@ -174,6 +212,10 @@ bool Worm_View::isSelect()
 void Worm_View::setSelect(bool cond)
 {
     this->selected = cond;
+    if(cond==false){
+        this->moving=false;
+        this->targetVis=false;
+    }
 }
 
 void Worm_View::setAlive(bool alive)
@@ -249,7 +291,7 @@ void Worm_View::setPosition(int x, int y)
 
     setPos(x-width/2,y-height/2);
     setDir(x-width/2,y-height/2);
-    qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
+    //qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
 }
 
 void Worm_View::setDestDir(int x, int y)
@@ -281,12 +323,10 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     //checkAngle(angle);
     QGraphicsScene* sc = scene();
     this->setPosition(posx,sc->height()-posy);
-    this->countFrame +=30;
-    qDebug()<<"ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ  --> "<<this->countFrame;
-    if((this->spriteImage->height()-60)<=this->countFrame){
+    this->countFrame +=60;
+    if((this->spriteImage->height())<=this->countFrame){
         this->countFrame=0;
         this->currentFrame=0;
-        qDebug()<<"holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     }else if((this->countFrame%60)==0){
         this->nextFrame();
     }

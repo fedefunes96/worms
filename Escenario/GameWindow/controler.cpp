@@ -83,8 +83,17 @@ void Controler::run()
             //Remove item     REMOVE ITEM
             emit eventCreated(list);
             continue;
+        }else if(cmd == static_cast<int>(Commands::WORM_STATUS)){
+            int8_t idworm;
+            int8_t on_ground;
+            int8_t dir;
+            this->protocol->recvWormStatus(&idworm,&on_ground,&dir);
+            list.push_back(idworm);
+            list.push_back(on_ground);
+            list.push_back(dir);
+            qDebug()<<"status worm --> dir"<<dir;
+            emit eventCreated(list);
         }else if(cmd==static_cast<int>(Commands::POSITION)){
-            qDebug()<<"position";
             int8_t obj_type=0;
             int32_t id_obj=0;
             int32_t posX=0;

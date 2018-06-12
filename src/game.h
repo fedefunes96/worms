@@ -57,6 +57,7 @@ private:
 
 	void notify_actual_player(const int id);
 
+
 public:
 	Game(const std::string& stage_file
 		, std::vector<Player*> players
@@ -71,6 +72,7 @@ public:
 	virtual void run() override;
 	bool game_finished();
 	//virtual void run() override;
+	void notify_worm_status(int id,bool ground,MoveDirection facing_direction);
 };
 
 #endif

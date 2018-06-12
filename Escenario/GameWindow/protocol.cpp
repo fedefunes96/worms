@@ -86,6 +86,20 @@ void Protocol::sendWormId(int8_t id, int8_t id_worm, int32_t health) {
     conexion.enviar((const char*)&conv_health,4);    
 }
 
+void Protocol::sendWormStatus(int8_t id, bool ground,int8_t dir)
+{
+    std::lock_guard<std::mutex> lock(this->client_send_m);
+    Commands cmd = Commands::WORM_STATUS;
+    int8_t on_ground=0;
+    if(ground){
+        on_ground=1;
+    }
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&id,1);
+    conexion.enviar((const char*)&on_ground,1);    
+    conexion.enviar((const char*)&dir,1);   
+}
+
 void Protocol::sendUsableId(int8_t id, int32_t ammo) {
     std::lock_guard<std::mutex> lock(this->client_send_m);
 
@@ -457,6 +471,15 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
 }
 
 
+void Protocol::recvWormStatus(int8_t *id, int8_t *ground,int8_t *dir)
+{
+    conexion.recibir((char*)id,1);
+    conexion.recibir((char*)ground,1);
+    conexion.recibir((char*)dir,1);
+}
+
+
+
 int8_t Protocol::recvCmd() {
     uint8_t cmd;
     conexion.recibir((char*)&cmd,1);
@@ -533,7 +556,7 @@ void Protocol::sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vec
         conexion.enviar((const char*)&aux,4);
         std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
     }
-    std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "posX:"<<posX <<"posY:"<<posY << std::endl;
+    //std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "posX:"<<posX <<"posY:"<<posY << std::endl;
 
 }
 
