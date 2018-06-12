@@ -14,12 +14,12 @@ editor_viga_grande_view::~editor_viga_grande_view()
 
 void editor_viga_grande_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 144,50);
+    painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 144,19);
     Q_UNUSED(option);
     Q_UNUSED(widget);
 }
 
 QRectF editor_viga_grande_view::boundingRect() const
 {
-   return QRectF(0,0,144,50);
+   return QRectF(0,0,144,19);
 }

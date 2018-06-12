@@ -26,7 +26,8 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     this->scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
-    scene->setBackgroundBrush(QBrush(QImage("../images/fondo.png")));
+    std::string name = "../images/fondo.png";
+    this->setBacGround(name);
     this->id = 0;
     ui->wormOpt->hide();
     ui->girderOpt->hide();
@@ -200,6 +201,12 @@ void EditorPantalla::loadWeapons()
     }
 }
 
+void EditorPantalla::setBacGround(std::string &name)
+{
+    this->bakcground = QString::fromStdString(name);
+    scene->setBackgroundBrush(QBrush(QImage(bakcground)));
+}
+
 void EditorPantalla::fileName(QString name)
 {
     this->nombre = name;
@@ -335,16 +342,19 @@ void EditorPantalla::remove_weapon(int id)
 
 void EditorPantalla::aumetar_angulo(int id)
 {
-    int x1 = items[id]->pos().x()/24;
-    int y1 = -items[id]->pos().y()/24;
-    std::map<int,editorViga>::iterator it;
+    int x = items[id]->pos().x();
+    int y = items[id]->pos().y();
+    int x1 = x/24 +1;
+    int y1 = -y/24;
     if (vigas[id].get_tam() == 6){
         vaciarCeldas(x1,y1,6);
+         celdas[std::make_pair((x1+3),y1)] = id;
     } else {
         vaciarCeldas(x1,y1,3);
+        celdas[std::make_pair((x1+1),y1)] = id;
     }
     vigas[id].aumentarAngulo(5);
-    items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
+    items[id]->setTransformOriginPoint(items[id]->boundingRect().center());
     items[id]->setRotation(items[id]->rotation() - 5);
 }
 
@@ -477,7 +487,8 @@ void EditorPantalla::on_saveAs_clicked()
             }
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
-            commonParser::save(name,this->usables,this->worms,this->vigas, cantidad);
+            std::string background = this->bakcground.toStdString();
+            commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
             QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));
         }
@@ -503,7 +514,8 @@ void EditorPantalla::on_pushButton_clicked()
             }
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
-            commonParser::save(name,this->usables,this->worms,this->vigas, cantidad);
+            std::string background = this->bakcground.toStdString();
+            commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
             QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0"));
         }

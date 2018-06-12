@@ -20,7 +20,7 @@ public:
 
     static void save(std::string &nombre,std::map<int,editorUsables> &usables,
                         std::map<int, editorWorm> &worms,
-                        std::map<int, editorViga> &vigas, int cant );
+                        std::map<int, editorViga> &vigas,unsigned int cant,std::string &backgrund);
 
     static void load(EditorPantalla *editor, std::string& file);
 

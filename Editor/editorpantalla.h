@@ -46,6 +46,8 @@ public:
 
     void loadWeapons();
 
+    void setBacGround(std::string &name);
+
 private slots:
 
     void on_agregarGusano_clicked();
@@ -90,6 +92,8 @@ private:
     int xscene;
     int yscene;
     std::vector<QPixmap*> armas;
+    QString bakcground;
+
     void load();
 
     bool checkWorms();

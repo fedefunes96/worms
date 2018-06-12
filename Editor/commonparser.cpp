@@ -168,7 +168,8 @@ void commonParser::saveConfig()
 }
 
 void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usables,
-                        std::map<int, editorWorm> &worms, std::map<int, editorViga> &vigas, int cant)
+                        std::map<int, editorWorm> &worms, std::map<int, editorViga> &vigas,
+                        unsigned int cant, std::string &backgrund)
 {
     YAML::Emitter out;
     out << YAML::BeginMap; 
@@ -186,19 +187,39 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     }
     out <<YAML::EndSeq;
 
-    out <<YAML::Key<<"Girder";
+    out <<YAML::Key<<"Small Girder";
     out <<YAML::BeginSeq;
     for (auto &viga : vigas){
-        out<<YAML::Flow;
-        out<<YAML::BeginSeq;
+                int tam = viga.second.get_tam();
+        float x = viga.second.getX()*6/144 + tam/2;
+        float y = viga.second.getY()*6/144;
+        if (tam == 3){
+            out<<YAML::Flow;
+            out<<YAML::BeginSeq;
+            out<<x;
+            out<<y;
+            out<<viga.second.get_angulo();
+            out<<tam;
+            out<<YAML::EndSeq;
+        }
+    }
+    out <<YAML::EndSeq;
+
+    out <<YAML::Key<<"Big Girder";
+    out <<YAML::BeginSeq;
+    for (auto &viga : vigas){
         int tam = viga.second.get_tam();
         float x = viga.second.getX()*6/144 + tam/2;
         float y = viga.second.getY()*6/144;
-        out<<x;
-        out<<y;
-        out<<viga.second.get_angulo();
-        out<<tam;
-        out<<YAML::EndSeq;
+        if (tam == 6){
+            out<<YAML::Flow;
+            out<<YAML::BeginSeq;
+            out<<x;
+            out<<y;
+            out<<viga.second.get_angulo();
+            out<<tam;
+            out<<YAML::EndSeq;
+        }
     }
     out <<YAML::EndSeq;
 
@@ -213,6 +234,9 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     }
     out <<YAML::EndSeq;
 
+    out<<YAML::Key<<"Background";
+    out<<backgrund;
+
     out <<YAML::EndMap;
     commonArchivo archivo = commonArchivo(nombre,std::fstream::out);
     archivo<<out.c_str();
@@ -222,8 +246,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
 {
     try{
         YAML::Node config = YAML::LoadFile(file);
-        if (config["Girder"]){
-            for (YAML::iterator it = config["Girder"].begin(); it != config["Girder"].end(); ++it){
+        if (config["Small Girder"]){
+            for (YAML::iterator it = config["Small Girder"].begin(); it != config["Small Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
                 int x = girder[0].as<int>();
                 int y = girder[1].as<int>()*144/6;
@@ -233,11 +257,26 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
                 x -= longitud/2 +0.5;
                 x = x *144/6;
                 int id;
-                if (longitud == 3){
-                    id = editor->agregar_viga_chica(x,y);
-                } else {
-                    id = editor->agregar_viga_grande(x,y);
+                id = editor->agregar_viga_chica(x,y);
+                float anguloActual = 0;
+                while (anguloActual < angulo) {
+                    editor->aumetar_angulo(id);
+                    anguloActual += 5*pi/180;
                 }
+            }
+        }
+        if (config["Big Girder"]){
+            for (YAML::iterator it = config["Big Girder"].begin(); it != config["Big Girder"].end(); ++it){
+                const YAML::Node& girder = *it;
+                int x = girder[0].as<int>();
+                int y = girder[1].as<int>()*144/6;
+                y = -y;
+                float angulo = girder[2].as<float>();
+                int longitud = girder[3].as<int>();
+                x -= longitud/2 +0.5;
+                x = x *144/6;
+                int id;
+                id = editor->agregar_viga_grande(x,y);
                 float anguloActual = 0;
                 while (anguloActual < angulo) {
                     editor->aumetar_angulo(id);
@@ -263,6 +302,10 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
                  int ammo = usable[1].as<int>();
                  editor->agregar_arma(id,ammo);
              }
+        }
+        if (config["Background"]){
+            std::string background = config["Background"].as<std::string>();
+            editor->setBacGround(background);
         }
     } catch(std::exception &e){
         std::cout<<e.what()<<"\n";
