@@ -195,6 +195,9 @@ std::vector<int> GameClass::fireWeapon()
                 idWeapon==static_cast<int>(WeaponsIds::RED_GRENADE)){
             vect.push_back(time);
         }
+        this->window->setButtonEnable(false);
+        this->game->getWormActive()->loadSpriteWeapon(-1);
+
     }
     return vect;
 }
