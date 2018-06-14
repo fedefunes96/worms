@@ -30,12 +30,16 @@ enum class Commands : uint8_t {
     MAP_LIST,
     COULD_JOIN,
     PLAYERS_IN_ROOM,
-    WORM_STATUS
+    WORM_STATUS,
+    WIND_PARAMS,
+    WIND_SPEED
 };
 
 enum class TypeObj : uint8_t {
     WORM = 0,
     GIRDER,
+    LARGE_GIRDER,
+    SMALL_GIRDER,
     BAZOOKA_M,
     MORTAR_M,
     FRAGMENT_M,
@@ -85,6 +89,8 @@ public:
     void sendStartGame();
     void sendRooms(const std::vector<std::string>& rooms_name);
     void sendMaps(const std::vector<std::string>&maps);
+    void sendWindParams(float min, float max);
+    void sendWindSpeed(float speed);
     void recvRoom(std::string& room_name);
     void recvMove(int *dir);
     void recvAttack(int* id_weapon, int* posx, int* posy, std::vector<int>& params);

@@ -25,6 +25,8 @@
 #include "event_actual_player.h"
 #include "event_disconnect.h"
 #include "event_worm_status.h"
+#include "event_wind_speed.h"
+#include "event_wind_params.h"
 
 #define EXTRA_HEALTH 100
 
@@ -84,6 +86,12 @@ void Game::initialize_game(const std::string& stage_file) {
 	int waterLvl = Parser::waterLvl(config);
 	float airMin = Parser::airMinSpeed(config);
 	float airMax = Parser::airMaxSpeed(config);
+
+	std::shared_ptr<Event> event_windpar(new EventWindParams(airMin, airMax));
+
+	for (int i = 0; i < (int) this->event_queues.size(); i++) {
+		this->event_queues[i]->add_event(event_windpar);
+	}
 
 	stage.set_wind(airMin,airMax);
 	stage.set_water(waterLvl);
@@ -174,11 +182,17 @@ void Game::game_loop() {
 	this->is_over = false;
 
 	while (game_status == UNDEFINED) {
+		std::shared_ptr<Event> event(new EventWindSpeed(this->stage.get_wind_speed()));
+
+		for (int i = 0; i < (int) this->event_queues.size(); i++) {
+			this->event_queues[i]->add_event(event);
+		}	
+
 		Player* actual_player = this->get_actual_player();
 
 		try {
 			//Notify everyone whose turn it is
-			this->notify_actual_player(actual_player->get_id());
+			this->notify_actual_player(actual_player->get_id(), actual_player->get_actual_worm_id());
 
 			actual_player->play();
 		} catch(const SocketException& e) {
@@ -269,6 +283,8 @@ Game_status Game::round_over() {
 		do {
 			this->new_player();
 		} while (this->get_actual_player()->lost());
+
+		this->stage.random_wind();
 	}
 
 	return game_status;
@@ -287,13 +303,13 @@ void Game::notify_health(Worm* worm) {
 	}
 }
 
-void Game::notify_actual_player(int id) {
+void Game::notify_actual_player(const int id, const int worm_id) {
 	/*std::vector<Player>::iterator it;
 
 	for (it = this->players.begin(); it != this->players.end(); ++it) {
 		(*it).notify_actual_player(id);
 	}*/
-	std::shared_ptr<Event> event(new EventActualPlayer(id));
+	std::shared_ptr<Event> event(new EventActualPlayer(id, worm_id));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
 		this->event_queues[i]->add_event(event);

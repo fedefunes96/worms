@@ -87,6 +87,7 @@ public:
 
 	std::vector<int>& get_worms_ids();	
 
+	int get_actual_worm_id();
 	int get_actual_worm();
 	void new_worm_id();
 };

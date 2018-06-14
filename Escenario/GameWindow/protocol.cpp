@@ -12,8 +12,10 @@ void Protocol::sendPosition(const std::string& type_obj, int32_t id_obj, float p
 
     if (type_obj.compare("Worm")==0) {
         type = TypeObj::WORM;
-    } else if (type_obj.compare("Girder")==0) {
-        type = TypeObj::GIRDER;
+    } else if (type_obj.compare("LargeGirder")==0) {
+        type = TypeObj::LARGE_GIRDER;
+    } else if (type_obj.compare("SmallGirder")==0) {
+        type = TypeObj::SMALL_GIRDER;
     } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
     } else if (type_obj.compare("Mortar")==0) {
@@ -137,8 +139,10 @@ void Protocol::sendRemove(const std::string& type_obj, int32_t id) {
 
     if (type_obj.compare("Worm")==0) {
         type = TypeObj::WORM;
-    } else if (type_obj.compare("Girder")==0) {
-        type = TypeObj::GIRDER;
+    } else if (type_obj.compare("LargeGirder")==0) {
+        type = TypeObj::LARGE_GIRDER;
+    } else if (type_obj.compare("SmallGirder")==0) {
+        type = TypeObj::SMALL_GIRDER;
     } else if (type_obj.compare("Bazooka")==0) {
         type = TypeObj::BAZOOKA_M;
     } else if (type_obj.compare("Mortar")==0) {
@@ -237,6 +241,26 @@ void Protocol::sendStartGame() {
     Commands cmd = Commands::START_GAME;  
 
     conexion.enviar((const char*)&cmd,1); 
+}
+
+void Protocol::sendWindParams(float min, float max) {
+    int32_t conv_min = htonl((abs(static_cast<int>(min*100))));
+    int32_t conv_max = htonl((abs(static_cast<int>(max*100))));
+
+    Commands cmd = Commands::WIND_PARAMS; 
+
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&conv_min,4);
+    conexion.enviar((const char*)&conv_max,4);
+}
+
+void Protocol::sendWindSpeed(float speed) {
+    int32_t conv = htonl((abs(static_cast<int>(speed*100))));
+
+    Commands cmd = Commands::WIND_SPEED; 
+
+    conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&conv,4);
 }
 
 void Protocol::sendRooms(const std::vector<std::string>& rooms_name) {

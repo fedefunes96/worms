@@ -198,6 +198,18 @@ void Player::game_loop() {
 
 }
 
+int Player::get_actual_worm_id() {
+	this->new_worm_id();
+	int actual_worm = this->get_actual_worm();
+
+	while (this->get_worms().at(actual_worm)->im_dead()) {
+		this->new_worm_id();
+		actual_worm = this->get_actual_worm();		
+	}
+
+	return actual_worm;
+}
+
 int Player::get_actual_worm() {
 	return this->worms_ids[this->id_actual_worm];
 }

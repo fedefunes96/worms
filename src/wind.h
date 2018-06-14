@@ -19,6 +19,7 @@ public:
 	Wind(const float min_wind_speed, const float max_wind_speed);
 
 	void set_wind_limits(const float min_wind_speed, const float max_wind_speed);
+	float get_wind_speed();
 
 	void change_wind();
 	void apply(Movable* movable);

@@ -12,7 +12,7 @@
 #include "teleportation.h"
 #include <yaml-cpp/yaml.h>
 #include <string>
-#include "samllgirder.h"
+#include "smallgirder.h"
 #include "largegirder.h"
 
 enum Weapons{
@@ -76,7 +76,7 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
             float angle = girder[2].as<float>();
             float longitud = cfg["Small Girder"][0].as<float>();
             float height = cfg["Small Girder"][1].as<float>();
-            Girder *gir = new SamllGirder(stage,x,y,angle,longitud,height);
+            Girder *gir = new SmallGirder(stage,x,y,angle,longitud,height);
             girders.push_back(gir);
         }
     }

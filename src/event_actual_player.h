@@ -9,9 +9,10 @@
 class EventActualPlayer : public Event {
 private:
 	const int id;
+	const int worm_id;
 
 public:
-	EventActualPlayer(const int id);
+	EventActualPlayer(const int id, const int worm_id);
 
 	virtual void process(Player& player, Protocol& protocol) override;
 };

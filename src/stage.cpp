@@ -160,7 +160,7 @@ void Stage::draw() {
 
  			//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
 
- 			std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
+ 			std::shared_ptr<Event> event_pos(new EventPosition((*it)->get_type()
 														, (*it)->get_id()
  														, pos.x
  														, pos.y
@@ -170,7 +170,7 @@ void Stage::draw() {
 				//Copy share pointers to everyone
 				//Destroy the event when all the players
 				//process it
-				this->event_queues[i]->add_event(event);
+				this->event_queues[i]->add_event(event_pos);
 			}
 
  			//if (b->IsAwake())
@@ -290,6 +290,14 @@ void Stage::set_wind(const float min, const float max) {
 
 void Stage::set_water(const float water_level) {
 	this->water.set_water_level(water_level);
+}
+
+float Stage::get_wind_speed() {
+	return this->wind.get_wind_speed();
+}
+
+void Stage::random_wind() {
+	this->wind.change_wind();
 }
 
 Stage::~Stage() {}

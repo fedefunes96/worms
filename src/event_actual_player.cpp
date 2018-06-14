@@ -3,15 +3,15 @@
 #include "protocol.h"
 #include "player.h"
 
-EventActualPlayer::EventActualPlayer(const int id)
-	: id(id) {}
+EventActualPlayer::EventActualPlayer(const int id, const int worm_id)
+	: id(id), worm_id(worm_id) {}
 
 void EventActualPlayer::process(Player& player, Protocol& protocol) {
-	printf("Actual Player id: %d\n", id);
+	printf("Actual Player id: %d Worm id: %d\n", id, worm_id);
 	protocol.sendActualPlayer(id);
-
+	protocol.sendActualWorm(worm_id);
 	//Its my turn, send worm id
-	if (id == player.get_id()) {
+	/*if (id == player.get_id()) {
 		printf("Sending id worm: \n");
 		player.new_worm_id();
 		int actual_worm = player.get_actual_worm();
@@ -24,5 +24,5 @@ void EventActualPlayer::process(Player& player, Protocol& protocol) {
 		printf("%d\n", actual_worm);
 
 		protocol.sendActualWorm(actual_worm);
-	}
+	}*/
 }

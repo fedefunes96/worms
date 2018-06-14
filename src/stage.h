@@ -82,6 +82,8 @@ public:
 
 	void set_position(Ubicable* ubicable, const b2Vec2 pos);
 
+	float get_wind_speed();
+	void random_wind();
 	void set_wind(const float min, const float max);
 	void set_water(const float water_level);
 

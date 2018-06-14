@@ -55,7 +55,7 @@ private:
 	void start_game();
 	void new_player();
 
-	void notify_actual_player(const int id);
+	void notify_actual_player(const int id, const int worm_id);
 
 
 public:

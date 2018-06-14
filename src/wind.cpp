@@ -40,3 +40,7 @@ void Wind::set_wind_limits(const float min_wind_speed
 	this->min_wind_speed = min_wind_speed;
 	this->max_wind_speed = max_wind_speed;
 }
+
+float Wind::get_wind_speed() {
+	return this->wind_speed;
+}
