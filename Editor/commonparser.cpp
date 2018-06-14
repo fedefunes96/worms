@@ -19,7 +19,7 @@
 #define velocidadSaltoRX 0.2
 #define velocidadSaltoRY 1.2
 #define alturaSinDanio 2
-#define alturaGirder 0.8
+#define alturaGirder 0.4
 #define pi 3.141592
 #define velVMin 0.2
 #define velVMax 10
@@ -61,9 +61,16 @@ void commonParser::saveConfig()
     out <<dmgMax;
     out <<YAML::EndSeq;
 
-    out <<YAML::Key<<"Girder";
+    out <<YAML::Key<<"Small Girder";
     out << YAML::BeginSeq;
     out<<alturaGirder;
+    out<<1.5;
+    out <<YAML::EndSeq;
+
+    out <<YAML::Key<<"Large Girder";
+    out << YAML::BeginSeq;
+    out<<alturaGirder;
+    out<<3;
     out <<YAML::EndSeq;
 
     out<<YAML::Key<<"Bazooka";
