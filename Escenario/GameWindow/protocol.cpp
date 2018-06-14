@@ -449,8 +449,6 @@ int convPxToMt(int px){
     return int(aux + 0.5);
 }
 
-
-
 void Protocol::sendMove(int8_t dir)
 {
     //state --> 1 = END     0 = START
@@ -549,9 +547,28 @@ void Protocol::recvRemove(int8_t* id_obj,int32_t* id)
     *id=ntohl(aux);
 }
 
-void Protocol::recvActualPlayer(int8_t* id)
+
+void Protocol::recvWindParamt(int32_t* min, int32_t* max)
+{
+    int32_t aux;
+    conexion.recibir((char*)&aux,4);
+    *min = ntohl(aux);
+    conexion.recibir((char*)&aux,4);
+    *max = ntohl(aux);
+}
+
+void Protocol::recvWindSpeed(int32_t* speed)
+{
+    int32_t aux;
+    conexion.recibir((char*)&aux,4);
+    *speed = ntohl(aux);
+}
+
+
+void Protocol::recvActualPlayer(int8_t* id, int8_t* id_worm)
 {
     conexion.recibir((char*)id,1);
+    conexion.recibir((char*)id_worm,1);
 }
 
 void Protocol::recvActualWorm(int8_t *id){

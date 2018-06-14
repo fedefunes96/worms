@@ -108,7 +108,7 @@ public:
     void recvPlayerId(int8_t *id);
     void recvWormId(int8_t *id_player, int8_t *id, int32_t *health);
     void recvWinner(int8_t *id);
-    void recvActualPlayer(int8_t *id);
+    void recvActualPlayer(int8_t* id, int8_t* id_worm);
     void recvRemove(int8_t *id_obj, int32_t *id);
     void recvUsableId(int8_t *id, int32_t *ammo);
     void recvWormHealth(int8_t *id, int32_t *health);
@@ -122,6 +122,8 @@ public:
     void recvActualWorm(int8_t *id);
     void recvWormStatus(int8_t *id, int8_t *ground,int8_t *dir);
 
+    void recvWindParamt(int32_t *min, int32_t *max);
+    void recvWindSpeed(int32_t *speed);
 };
 
 #endif // PROTOCOL_H

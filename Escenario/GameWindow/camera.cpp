@@ -50,7 +50,6 @@ void Camera::followObject()
 
     MovableItem *item;
     if(!this->projectileToFollow.empty()){
-        qDebug()<<" saque un proyectil a seguir !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         item = this->projectileToFollow.top();
         if( (!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
             this->projectileToFollow.pop();
@@ -60,7 +59,6 @@ void Camera::followObject()
         if(this->itemsToFollow.empty()){
             return;
         }
-        qDebug()<<" w a seguir !!!!!!!!!!!!! ??????????????";
         item= this->itemsToFollow.top();
         if( (!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
             this->itemsToFollow.pop();

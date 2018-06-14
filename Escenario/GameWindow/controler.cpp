@@ -32,7 +32,6 @@ void Controler::run()
             qDebug()<<"attach player id";
             int8_t id;
             this->protocol->recvPlayerId(&id);
-            this->mi_id=id;
             //list.push_back(id);
             //emit eventCreated(list);
             emit playerId(id);
@@ -50,12 +49,9 @@ void Controler::run()
             qDebug()<<"actual player";
             int8_t id;
             int8_t id_worm;
-            this->protocol->recvActualPlayer(&id);
+            this->protocol->recvActualPlayer(&id,&id_worm);
             list.push_back(id);
-            if(id==this->mi_id){
-                this->protocol->recvActualWorm(&id_worm);
-                list.push_back(id_worm);
-            }
+            list.push_back(id_worm);
             //Enable key control..
             emit eventCreated(list);
             continue;
@@ -106,6 +102,15 @@ void Controler::run()
             list.push_back(posY);
             list.push_back(angle);
             emit eventCreated(list);
+            continue;
+        }else if(cmd==static_cast<int>(Commands::WIND_PARAMS)){
+            int32_t min;
+            int32_t max;
+            this->protocol->recvWindParamt(&min,&max);
+            continue;
+        }else if(cmd==static_cast<int>(Commands::WIND_SPEED)){
+            int32_t speed;
+            this->protocol->recvWindSpeed(&speed);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";

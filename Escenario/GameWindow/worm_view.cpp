@@ -134,41 +134,68 @@ void Worm_View::setStatus(int on_ground, int dir)
         this->loadSpriteWeapon(this->weapon);
         this->moving=true;
     }
-    if(this->last_on_ground==on_ground && dir==static_cast<int>(MoveDirection::NONE)){
+    if((this->last_on_ground==on_ground && dir==static_cast<int>(MoveDirection::NONE)) || (dir!=this->last_dir && dir==static_cast<int>(MoveDirection::NONE)) ){
+        this->targetVis=false;
+        this->targetClick=false;
+        this->weaponCountDwn=false;
+        this->weapon=-1;
+        this->loadSpriteWeapon(this->weapon);
+
         this->moving = false;
+        qDebug()<<"deje de moverme!!!!";
         this->last_dir=dir;
         return;
     }
-
+    QMatrix rm;
+    QPixmap *aux;
     switch (dir) {
-    case 1:
+    case static_cast<int>(MoveDirection::RIGHT):
         //RIGHT
-        if(this->angle==0){
-            qDebug()<<"setee";
+        if(this->angle==0 && this->last_dir!=static_cast<int>(MoveDirection::JUMP_BACK) && this->last_dir!=static_cast<int>(MoveDirection::JUMP_FORW)){
             break;
         }
         setAngle(0);
         break;
-    case 2:
+    case static_cast<int>(MoveDirection::LEFT):
         //LEFT
-        if(this->angle==-180){
+        if(this->angle==-180 && this->last_dir!=static_cast<int>(MoveDirection::JUMP_BACK) && this->last_dir!=static_cast<int>(MoveDirection::JUMP_FORW)){
             break;
         }
         setAngle(-180);
         break;
-    case 3:
-        //JMPFW --> cargar imagen de salto
-        qDebug()<<"#######################################################################################salte hacia adelante";
+    case static_cast<int>(MoveDirection::JUMP_FORW):
+        delete(this->spriteImage);
+        aux = new QPixmap("../../images/wfly.png");
+        if(this->angle==0){
+            rm.scale(-1,1);
+        }else{
+            rm.scale(1,1);
+        }
+        this->spriteImage = new QPixmap(aux->transformed(rm));
+        delete(aux);
+        aux = nullptr;
         break;
-    case 4:
-        //JMPBACK --> cargar imagen de salto
+    case static_cast<int>(MoveDirection::JUMP_BACK):
+        delete(this->spriteImage);
+        aux = new QPixmap("../../images/wbackflp.png");
+        if(this->angle==0){
+            rm.scale(-1,1);
+        }else{
+            rm.scale(1,1);
+        }
+        this->spriteImage = new QPixmap(aux->transformed(rm));
+        delete(aux);
+        aux = nullptr;
         break;
     default:
         //NOT DEFINE or NONE
+        this->targetVis=false;
+        this->targetClick=false;
+        this->weaponCountDwn=false;
+        this->weapon=-1;
+        this->loadSpriteWeapon(this->weapon);
         break;
     }
-
-
 
     this->last_on_ground=on_ground;
     this->last_dir=dir;

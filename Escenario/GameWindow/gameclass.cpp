@@ -78,7 +78,17 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
             this->game->moveObjTo(type,id,posX,posY,angle);
         }
-    }else if(type==static_cast<int>(TypeObj::GIRDER)){
+    }else if(type==static_cast<int>(TypeObj::SMALL_GIRDER)){
+        //es girder
+        if(!this->game->containsItem(type,id)){
+            //no contiene girder...
+            //qDebug()<<"no contiene girder";
+            Girder_View* girder = new Girder_View(angle,70);
+            girder->setId(id);
+            girder->setIdObj(type);
+            this->game->add_Item(girder,posX,posY);
+        }
+    }else if(type==static_cast<int>(TypeObj::LARGE_GIRDER)){
         //es girder
         if(!this->game->containsItem(type,id)){
             //no contiene girder...
@@ -319,7 +329,8 @@ void GameClass::setStatusWorm(QList<int> list)
 }
 
 void GameClass::checkRound(QList<int> list){
-    qDebug()<<"jugador id:"<<list[1];
+    qDebug()<<"actual player id:"<<list[1];
+    qDebug()<<"actual worm id:"<<list[2];
 
     if(this->myPlayer->getId() != list[1]){
         qDebug()<<"NO es mi turno";
