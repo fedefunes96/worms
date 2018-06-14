@@ -12,6 +12,8 @@
 #include "teleportation.h"
 #include <yaml-cpp/yaml.h>
 #include <string>
+#include "samllgirder.h"
+#include "largegirder.h"
 
 enum Weapons{
     BAZOOKA = 0,
@@ -72,9 +74,9 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
             float x = girder[0].as<float>();
             float y = girder[1].as<float>();
             float angle = girder[2].as<float>();
-            float longitud = girder[3].as<float>();
-            float height = cfg["Girder"][0].as<float>();
-            Girder *gir = new Girder(stage,x,y,angle,longitud,height);
+            float longitud = cfg["Small Girder"][0].as<float>();
+            float height = cfg["Small Girder"][1].as<float>();
+            Girder *gir = new SamllGirder(stage,x,y,angle,longitud,height);
             girders.push_back(gir);
         }
     }
@@ -87,9 +89,9 @@ void Parser::loadGirder(std::string &file, std::string &config, Stage& stage,
             float x = girder[0].as<float>();
             float y = girder[1].as<float>();
             float angle = girder[2].as<float>();
-            float longitud = girder[3].as<float>();
-            float height = cfg["Girder"][0].as<float>();
-            Girder *gir = new Girder(stage,x,y,angle,longitud,height);
+            float longitud = cfg["Large Girder"][0].as<float>();
+            float height = cfg["Large Girder"][1].as<float>();
+            Girder *gir = new LargeGirder(stage,x,y,angle,longitud,height);
             girders.push_back(gir);
         }
     }
