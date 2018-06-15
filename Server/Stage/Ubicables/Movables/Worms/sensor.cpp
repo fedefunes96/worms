@@ -58,7 +58,7 @@ void Sensor::start_contacting(b2Contact* contact) {
 
 	float angle = atan2(worldManifold.normal.y, worldManifold.normal.x) - b2_pi/2;
 
-	this->worm.set_angle(angle);
+	//this->worm.set_angle(angle);
 
 	if (b2_pi/4 <= fabs(angle) && fabs(angle) < b2_pi/2) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
@@ -67,9 +67,11 @@ void Sensor::start_contacting(b2Contact* contact) {
 	} else if (0 <= fabs(angle) && fabs(angle) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
+		this->worm.set_angle(angle);
 	} else {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(false);	
+		//this->worm.set_angle(angle);
 	}
 }
 

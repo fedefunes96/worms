@@ -198,6 +198,8 @@ void Worm::move_step(float32 time_step) {
 				this->receive_dmg(max_height_dmg);
 			else
 				this->receive_dmg(fall_height);
+
+			printf("Fallheight: %0.1f - MinHeigh: %0.1f\n", fall_height, min_height_for_dmg);
 		}
 
 		this->last_position = actual_position;
@@ -299,6 +301,8 @@ void Worm::create_myself(b2World& world) {
 }
 
 void Worm::delete_myself(b2World& world) {
+	this->actual_health = 0;
+	this->game.notify_health(this);	
 	world.DestroyBody(this->body);
 }
 
