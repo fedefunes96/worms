@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h> 
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 Wind::Wind(const float min_wind_speed, const float max_wind_speed){
 	//Initialize random
@@ -20,18 +21,17 @@ void Wind::change_wind() {
 	this->wind_speed = r * (MAX_WIND_SPEED - MIN_WIND_SPEED) + MIN_WIND_SPEED;
 
 	this->direction = rand() % 2;
+	if(this->direction == 1){
+		this->wind_speed = -this->wind_speed;
+	}
 }
 
 void Wind::apply(Movable* movable) {
 	if (movable->is_affected_by_wind()) {
 		b2Body* body = movable->get_body();
 		b2Vec2 pos = body->GetWorldCenter();
-
-		if (this->direction == 0)
-			movable->get_body()->ApplyForce(b2Vec2(this->wind_speed*body->GetMass(), 0), pos);
-		else if (this->direction == 1) {
-			movable->get_body()->ApplyForce(b2Vec2(-this->wind_speed*body->GetMass(), 0), pos);
-		}
+		movable->get_body()->ApplyForce(b2Vec2(this->wind_speed*body->GetMass(), 0), pos);
+		
 	}
 }
 

@@ -104,15 +104,24 @@ void GameWindow::stepTimer()
 void GameWindow::setWind(int speed)
 {
     if(speed<0){
-        ui->windBar->setInvertedAppearance(true);
+        ui->windLeft->setEnabled(true);
+        ui->windRight->setValue(0);
+        ui->windRight->setEnabled(false);
+        ui->windLeft->setValue(abs(speed));
+        return;
     }
-    ui->windBar->setValue(abs(speed));
+    ui->windRight->setEnabled(true);
+    ui->windLeft->setValue(0);
+    ui->windLeft->setEnabled(false);
+    ui->windRight->setValue(abs(speed));
 }
 
 void GameWindow::setWindParm(int min, int max)
 {
-    ui->windBar->setMaximum(max);
-    ui->windBar->setMinimum(min);
+    ui->windRight->setMaximum(max);
+    ui->windRight->setMinimum(0);
+    ui->windLeft->setMaximum(max);
+    ui->windLeft->setMinimum(0);
 }
 
 void GameWindow::setRefocusEnable(bool enable)

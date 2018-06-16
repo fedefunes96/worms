@@ -256,12 +256,14 @@ void Protocol::sendWindParams(float min, float max) {
 }
 
 void Protocol::sendWindSpeed(float speed) {
+    std::cout << "ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ    speed :" << speed  << std::endl;
     int32_t conv = htonl((abs(static_cast<int>(speed*100))));
 
     Commands cmd = Commands::WIND_SPEED; 
 
     int8_t sign = 1;
     if(speed<0){
+        std::cout << "--------------------------------------------------------> hay viento negativo" << std::endl;
         sign=0;
     }
 
