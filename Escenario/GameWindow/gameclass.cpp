@@ -324,6 +324,10 @@ void GameClass::checkQueueEvent(QList<int> list)
         this->recvWormHealth(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::WORM_STATUS)){
         setStatusWorm(list);
+    }else if(cmd==static_cast<int>(Commands::WIND_PARAMS)){
+        this->window->setWindParm(list[1],list[2]);
+    }else if(cmd==static_cast<int>(Commands::WIND_SPEED)){
+        this->window->setWind(list[1]);
     }
 
 }

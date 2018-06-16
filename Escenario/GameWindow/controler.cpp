@@ -107,10 +107,18 @@ void Controler::run()
             int32_t min;
             int32_t max;
             this->protocol->recvWindParamt(&min,&max);
+            list.push_back(min);
+            list.push_back(max);
+            qDebug()<<"------>wind min"<<min;
+            qDebug()<<"------>wind max"<<max;
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WIND_SPEED)){
             int32_t speed;
             this->protocol->recvWindSpeed(&speed);
+            list.push_back(speed);
+            qDebug()<<"---------------->wind speed"<<speed;
+            emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";

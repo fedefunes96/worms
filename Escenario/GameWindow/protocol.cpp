@@ -475,13 +475,14 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
 
     mult = (sign == 1) ? 1 : -1;
 
-    *posX = convMtToPx(ntohl(aux)*mult/10000.0);
+    *posX = convMtToPx(ntohl(aux)/10000.0)*mult;
 
     conexion.recibir((char*)&aux,4);
     conexion.recibir((char*)&sign,1);
 
     mult = (sign == 1) ? 1 : -1;
-    *posY = convMtToPx(ntohl(aux)*mult/10000.0);
+
+    *posY = convMtToPx(ntohl(aux)/10000.0)*mult;
 
     conexion.recibir((char*)&aux,4);
     conexion.recibir((char*)&sign,1);
@@ -490,6 +491,8 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     float aux2=(ntohl(aux)*mult*57.2958/100)+0.5;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
+
+    std::cout << "#### en RECVPOST id:" << *id_obj << "posX:" << *posX << "posY:" << *posY << std::endl;
 
 }
 
@@ -564,6 +567,7 @@ void Protocol::recvWindSpeed(int32_t* speed)
 {
     int32_t aux;
     conexion.recibir((char*)&aux,4);
+    std::cout << "##### en protocolo wind speed:" << ntohl(aux) << std::endl;
     *speed = ntohl(aux);
 }
 

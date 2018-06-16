@@ -78,7 +78,7 @@ void GameWindow::setButtonEnable(bool enable)
 
 void GameWindow::setBar(int pot)
 {
-    ui->progressBar->setValue(pot);
+    ui->powerBar->setValue(pot);
 }
 
 void GameWindow::startTimerRound(int time)
@@ -97,4 +97,15 @@ void GameWindow::stepTimer()
     qDebug()<<"entre tiempo";
     this->time++;
     ui->lcdNumber->display(this->time);
+}
+
+void GameWindow::setWind(int speed)
+{
+    ui->windBar->setValue(speed);
+}
+
+void GameWindow::setWindParm(int min, int max)
+{
+    ui->windBar->setMaximum(max);
+    ui->windBar->setMinimum(min);
 }

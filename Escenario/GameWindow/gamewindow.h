@@ -27,6 +27,8 @@ public:
     void setButtonEnable(bool enable);
     void setBar(int pot);
     void startTimerRound(int time);
+    void setWindParm(int min, int max);
+    void setWind(int speed);
 private slots:
     void on_pushButton_clicked();
 
