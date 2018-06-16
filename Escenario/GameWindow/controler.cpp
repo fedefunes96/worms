@@ -46,7 +46,7 @@ void Controler::run()
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
-            qDebug()<<"actual player";
+            //qDebug()<<"actual player";
             int8_t id;
             int8_t id_worm;
             this->protocol->recvActualPlayer(&id,&id_worm);
@@ -68,14 +68,14 @@ void Controler::run()
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
-            qDebug()<<"remove";
+            //qDebug()<<"remove";
             int8_t id_obj;
             int32_t id;
             this->protocol->recvRemove(&id_obj,&id);
 
             list.push_back(id_obj);
             list.push_back(id);
-            qDebug()<<"----->>>>>>>>>   id OBJ:"<<id_obj<<"id:"<<id;
+            //qDebug()<<"----->>>>>>>>>   id OBJ:"<<id_obj<<"id:"<<id;
             //Remove item     REMOVE ITEM
             emit eventCreated(list);
             continue;
@@ -87,7 +87,7 @@ void Controler::run()
             list.push_back(idworm);
             list.push_back(on_ground);
             list.push_back(dir);
-            qDebug()<<"status worm --> dir"<<dir;
+            //qDebug()<<"status worm --> dir"<<dir;
             emit eventCreated(list);
         }else if(cmd==static_cast<int>(Commands::POSITION)){
             int8_t obj_type=0;
@@ -117,7 +117,7 @@ void Controler::run()
             gameRunning=false;
             emit eventCreated(list);
         }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
-            qDebug()<<"worm vida update";
+            //qDebug()<<"worm vida update";
             int8_t id;
             int32_t health;
             this->protocol->recvWormHealth(&id,&health);

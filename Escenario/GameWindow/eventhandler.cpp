@@ -77,7 +77,7 @@ oid EventHandler::mouseMoveEvent(QMouseEvent *m_event)
 
 void EventHandler::fireWithClick()
 {
-    Worm_View* worm = this->game->getWormActive();
+    Worm_View* worm = this->game->getPlayer()->getWormActive();
     if(worm==nullptr){
         return;
     }
@@ -104,7 +104,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(k_event->isAutoRepeat()){
                 return;
             }
-            qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
+            //qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
             this->power=10;
             break;
         }
@@ -118,17 +118,16 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             qDebug() << "Left"; //moveLeft worm
 
             if(!this->game->isMyTurn()){
-                qDebug()<<"no es mi turno";
+                //qDebug()<<"no es mi turno";
                 return;
             }
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
-                qDebug()<<"worm nulo";
+                //qDebug()<<"worm nulo";
                 return;
             }
-            //worm->setAngle(-180);
             this->protocol->sendMove(2);
-            qDebug()<< "id worm a mover:"<<worm->getId();
+            //qDebug()<< "id worm a mover:"<<worm->getId();
             break;
         }
         case Qt::Key_Right:
@@ -137,16 +136,15 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            //qDebug() << "Right";//moveRight worm
+            qDebug() << "Right";//moveRight worm
             if(!this->game->isMyTurn()){
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
-            //worm->setAngle(0);
             this->protocol->sendMove(1);
             break;
         }
@@ -157,7 +155,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -171,7 +169,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -190,11 +188,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
-            worm->setAngle(worm->getAngle());
+            //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(3);
             break;
         }
@@ -210,11 +208,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
-            worm->setAngle(worm->getAngle());
+            //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(4);
             break;
         }
@@ -227,7 +225,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(!this->game->isMyTurn()){
                 return;
             }
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -243,7 +241,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -260,7 +258,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -277,7 +275,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -294,7 +292,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -324,7 +322,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -341,7 +339,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -352,8 +350,9 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
         case Qt::Key_Space:
         {
             if(k_event->isAutoRepeat()){ // para saber si es repetitiva
+                this->game->setPotBar(this->power);
                 if(this->power<100){
-                    qDebug()<< "power:"<<this->power;
+                    //qDebug()<< "power:"<<this->power;
                     this->power+=10;
                 }
                 break;
@@ -362,7 +361,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 std::vector<int> vect = this->game->fireWeapon();
 
                 if(vect.empty()){
-                    qDebug()<<"vector vacio --> no arma seleccionada o disponible";
+                    //qDebug()<<"vector vacio --> no arma seleccionada o disponible";
                     return;
                 }
                 std::vector<int> vect2;
@@ -378,9 +377,9 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                     vect2.push_back(vect[3]);
                 }
                 protocol->sendAttack(vect[0],vect[1],vect[2],vect2);
-                qDebug()<<"dispare! event";
+                //qDebug()<<"dispare! event";
             }
-            qDebug()<<"solte Espacio";
+            //qDebug()<<"solte Espacio";
             break;
         }
 
@@ -395,7 +394,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }
@@ -414,7 +413,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 return;
             }
 
-            Worm_View* worm = this->game->getWormActive();
+            Worm_View* worm = this->game->getPlayer()->getWormActive();
             if(worm==nullptr){
                 return;
             }

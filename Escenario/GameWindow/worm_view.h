@@ -62,6 +62,7 @@ private:
     bool labelset;
     std::pair<int,int> currentDir;
     std::pair<int,int> destDir;
+    std::pair<int,int> lastDir;
     int angle;
     int speed;
     QTimer *timer;
@@ -110,8 +111,9 @@ private:
     int last_on_ground;
     int last_dir;
 
-
-
+    bool jumping;
+    bool isFlying();
+    bool isFalling();
 };
 
 #endif // WORM_VIEW_H

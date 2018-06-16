@@ -95,11 +95,12 @@ void Protocol::sendWormStatus(int8_t id, bool ground,int8_t dir)
     int8_t on_ground=0;
     if(ground){
         on_ground=1;
-    }
+    }    
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&id,1);
     conexion.enviar((const char*)&on_ground,1);    
     conexion.enviar((const char*)&dir,1);   
+    std::cout << "----> Status idWorm:" << static_cast<int>(id) << " ground:" << static_cast<int>(on_ground) <<  " mDir:" << static_cast<int>(dir) << std::endl;
 }
 
 void Protocol::sendUsableId(int8_t id, int32_t ammo) {
@@ -457,7 +458,7 @@ void Protocol::sendMove(int8_t dir)
     Commands cmd = Commands::MOVE;
     conexion.enviar((const char*)&cmd,1);
     conexion.enviar((const char*)&dir,1);
-    std::cout << "en protocolo envio movimiento:"<<static_cast<int>(cmd)<<"en direccion:"<<static_cast<int>(dir)<<std::endl;
+    //std::cout << "en protocolo envio movimiento:"<<static_cast<int>(cmd)<<"en direccion:"<<static_cast<int>(dir)<<std::endl;
 }
 
 
@@ -498,6 +499,8 @@ void Protocol::recvWormStatus(int8_t *id, int8_t *ground,int8_t *dir)
     conexion.recibir((char*)id,1);
     conexion.recibir((char*)ground,1);
     conexion.recibir((char*)dir,1);
+    std::cout << "worm id:" << static_cast<int>(*id) << "on_ground:" << static_cast<int>(*ground) << "dir:" << static_cast<int>(*dir) << std::endl;
+    //si toco el enter o el de saltar atras muy rapido el server manda directamente el 0 y nunca el 3 o 4...
 }
 
 
@@ -595,7 +598,7 @@ void Protocol::sendAttack(int8_t id_weapon, int32_t posX, int32_t posY, std::vec
     for (unsigned int var = 0; var < vect.size(); ++var) {
         int32_t aux = htonl(vect[var]);
         conexion.enviar((const char*)&aux,4);
-        std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
+        //std::cout << "dentro del vector hay:" << vect[var] <<std::endl;
     }
     //std::cout << "idweapon:" << static_cast<int16_t>(id_weapon) << "posX:"<<posX <<"posY:"<<posY << std::endl;
 

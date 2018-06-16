@@ -108,6 +108,8 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}	
 			case MoveDirection::JUMP_FORW: {
+				if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
+					this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
 				if (this->is_on_ground() && !this->should_slide) {
 					this->actual_velocity.Set(0, 0);
 					this->body->SetLinearVelocity(this->actual_velocity);
@@ -125,6 +127,8 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
+				if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
+					this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
 				if (this->is_on_ground() && !this->should_slide) {
 					this->actual_velocity.Set(0, 0);	
 					this->body->SetLinearVelocity(this->actual_velocity);

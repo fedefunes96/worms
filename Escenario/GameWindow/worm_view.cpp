@@ -69,10 +69,12 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     setAngle(0);
     this->selected=false;
     this->countDown=0;
-    qDebug()<<"color en worm"<<color;
+    //qDebug()<<"color en worm"<<color;
     this->color = color;
     this->countFrame=0;
     this->last_on_ground=1;
+    this->last_dir=0;
+    this->jumping=false;
 
 }
 
@@ -93,7 +95,7 @@ bool Worm_View::isAlive()
 
 
 void Worm_View::movTargetAngle(int dir){
-    qDebug()<<"anguloooooooo: "<<this->targetAngle;
+    //qDebug()<<"anguloooooooo: "<<this->targetAngle;
     if((this->targetAngle==-90 && dir==1) || (this->targetAngle==-270 && dir==-1) || (this->targetAngle==90 && dir==-1)){
         return;
     }
@@ -122,102 +124,165 @@ void Worm_View::setHealth(int vida)
     this->health = vida;
 }
 
+
+
+
+
+
+
+
 void Worm_View::setStatus(int on_ground, int dir)
 {
-    qDebug()<<" valor ground ant:"<<this->last_on_ground<<"valor de dir ant:"<<this->last_dir;
-    qDebug()<<" valor ground:"<<on_ground<<"valor de dir:"<<dir;
-    if(this->last_on_ground!=on_ground || this->last_dir!=dir){
-        this->targetVis=false;
-        this->targetClick=false;
-        this->weaponCountDwn=false;
-        this->weapon=-1;
-        this->loadSpriteWeapon(this->weapon);
-        this->moving=true;
-    }
-    if((this->last_on_ground==on_ground && dir==static_cast<int>(MoveDirection::NONE)) || (dir!=this->last_dir && dir==static_cast<int>(MoveDirection::NONE)) ){
-        this->targetVis=false;
-        this->targetClick=false;
-        this->weaponCountDwn=false;
-        this->weapon=-1;
-        this->loadSpriteWeapon(this->weapon);
-
-        this->moving = false;
-        qDebug()<<"deje de moverme!!!!";
-        this->last_dir=dir;
-        return;
-    }
     QMatrix rm;
     QPixmap *aux;
-    switch (dir) {
-    case static_cast<int>(MoveDirection::RIGHT):
-        //RIGHT
-        if(this->angle==0 && this->last_dir!=static_cast<int>(MoveDirection::JUMP_BACK) && this->last_dir!=static_cast<int>(MoveDirection::JUMP_FORW)){
-            break;
+    if(this->last_on_ground==1 && on_ground==1){
+        if(dir==static_cast<int>(MoveDirection::LEFT)){
+            //mover izq
+            qDebug()<<"set izq";
+            if(this->jumping){
+                qDebug()<<"rotar a izquierda";
+            }else if(this->last_dir!=static_cast<int>(MoveDirection::LEFT) && this->angle!=-180){
+                qDebug()<<"set izq2";
+                setAngle(-180);
+                this->last_dir=dir;
+            }
+            this->last_on_ground=on_ground;
+            this->moving=true;
+        }else if(dir==static_cast<int>(MoveDirection::RIGHT)){
+            //mover der
+            qDebug()<<"set der";
+            if(this->jumping){
+                qDebug()<<"rotar a derecha";
+            }else if(this->last_dir!=static_cast<int>(MoveDirection::RIGHT) && this->angle!=0){
+                qDebug()<<"set der2";
+                setAngle(0);
+                this->last_dir=dir;
+            }
+            this->last_on_ground=on_ground;
+            this->moving=true;
+        }else if(dir==static_cast<int>(MoveDirection::JUMP_BACK)){
+            //saltar
+            this->targetVis=false;
+            this->targetClick=false;
+            this->weaponCountDwn=false;
+            this->weapon=-1;
+            this->loadSpriteWeapon(this->weapon);
+            this->jumping=true;
+            qDebug()<<"salte hacia atras";
+            delete(this->spriteImage);
+            aux = new QPixmap("../../images/wbackflp.png");
+            if(this->angle==0){
+                rm.scale(-1,1);
+            }else{
+                rm.scale(1,1);
+            }
+            this->spriteImage = new QPixmap(aux->transformed(rm));
+            delete(aux);
+            aux = nullptr;
+            this->last_dir=dir;
+            this->last_on_ground=on_ground;
+            this->moving=true;
+        }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
+            //saltar
+            this->jumping=true;
+            this->targetVis=false;
+            this->targetClick=false;
+            this->weaponCountDwn=false;
+            this->weapon=-1;
+            this->loadSpriteWeapon(this->weapon);
+            qDebug()<<"salte hacia adelante";
+            delete(this->spriteImage);
+            aux = new QPixmap("../../images/wfly.png");
+            if(this->angle==0){
+                rm.scale(-1,1);
+            }else{
+                rm.scale(1,1);
+            }
+            this->spriteImage = new QPixmap(aux->transformed(rm));
+            delete(aux);
+            aux = nullptr;
+            this->last_dir=dir;
+            this->last_on_ground=on_ground;
+            this->moving=true;
+        }else if(dir==static_cast<int>(MoveDirection::NONE)){
+            // dejar de moverme
+            if(this->jumping){
+                return;
+            }
+            qDebug()<<"deje de moverme";
+            this->moving=false;
+            this->targetVis=false;
+            this->targetClick=false;
+            this->weaponCountDwn=false;
+            this->weapon=-1;
+            this->loadSpriteWeapon(this->weapon);
+            this->last_dir=dir;
+            this->last_on_ground=on_ground;
         }
-        setAngle(0);
-        break;
-    case static_cast<int>(MoveDirection::LEFT):
-        //LEFT
-        if(this->angle==-180 && this->last_dir!=static_cast<int>(MoveDirection::JUMP_BACK) && this->last_dir!=static_cast<int>(MoveDirection::JUMP_FORW)){
-            break;
+    }else if(this->last_on_ground==1 && on_ground==0){
+        //comence a volar o caer
+        //this->jumping=false;
+        qDebug()<<"volar o caer";
+        this->moving=true;
+        this->last_on_ground=on_ground;
+    }else if(this->last_on_ground==0 && on_ground==0){
+        //rotar imagen
+        qDebug()<<"rotar imagen";
+        if(dir==static_cast<int>(MoveDirection::LEFT)){
+            this->angle=-180;
+            this->targetAngle=this->angle;
+        }else if(dir==static_cast<int>(MoveDirection::RIGHT)){
+            this->angle=0;
+            this->targetAngle=this->angle;
         }
-        setAngle(-180);
-        break;
-    case static_cast<int>(MoveDirection::JUMP_FORW):
-        delete(this->spriteImage);
-        aux = new QPixmap("../../images/wfly.png");
-        if(this->angle==0){
-            rm.scale(-1,1);
-        }else{
-            rm.scale(1,1);
-        }
-        this->spriteImage = new QPixmap(aux->transformed(rm));
-        delete(aux);
-        aux = nullptr;
-        break;
-    case static_cast<int>(MoveDirection::JUMP_BACK):
-        delete(this->spriteImage);
-        aux = new QPixmap("../../images/wbackflp.png");
-        if(this->angle==0){
-            rm.scale(-1,1);
-        }else{
-            rm.scale(1,1);
-        }
-        this->spriteImage = new QPixmap(aux->transformed(rm));
-        delete(aux);
-        aux = nullptr;
-        break;
-    default:
-        //NOT DEFINE or NONE
+        this->moving=true;
+    }else if(this->last_on_ground==0 && on_ground==1){
+        //llegue a piso
+        qDebug()<<"llegue a piso con none";
+        this->jumping=false;
+        this->moving=false;
         this->targetVis=false;
         this->targetClick=false;
         this->weaponCountDwn=false;
         this->weapon=-1;
         this->loadSpriteWeapon(this->weapon);
-        break;
-    }
+        this->last_dir=dir;
+        this->last_on_ground=on_ground;
 
-    this->last_on_ground=on_ground;
-    this->last_dir=dir;
-
-
-
-    //setear ahora si esta en aire o piso..
-    if(this->last_on_ground==1 && on_ground==0 && dir!=3 && dir!=4){
-        // me dispararon o estaba caminando y me cai
-        if(dir==1 || dir==2){
-            //estaba caminando y me cai
-        }else{
-            //me dispararon
-        }
-    }else if(this->last_on_ground && on_ground==0 && dir==3){
-        // salte hacia adelante en la dir que apunte
-    }else if(this->last_on_ground && on_ground==0 && dir==4){
-        // salte hacia atras en la dir que apunte
-    }else if(!this->last_on_ground && on_ground==1){
-        // estaba en el aire y ahora en el piso... ver en que dir estaba apuntando anteriormente
     }
 }
+
+
+
+
+
+
+bool Worm_View::isFalling()
+{
+    return (this->lastDir.second < this->currentDir.second);
+}
+
+bool Worm_View::isFlying()
+{
+    return (this->lastDir.second > this->currentDir.second);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -335,6 +400,7 @@ bool Worm_View::isMovable()
 }
 
 
+
 int Worm_View::getTargetAngle(){
     return this->targetAngle;
 }
@@ -355,6 +421,8 @@ void Worm_View::setPosition(int x, int y)
 
     setPos(x-width/2,y-height/2);
     setDir(x-width/2,y-height/2);
+    this->lastDir.first=this->currentDir.first;
+    this->lastDir.second=this->currentDir.second;
     //qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
 }
 
@@ -374,17 +442,25 @@ void Worm_View::nextFrame(){
 
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
-    this->targetVis=false;
-    this->targetClick=false;
-    this->weaponCountDwn=false;
-    this->weapon=-1;
+    //qDebug()<<"muevo worm...";
+    //this->targetVis=false;
+    //this->targetClick=false;
+    //this->weaponCountDwn=false;
+    //this->weapon=-1;
     setDestDir(posx,posy);
+    //qDebug()<<"idworm:"<<this->id<<"currentDir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
+    //qDebug()<<"idworm:"<<this->id<<"destDir x:"<<this->destDir.first<<"y:"<<this->destDir.second;
+    //qDebug()<<"posx:"<<posx<<"posy:"<<posy;
     if(this->currentDir==this->destDir){
+        //qDebug()<<"es la misma dir";
         return;
     }
     //this->moving=true;
     //checkAngle(angle);
     QGraphicsScene* sc = scene();
+    this->lastDir.first=this->currentDir.first;
+    this->lastDir.second=this->currentDir.second;
+    //qDebug()<<"SETEE LASTDIR";
     this->setPosition(posx,sc->height()-posy);
     this->countFrame +=60;
     if((this->spriteImage->height())<=this->countFrame){
@@ -393,6 +469,7 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     }else if((this->countFrame%60)==0){
         this->nextFrame();
     }
+    //qDebug()<<"momving dir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
 	return;
 }
 

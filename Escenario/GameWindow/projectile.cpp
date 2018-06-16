@@ -18,11 +18,10 @@ Projectile::~Projectile()
 
 void Projectile::nextFameImpact()
 {
-    qDebug()<<"entreeeeeeeeeeeeeeeeee11111";
     currentFrame += 60;
     if(currentFrame >= spriteImage->height())
     {
-        qDebug()<<"TERMINE DE EXPLOTAR";
+        //qDebug()<<"TERMINE DE EXPLOTAR";
         timer->disconnect();
         timer->stop();
         this->alive=false;
@@ -35,7 +34,7 @@ void Projectile::nextFameImpact()
 
 void Projectile::moveTo(int angle, int posx, int posy)
 {
-    qDebug()<<"mover misil";
+    //qDebug()<<"mover misil";
     int width = this->boundingRect().width();
     int height = this->boundingRect().height();
     QGraphicsScene* sc = this->scene();

@@ -24,6 +24,7 @@ public:
     Worm_View *getWormActive();
     void connectController(Controler *controler);
     void setStatusWorm(QList<int> list);
+    void setPotBar(int pot);
 private slots:
     void checkQueueEvent(QList<int> list);
     void checkDeadItem();

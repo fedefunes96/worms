@@ -12,6 +12,12 @@ GameWindow::GameWindow(QWidget *parent) :
     this->timer->start(500);// no hace falta chequear tan seguido...
     connect(this->timer,&QTimer::timeout,this,&GameWindow::refreshBox);
     this->setWindowTitle("Worms Armageddon");
+    this->time=0;
+    this->timeToReach=0;
+    this->timerRound = new QTimer();
+    this->timerRound->start(1000);
+    connect(this->timerRound,&QTimer::timeout,this,&GameWindow::stepTimer);
+
 }
 
 
@@ -67,4 +73,28 @@ void GameWindow::on_pushButton_clicked()
 void GameWindow::setButtonEnable(bool enable)
 {
     this->ui->pushButton->setEnabled(enable);
+}
+
+
+void GameWindow::setBar(int pot)
+{
+    ui->progressBar->setValue(pot);
+}
+
+void GameWindow::startTimerRound(int time)
+{
+    this->time=0;
+    this->timeToReach=time;
+    qDebug()<<"XXXXXXXXXXXXXXXXXXXXXX time:"<<this->time<<"timeToreach:"<<this->timeToReach;
+}
+
+void GameWindow::stepTimer()
+{
+    qDebug()<<"time:"<<this->time<<"timeToreach:"<<this->timeToReach;
+    if(this->time>this->timeToReach){
+        return;
+    }
+    qDebug()<<"entre tiempo";
+    this->time++;
+    ui->lcdNumber->display(this->time);
 }

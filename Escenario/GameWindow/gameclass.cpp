@@ -44,6 +44,13 @@ void GameClass::connectController(Controler *controler)
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
 }
 
+
+void GameClass::setPotBar(int pot)
+{
+    this->window->setBar(pot);
+}
+
+
 void GameClass::recvWormHealth(int id,int health)
 {
     Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),id);
@@ -75,7 +82,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
     if(type==static_cast<int>(TypeObj::WORM)){
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
-            qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
+            //qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
             this->game->moveObjTo(type,id,posX,posY,angle);
         }
     }else if(type==static_cast<int>(TypeObj::SMALL_GIRDER)){
@@ -182,19 +189,24 @@ std::vector<int> GameClass::fireWeapon()
 {
     std::vector<int> vect;
     if(isMyTurn()){
-        int idWeapon = this->game->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
+        if(this->myPlayer->getWormActive()==nullptr){
+            qDebug()<<"nullptr el worm";
+        }
+        int idWeapon = this->myPlayer->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
         //int angle = this->game->getWormActive()->getTargetAngle();
         if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
             qDebug()<<"entreeeeeeee";
+            qDebug()<<idWeapon;
+            qDebug()<<"id worm:"<<this->game->getWormActive()->getId();
             return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
         qDebug()<<"arma a disparar ------->"<<idWeapon;
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
 
-        std::pair<int,int> pos = this->game->getWormActive()->getDirWeapon();
+        std::pair<int,int> pos = this->myPlayer->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
-        int time = this->game->getWormActive()->getTimeWeapon();
+        int time = this->myPlayer->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
         vect.push_back(pos.first);
         vect.push_back(pos.second);
@@ -206,7 +218,7 @@ std::vector<int> GameClass::fireWeapon()
             vect.push_back(time);
         }
         this->window->setButtonEnable(false);
-        this->game->getWormActive()->loadSpriteWeapon(-1);
+        this->myPlayer->getWormActive()->loadSpriteWeapon(-1);
 
     }
     return vect;
@@ -329,33 +341,40 @@ void GameClass::setStatusWorm(QList<int> list)
 }
 
 void GameClass::checkRound(QList<int> list){
+    this->window->startTimerRound(60);
     qDebug()<<"actual player id:"<<list[1];
     qDebug()<<"actual worm id:"<<list[2];
 
+    Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
+    Worm_View* worm = static_cast<Worm_View*>(i);
+    worm->setSelect(true);
+    this->game->addItemToFollow(worm);
+
     if(this->myPlayer->getId() != list[1]){
         qDebug()<<"NO es mi turno";
+        this->setPotBar(0);
         this->myTurn=false;
         this->window->setButtonEnable(false);
         this->myPlayer->setActive(false);
-        Worm_View* worm = this->myPlayer->getWormActive();
-        if(worm!=nullptr){
+        Worm_View* worm2 = this->myPlayer->getWormActive();
+        if(worm2!=nullptr){
             qDebug()<<"entre";
-            worm->setSelect(false);
+            worm2->setSelect(false);
         }
         this->myPlayer->setWormActive(nullptr);
         return;
     }
     qDebug()<<"es mi turno";
     qDebug()<<"idworm:"<<list[2];
-    Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
-    Worm_View* worm = static_cast<Worm_View*>(i);
+
     this->myTurn=true;
+    this->setPotBar(0);
     this->window->setButtonEnable(true);
     this->myPlayer->setActive(true);
-    worm->setSelect(true);
+
     this->myPlayer->setWormActive(worm);
     qDebug()<<"setee worm activo id:"<<worm->getId();
-    this->game->addItemToFollow(worm);
+
 
 }
 
