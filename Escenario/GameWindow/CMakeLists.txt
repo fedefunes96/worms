@@ -15,6 +15,7 @@ SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++0x")
 
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt5Multimedia CONFIG REQUIRED)
 
 
 # Populate a CMake variable with the sources
@@ -22,4 +23,4 @@ file(GLOB SOURCE *.cpp *.ui)
 # Tell CMake to create the helloworld executable
 add_executable(GameWindow ${SOURCE})
 # Use the Widgets module from Qt 5
-target_link_libraries(GameWindow Qt5::Widgets)
+target_link_libraries(GameWindow Qt5::Widgets Qt5::Multimedia)
