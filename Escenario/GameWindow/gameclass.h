@@ -25,6 +25,7 @@ public:
     void connectController(Controler *controler);
     void setStatusWorm(QList<int> list);
     void setPotBar(int pot);
+    void setRefocus(bool enable);
 private slots:
     void checkQueueEvent(QList<int> list);
     void checkDeadItem();

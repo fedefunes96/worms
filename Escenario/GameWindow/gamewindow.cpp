@@ -17,6 +17,7 @@ GameWindow::GameWindow(QWidget *parent) :
     this->timerRound = new QTimer();
     this->timerRound->start(1000);
     connect(this->timerRound,&QTimer::timeout,this,&GameWindow::stepTimer);
+    ui->refocus->setEnabled(false);
 
 }
 
@@ -83,20 +84,21 @@ void GameWindow::setBar(int pot)
 
 void GameWindow::startTimerRound(int time)
 {
-    this->time=0;
-    this->timeToReach=time;
-    qDebug()<<"XXXXXXXXXXXXXXXXXXXXXX time:"<<this->time<<"timeToreach:"<<this->timeToReach;
+    this->time=time;
+    this->timeToReach=0;
+    ui->lcdNumber->setPalette(Qt::gray);
 }
 
 void GameWindow::stepTimer()
 {
-    qDebug()<<"time:"<<this->time<<"timeToreach:"<<this->timeToReach;
-    if(this->time>this->timeToReach){
+    if(this->time==this->timeToReach){
         return;
     }
-    qDebug()<<"entre tiempo";
-    this->time++;
+    this->time--;
     ui->lcdNumber->display(this->time);
+    if(this->time <= 10){
+        ui->lcdNumber->setPalette(Qt::red);
+    }
 }
 
 void GameWindow::setWind(int speed)
@@ -108,4 +110,15 @@ void GameWindow::setWindParm(int min, int max)
 {
     ui->windBar->setMaximum(max);
     ui->windBar->setMinimum(min);
+}
+
+void GameWindow::setRefocusEnable(bool enable)
+{
+    ui->refocus->setEnabled(enable);
+}
+
+void GameWindow::on_refocus_clicked()
+{
+    ui->graphicsView->setFreeMove(false);
+    ui->refocus->setEnabled(false);
 }

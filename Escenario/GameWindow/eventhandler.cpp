@@ -106,6 +106,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             //qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
             this->power=10;
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
 
@@ -127,6 +128,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             this->protocol->sendMove(2);
+            this->game->getCamera()->setFreeMove(false);
             //qDebug()<< "id worm a mover:"<<worm->getId();
             break;
         }
@@ -146,6 +148,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             this->protocol->sendMove(1);
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
         case Qt::Key_Up:
@@ -160,6 +163,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->movTargetAngle(1);
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
         case Qt::Key_Down:
@@ -174,6 +178,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             worm->movTargetAngle(-1);
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
 
@@ -194,6 +199,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(3);
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
 
@@ -214,6 +220,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(4);
+            this->game->getCamera()->setFreeMove(false);
             break;
         }
 
@@ -299,6 +306,36 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             worm->setTimeWeapon(5);
             break;
         }
+
+        case Qt::Key_D:
+        {
+            //mover camara a derecha
+            this->game->getCamera()->moveRightCam();
+            this->game->setRefocus(true);
+            break;
+        }
+        case Qt::Key_A:
+        {
+            //mover camara a izq
+            this->game->getCamera()->moveLeftCam();
+            this->game->setRefocus(true);
+            break;
+        }
+        case Qt::Key_W:
+        {
+            //mover camara arriba
+            this->game->getCamera()->moveUpCam();
+            this->game->setRefocus(true);
+            break;
+        }
+        case Qt::Key_S:
+        {
+            //mover camara abajo
+            this->game->getCamera()->moveDownCam();
+            this->game->setRefocus(true);
+            break;
+        }
+
         default:
         {
             qDebug() << "Unhandled"; //sin definir aun

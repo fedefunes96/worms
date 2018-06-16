@@ -17,6 +17,7 @@ void Camera::addScene(QGraphicsScene *scene)
 {
     setScene(scene);
     connect(timer, &QTimer::timeout, this, &Camera::followObject);
+    this->freeMove=false;
 }
 
 void Camera::resizeEvent(QResizeEvent *event)
@@ -41,12 +42,17 @@ void Camera::mousePressEvent(QMouseEvent *event)
     }
 }
 
-
+void Camera::setFreeMove(bool val)
+{
+    this->freeMove=val;
+}
 
 void Camera::followObject()
 {
 
-
+    if(this->freeMove){
+        return;
+    }
 
     MovableItem *item;
     if(!this->projectileToFollow.empty()){
@@ -55,15 +61,15 @@ void Camera::followObject()
             this->projectileToFollow.pop();
             return;
         }
-    }else{
-        if(this->itemsToFollow.empty()){
-            return;
-        }
+    }else if(!this->itemsToFollow.empty()) {
         item= this->itemsToFollow.top();
-        if( (!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
+        if((!item->isSelect()) && (!item->isAlive() || !item->isMoving()) ){
             this->itemsToFollow.pop();
             return;
         }
+    }else {
+        // aca tengo que seguir al worm que este activo...
+        return;
     }
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
@@ -80,6 +86,31 @@ void Camera::followObject()
     }
 
 }
+
+void Camera::moveRightCam()
+{
+    this->freeMove=true;
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 10 );
+}
+
+void Camera::moveLeftCam()
+{
+    this->freeMove=true;
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 10 );
+}
+
+void Camera::moveUpCam()
+{
+    this->freeMove=true;
+    verticalScrollBar()->setValue( verticalScrollBar()->value() - 10 );
+}
+
+void Camera::moveDownCam()
+{
+    this->freeMove=true;
+    verticalScrollBar()->setValue( verticalScrollBar()->value() + 10 );
+}
+
 
 void Camera::setPlayerActive(Player *player)
 {

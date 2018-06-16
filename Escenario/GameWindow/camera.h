@@ -26,6 +26,11 @@ public:
     void delItemToFollow(MovableItem *item);
     bool containsitemToFollow(MovableItem *item);
     void addProjectileToFollow(MovableItem *item);
+    void moveRightCam();
+    void moveLeftCam();
+    void moveUpCam();
+    void moveDownCam();
+    void setFreeMove(bool val);
 signals:
     void mouseClick();
 protected:
@@ -39,6 +44,7 @@ private:
     std::stack<MovableItem*> projectileToFollow;
     std::vector<MovableItem*> vectorItems;
     Player* playerActive;
+    bool freeMove;
 
 };
 

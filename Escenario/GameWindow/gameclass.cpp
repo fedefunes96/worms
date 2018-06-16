@@ -32,6 +32,7 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->color_list.append("purple");
     this->color_list.append("cyan");
     this->color_list.append("darkBlue");
+    this->window->setRefocusEnable(false);
 }
 
 Camera* GameClass::getCamera()
@@ -44,6 +45,11 @@ void GameClass::connectController(Controler *controler)
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
 }
 
+
+void GameClass::setRefocus(bool enable)
+{
+    this->window->setRefocusEnable(enable);
+}
 
 void GameClass::setPotBar(int pot)
 {
@@ -345,7 +351,7 @@ void GameClass::setStatusWorm(QList<int> list)
 }
 
 void GameClass::checkRound(QList<int> list){
-    this->window->startTimerRound(60);
+    this->window->startTimerRound(40);
     qDebug()<<"actual player id:"<<list[1];
     qDebug()<<"actual worm id:"<<list[2];
 

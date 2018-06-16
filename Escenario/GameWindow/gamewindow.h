@@ -29,11 +29,14 @@ public:
     void startTimerRound(int time);
     void setWindParm(int min, int max);
     void setWind(int speed);
+    void setRefocusEnable(bool enable);
 private slots:
     void on_pushButton_clicked();
 
     void refreshBox();
     void stepTimer();
+    void on_refocus_clicked();
+
 private:
     Ui::GameWindow *ui;
     Game_View *gameScene;
