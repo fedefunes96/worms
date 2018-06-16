@@ -33,6 +33,10 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->color_list.append("cyan");
     this->color_list.append("darkBlue");
     this->window->setRefocusEnable(false);
+
+    this->refreshScreen = new QTimer();
+    connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
+    this->refreshScreen->start(10);
 }
 
 Camera* GameClass::getCamera()
@@ -393,7 +397,11 @@ void GameClass::checkRound(QList<int> list){
 
 
 
-
+void GameClass::updateScreen()
+{
+    QGraphicsScene *scene = this->game->getScene();
+    scene->update(scene->sceneRect()); // para refrescar la pantalla
+}
 
 
 

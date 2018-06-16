@@ -73,16 +73,16 @@ void Camera::followObject()
     }
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 5 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 7 );
     }else if(item->x() < horizontalScrollBar()->value()+200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 5 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 7 );
     }
 
 
     if(item->y() > verticalScrollBar()->value()+200 && item->y()>verticalScrollBar()->value()+this->height()-200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + 5 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() + 7 );
     }else if(item->y() < verticalScrollBar()->value()+200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() - 5 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() - 7 );
     }
 
 }

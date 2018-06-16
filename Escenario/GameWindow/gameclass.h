@@ -29,6 +29,7 @@ public:
 private slots:
     void checkQueueEvent(QList<int> list);
     void checkDeadItem();
+    void updateScreen();
 private:
     Game_View* game;
     Player* myPlayer;
@@ -36,6 +37,7 @@ private:
     QList<QString> color_list;
 
     QTimer *deadItemCollector;
+    QTimer *refreshScreen;
 
     void attachWorm(int type, int id_player, int id, int health);
     void updateItem(int type=999, int id=999, int posX=0, int posY=0, int angle=0);
