@@ -263,6 +263,9 @@
                <property name="value">
                 <number>0</number>
                </property>
+               <property name="invertedAppearance">
+                <bool>false</bool>
+               </property>
               </widget>
              </item>
              <item>

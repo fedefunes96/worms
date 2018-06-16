@@ -260,7 +260,13 @@ void Protocol::sendWindSpeed(float speed) {
 
     Commands cmd = Commands::WIND_SPEED; 
 
+    int8_t sign = 1;
+    if(speed<0){
+        sign=0;
+    }
+
     conexion.enviar((const char*)&cmd,1);
+    conexion.enviar((const char*)&sign,1);
     conexion.enviar((const char*)&conv,4);
 }
 
@@ -566,9 +572,15 @@ void Protocol::recvWindParamt(int32_t* min, int32_t* max)
 void Protocol::recvWindSpeed(int32_t* speed)
 {
     int32_t aux;
+    int8_t sign;
+    int mult;
+    conexion.recibir((char*)&sign,1);
+    mult = (sign==1) ? 1 : -1;
+    std::cout << "val mult:" << mult << std::endl;
     conexion.recibir((char*)&aux,4);
+    *speed = ntohl(aux)*mult;
     std::cout << "##### en protocolo wind speed:" << ntohl(aux) << std::endl;
-    *speed = ntohl(aux);
+
 }
 
 

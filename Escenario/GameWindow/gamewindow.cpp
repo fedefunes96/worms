@@ -103,7 +103,10 @@ void GameWindow::stepTimer()
 
 void GameWindow::setWind(int speed)
 {
-    ui->windBar->setValue(speed);
+    if(speed<0){
+        ui->windBar->setInvertedAppearance(true);
+    }
+    ui->windBar->setValue(abs(speed));
 }
 
 void GameWindow::setWindParm(int min, int max)
