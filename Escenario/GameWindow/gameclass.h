@@ -6,13 +6,16 @@
 #include "gamewindow.h"
 #include <QTimer>
 #include <QList>
+#include "generalSounds.h"
+#include "backgrounMusic.h"
+#include <vector>
 
 class GameClass : public QObject
 {
     Q_OBJECT
 public:
     GameClass(QRect screen,int w,int h,int idply);
-
+    ~GameClass();
 
     Player* getPlayer();
     Game_View* getGameView();
@@ -45,6 +48,9 @@ private:
     void removeItem(int type, int id);
 
     GameWindow *window;
+
+    std::vector<generalSounds*> sounds;
+    backgrounMusic* music;
 
     void recvWormHealth(int id, int health);
     void throwProjectile(int type, int id, int posX, int posY, int angle, std::string &path);

@@ -184,12 +184,12 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->moving=true;
         }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
             //saltar
+            this->jumping=true;
             this->targetVis=false;
             this->targetClick=false;
             this->weaponCountDwn=false;
             this->weapon=-1;
             this->loadSpriteWeapon(this->weapon);
-            this->jumping=true;
             qDebug()<<"salte hacia adelante";
             delete(this->spriteImage);
             aux = new QPixmap("../../images/wfly.png");

@@ -2,7 +2,8 @@
 #include "girder_view.h"
 #include <QDebug>
 #include "projectile.h"
-
+#include "commonWin.h"
+#include "commonLose.h"
 #include <QColor>
 #include <QCoreApplication>
 
@@ -37,6 +38,11 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->refreshScreen = new QTimer();
     connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
     this->refreshScreen->start(10);
+}
+
+GameClass::~GameClass()
+{
+
 }
 
 Camera* GameClass::getCamera()
@@ -328,6 +334,9 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";
+        this->window->close();
+        commonWIn win;
+        win.exec();
         this->myPlayer->setActive(false);
         this->myTurn=false;
     }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
