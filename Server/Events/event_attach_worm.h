@@ -2,7 +2,7 @@
 #define EVENT_ATTACH_WORM_H
 
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include <string>
 #include "player.h"
 #include "worm.h"
@@ -15,7 +15,7 @@ private:
 public:
 	EventAttachWorm(const int id, std::shared_ptr<Worm> worm);
 
-	virtual void process(Player& player, Protocol& protocol) override;
+	virtual void process(Player& player, ProtocolServer& protocol) override;
 };
 
 #endif

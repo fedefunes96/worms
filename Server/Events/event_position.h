@@ -2,7 +2,7 @@
 #define EVENT_POSITION_H
 
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include <string>
 #include "player.h"
 
@@ -23,7 +23,7 @@ public:
 		, const float y
 		, const float angle);
 
-	virtual void process(Player& player, Protocol& protocol) override;
+	virtual void process(Player& player, ProtocolServer& protocol) override;
 };
 
 #endif

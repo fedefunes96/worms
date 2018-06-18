@@ -6,7 +6,7 @@
 #include "thread.h"
 #include <unordered_map>
 #include <memory>
-#include "protocol.h"
+#include "protocol_server.h"
 #include "ubicable.h"
 #include "counter.h"
 #include "event_queue.h"
@@ -28,7 +28,7 @@ private:
 
 	Server& server;
 	Socket socket;
-	Protocol protocol;
+	ProtocolServer protocol;
 	std::unordered_map<int, std::unique_ptr<Usable>> usables;
 	//std::unordered_map<int, Worm*> worms;
 	std::unordered_map<int, std::shared_ptr<Worm>> worms;

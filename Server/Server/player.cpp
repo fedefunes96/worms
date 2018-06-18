@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "player.h"
 #include <memory>
-#include "protocol.h"
+#include "protocol_server.h"
 #include "ubicable.h"
 #include <thread>
 #include <string>
@@ -95,7 +95,7 @@ void Player::game_loop() {
 	try {
 		while (this->connected) {	
 			std::cout << "antes de recibir"  << std::endl;
-			Commands cmd = static_cast<Commands>(this->protocol.recvCmd());
+			Commands cmd = static_cast<Commands>(this->protocol.recv_char());
 
 			std::cout << "comando recibido:" << static_cast<int>(cmd) << std::endl;
 			if (cmd == Commands::MOVE) {

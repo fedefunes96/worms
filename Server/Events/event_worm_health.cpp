@@ -1,13 +1,13 @@
 #include "event_worm_health.h"
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include "player.h"
 #include <algorithm>
 
 EventWormHealth::EventWormHealth(const int id, const int health)
 	: id(id), health(health) {}
 
-void EventWormHealth::process(Player& player, Protocol& protocol) {
+void EventWormHealth::process(Player& player, ProtocolServer& protocol) {
 	printf("Sending new health: %d %d\n", id, health);
 	protocol.sendWormHealth(id, health);
 

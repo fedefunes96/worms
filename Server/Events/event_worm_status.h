@@ -2,7 +2,7 @@
 #define EVENT_WORM_STATUS_H
 
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include <string>
 #include "player.h"
 
@@ -15,7 +15,7 @@ private:
 public:
 	EventWormStatus(const int id, bool ground, MoveDirection dir);
 
-	virtual void process(Player& player, Protocol& protocol) override;
+	virtual void process(Player& player, ProtocolServer& protocol) override;
 };
 
 #endif

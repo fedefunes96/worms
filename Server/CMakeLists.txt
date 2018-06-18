@@ -16,8 +16,8 @@ include_directories("${PROJECT_SOURCE_DIR}/Stage/Ubicables/Movables/Worms")
 include_directories("${PROJECT_SOURCE_DIR}/Server")
 include_directories("${PROJECT_SOURCE_DIR}/Communications")
 include_directories("${PROJECT_SOURCE_DIR}/Usables")
-
-include_directories( ../Escenario/GameWindow )
+include_directories("../Common")
+#include_directories( ../Escenario/GameWindow )
 
 set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -pthread -pedantic -lyaml-cpp")
 
@@ -35,8 +35,9 @@ file(GLOB SOURCES "*.cpp"
 "Server/*.cpp"
 "Communications/*.cpp"
 "Usables/*.cpp"
-"../Escenario/GameWindow/socket.cpp"
-"../Escenario/GameWindow/protocol.cpp")
+"../Common/*.cpp")
+#"../Escenario/GameWindow/socket.cpp"
+#"../Escenario/GameWindow/protocol.cpp")
 
 add_executable(Worms ${SOURCES} )
 target_link_libraries(Worms ${PROJECT_LINK_LIBS})

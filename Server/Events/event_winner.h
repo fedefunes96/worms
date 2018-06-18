@@ -2,7 +2,7 @@
 #define EVENT_WINNER_H
 
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include <string>
 #include "player.h"
 
@@ -13,7 +13,7 @@ private:
 public:
 	EventWinner(const int id);
 
-	virtual void process(Player& player, Protocol& protocol) override;
+	virtual void process(Player& player, ProtocolServer& protocol) override;
 };
 
 #endif

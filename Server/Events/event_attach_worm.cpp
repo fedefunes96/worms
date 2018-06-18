@@ -1,13 +1,13 @@
 #include "event_attach_worm.h"
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include "player.h"
 #include "worm.h"
 
 EventAttachWorm::EventAttachWorm(const int id, std::shared_ptr<Worm> worm) 
  : id(id), worm(std::move(worm)) {}
 
-void EventAttachWorm::process(Player& player, Protocol& protocol) {	
+void EventAttachWorm::process(Player& player, ProtocolServer& protocol) {	
 	if (id == player.get_id()) {
 		player.attach_worm(worm);
 	}

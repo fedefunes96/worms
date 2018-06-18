@@ -2,7 +2,7 @@
 #define EVENT_WORM_HEALTH_H
 
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include <string>
 #include "player.h"
 
@@ -14,7 +14,7 @@ private:
 public:
 	EventWormHealth(const int id, const int health);
 
-	virtual void process(Player& player, Protocol& protocol) override;
+	virtual void process(Player& player, ProtocolServer& protocol) override;
 };
 
 #endif

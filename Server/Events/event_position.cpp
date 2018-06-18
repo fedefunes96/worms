@@ -1,6 +1,6 @@
 #include "event_position.h"
 #include "event.h"
-#include "protocol.h"
+#include "protocol_server.h"
 #include "player.h"
 
 EventPosition::EventPosition(const std::string type
@@ -14,7 +14,7 @@ EventPosition::EventPosition(const std::string type
 	, y(y)
 	, angle(angle) {}
 
-void EventPosition::process(Player& player, Protocol& protocol) {
+void EventPosition::process(Player& player, ProtocolServer& protocol) {
 	//printf("Sending position: %0.1f %0.1f\n", x, y);
 
 	protocol.sendPosition(type, id, x, y, angle);
