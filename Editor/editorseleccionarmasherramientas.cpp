@@ -12,16 +12,16 @@ editorSeleccionArmasHerramientas::editorSeleccionArmasHerramientas(QWidget *pare
 {
     ui->setupUi(this);
     this->setWindowTitle("Seleccion de armas y herramientas");
-    QPixmap bazooka = QPixmap("../images/Bazooka.png");
-    QPixmap mortero = QPixmap("../images/Mortar.png");
-    QPixmap granadaV = QPixmap("../images/W4_Grenade.png");
-    QPixmap granadaR = QPixmap("../images/Redgrenade.png");
-    QPixmap banana = QPixmap("../images/Bananabomb.png");
-    QPixmap granadaS = QPixmap("../images/Holy_Grenade.png");
-    QPixmap dinamita = QPixmap("../images/W4_Dynamite.png");
-    QPixmap bate = QPixmap("../images/Baseballbat.png");
-    QPixmap aereo = QPixmap("../images/W4_Airstrike.png");
-    QPixmap tele = QPixmap("../images/IconTeleport.png");
+    QPixmap bazooka = QPixmap(ROOT_PATH"/images/Bazooka.png");
+    QPixmap mortero = QPixmap(ROOT_PATH"/images/Mortar.png");
+    QPixmap granadaV = QPixmap(ROOT_PATH"/images/W4_Grenade.png");
+    QPixmap granadaR = QPixmap(ROOT_PATH"/images/Redgrenade.png");
+    QPixmap banana = QPixmap(ROOT_PATH"/images/Bananabomb.png");
+    QPixmap granadaS = QPixmap(ROOT_PATH"/images/Holy_Grenade.png");
+    QPixmap dinamita = QPixmap(ROOT_PATH"/images/W4_Dynamite.png");
+    QPixmap bate = QPixmap(ROOT_PATH"/images/Baseballbat.png");
+    QPixmap aereo = QPixmap(ROOT_PATH"/images/W4_Airstrike.png");
+    QPixmap tele = QPixmap(ROOT_PATH"/images/IconTeleport.png");
     ui->bazooka_2->setPixmap(bazooka);
     ui->mortero->setPixmap(mortero);
     ui->granadaV->setPixmap(granadaV);

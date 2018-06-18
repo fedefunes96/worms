@@ -1,10 +1,11 @@
 #include "editor_viga_grande_view.h"
 
+
 editor_viga_grande_view::editor_viga_grande_view(QObject* parent):
         QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("../images/grdl4.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap(ROOT_PATH"/images/grdl4.png"); // Load the sprite image QPixmap
 }
 
 editor_viga_grande_view::~editor_viga_grande_view()

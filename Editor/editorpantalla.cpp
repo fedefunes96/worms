@@ -26,46 +26,46 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     this->scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
-    std::string name = "../images/fondo.png";
+    std::string name = ROOT_PATH"/images/fondo.png";
     this->setBacGround(name);
     this->id = 0;
     ui->wormOpt->hide();
     ui->girderOpt->hide();
     this->current_id = -1;
-    QPixmap bazooka = QPixmap("../images/Bazooka.png");
+    QPixmap bazooka = QPixmap(ROOT_PATH"/images/Bazooka.png");
     bazooka = bazooka.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bazooka->setPixmap(bazooka);
-    QPixmap mortero = QPixmap("../images/Mortar.png");
+    QPixmap mortero = QPixmap(ROOT_PATH"/images/Mortar.png");
     mortero = mortero.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->mortero->setPixmap(mortero);
-    QPixmap granadaV = QPixmap("../images/W4_Grenade.png");
+    QPixmap granadaV = QPixmap(ROOT_PATH"/images/W4_Grenade.png");
     granadaV = granadaV.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaV->setPixmap(granadaV);
-    QPixmap granadaR = QPixmap("../images/Redgrenade.png");
+    QPixmap granadaR = QPixmap(ROOT_PATH"/images/Redgrenade.png");
     granadaR = granadaR.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaR->setPixmap(granadaR);
-    QPixmap banana = QPixmap("../images/Bananabomb.png");
+    QPixmap banana = QPixmap(ROOT_PATH"/images/Bananabomb.png");
     banana = banana.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->banana->setPixmap(banana);
-    QPixmap granadaS = QPixmap("../images/Holy_Grenade.png");
+    QPixmap granadaS = QPixmap(ROOT_PATH"/images/Holy_Grenade.png");
     granadaS = granadaS.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaS->setPixmap(granadaS);
-    QPixmap dinamita = QPixmap("../images/W4_Dynamite.png");
+    QPixmap dinamita = QPixmap(ROOT_PATH"/images/W4_Dynamite.png");
     dinamita = dinamita.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->dinamita->setPixmap(dinamita);
-    QPixmap bate = QPixmap("../images/Baseballbat.png");
+    QPixmap bate = QPixmap(ROOT_PATH"/images/Baseballbat.png");
     bate = bate.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bate->setPixmap(bate);
-    QPixmap aereo = QPixmap("../images/W4_Airstrike.png");
+    QPixmap aereo = QPixmap(ROOT_PATH"/images/W4_Airstrike.png");
     aereo = aereo.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->aereo->setPixmap(aereo);
-    QPixmap tele = QPixmap("../images/IconTeleport.png");
+    QPixmap tele = QPixmap(ROOT_PATH"/images/IconTeleport.png");
     tele = tele.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->teletransportador->setPixmap(tele);
     loadWeapons();
-    ui->agregarGusano->setIcon(QIcon("../images/wormwait.png"));
-    ui->agregarVigaChica->setIcon(QIcon("../images/grds4.png"));
-    ui->AgregarViga->setIcon(QIcon("../images/grdl4.png"));
+    ui->agregarGusano->setIcon(QIcon(ROOT_PATH"/images/wormwait.png"));
+    ui->agregarVigaChica->setIcon(QIcon(ROOT_PATH"/images/grds4.png"));
+    ui->AgregarViga->setIcon(QIcon(ROOT_PATH"/images/grdl4.png"));
 }
 
 EditorPantalla::~EditorPantalla()
@@ -249,7 +249,7 @@ int EditorPantalla::agregar_gusano(int x, int y)
         this->estado = 0;
         return (id-1);
     } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada"));
+        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
     }
     return -1;
 }
@@ -283,7 +283,7 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
         this->estado = 0;
         return (id-1);
     } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada"));
+        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
     }
     return -1;
 }
@@ -313,7 +313,7 @@ int EditorPantalla::agregar_viga_chica(int x, int y)
         this->estado = 0;
         return (id-1);
     } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada"));
+        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
     }
     return -1;
 }
@@ -517,7 +517,7 @@ void EditorPantalla::on_pushButton_clicked()
             std::string background = this->bakcground.toStdString();
             commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
-            QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0"));
+            QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));
         }
     } else {
         QMessageBox::information(this,tr("Error"),tr("No hay suficientes gusanos en el escenario."));
@@ -538,7 +538,7 @@ void EditorPantalla::on_ok_clicked()
 {
     int vida = ui->vidaGusano->text().toInt();
     if ( vida == 0){
-        QMessageBox::information(this,tr("Error"),tr("Vida indalida"));
+        QMessageBox::information(this,tr("Error"),tr("Vida indalida."));
         return;
     }
     worms[current_id].setVida(vida);

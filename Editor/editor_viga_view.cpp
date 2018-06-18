@@ -1,11 +1,12 @@
 #include "editor_viga_view.h"
 #include <iostream>
 
+
 editor_viga_view::editor_viga_view(QObject* parent):
      QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap("../images/grds4.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap(ROOT_PATH"/images/grds4.png"); // Load the sprite image QPixmap
 }
 
 editor_viga_view::~editor_viga_view()
