@@ -67,16 +67,6 @@ void Player::new_worm_id() {
 }
 
 void Player::play() {
-	/*this->new_worm_id();
-	int actual_worm = this->get_actual_worm();
-
-	while (this->worms.at(actual_worm).im_dead()) {
-		this->new_worm_id();
-		actual_worm = this->get_actual_worm();		
-	}
-
-	this->protocol.sendActualWorm(actual_worm);*/
-
 	this->can_attack = true;
 	this->set_receive(true);
 
@@ -143,8 +133,7 @@ void Player::game_loop() {
 
  				b2Vec2 dest(posx, posy);
  
-				//this->counter.set_time(3);
-				this->counter.set_time(15);
+				this->counter.set_time(3);
 
 				printf("Usable id %d\n", id_usable);
  
@@ -194,15 +183,13 @@ void Player::game_loop() {
 			//Played disconnected
 			this->disconnected_player();
 	}
-	std::cout << "termine!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
-
 }
 
 int Player::get_actual_worm_id() {
 	this->new_worm_id();
 	int actual_worm = this->get_actual_worm();
 
-	while (this->get_worms().at(actual_worm)->im_dead()) {
+	while (this->worms.at(actual_worm)->im_dead()) {
 		this->new_worm_id();
 		actual_worm = this->get_actual_worm();		
 	}
@@ -262,28 +249,6 @@ bool Player::is_in_game() {
 void Player::set_in_game(bool state) {
 	this->in_game = state;
 }
-/*void Player::notify_start_game() {
-	this->in_game = true;
-	this->protocol.sendGameStart();
-}*/
-
-void Player::notify_winner(int id) {
-	printf("Sending Winner\n");
-	//this->protocol.sendWinner(id);
-}
-
-void Player::disconnect() {
-	//mutex
-	//printf("Sending Game end\n");
-	//this->protocol.sendGameEnd();
-	//this->connected = false;
-	//Do this in other place, server might eliminate player while sending msj disconnect
-	//this->in_game = false;
-	//this->event_t.join();
-	//printf("Connected = false\n");
-	//Put this in an event called Disconnect
-	//this->socket.desconectar();
-}
 
 void Player::set_connected(bool state) {
 	this->connected = state;
@@ -291,59 +256,23 @@ void Player::set_connected(bool state) {
 
 void Player::stop_events() {
 	this->event_t.join();
-	//this->in_game = false;
 }
 
 void Player::shutdown() {
+	this->connected = false;
 	this->socket.desconectar();
 	this->in_game = false;
 }
-
-void Player::notify_actual_player(int id) {
-	printf("Actual Player id: %d\n", id);
-	//this->protocol.sendActualPlayer(id);
-}
-
-void Player::notify_health(Worm* worm) {
-	//this->protocol.sendWormHealth(worm->get_id(), worm->get_health());
-}
-
-void Player::notify_removal(Ubicable* ubicable) {
-	/*if (ubicable->get_type().compare("Worm") == 0) {
-		this->check_if_worm_was_mine(ubicable);
-	}*/
-
-	printf("Sending Remove object\n");
-	//this->protocol.sendRemove(ubicable->get_type(), ubicable->get_id());
-}
-
-void Player::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-	if ((ubicable->get_type()).compare("Worm")==0) {
-		//printf("Sending Position worm: %0.1f %0.1f %0.1f\n", x, y, angle);	
-	}
-	//this->protocol.sendPosition(ubicable->get_type(), ubicable->get_id(), x, y, angle);
-}
-
-//void Player::attach_worm(Worm* worm) {
 void Player::attach_worm(std::shared_ptr<Worm> worm) {
 	this->worms_ids.push_back(worm->get_id());
 
-	printf("Sending Worm id: %d %d\n", worm->get_id(), worm->get_health());
+	printf("Sending Worm id: %d %d %d\n", id, worm->get_id(), worm->get_health());
 	this->worms.emplace(worm->get_id(), worm);
-	//this->protocol.sendWormId(worm->get_id(), worm->get_health());
 }
 
 void Player::attach_usable(std::unique_ptr<Usable> usable) {
 	printf("Sending Usable id: %d %d\n", usable->get_id(), usable->get_ammo());
-	//this->protocol.sendUsableId(usable->get_id(), usable->get_ammo());
 	this->usables.emplace(usable->get_id(), std::move(usable));
-}
-
-void Player::set_id(int id) {
-	this->id = id;
-	printf("Sending Player id: %d\n", id);
-	//Notify client id
-	//this->protocol.sendPlayerId(id);
 }
 
 int Player::get_id() {
@@ -352,19 +281,41 @@ int Player::get_id() {
 
 bool Player::lost() {
 	//std::lock_guard<std::mutex> lock(this->worms_m);
+	std::unordered_map<int, std::shared_ptr<Worm>>::iterator it2;
 
-	std::unordered_map<int, std::shared_ptr<Worm>>::const_iterator it;
+	it2 = this->worms.begin();
+	int ie = 0;
+	int iee = 0;
+
+	if (it2 != this->worms.end()) {
+		ie++;
+		++it2;
+	}	
+
+	for (auto it3 = this->worms.begin(); it3 != this->worms.end(); ++it3) {
+		iee++;
+		printf("Checking worms alive id: %d %d\n", this->id, it3->second->get_id());
+		if(!it3->second->im_dead()) {
+			printf("Worm alive %d\n", this->id);
+			return false;
+		}		
+	}
+
+	printf("Cant worms: %d %d %d\n", ie, iee, (int) this->worms.size());
+
+	/*std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
 
 	it = this->worms.begin();
 
 	if (it != this->worms.end()) {
+		printf("Checking worms alive id: %d %d\n", this->id, it->second->get_id());
 		if(!it->second->im_dead()) {
-			printf("Worm alive\n");
+			printf("Worm alive %d\n", this->id);
 			return false;
 		}
 
 		++it;
-	}	
+	}	*/
 
 	return true;
 	//return this->worms.size() == 0;
@@ -372,16 +323,4 @@ bool Player::lost() {
 
 bool Player::is_disconnected() {
 	return this->connected == 0;
-}
-
-std::unordered_map<int, std::unique_ptr<Usable>>& Player::get_usables() {
-	return this->usables;
-}
-	
-std::unordered_map<int, std::shared_ptr<Worm>>& Player::get_worms() {
-	return this->worms;
-}
-
-std::vector<int>& Player::get_worms_ids() {
-	return this->worms_ids;
 }

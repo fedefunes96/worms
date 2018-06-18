@@ -54,22 +54,13 @@ public:
 	void game_loop();
 	bool lost();
 
-	//void attach_worm(Worm* worm);
 	void attach_worm(std::shared_ptr<Worm> worm);
 	void attach_usable(std::unique_ptr<Usable> usable);
 
-	void notify_winner(int id);
-	void notify_actual_player(int id);
-	void notify_removal(Ubicable* ubicable);
-	void notify_position(Ubicable* ubicable, float x, float y, float angle);
-	void notify_health(Worm* worm);
-
-	void set_id(int id);
 	int get_id();
 
 	bool is_in_game();
 	void set_in_game(bool state);
-	void disconnect();
 	void shutdown();
 	void stop_events();
 	void set_connected(bool state);
@@ -80,12 +71,6 @@ public:
 	bool is_disconnected();
 
 	EventQueue* get_event_queue();
-
-	std::unordered_map<int, std::unique_ptr<Usable>>& get_usables();
-
-	std::unordered_map<int, std::shared_ptr<Worm>>& get_worms();
-
-	std::vector<int>& get_worms_ids();	
 
 	int get_actual_worm_id();
 	int get_actual_worm();

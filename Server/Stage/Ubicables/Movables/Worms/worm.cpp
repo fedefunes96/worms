@@ -168,6 +168,10 @@ void Worm::set_slide(bool slide) {
 	this->should_slide = slide;
 }
 
+bool Worm::is_sliding() {
+	return this->should_slide;
+}
+
 void Worm::receive_explosion(const b2Vec2& impulse) {
 	//Mutex to prevent moving if it was going to set velocity
 	std::lock_guard<std::mutex> lock(this->direction_m);
@@ -179,6 +183,7 @@ void Worm::receive_explosion(const b2Vec2& impulse) {
 void Worm::move_step(float32 time_step) {
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
+	b2Vec2 actual_position = this->body->GetPosition();
 	/*if (this->jump_cooldown > 0) {
 		this->jump_cooldown--;
 	} else {
@@ -193,8 +198,6 @@ void Worm::move_step(float32 time_step) {
 			this->body->SetLinearVelocity(this->actual_velocity);
 		}
 
-		b2Vec2 actual_position = this->body->GetPosition();
-
 		float fall_height = last_position.y - actual_position.y;
 
 		if (fall_height >= this->min_height_for_dmg) {
@@ -204,9 +207,13 @@ void Worm::move_step(float32 time_step) {
 				this->receive_dmg(fall_height);
 
 			printf("Fallheight: %0.1f - MinHeigh: %0.1f\n", fall_height, min_height_for_dmg);
-		}
+		}	
 
-		this->last_position = actual_position;
+		this->last_position = actual_position;	
+	} else {
+		//Get the highest position for fall dmg
+		if (actual_position.y > last_position.y)
+			this->last_position = actual_position;
 	}
 
 	if(this->jump_cooldown > 0) {
@@ -357,6 +364,8 @@ b2Body* Worm::get_body() {
 }
 
 bool Worm::im_dead() {
+	if(this->dead)
+		printf("Im dead %d\n", id_obj);
 	return this->dead;
 }
 

@@ -7,17 +7,10 @@
 EventAttachWorm::EventAttachWorm(const int id, std::shared_ptr<Worm> worm) 
  : id(id), worm(std::move(worm)) {}
 
-void EventAttachWorm::process(Player& player, Protocol& protocol) {
-	printf("Sending Worm id: %d %d %d\n", id, worm->get_id(), worm->get_health());
-	
+void EventAttachWorm::process(Player& player, Protocol& protocol) {	
 	if (id == player.get_id()) {
-
-		player.get_worms_ids().push_back(worm->get_id());
-
-		player.get_worms().emplace(worm->get_id(), worm);
+		player.attach_worm(worm);
 	}
 
 	protocol.sendWormId(id, worm->get_id(), worm->get_health());
-
-	//printf("Rompe\n");
 }

@@ -62,7 +62,7 @@ void MortarMissile::create_fragments() {
 		FragmentMissile* missile = new FragmentMissile(this->stage
 													, this->owner
 													, pos.x
-													, pos.y+1.0
+													, pos.y
 													, angle
 													, velocity_missile
 													, this->radius_frag

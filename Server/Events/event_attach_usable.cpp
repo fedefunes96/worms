@@ -10,5 +10,5 @@ EventAttachUsable::EventAttachUsable(std::unique_ptr<Usable> usable)
 void EventAttachUsable::process(Player& player, Protocol& protocol) {
 	printf("Sending Usable id: %d %d\n", usable->get_id(), usable->get_ammo());
 	protocol.sendUsableId(usable->get_id(), usable->get_ammo());
-	player.get_usables().emplace(usable->get_id(), std::move(usable));
+	player.attach_usable(std::move(usable));
 }

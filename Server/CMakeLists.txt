@@ -40,3 +40,4 @@ file(GLOB SOURCES "*.cpp"
 
 add_executable(Worms ${SOURCES} )
 target_link_libraries(Worms ${PROJECT_LINK_LIBS})
+install(TARGETS Worms DESTINATION bin)

@@ -11,13 +11,44 @@
 #include "event_could_join_room.h"
 #include "event_start_game.h"
 #include "event_players_in_room.h"
+#include <sys/types.h>
+#include <dirent.h>
+#include "parser.h"
+
+/*#ifndef ROOT_PATH
+#define ROOT_PATH "."
+#endif*/
 
 Server::Server(const std::string& port, int cant_users)
  : skt(port, cant_users) {
  	active_server = false;
 
  	//Load maps in here
- 	this->maps.emplace("asd","../yaml/basic.yaml");
+ 	std::string res = std::string(ROOT_PATH) + std::string("/resources/maps");
+
+    DIR* dirp = opendir(res.c_str());
+
+    struct dirent * dp;
+
+    while ((dp = readdir(dirp)) != NULL) {
+    	std::string s(dp->d_name);
+
+    	//Only load yaml files
+    	size_t pos;
+
+    	if ((pos = s.find(".yaml")) == std::string::npos)
+    		continue;
+
+    	std::string map_name = s;
+
+    	map_name.replace(pos, map_name.length(), "");
+
+        std::cout << "names " << map_name << " - " << s << std::endl;
+        this->maps.emplace(map_name, res + "/" + s);
+    }
+
+    closedir(dirp); 
+ 	//this->maps.emplace("asd","../yaml/basico.yaml");
 }
 
 void Server::end_user(std::unique_ptr<Player> player) {
@@ -176,7 +207,7 @@ void Server::create_room(const int id, const std::string name, const std::string
 
 	if (it == this->rooms.end()) {
 		//Read stage file and get ammount of players
-		int ammount_players = 2;
+		int ammount_players = Parser::cantidad(maps.at(stage_file));
 		//Room room(*this, name, stage_file, ammount_players);
 		Room room(*this, name, maps.at(stage_file), ammount_players);
 
@@ -220,12 +251,11 @@ void Server::join_room(const int id, const std::string& name) {
 		this->players.at(id)->get_event_queue()->add_event(event);
 
 		it->second.add_player(id);
-	}else{
+	} else {
 		std::shared_ptr<Event> event_join(new EventCouldJoinRoom(false));
 		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));
 	}
 
-	
 }
 
 void Server::exit_room(const int id) {
@@ -246,8 +276,7 @@ void Server::exit_room(const int id) {
 			if (it->second.get_players_ids().size() == 0) {
 				printf("Remove empty room\n");
 				this->rooms.erase(it);
-			} else {
-				
+			} else {			
 				std::vector<int> ids = it->second.get_players_ids();
 				std::shared_ptr<Event> event(new EventPlayersInRoom(ids.size()));
 
@@ -290,7 +319,7 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 			event_queues.push_back(queue);
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		printf("Launching game\n");
 
 		Game *game = new Game(stage_file 

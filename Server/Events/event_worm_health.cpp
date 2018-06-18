@@ -13,13 +13,13 @@ void EventWormHealth::process(Player& player, Protocol& protocol) {
 
 	if (player.should_i_receive() && id == player.get_actual_worm()) {
 		//Im receiving, so its my turn
-		player.get_worms_ids();
-
-		if (std::find(player.get_worms_ids().begin()
+		//player.get_worms_ids();
+		player.stop_turn();
+		/*if (std::find(player.get_worms_ids().begin()
 			, player.get_worms_ids().end()
 			, player.get_actual_worm()) != player.get_worms_ids().end()) {
 			printf("Damaging myself\n");
 			player.stop_turn();
-		}
+		}*/
 	}
 }

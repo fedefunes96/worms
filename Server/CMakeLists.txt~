@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.12)
 project (Worms)
 
-#set (PROJECT_LINK_LIBS Box2D.a yaml-cpp)
-link_directories( usr/local/lib )
+set (PROJECT_LINK_LIBS Box2D.a yaml-cpp)
+#link_directories( usr/local/lib )
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/Events")
@@ -40,3 +40,4 @@ file(GLOB SOURCES "*.cpp"
 
 add_executable(Worms ${SOURCES} )
 target_link_libraries(Worms ${PROJECT_LINK_LIBS})
+install(TARGETS Worms DESTINATION bin)

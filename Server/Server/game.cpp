@@ -28,7 +28,7 @@
 #include "event_wind_speed.h"
 #include "event_wind_params.h"
 
-#define EXTRA_HEALTH 100
+#define EXTRA_HEALTH 25
 
 Game::Game(const std::string& stage_file
  , std::vector<Player*> players
@@ -38,37 +38,14 @@ Game::Game(const std::string& stage_file
  , stage(stage_file, 1.0/20.0, 6, 2, *this, this->event_queues) {
  	this->id_player_list = 0;
  	this->is_over = false;
- 	this->stage_file= stage_file;
-
- 	//Remove this, use run when creating game
- 	
+ 	this->stage_file= stage_file; 	
 }
 
 void Game::start_game() {
 	printf("Creating threads\n");
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
-	//this->game_t = std::thread(&Game::game_loop, this);
-
-	/*for (int i = 0; i < (int) this->players.size(); i++) {
-		this->players_t.push_back(
-			std::thread(&Player::game_loop, this->players[i])
-		);
-	}*/
 
 	this->game_loop();
-	//printf("Waiting 20 secs to end game\n");
-	//std::this_thread::sleep_for(std::chrono::milliseconds(20000));
-	//printf("Game ended 20 secs\n");
-
-	//this->stage.stop_drawing();
-}
-
-void Game::initialize_players() {
-	//First, set an id to every player
-	//Starting with id = 1
-	/*for (int i = 0; i < (int) this->players.size(); i++) {
-		this->players[i].set_id(i+1);
-	}*/
 }
 
 void Game::initialize_game(const std::string& stage_file) {
@@ -77,10 +54,10 @@ void Game::initialize_game(const std::string& stage_file) {
 	//Read stage and create ubicables
 	//Push them in a list to mantain them
 
-
 	//Reserve a list with a reference to worms & usables
 	std::vector<Worm*> worms_to_attach;
-	std::string map = "../yaml/basico.yaml";
+	//std::string map = "../yaml/basico.yaml";
+	std::string map = stage_file;
 	std::string config =  "../yaml/config.yaml";
 	
 	int waterLvl = Parser::waterLvl(config);
@@ -99,9 +76,6 @@ void Game::initialize_game(const std::string& stage_file) {
 	Parser::loadWorms(map,config,worms_to_attach,this->stage,this);
 	int cant_worms = worms_to_attach.size();
 	int cant_players = this->players.size();
-
-	// if (cant_players > cant_worms)
-	//		invalid_game
 
 	int remu_worms = (cant_worms % cant_players);
 	int worms_per_player = cant_worms / cant_players;
@@ -167,8 +141,6 @@ void Game::initialize_game(const std::string& stage_file) {
 }
 
 void Game::run() {
-	//this->game_loop();
-	this->initialize_players();
  	this->initialize_game(this->stage_file);
  	this->start_game();
 }
@@ -198,8 +170,6 @@ void Game::game_loop() {
 		} catch(const SocketException& e) {
 			//Player disconnected
 		}
-		//Need conditional variable over Stage
-
 		this->stage.wait_stop_moving();
 
 		game_status = this->round_over();
@@ -234,26 +204,22 @@ void Game::notify_winner() {
 }
 
 void Game::end_game(Game_status game_status) {
-	/*if (game_status == WINNER) {
-		//Show message "Winner" to winner
-		this->notify_winner();
-	}*/
 	this->notify_winner();
 	this->is_over = true;
 	this->stage.stop_drawing();
 	this->stage_t.join();
 	printf("Game ended\n");
-	//Show message "Loser" to all losers
-	//this->notify_losers();
 }
 
 Game_status Game::check_for_winner() {
 	int cant_players_alive = 0;
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
+		printf("Checking player: %d\n", this->players[i]->get_id());
 		if (!this->players[i]->lost()) {
 			cant_players_alive++;
 		}
+		printf("End checking player: %d\n", this->players[i]->get_id());
 	}
 
 	if (cant_players_alive == 1) {
@@ -291,11 +257,6 @@ Game_status Game::round_over() {
 }
 
 void Game::notify_health(Worm* worm) {
-	/*std::vector<Player>::iterator it;
-
-	for (it = this->players.begin(); it != this->players.end(); ++it) {
-		(*it).notify_health(worm);
-	}*/
 	std::shared_ptr<Event> event(new EventWormHealth(worm->get_id(), worm->get_health()));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
@@ -304,11 +265,6 @@ void Game::notify_health(Worm* worm) {
 }
 
 void Game::notify_actual_player(const int id, const int worm_id) {
-	/*std::vector<Player>::iterator it;
-
-	for (it = this->players.begin(); it != this->players.end(); ++it) {
-		(*it).notify_actual_player(id);
-	}*/
 	std::shared_ptr<Event> event(new EventActualPlayer(id, worm_id));
 
 	for (int i = 0; i < (int) this->event_queues.size(); i++) {
@@ -325,44 +281,4 @@ void Game::notify_worm_status(int id, bool ground, MoveDirection facing_directio
 	}
 }
 
-
-void Game::notify_position(Ubicable* ubicable, float x, float y, float angle) {
-/*	std::vector<Player>::iterator it;
-
-	for (it = this->players.begin(); it != this->players.end(); ++it) {
-		(*it).notify_position(ubicable, x, y, angle);
-	}*/
-}
-
-void Game::notify_removal(Ubicable* ubicable) {
-	/*std::vector<Player>::iterator it;
-
-	for (it = this->players.begin(); it != this->players.end(); ++it) {
-		(*it).notify_removal(ubicable);
-	}*/
-}
-
-Game::~Game() {
-	//for (int i = 0; i < this->players.size(); i++)
-	//	this->players.join();
-
-	/*this->stage.stop_drawing();
-	this->stage_t.join();*/
-	//this->game_t.join();
-	//std::shared_ptr<Event> event(new EventDisconnect());
-
-	/*for (int i = 0; i < (int) this->players.size(); i++) {
-		this->players[i]->disconnect();
-		this->event_queues[i]->add_event(event);
-		//printf("add disconnect event\n");
-		//this->players[i].get_event_queue()->add_event(event);
-		//printf("stop event\n");
-		this->players[i]->stop_events();
-
-		this->players_t[i].join();
-	}*/
-
-	/*for (int i = 0; i < (int) this->players_t.size(); i++) {
-		this->players_t[i].join();
-	}*/
-}
+Game::~Game() {}

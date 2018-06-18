@@ -15,3 +15,4 @@ std::shared_ptr<Event> EventQueue::get_event() {
 
 EventQueue::EventQueue(EventQueue&& other)
  : block_queue(std::move(other.block_queue)) {}
+ 

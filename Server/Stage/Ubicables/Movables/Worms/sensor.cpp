@@ -69,9 +69,11 @@ void Sensor::start_contacting(b2Contact* contact) {
 		this->worm.set_slide(false);
 		this->worm.set_angle(angle);
 	} else {
-		this->worm.set_gravity(DEFAULT_GRAVITY);
-		this->worm.set_slide(false);	
-		//this->worm.set_angle(angle);
+		if (this->worm.is_sliding()) {
+			this->worm.set_gravity(DEFAULT_GRAVITY);
+			this->worm.set_slide(false);	
+			//this->worm.set_angle(angle);
+		}
 	}
 }
 

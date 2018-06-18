@@ -15,19 +15,6 @@ protected:
 	int ammo;
 public:
 	Usable(Stage& stage, const int ammo);
-	/*virtual void action(
-		const float longitude
-		, const float height
-		, const b2Vec2& from_pos
-		, const b2Vec2& dest_pos
-		, const std::vector<float>& params) = 0;
-
-	void use(
-		const float longitude
-		, const float height		
-		, const b2Vec2& from_pos
-		, const b2Vec2& dest_pos
-		, const std::vector<float>& params);*/
 	
 	virtual void action(
 		Worm* worm

@@ -107,6 +107,7 @@ public:
 	virtual bool is_affected_by_wind() override;
 
 	void set_slide(bool slide);
+	bool is_sliding();
 	void set_angle(float angle);
 	void set_velocity(b2Vec2 velocity);
 
