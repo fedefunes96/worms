@@ -26,7 +26,6 @@ enum Game_status {
 class Game : public Thread {
 private:
 	std::vector<Player*> players;
-	std::vector<std::unique_ptr<Ubicable>> ubicables;
 	std::vector<EventQueue*> event_queues;
 	Stage stage;
 
@@ -36,7 +35,6 @@ private:
 	std::string stage_file;
 
 	std::thread stage_t;
-	std::vector<std::thread> players_t;
 
 	Player* get_actual_player();
 	void end_game(Game_status game_status);

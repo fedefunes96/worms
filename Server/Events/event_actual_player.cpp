@@ -8,6 +8,6 @@ EventActualPlayer::EventActualPlayer(const int id, const int worm_id)
 
 void EventActualPlayer::process(Player& player, ProtocolServer& protocol) {
 	printf("Actual Player id: %d Worm id: %d\n", id, worm_id);
-	protocol.sendActualPlayer(id);
-	protocol.sendActualWorm(worm_id);
+	protocol.sendActualPlayer(id, worm_id);
+	//protocol.sendActualWorm(worm_id);
 }

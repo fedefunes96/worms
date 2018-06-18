@@ -51,10 +51,6 @@ void ProtocolServer::sendPosition(const std::string& type_obj
     this->send_int_signed(static_cast<int>(angle*100));
 }
 
-void ProtocolServer::sendActualWorm(int8_t id) {
-    this->send_char(id);
-}
-
 void ProtocolServer::sendWormId(int8_t id, int8_t id_worm, int32_t health) {
     Commands cmd = Commands::ATTACH_WORM_ID;
 
@@ -134,11 +130,12 @@ void ProtocolServer::sendGameEnd() {
     this->send_cmd(cmd);
 }
 
-void ProtocolServer::sendActualPlayer(int8_t id) {
+void ProtocolServer::sendActualPlayer(int8_t id, int8_t worm_id) {
     Commands cmd = Commands::ACTUAL_PLAYER;  
 
     this->send_cmd(cmd);
     this->send_char(id);
+    this->send_char(worm_id);
 }
 
 void ProtocolServer::sendWinner(int8_t id) {
