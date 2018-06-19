@@ -8,15 +8,14 @@
 - 6) Manera optima de deslizar 45º
 
 - Modelo cliente/ Escenario
-- 1) Ajustes finales protocolo con servidor
-- 2) Finalizar modelo cliente
-- 3) Finalizar mantener animacion
-- 4) Finalizar loadWeapon segun el angulo del worm
-- 5) Hacer animaicon worm apuntando
-- 6) Hacer animacion worm ahogandose + colocar agua
+- 1) Re acomodar protocolo nuevo
+- 2) Loop fin juego a nueva conexion
+- 3) Colores repetitivos
+- 4) Mas manejo errores.
+- 5) Revisar redim de escena
+- 6) Revisar perdida memoria
 - 8) Documentacion
 - 9) Testings
-- 10) Cambiar ventana maximizable de seleccion de armas
 
 - Cliente editor
 - 1) Finalizar creador de ecenarios (problemas con el dragg)
