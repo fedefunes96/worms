@@ -2,7 +2,7 @@
 #include "girder_view.h"
 #include <QDebug>
 #include "projectile.h"
-
+#include <stdlib.h>
 #include <QColor>
 #include <QCoreApplication>
 
@@ -35,11 +35,66 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->refreshScreen = new QTimer();
     connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
     this->refreshScreen->start(50);
+
+     backGround = new backgrounMusic("/resources/sounds/BackgroundMusic/Soundtrack.wav");
+     explocion = new generalSounds("/resources/sounds/English/Explosion.wav");
+     generalSounds *fall1 = new generalSounds("/resources/sounds/English/fall/BUNGEE.WAV");
+     this->fall.push_back(fall1);
+     generalSounds *fall2 = new generalSounds("/resources/sounds/English/fall/DROP.WAV");
+     this->fall.push_back(fall2);
+     generalSounds *fall3 = new generalSounds("/resources/sounds/English/fall/NOOO.WAV");
+     this->fall.push_back(fall3);
+     generalSounds *fall4 = new generalSounds("/resources/sounds/English/fall/UH-OH.WAV");
+     this->fall.push_back(fall4);
+
+     generalSounds *fire1 = new generalSounds("/resources/sounds/English/fire/DRAGONPUNCH.WAV");
+     this->fire.push_back(fire1);
+     generalSounds *fire2 = new generalSounds("/resources/sounds/English/fire/FIRE.WAV");
+     this->fire.push_back(fire2);
+     generalSounds *fire3 = new generalSounds("/resources/sounds/English/fire/FIREBALL.WAV");
+     this->fire.push_back(fire3);
+
+     generalSounds *jump1 = new generalSounds("/resources/sounds/English/jump/JUMP1.WAV");
+     this->jumps.push_back(jump1);
+     generalSounds *jump2 = new generalSounds("/resources/sounds/English/jump/WOBBLE.WAV");
+     this->jumps.push_back(jump2);
+
+     generalSounds *select1 = new generalSounds("/resources/sounds/English/select/HELLO.WAV");
+     this->select.push_back(select1);
+     generalSounds *select2 = new generalSounds("/resources/sounds/English/select/YESSIR.WAV");
+     this->select.push_back(select2);
+
+     generalSounds *weaponSelect1 = new generalSounds("/resources/sounds/English/weaponSelect/COLLECT.WAV");
+     this->weaponSelect.push_back(weaponSelect1);
+     generalSounds *weaponSelect2 = new generalSounds("/resources/sounds/English/weaponSelect/LAUGH.WAV");
+     this->weaponSelect.push_back(weaponSelect2);
+}
+
+GameClass::~GameClass()
+{
+    delete backGround;
+    delete this->explocion;
+    for (auto &x : this->fire){
+        delete x;
+    }
+    for (auto &x : this->fall){
+        delete x;
+    }
+    for (auto &x : this->jumps){
+        delete x;
+    }
+    for (auto &x : this->select){
+        delete x;
+    }
+    for (auto &x : this->weaponSelect){
+        delete x;
+    }
 }
 
 Camera* GameClass::getCamera()
 {
     return this->game->getCamera();
+
 }
 
 void GameClass::connectWaitRoom(WaitRoom *wait){
@@ -224,6 +279,8 @@ std::vector<int> GameClass::fireWeapon()
         //puedo disparar el arma...
         qDebug()<<"arma a disparar ------->"<<idWeapon;
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
+        int id = rand() % this->fire.size();
+        this->fire[id]->play();
 
         std::pair<int,int> pos = this->myPlayer->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
@@ -338,6 +395,7 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";
+        this->backGround->stop();
         this->myPlayer->setActive(false);
         this->myTurn=false;
         this->window->close();
@@ -404,7 +462,8 @@ void GameClass::checkRound(QList<int> list){
 
     this->myPlayer->setWormActive(worm);
     qDebug()<<"setee worm activo id:"<<worm->getId();
-
+    int id = rand() % this->select.size();
+    this->select[id]->play();
 
 }
 

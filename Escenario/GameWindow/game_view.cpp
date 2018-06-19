@@ -19,7 +19,13 @@ Game_View::Game_View(QRect screen,int w,int h)
 
     this->scene->setSceneRect(0,0,w,h); //tam escenario
 
+
     //this->camera = new Camera(this->scene,screen.width(),screen.height());
+}
+
+Game_View::~Game_View()
+{
+
 }
 
 

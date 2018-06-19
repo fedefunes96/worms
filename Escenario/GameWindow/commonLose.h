@@ -2,7 +2,7 @@
 #define COMMONLOSE_H
 
 #include <QWidget>
-//#include "backgrounMusic.h"
+#include "backgrounMusic.h"
 
 namespace Ui {
 class commonLose;
@@ -18,7 +18,7 @@ public:
 
 private:
     Ui::commonLose *ui;
-    //backgrounMusic *b;
+    backgrounMusic *b;
 };
 
 #endif // COMMONLOSE_H

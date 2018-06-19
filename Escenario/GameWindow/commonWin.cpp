@@ -9,13 +9,13 @@ commonWIn::commonWIn(QWidget *parent) :
     this->setWindowTitle("Victory");
     QFont f("Arial",22,QFont::Bold);
     ui->label->setFont(f);
-    //b = new backgrounMusic("../../sounds/BackgroundMusic/FFI - Victory.wav");
-    QPixmap img = QPixmap("../../images/Win.jpeg");
+    this->b = new backgrounMusic("/resources/sounds/BackgroundMusic/FFI - Victory.wav");
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/Win.jpeg");
     ui->label->setPixmap(img);
 }
 
 commonWIn::~commonWIn()
 {
     delete ui;
-    //delete b;
+    delete b;
 }
