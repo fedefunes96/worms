@@ -6,16 +6,15 @@
 #include "gamewindow.h"
 #include <QTimer>
 #include <QList>
-#include "generalSounds.h"
-#include "backgrounMusic.h"
-#include <vector>
+#include "waitRoom.h"
+
 
 class GameClass : public QObject
 {
     Q_OBJECT
 public:
     GameClass(QRect screen,int w,int h,int idply);
-    ~GameClass();
+
 
     Player* getPlayer();
     Game_View* getGameView();
@@ -29,10 +28,14 @@ public:
     void setStatusWorm(QList<int> list);
     void setPotBar(int pot);
     void setRefocus(bool enable);
+    void connectWaitRoom(WaitRoom *wait);
+signals:
+    void isWinner(bool iswinner);
 private slots:
     void checkQueueEvent(QList<int> list);
     void checkDeadItem();
     void updateScreen();
+    void showWindow();
 private:
     Game_View* game;
     Player* myPlayer;
@@ -48,9 +51,6 @@ private:
     void removeItem(int type, int id);
 
     GameWindow *window;
-
-    std::vector<generalSounds*> sounds;
-    backgrounMusic* music;
 
     void recvWormHealth(int id, int health);
     void throwProjectile(int type, int id, int posX, int posY, int angle, std::string &path);

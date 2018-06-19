@@ -7,14 +7,11 @@
 Controler::Controler(Protocol *protocol)
 {
     this->protocol = protocol;
-    //timer = new QTimer();
-    //timer->start(3000);
 }
 
-
-void Controler::prueba(){
-    qDebug()<<"lance";
-    //this->game->timerStop();
+void Controler::stopController()
+{
+    this->terminate();
 }
 
 void Controler::run()
@@ -122,7 +119,10 @@ void Controler::run()
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
             qDebug()<<"Winner!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+            int8_t id;
+            this->protocol->recvWinner(&id);
             gameRunning=false;
+            list.push_back(id);
             emit eventCreated(list);
         }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
             //qDebug()<<"worm vida update";
@@ -159,7 +159,7 @@ void Controler::run()
         	list.push_back(cant);
             emit playersInRoom(cant);
         } else if (cmd==static_cast<int>(Commands::START_GAME)){
-            qDebug()<<" se inicia el juego";
+            qDebug()<<" se inicia el juego !!!!!!!!!!!!!!!!!!!!!!111@@#@#@~@@#";
         	//pasarselo a wait room
             emit startGame();
         }

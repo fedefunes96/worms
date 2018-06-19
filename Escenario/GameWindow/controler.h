@@ -13,9 +13,8 @@ class Controler: public QThread
 public:
     Controler(Protocol* protocol);
     void run();
-private slots:
-    void prueba();
-
+public slots:
+    void stopController();
 signals:
     void eventCreated(QList<int> list);
     void recvMap(QList<std::string> list);
@@ -26,8 +25,6 @@ signals:
     void playerId(int id);
 private:
     Protocol *protocol;
-    QTimer *timer;
-    int mi_id;
 };
 
 #endif // CONTROLER_H

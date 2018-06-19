@@ -27,7 +27,7 @@ public:
     std::pair<int, int> &getDir();
     int getAngle();
     void moveTo(int angle, int posx, int posy);
-    void setVisibility(bool vis);
+    void removeMovable();
     int getHealth();
     void setHealth(int health);
     void setAngle(int angle);
@@ -96,7 +96,7 @@ private:
 
 
     int weapon;
-    void loadSprite(QString& path_L,QString& path_U,QString path_D,QString path_Fly="",QString path_Fall="");
+    void loadSprite(QString& path_L);
     Target* target;
     void setTarget();
     bool targetVis;

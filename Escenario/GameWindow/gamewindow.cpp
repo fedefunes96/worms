@@ -18,6 +18,7 @@ GameWindow::GameWindow(QWidget *parent) :
     this->timerRound->start(1000);
     connect(this->timerRound,&QTimer::timeout,this,&GameWindow::stepTimer);
     ui->refocus->setEnabled(false);
+    this->setWindowState(this->windowState() | Qt::WindowMaximized);
 
 }
 

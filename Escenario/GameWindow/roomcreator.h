@@ -18,15 +18,19 @@ class RoomCreator : public QDialog
     Q_OBJECT
 
 public:
-    explicit RoomCreator(WaitRoom* wait,Protocol* protocol,QWidget *parent = nullptr);
+    RoomCreator(WaitRoom* wait,Protocol* protocol,QWidget *parent = nullptr);
     ~RoomCreator();
     void connectControler(Controler *controler);
 
+    void closeEvent(QCloseEvent *event);
 public slots:
     void recvMaps(QList<std::string> list);
 
 private slots:
-    void createRoom();
+    void on_pushButton_clicked();
+
+signals:
+    void closeGame();
 
 private:
     Ui::RoomCreator *ui;
@@ -34,6 +38,7 @@ private:
     WaitRoom* wait;
     std::vector<button*> buttons;
     std::vector<QLineEdit*> lines;
+    bool closeX;
 };
 
 #endif // ROOMCREATOR_H

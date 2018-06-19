@@ -68,7 +68,7 @@ void Projectile::explote()
     // hacer que el timer sea singleshoot para hacer la animacion de la explosion...
     timer->start(30);
     delete(this->spriteImage);
-    spriteImage = new QPixmap("../../images/shothit.png");
+    spriteImage = new QPixmap(ROOT_PATH"/resources/images/shothit.png");
     //setPos(x()-30,y());
     currentFrame=0;
     connect(timer, &QTimer::timeout, this, &Projectile::nextFameImpact);
@@ -96,7 +96,7 @@ void Projectile::fire()
     //connect(timer, &QTimer::timeout, this, &MisilBazooka::move);
 }
 
-void Projectile::setVisibility(bool vis)
+void Projectile::removeMovable()
 {
     //this->setVisible(vis);
     this->explote();

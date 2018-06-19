@@ -256,14 +256,12 @@ void Protocol::sendWindParams(float min, float max) {
 }
 
 void Protocol::sendWindSpeed(float speed) {
-    std::cout << "ÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜÜ    speed :" << speed  << std::endl;
     int32_t conv = htonl((abs(static_cast<int>(speed*100))));
 
     Commands cmd = Commands::WIND_SPEED; 
 
     int8_t sign = 1;
     if(speed<0){
-        std::cout << "--------------------------------------------------------> hay viento negativo" << std::endl;
         sign=0;
     }
 
@@ -499,8 +497,6 @@ void Protocol::recvPosition(int8_t *type_obj, int32_t *id_obj, int32_t *posX, in
     float aux2=(ntohl(aux)*mult*57.2958/100)+0.5;
     int32_t aux3 = (int32_t) aux2;
     *angle = aux3;
-
-    std::cout << "#### en RECVPOST id:" << *id_obj << "posX:" << *posX << "posY:" << *posY << std::endl;
 
 }
 

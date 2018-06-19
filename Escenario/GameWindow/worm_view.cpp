@@ -50,7 +50,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     setFlag(QGraphicsItem::ItemIsSelectable);
     currentFrame = 0;
     //this->timer=nullptr;
-    spriteImage = new QPixmap("../../images/wormwait.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png"); // Load the sprite image QPixmap
     this->timer = new QTimer();   // Create a timer for sprite animation
     this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
     currentDir.first = 0;
@@ -60,6 +60,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     count=0;
     alive=true; // check this after recvDamage()
 
+    this->labelVida=nullptr;
     this->labelset=false;
     this->targetVis=false;
     this->target=nullptr;
@@ -137,26 +138,46 @@ void Worm_View::setStatus(int on_ground, int dir)
     QPixmap *aux;
     if(this->last_on_ground==1 && on_ground==1){
         if(dir==static_cast<int>(MoveDirection::LEFT)){
+            this->targetVis=false;
+            this->targetClick=false;
+            this->weaponCountDwn=false;
+            this->weapon=-1;
+            this->loadSpriteWeapon(this->weapon);
             //mover izq
             qDebug()<<"set izq";
             if(this->jumping){
                 qDebug()<<"rotar a izquierda";
+                this->angle=-180;
+                this->targetAngle=this->angle;
             }else if(this->last_dir!=static_cast<int>(MoveDirection::LEFT) && this->angle!=-180){
                 qDebug()<<"set izq2";
                 setAngle(-180);
                 this->last_dir=dir;
+            }else if(this->weapon!=-1){
+                qDebug()<<"Dejo de Cargar el arma...";
+                setAngle(-180);
             }
             this->last_on_ground=on_ground;
             this->moving=true;
         }else if(dir==static_cast<int>(MoveDirection::RIGHT)){
+            this->targetVis=false;
+            this->targetClick=false;
+            this->weaponCountDwn=false;
+            this->weapon=-1;
+            this->loadSpriteWeapon(this->weapon);
             //mover der
             qDebug()<<"set der";
             if(this->jumping){
                 qDebug()<<"rotar a derecha";
+                this->angle=0;
+                this->targetAngle=this->angle;
             }else if(this->last_dir!=static_cast<int>(MoveDirection::RIGHT) && this->angle!=0){
                 qDebug()<<"set der2";
                 setAngle(0);
                 this->last_dir=dir;
+            }else if(this->weapon!=-1){
+                qDebug()<<"Dejo de Cargar el arma...";
+                setAngle(0);
             }
             this->last_on_ground=on_ground;
             this->moving=true;
@@ -170,7 +191,8 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->jumping=true;
             qDebug()<<"salte hacia atras";
             delete(this->spriteImage);
-            aux = new QPixmap("../../images/wbackflp.png");
+            this->currentFrame=0;
+            aux = new QPixmap(ROOT_PATH"/resources/images/wbackflp.png");
             if(this->angle==0){
                 rm.scale(-1,1);
             }else{
@@ -184,15 +206,16 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->moving=true;
         }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
             //saltar
-            this->jumping=true;
             this->targetVis=false;
             this->targetClick=false;
             this->weaponCountDwn=false;
             this->weapon=-1;
             this->loadSpriteWeapon(this->weapon);
+            this->jumping=true;
             qDebug()<<"salte hacia adelante";
             delete(this->spriteImage);
-            aux = new QPixmap("../../images/wfly.png");
+            this->currentFrame=0;
+            aux = new QPixmap(ROOT_PATH"/resources/images/wfly.png");
             if(this->angle==0){
                 rm.scale(-1,1);
             }else{
@@ -219,13 +242,21 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_dir=dir;
             this->last_on_ground=on_ground;
         }
-    }else if(this->last_on_ground==1 && on_ground==0){
+    }else if(this->last_on_ground==1 && on_ground==0){ // SEGUNDA CONDICION ONGROUND
         //comence a volar o caer
         //this->jumping=false;
         qDebug()<<"volar o caer";
-        this->moving=true;
         this->last_on_ground=on_ground;
-    }else if(this->last_on_ground==0 && on_ground==0){
+        if(dir==static_cast<int>(MoveDirection::LEFT)){
+            //rotar a izq
+            this->angle=-180;
+            this->targetAngle=this->angle;
+        }else if(dir==static_cast<int>(MoveDirection::RIGHT)){
+            //rotar a der
+            this->angle=0;
+            this->targetAngle=this->angle;
+        }
+    }else if(this->last_on_ground==0 && on_ground==0){ // TERCER CONDICION ONGROUND
         //rotar imagen
         qDebug()<<"rotar imagen";
         if(dir==static_cast<int>(MoveDirection::LEFT)){
@@ -235,8 +266,7 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->angle=0;
             this->targetAngle=this->angle;
         }
-        this->moving=true;
-    }else if(this->last_on_ground==0 && on_ground==1){
+    }else if(this->last_on_ground==0 && on_ground==1){ // CUARTA CONDICION ONGROUND
         //llegue a piso
         qDebug()<<"llegue a piso con none";
         this->jumping=false;
@@ -305,10 +335,6 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         labelVida->setVisible(false);
     }
 
-
-    if(this->targetVis){
-
-    }
     if(!this->target){
         this->target = new Target();
         this->scene()->addItem(this->target);
@@ -437,16 +463,16 @@ void Worm_View::setDestDir(int x, int y)
 
 void Worm_View::nextFrame(){
     currentFrame += 60;
+    if(currentFrame >= spriteImage->height())
+    {
+        currentFrame=0;
+    }
     this->update(0,0,60,60);
 }
 
 void Worm_View::moveTo(int angle, int posx,int posy)
 {
     //qDebug()<<"muevo worm...";
-    //this->targetVis=false;
-    //this->targetClick=false;
-    //this->weaponCountDwn=false;
-    //this->weapon=-1;
     setDestDir(posx,posy);
     //qDebug()<<"idworm:"<<this->id<<"currentDir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
     //qDebug()<<"idworm:"<<this->id<<"destDir x:"<<this->destDir.first<<"y:"<<this->destDir.second;
@@ -462,22 +488,23 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     this->lastDir.second=this->currentDir.second;
     //qDebug()<<"SETEE LASTDIR";
     this->setPosition(posx,sc->height()-posy);
-    this->countFrame +=60;
-    if((this->spriteImage->height())<=this->countFrame){
-        this->countFrame=0;
-        this->currentFrame=0;
-    }else if((this->countFrame%60)==0){
-        this->nextFrame();
-    }
+    nextFrame();
     //qDebug()<<"momving dir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
 	return;
 }
 
-void Worm_View::setVisibility(bool vis)
+void Worm_View::removeMovable()
 {
-    this->setVisible(vis);
+    delete(this->spriteImage);
+    this->currentFrame=0;
+    this->spriteImage = new QPixmap(ROOT_PATH"/resources/images/grave.png");
+    this->alive=false;
+    this->moving=false;
+    this->selected=false;
     this->targetVis=false;
-    this->labelVida->setVisible(vis);
+    if(this->labelVida!=nullptr){
+        this->labelVida->setVisible(false);
+    }
 }
 
 int Worm_View::getHealth()
@@ -512,14 +539,8 @@ void Worm_View::setSprite()
     {
         delete(spriteImage);
     }
-
-    QString path_L="../../images/wwalk.png";
-    QString path_U="../../images/wwalku.png";
-    QString path_D="../../images/wwalkd.png";
-    QString path_Fly="../../images/wfly.png";
-    QString path_Fall="../../images/wfall.png";
-
-    loadSprite(path_L,path_U,path_D,path_Fly,path_Fall);
+    QString path_L=ROOT_PATH"/resources/images/wwalk.png";
+    loadSprite(path_L);
 }
 
 
@@ -580,35 +601,27 @@ void Worm_View::loadSpriteWeapon(int val)
     this->countDown=0;
 
     QString path1;
-    QString path2;
-    QString path3;
 
     switch (val) {
     case static_cast<int>(WeaponsIds::AERIAL_ATTACK):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wairlnk.png";
-        path2 ="../../images/wairlnku.png";
-        path3 ="../../images/wairlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wairlnk.png";
+        loadSprite(path1);
         this->targetClick=true;
         break;
     case static_cast<int>(WeaponsIds::BASEBALL_BAT):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wbsblnk.png";
-        path2 ="../../images/wbsblnku.png";
-        path3 ="../../images/wbsblnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wbsblnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         break;
     case static_cast<int>(WeaponsIds::BANANA):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wbanlnk.png";
-        path2 ="../../images/wbanlnku.png";
-        path3 ="../../images/wbanlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wbanlnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         this->weaponCountDwn=true;
         this->countDown=5;
@@ -616,20 +629,16 @@ void Worm_View::loadSpriteWeapon(int val)
     case static_cast<int>(WeaponsIds::DYNAMITE):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wdynlnk.png";
-        path2 ="../../images/wdynlnku.png";
-        path3 ="../../images/wdynlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wdynlnk.png";
+        loadSprite(path1);
         this->weaponCountDwn=true;
         this->countDown=5;
         break;
     case static_cast<int>(WeaponsIds::RED_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wclslnk.png";
-        path2 ="../../images/wclslnku.png";
-        path3 ="../../images/wclslnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wclslnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         this->weaponCountDwn=true;
         this->countDown=5;
@@ -637,10 +646,8 @@ void Worm_View::loadSpriteWeapon(int val)
     case static_cast<int>(WeaponsIds::GREEN_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wgrnlnk.png";
-        path2 ="../../images/wgrnlnku.png";
-        path3 ="../../images/wgrnlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wgrnlnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         this->weaponCountDwn=true;
         this->countDown=5;
@@ -648,10 +655,8 @@ void Worm_View::loadSpriteWeapon(int val)
     case static_cast<int>(WeaponsIds::HOLY_GRENADE):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/whgrlnk.png";
-        path2 ="../../images/whgrlnku.png";
-        path3 ="../../images/whgrlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/whgrlnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         this->weaponCountDwn=true;
         this->countDown=5;
@@ -659,36 +664,28 @@ void Worm_View::loadSpriteWeapon(int val)
     case static_cast<int>(WeaponsIds::MORTAR):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wbazlnk.png";
-        path2 ="../../images/wbazlnku.png";
-        path3 ="../../images/wbazlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wbazlnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         break;
     case static_cast<int>(WeaponsIds::TELEPORTATION):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wtellnk.png";
-        path2 ="../../images/wtellnku.png";
-        path3 ="../../images/wtellnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wtellnk.png";
+        loadSprite(path1);
         this->targetClick=true;
         break;
     case static_cast<int>(WeaponsIds::BAZOOKA):
     	currentFrame=0;
         timer->setInterval(35);
-        path1 ="../../images/wbazlnk.png";
-        path2 ="../../images/wbazlnku.png";
-        path3 ="../../images/wbazlnkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wbz2lnk.png";
+        loadSprite(path1);
         this->targetVis=true;
         break;
 
     default:
-        path1 ="../../images/wwalk.png";
-        path2 ="../../images/wwalku.png";
-        path3 ="../../images/wwalkd.png";
-        loadSprite(path1,path2,path3);
+        path1 =ROOT_PATH"/resources/images/wwalk.png";
+        loadSprite(path1);
     	return;
         //break;
     }
@@ -700,45 +697,17 @@ void Worm_View::loadSpriteWeapon(int val)
 
 
 
-void Worm_View::loadSprite(QString& path_L,QString& path_U,QString path_D,QString path_Fly,QString path_Fall)
+void Worm_View::loadSprite(QString& path_L)
 {
     QMatrix rm;
     QPixmap* pix;
     QString path;
     path = path_L;
-    if((this->angle==0) || (this->angle==-360))
+    if((this->angle==0))
     {
         rm.scale(-1,1);
     }else if(this->angle==-180){
         rm.scale(1,1);
-    }else if((this->angle<0 && this->angle>=-45) || (this->angle>-180 && this->angle<=-135)){
-        path = path_U;
-        if(this->angle>=-135){
-            rm.scale(-1,1);
-        }else{
-            rm.scale(1,1);
-        }
-    }else if((this->angle<-360 && this->angle>=-315) || (this->angle<-180 && this->angle>=-225)){
-        path = path_D;
-        if(this->angle>=-315){
-            rm.scale(-1,1);
-        }else{
-            rm.scale(1,1);
-        }
-    }else if(this->angle<-45 && this->angle>-135){
-        path = path_Fly;
-        if(this->angle>=-90){
-            rm.scale(1,1);
-        }else{
-            rm.scale(-1,1);
-        }
-    }else{
-        path = path_Fall;
-        if(this->angle>=-270){
-            rm.scale(1,1);
-        }else{
-            rm.scale(-1,1);
-        }
     }
     pix = new QPixmap(path);
     this->spriteImage = new QPixmap(pix->transformed(rm));

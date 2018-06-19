@@ -5,7 +5,7 @@
 
 Target::Target():QGraphicsItem()
 {
-    this->spriteImage = new QPixmap("../../images/target.png");
+    this->spriteImage = new QPixmap(ROOT_PATH"/resources/images/target.png");
     this->currentFrame=0;
 }
 

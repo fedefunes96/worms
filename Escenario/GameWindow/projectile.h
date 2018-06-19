@@ -17,7 +17,7 @@ public:
     bool isAlive();
     void setPosition(int x, int y);
     void fire();
-    void setVisibility(bool vis);
+    void removeMovable();
     bool isSelect();
     void setSelect(bool cond);
     void setAlive(bool alive);

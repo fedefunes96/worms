@@ -17,7 +17,6 @@
 #include "protocol.h"
 #include "player.h"
 
-#include "socket.h"
 
 #include "gameclass.h"
 #include "controler.h"
@@ -26,6 +25,8 @@
 #include "roomcreator.h"
 #include "waitRoom.h"
 #include "window.h"
+#include "finalscreen.h"
+#include "conectionwindow.h"
 
 
 int main(int argc, char *argv[])
@@ -35,37 +36,57 @@ int main(int argc, char *argv[])
 
     QRect rect = a.desktop()->screenGeometry();
 
-    std::string ip("127.0.0.1");
-    std::string puerto("7777");
-    Socket client(ip,puerto);
+    ConectionWindow mainWindow;
+    mainWindow.exec();
+
+    if(mainWindow.closeWithX()){
+        return 0;
+    }
+
+    Socket client = mainWindow.getSocket();
 
     Protocol protocol(client);
-
-    //GameClass game(rect,10000,10000);
 
     Controler controler(&protocol);
 
     WaitRoom wait(&protocol);
     MapSelection map(&wait,&protocol);
     RoomCreator room(&wait,&protocol);
+    FinalScreen finalScreen(&a);
     map.connectControler(&controler);
     room.connectControler(&controler);
     wait.connectControler(&controler);
-
-    //game.connectController(&controler);
     controler.start();
-    Window c(&map,&room,&protocol);
+
+    Window c(&map,&room,&protocol,&wait);
+
     c.connectControler(&controler);
     c.exec();
-    qDebug()<<" PASEEEEEEEEEEEEEEEEEEEEEEEEEEE EJECUCION";
+
     GameClass game(rect,10000,10000,c.getId());
+    game.connectWaitRoom(&wait);
     game.connectController(&controler);
+
+    finalScreen.connectGame(&game);
+
+    if(c.closeWithX()){
+        controler.terminate();
+        return 0;
+    }
+
+    if(!wait.getShowWindow()){
+        return 0;
+    }
+    wait.exec();
+
     EventHandler *filter = new EventHandler(&a,&game,&protocol);
     a.installEventFilter(filter);
 
 
-    //return 0;
-    return a.exec();
+    if(wait.closeWithX()){
+        return 0;
+    }
+    return a.exec();//solucionar esto para cerrar el juego
 }
 
 

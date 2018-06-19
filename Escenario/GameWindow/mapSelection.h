@@ -23,9 +23,14 @@ public:
     ~MapSelection();
 
     void connectControler(Controler *controler);
+    void closeEvent(QCloseEvent *event);
 private slots:
     void recvRooms(QList<std::string> list);
     void goWaitRoom(int cant);
+    void on_pushButton_clicked();
+
+signals:
+    void closeGame();
 
 private:
     Ui::MapSelection *ui;
@@ -33,6 +38,7 @@ private:
     std::vector<button*> buttons;
     WaitRoom* wait;
     void adjustView();
+    bool closeX;
 };
 
 #endif // MAPSELECTION_H

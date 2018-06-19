@@ -16,10 +16,10 @@ Girder_View::Girder_View(int angle,int large)
 
     if(large==140)
     {
-        pixmap = new QPixmap("../../images/grdl4.png");
+        pixmap = new QPixmap(ROOT_PATH"/resources/images/grdl4.png");
     }else if(large==70)
     {
-        pixmap = new QPixmap("../../images/grds4.png");
+        pixmap = new QPixmap(ROOT_PATH"/resources/images/grds4.png");
     }else{
         //lanzar error de que se creo con un parametro invalido...
     }

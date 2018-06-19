@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>289</width>
-    <height>113</height>
+    <width>383</width>
+    <height>183</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,18 +135,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>jugadores</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>jugadores</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>jugadores</zorder>
-  <zorder>label</zorder>
-  <zorder>horizontalSpacer</zorder>
-  <zorder>verticalSpacer</zorder>
-  <zorder>verticalSpacer_2</zorder>
-  <zorder>horizontalSpacer_2</zorder>
-  <zorder>horizontalSpacer_3</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -15,6 +15,7 @@ MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle("Worms Armageddon - Seleccion de sala");
     this->wait = wait;
+    this->closeX=true;
 }
 
 MapSelection::~MapSelection()
@@ -25,12 +26,12 @@ MapSelection::~MapSelection()
 void MapSelection::recvRooms(QList<std::string> list)
 {
     qDebug()<<"recibi salas existentes";
+
     int cant = list.size();
-    for (int i = 0; i< cant; ++i){
-        std::string name = list[i];
-        std::cout << name << std::endl;
-        button *b = new button(protocol,this,name,i*100,0);
-        buttons.push_back(b);
+    for (int i = 0; i < cant; ++i){
+        std::cout<<"nombre:"<<list[i]<<std::endl;
+        QString name = QString::fromStdString(list[i]);
+        ui->listWidget->addItem(name);
     }
 }
 
@@ -38,16 +39,32 @@ void MapSelection::goWaitRoom(int cant)
 {
     if (cant>0){
         this->close();
-        this->wait->exec();
     } else {
         qDebug()<<"no se conecto";
     }
 }
 
+void MapSelection::closeEvent(QCloseEvent *event)
+{
+    if(this->closeX){
+        this->wait->setShowWindow(false);
+        emit closeGame();
+    }
+}
 
 
 void MapSelection::connectControler(Controler *controler)
 {
     connect(controler,SIGNAL(joinR(int)),this,SLOT(goWaitRoom(int)));
     connect(controler,SIGNAL(recvMap(QList<std::string>)),this,SLOT(recvRooms(QList<std::string>)));
+    connect(this,SIGNAL(closeGame()),controler,SLOT(stopController()));
+}
+
+void MapSelection::on_pushButton_clicked()
+{
+    std::string name = ui->listWidget->currentItem()->text().toUtf8().constData();
+    protocol->sendSelectRoom(name);
+    this->wait->setShowWindow(true);
+    this->closeX=false;
+    this->close();
 }

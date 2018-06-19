@@ -2,8 +2,7 @@
 #include "girder_view.h"
 #include <QDebug>
 #include "projectile.h"
-#include "commonWin.h"
-#include "commonLose.h"
+
 #include <QColor>
 #include <QCoreApplication>
 
@@ -13,9 +12,7 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->game = new Game_View(screen,w,h);
     this->window->addGameScene(this->game);
     this->game->addCamera(this->window->getCamera());
-    std::string path("../../images/intro2.jpg");
-    this->window->showMaximized();
-    this->game->setBackground(path);
+
     this->myTurn=false;
     this->myPlayer = new Player();
     this->myPlayer->setId(idply);
@@ -23,7 +20,7 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->window->addPlayer(this->myPlayer);
 
     this->deadItemCollector = new QTimer();
-    this->deadItemCollector->start(1);
+    this->deadItemCollector->start(10);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
     this->color_list.append("red");
     this->color_list.append("yellow");
@@ -37,12 +34,7 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
 
     this->refreshScreen = new QTimer();
     connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
-    this->refreshScreen->start(10);
-}
-
-GameClass::~GameClass()
-{
-
+    this->refreshScreen->start(50);
 }
 
 Camera* GameClass::getCamera()
@@ -50,9 +42,22 @@ Camera* GameClass::getCamera()
     return this->game->getCamera();
 }
 
+void GameClass::connectWaitRoom(WaitRoom *wait){
+    connect(wait,SIGNAL(startView()),this,SLOT(showWindow()));
+}
+
+void GameClass::showWindow()
+{
+    qDebug()<<"SHOOOOOOOOOOOOOWWWWWWWWWWW";
+    std::string path(ROOT_PATH"/resources/images/intro2.jpg");
+    this->window->showMaximized();
+    this->game->setBackground(path);
+}
+
 void GameClass::connectController(Controler *controler)
 {
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
+    //connect(controler,SIGNAL(startGame()),this,SLOT(showWindow()));
 }
 
 
@@ -122,31 +127,31 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
             this->game->add_Item(girder,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::BAZOOKA_M)){
-        std::string path("../../images/misil.png");
+        std::string path(ROOT_PATH"/resources/images/misil.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::GREEN_GRENADE_M)){
-        std::string path("../../images/granade.png");
+        std::string path(ROOT_PATH"/resources/granade.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
-        std::string path("../../images/mortar.png");
+        std::string path(ROOT_PATH"/resources/images/mortar.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::AERIAL_ATTACK_M)){
-        std::string path("../../images/airmisil.png");
+        std::string path(ROOT_PATH"/resources/images/airmisil.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::HOLY_GRENADE_M)){
-        std::string path("../../images/hgranade.png");
+        std::string path(ROOT_PATH"/resources/images/hgranade.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::FRAGMENT_M)){
-        std::string path("../../images/hgranade.png");
+        std::string path(ROOT_PATH"/resources/images/fragm.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::RED_GRENADE_M)){
-        std::string path("../../images/cluster.png");
+        std::string path(ROOT_PATH"/resources/images/cluster.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::BANANA_M)){
-        std::string path("../../images/banana.png");
+        std::string path(ROOT_PATH"/resources/images/banana.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::DYNAMITE_M)){
-        std::string path("../../images/dynamite.png");
+        std::string path(ROOT_PATH"/resources/images/dynamite.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }
 }
@@ -235,6 +240,7 @@ std::vector<int> GameClass::fireWeapon()
         }
         this->window->setButtonEnable(false);
         this->myPlayer->getWormActive()->loadSpriteWeapon(-1);
+        this->window->startTimerRound(3);
 
     }
     return vect;
@@ -249,14 +255,13 @@ bool GameClass::isMyTurn(){
 void GameClass::removeItem(int type,int id)
 {
     MovableItem* item = static_cast<MovableItem*>(this->game->getItem(type,id));
+    item->removeMovable();
+    qDebug()<<"removi item id:"<<item->getId();
     Projectile *p = dynamic_cast<Projectile*>(item);
     if(p){
-        p->explote();
+        qDebug()<<"es proyectil";
         return;
     }
-    item->setAlive(false);
-    item->setVisibility(false);
-    item->setSelect(false);
 }
 
 
@@ -289,7 +294,6 @@ void GameClass::checkDeadItem()
             }
 
         }
-
         Projectile* item =dynamic_cast<Projectile*>(*it);
         if(!item){// no es movible
             continue;
@@ -334,11 +338,14 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";
-        this->window->close();
-        commonWIn win;
-        win.exec();
         this->myPlayer->setActive(false);
         this->myTurn=false;
+        this->window->close();
+        if(list[1]==this->myPlayer->getId()){
+            emit isWinner(true);
+        }else{
+            emit isWinner(false);
+        }
     }else if(cmd==static_cast<int>(Commands::WORM_HEALTH)){
         this->recvWormHealth(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::WORM_STATUS)){
