@@ -38,7 +38,8 @@ SOURCES += \
     commonarchivo.cpp \
     commonparser.cpp \
     editorBacgroun.cpp \
-    editor_viga_grande_view.cpp
+    editor_viga_grande_view.cpp \
+    scene.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -53,7 +54,8 @@ HEADERS += \
     commonarchivo.h \
     commonparser.h \
     editorBacgroun.h \
-    editor_viga_grande_view.h
+    editor_viga_grande_view.h \
+    scene.h
 
 FORMS += \
         mainwindow.ui \

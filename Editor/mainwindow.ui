@@ -33,7 +33,7 @@
       <item>
        <widget class="QPushButton" name="pushButton">
         <property name="text">
-         <string>Crear nuevo mapa</string>
+         <string>New Map</string>
         </property>
        </widget>
       </item>

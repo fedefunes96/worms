@@ -9,11 +9,13 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
 #include <QString>
 #include "editorworm.h"
 #include "editorviga.h"
 #include <QDropEvent>
 #include <vector>
+#include "scene.h"
 
 namespace Ui {
 class EditorPantalla;
@@ -30,13 +32,13 @@ public:
 
     void fileName(QString name);
 
-    int agregar_gusano(int x, int y);
-
     void setVIdaWorm(int id, int vida);
 
-    int agregar_viga_grande(int x, int y);
+    int add_worm(int x, int y);
 
-    int agregar_viga_chica(int x, int y);
+    int add_small_girder(int x, int y);
+
+    int add_big_girder(int x, int y);
 
     void agregar_arma(int id, int municion);
 
@@ -47,6 +49,15 @@ public:
     void loadWeapons();
 
     void setBacGround(std::string &name);
+
+public slots:
+    void wormSelect(int id);
+
+    void wormSetPos();
+
+    void girderSelect(int id);
+
+    void girderSetPos();
 
 private slots:
 
@@ -76,6 +87,14 @@ private slots:
 
     void on_remove_clicked();
 
+    void on_up_clicked();
+
+    void on_left_clicked();
+
+    void on_right_clicked();
+
+    void on_down_clicked();
+
 private:
     std::map<int, QGraphicsItem*> items;
     unsigned int cantidad = 2;
@@ -98,11 +117,13 @@ private:
 
     bool checkWorms();
 
-    void llenarCeldas(int x, int y, int cant);
-
-    void vaciarCeldas(int x, int y, int cant);
-
     void removeItem();
+
+    int agregar_gusano(int x, int y);
+
+    int agregar_viga_grande(int x, int y);
+
+    int agregar_viga_chica(int x, int y);
 };
 
 

@@ -7,6 +7,7 @@
 #include <editorusables.h>
 #include <iostream>
 #include <yaml-cpp/yaml.h>
+#include <math.h>
 
 #define angle_rad 0
 #define longitudW 1
@@ -187,8 +188,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &worm : worms){
         out <<YAML::Flow;
         out << YAML::BeginSeq;
-        out << worm.second.getX()*6/144;
-        out << worm.second.getY()*6/144;
+        int x = worm.second.getX()*6/140;
+        int y = ceil(worm.second.getY()*6/140);
+        out << x;
+        out << y;
         out << worm.second.getVida();
         out <<YAML::EndSeq;
     }
@@ -197,9 +200,9 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     out <<YAML::Key<<"Small Girder";
     out <<YAML::BeginSeq;
     for (auto &viga : vigas){
-                int tam = viga.second.get_tam();
-        float x = viga.second.getX()*6/144 + tam/2;
-        float y = viga.second.getY()*6/144;
+        int tam = viga.second.get_tam();
+        float x = viga.second.getX()*6/140;
+        float y = floor(viga.second.getY()*6/140);
         if (tam == 3){
             out<<YAML::Flow;
             out<<YAML::BeginSeq;
@@ -216,8 +219,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     out <<YAML::BeginSeq;
     for (auto &viga : vigas){
         int tam = viga.second.get_tam();
-        float x = viga.second.getX()*6/144 + tam/2;
-        float y = viga.second.getY()*6/144;
+        float x = viga.second.getX()*6/140;
+        float y = floor(viga.second.getY()*6/140);
         if (tam == 6){
             out<<YAML::Flow;
             out<<YAML::BeginSeq;
@@ -256,15 +259,12 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Small Girder"]){
             for (YAML::iterator it = config["Small Girder"].begin(); it != config["Small Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = girder[0].as<int>();
-                int y = girder[1].as<int>()*144/6;
+                int x = girder[0].as<int>()*140/6;
+                int y = girder[1].as<int>()*140/6;
                 y = -y;
                 float angulo = girder[2].as<float>();
-                int longitud = girder[3].as<int>();
-                x -= longitud/2 +0.5;
-                x = x *144/6;
                 int id;
-                id = editor->agregar_viga_chica(x,y);
+                id = editor->add_small_girder(x,y);
                 float anguloActual = 0;
                 while (anguloActual < angulo) {
                     editor->aumetar_angulo(id);
@@ -275,15 +275,12 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Big Girder"]){
             for (YAML::iterator it = config["Big Girder"].begin(); it != config["Big Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = girder[0].as<int>();
-                int y = girder[1].as<int>()*144/6;
+                int x = (girder[0].as<int>()+1)*140/6;
+                int y = girder[1].as<int>()*140/6;
                 y = -y;
                 float angulo = girder[2].as<float>();
-                int longitud = girder[3].as<int>();
-                x -= longitud/2 +0.5;
-                x = x *144/6;
                 int id;
-                id = editor->agregar_viga_grande(x,y);
+                id = editor->add_big_girder(x,y);
                 float anguloActual = 0;
                 while (anguloActual < angulo) {
                     editor->aumetar_angulo(id);
@@ -294,10 +291,10 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Worm"]){
             for (YAML::iterator it = config["Worm"].begin(); it != config["Worm"].end(); ++it){
                 const YAML::Node& worm = *it;
-                int x = worm[0].as<int>()*144/6;
-                int y = worm[1].as<int>()*144/6;
+                int x = worm[0].as<int>()*140/6;
+                int y = worm[1].as<int>()*140/6;
                 y = -y;
-                int id = editor->agregar_gusano(x,y);
+                int id = editor->add_worm(x,y);
                 int vida = worm[2].as<int>();
                 editor->setVIdaWorm(id,vida);
             }

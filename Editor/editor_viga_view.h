@@ -11,14 +11,26 @@ class editor_viga_view: public QObject, public QGraphicsItem
         {
             Q_OBJECT
 public:
-    editor_viga_view(QObject* parent = 0);
+    editor_viga_view(int id,QObject* parent = 0);
+
     ~editor_viga_view();
+
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
+
+    QRectF boundingRect() const;
+
+signals:
+    void girderSelect(int id);
+
+    void girderSetPos();
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    QRectF boundingRect() const;
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
     int currentFrame;   // Coordinates X, which starts the next frame of the sprite
+    int id;
 
 };
 

@@ -26,46 +26,48 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     this->scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
-    std::string name = ROOT_PATH"/images/fondo.png";
+    std::string name = ROOT_PATH"/resources/images/fondo.png";
     this->setBacGround(name);
     this->id = 0;
     ui->wormOpt->hide();
     ui->girderOpt->hide();
     this->current_id = -1;
-    QPixmap bazooka = QPixmap(ROOT_PATH"/images/Bazooka.png");
+    QPixmap bazooka = QPixmap(ROOT_PATH"/resources/images/Bazooka.png");
     bazooka = bazooka.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bazooka->setPixmap(bazooka);
-    QPixmap mortero = QPixmap(ROOT_PATH"/images/Mortar.png");
+    QPixmap mortero = QPixmap(ROOT_PATH"/resources/images/Mortar.png");
     mortero = mortero.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->mortero->setPixmap(mortero);
-    QPixmap granadaV = QPixmap(ROOT_PATH"/images/W4_Grenade.png");
+    QPixmap granadaV = QPixmap(ROOT_PATH"/resources/images/W4_Grenade.png");
     granadaV = granadaV.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaV->setPixmap(granadaV);
-    QPixmap granadaR = QPixmap(ROOT_PATH"/images/Redgrenade.png");
+    QPixmap granadaR = QPixmap(ROOT_PATH"/resources/images/Redgrenade.png");
     granadaR = granadaR.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaR->setPixmap(granadaR);
-    QPixmap banana = QPixmap(ROOT_PATH"/images/Bananabomb.png");
+    QPixmap banana = QPixmap(ROOT_PATH"/resources/images/Bananabomb.png");
     banana = banana.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->banana->setPixmap(banana);
-    QPixmap granadaS = QPixmap(ROOT_PATH"/images/Holy_Grenade.png");
+    QPixmap granadaS = QPixmap(ROOT_PATH"/resources/images/Holy_Grenade.png");
     granadaS = granadaS.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->granadaS->setPixmap(granadaS);
-    QPixmap dinamita = QPixmap(ROOT_PATH"/images/W4_Dynamite.png");
+    QPixmap dinamita = QPixmap(ROOT_PATH"/resources/images/W4_Dynamite.png");
     dinamita = dinamita.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->dinamita->setPixmap(dinamita);
-    QPixmap bate = QPixmap(ROOT_PATH"/images/Baseballbat.png");
+    QPixmap bate = QPixmap(ROOT_PATH"/resources/images/Baseballbat.png");
     bate = bate.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->bate->setPixmap(bate);
-    QPixmap aereo = QPixmap(ROOT_PATH"/images/W4_Airstrike.png");
+    QPixmap aereo = QPixmap(ROOT_PATH"/resources/images/W4_Airstrike.png");
     aereo = aereo.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->aereo->setPixmap(aereo);
-    QPixmap tele = QPixmap(ROOT_PATH"/images/IconTeleport.png");
+    QPixmap tele = QPixmap(ROOT_PATH"/resources/images/IconTeleport.png");
     tele = tele.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     ui->teletransportador->setPixmap(tele);
     loadWeapons();
-    ui->agregarGusano->setIcon(QIcon(ROOT_PATH"/images/wormwait.png"));
-    ui->agregarVigaChica->setIcon(QIcon(ROOT_PATH"/images/grds4.png"));
-    ui->AgregarViga->setIcon(QIcon(ROOT_PATH"/images/grdl4.png"));
+    ui->agregarGusano->setIcon(QIcon(ROOT_PATH"/resources/images/wormwait.png"));
+    ui->agregarVigaChica->setIcon(QIcon(ROOT_PATH"/resources/images/grds4.png"));
+    ui->AgregarViga->setIcon(QIcon(ROOT_PATH"/resources/images/grdl4.png"));
+    ui->moveOpt->hide();
+    ui->cant->setValue(2);
 }
 
 EditorPantalla::~EditorPantalla()
@@ -103,20 +105,6 @@ bool EditorPantalla::checkWorms()
     return true;
 }
 
-void EditorPantalla::llenarCeldas(int x, int y, int cant)
-{
-    for (int i = 0; i < cant; ++i){
-        celdas[std::make_pair((x+i),y)] = id;
-    }
-}
-
-void EditorPantalla::vaciarCeldas(int x, int y, int cant)
-{
-    for (int i = 0; i < cant; ++i){
-        celdas.erase(std::make_pair((x+i),y));
-    }
-}
-
 void EditorPantalla::removeItem()
 {
     std::map<int, QGraphicsItem*>::iterator iter;
@@ -130,18 +118,12 @@ void EditorPantalla::removeItem()
         it = this->worms.find(current_id);
         if (it != worms.end()){
             x1++;
-            vaciarCeldas(x1,y1,1);
             worms.erase(it);
         }
 
         std::map<int, editorViga>::iterator it2;
         it2 = this->vigas.find(current_id);
         if (it2 != vigas.end()){
-            if (vigas[current_id].get_tam() == 6){
-                vaciarCeldas(x1,y1,6);
-            } else {
-                vaciarCeldas(x1,y1,3);
-            }
             vigas.erase(it2);
         }
         delete items[current_id];
@@ -150,6 +132,7 @@ void EditorPantalla::removeItem()
         estado = 0;
         ui->girderOpt->hide();
         ui->wormOpt->hide();
+        ui->moveOpt->hide();
     }
 }
 
@@ -207,6 +190,39 @@ void EditorPantalla::setBacGround(std::string &name)
     scene->setBackgroundBrush(QBrush(QImage(bakcground)));
 }
 
+void EditorPantalla::wormSelect(int id)
+{
+    this->current_id = id;
+    items[id]->setOpacity(0.5);
+    ui->wormOpt->show();
+    ui->girderOpt->hide();
+    ui->moveOpt->show();
+    ui->vidaGusano->setValue(worms[id].getVida());
+}
+
+void EditorPantalla::wormSetPos()
+{
+    int x = items[current_id]->scenePos().toPoint().x();
+    int y = items[current_id]->scenePos().toPoint().y();
+    this->worms[current_id].setPos(x,-y);
+}
+
+void EditorPantalla::girderSelect(int id)
+{
+    this->current_id = id;
+    items[id]->setOpacity(0.5);
+    ui->wormOpt->hide();
+    ui->moveOpt->show();
+    ui->girderOpt->show();
+}
+
+void EditorPantalla::girderSetPos()
+{
+    int x = items[current_id]->scenePos().toPoint().x();
+    int y = items[current_id]->scenePos().toPoint().y();
+    this->vigas[current_id].setPos(x,-y);
+}
+
 void EditorPantalla::fileName(QString name)
 {
     this->nombre = name;
@@ -232,15 +248,15 @@ int EditorPantalla::agregar_gusano(int x, int y)
 {
     int celdaX = x/24;
     int celdaY = -y/24+1;
-    std::map<std::pair<int,int>,int>::iterator it;
-    it = celdas.find(std::make_pair(celdaX,celdaY));
-    if (it == celdas.end()){
-        int xn = celdaX*24 -20;
-        int yn = -celdaY*24 -20;
-        QGraphicsItem *worm = new Worm_View();
+    if (true){
+        Worm_View *worm = new Worm_View(id);
+        int xn = celdaX*24 - worm->boundingRect().center().toPoint().x();
+        int yn = -celdaY*24 - worm->boundingRect().center().toPoint().y();
+        connect(worm,SIGNAL(wormSelect(int)),this,SLOT(wormSelect(int)));
+        connect(worm,SIGNAL(wormSetPos()),this,SLOT(wormSetPos()));
         scene->addItem(worm);
         worm->setPos(xn,yn);
-        llenarCeldas(celdaX,celdaY,1);
+        worm->setFlag(QGraphicsItem::ItemIsSelectable,true);
         this->items[id] = worm;
         this->worms.emplace(std::piecewise_construct,
                                     std::forward_as_tuple(id++),
@@ -259,24 +275,67 @@ void EditorPantalla::setVIdaWorm(int id, int vida)
     worms[id].setVida(vida);
 }
 
+int EditorPantalla::add_worm(int x, int y)
+{
+    Worm_View *worm = new Worm_View(id);
+    int xn = x - worm->boundingRect().center().toPoint().x();
+    int yn = y - worm->boundingRect().center().toPoint().y();
+    connect(worm,SIGNAL(wormSelect(int)),this,SLOT(wormSelect(int)));
+    connect(worm,SIGNAL(wormSetPos()),this,SLOT(wormSetPos()));
+    scene->addItem(worm);
+    worm->setPos(xn,yn);
+    worm->setFlag(QGraphicsItem::ItemIsSelectable,true);
+    this->items[id] = worm;
+    this->worms.emplace(std::piecewise_construct,
+                                std::forward_as_tuple(id++),
+                                std::forward_as_tuple(x,-y));
+    return (id-1);
+}
+
+int EditorPantalla::add_small_girder(int x, int y)
+{
+    editor_viga_view *viga = new editor_viga_view(id);
+    int xn = x - viga->boundingRect().center().toPoint().x();
+    scene->addItem(viga);
+    viga->setPos(xn,y);
+    this->items[id] = viga;
+    connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
+    connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
+    viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
+    this->vigas.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(id++),
+                    std::forward_as_tuple(xn,-y,6));
+    return (id-1);
+}
+
+int EditorPantalla::add_big_girder(int x, int y)
+{
+    editor_viga_grande_view *viga = new editor_viga_grande_view (id);
+    int xn = x - viga->boundingRect().center().toPoint().x();
+    scene->addItem(viga);
+    viga->setPos(xn,y);
+    this->items[id] = viga;
+    connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
+    connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
+    viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
+    this->vigas.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(id++),
+                    std::forward_as_tuple(xn,-y,6));
+    return (id-1);
+}
+
 int EditorPantalla::agregar_viga_grande(int x, int y)
 {
-    int celdaX = x/24;
-    int celdaY = -y/24+1;
-    bool ocupadas = true;
-    for (int i = 0; i<6; ++i){
-        std::map<std::pair<int,int>,int>::iterator it;
-        it = celdas.find(std::make_pair(celdaX+i,celdaY));
-        ocupadas = ocupadas && (it != celdas.end());
-    }
-    if (!ocupadas){
-        int xn = celdaX*24;
-        int yn = -celdaY*24;
-        QGraphicsItem *viga = new editor_viga_grande_view ();
+    if (true){
+        editor_viga_grande_view *viga = new editor_viga_grande_view (id);
+        int xn = x - viga->boundingRect().center().toPoint().x();
+        int yn = y - viga->boundingRect().center().toPoint().y();
         scene->addItem(viga);
         viga->setPos(xn,yn);
-        llenarCeldas(celdaX,celdaY,6);
         this->items[id] = viga;
+        connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
+        connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
+        viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
         this->vigas.emplace(std::piecewise_construct,
                         std::forward_as_tuple(id++),
                         std::forward_as_tuple(x,-y,6));
@@ -290,22 +349,16 @@ int EditorPantalla::agregar_viga_grande(int x, int y)
 
 int EditorPantalla::agregar_viga_chica(int x, int y)
 {
-    int celdaX = x/24;
-    int celdaY = -y/24+1;
-    bool ocupadas = true;
-    for (int i = 0; i<3; ++i){
-        std::map<std::pair<int,int>,int>::iterator it;
-        it = celdas.find(std::make_pair(celdaX+i,celdaY));
-        ocupadas = ocupadas && (it != celdas.end());
-    }
-    if (!ocupadas){
-        int xn = celdaX*24;
-        int yn = -celdaY*24;
-        QGraphicsItem *viga = new editor_viga_view();
+    if (true){
+        editor_viga_view *viga = new editor_viga_view(id);
+        int xn = x - viga->boundingRect().center().toPoint().x();
+        int yn = y - viga->boundingRect().center().toPoint().y();
         scene->addItem(viga);
         viga->setPos(xn,yn);
-        llenarCeldas(celdaX,celdaY,3);
         this->items[id] = viga;
+        connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
+        connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
+        viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
         this->vigas.emplace(std::piecewise_construct,
                         std::forward_as_tuple(id++),
                         std::forward_as_tuple(x,-y,3));
@@ -342,17 +395,6 @@ void EditorPantalla::remove_weapon(int id)
 
 void EditorPantalla::aumetar_angulo(int id)
 {
-    int x = items[id]->pos().x();
-    int y = items[id]->pos().y();
-    int x1 = x/24 +1;
-    int y1 = -y/24;
-    if (vigas[id].get_tam() == 6){
-        vaciarCeldas(x1,y1,6);
-         celdas[std::make_pair((x1+3),y1)] = id;
-    } else {
-        vaciarCeldas(x1,y1,3);
-        celdas[std::make_pair((x1+1),y1)] = id;
-    }
     vigas[id].aumentarAngulo(5);
     items[id]->setTransformOriginPoint(items[id]->boundingRect().center());
     items[id]->setRotation(items[id]->rotation() - 5);
@@ -366,43 +408,27 @@ void EditorPantalla::on_SelecionarHerramintas_Armas_clicked()
     pantalla3.exec();
 }
 
-void EditorPantalla::mousePressEvent(QMouseEvent * evento)
+void EditorPantalla::mousePressEvent(QMouseEvent *evento)
 {
     int x = evento->pos().x();
     int y = evento->pos().y();
-
     x += ui->graphicsView->horizontalScrollBar()->value();
     y += ui->graphicsView->verticalScrollBar()->value();
+    std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
     if (x >= (xscene - 100)){
         xscene += 400 ;
         this->scene->setSceneRect(0,-yscene,xscene,yscene);
     }
     if (estado == 0){
-        int celdaX = x/24;
-        int celdaY = -y/24 +1;
-        if (current_id != -1){
+        ui->wormOpt->hide();
+        ui->girderOpt->hide();
+        ui->moveOpt->hide();
+        std::map<int, QGraphicsItem*>::iterator iter;
+        iter = items.find(current_id);
+        if ( iter != items.end()){
             items[current_id]->setOpacity(1);
         }
-        std::map<std::pair<int,int>,int>::iterator it;
-        it = celdas.find(std::make_pair(celdaX,celdaY));
-        if (it != celdas.end()){
-            this->current_id = celdas[std::make_pair(celdaX,celdaY)];
-            items[current_id]->setOpacity(0.5);
-            std::map<int, editorViga>::iterator it;
-            it = this->vigas.find(current_id);
-            if (it != vigas.end()){
-                ui->girderOpt->show();
-                ui->wormOpt->hide();
-            } else {
-                ui->wormOpt->show();
-                ui->girderOpt->hide();
-                ui->vidaGusano->setValue(worms[current_id].getVida());
-            }
-        } else {
-            this->current_id = -1;
-            ui->wormOpt->hide();
-            ui->girderOpt->hide();
-        }
+        current_id = -1;
     }
 
     if (estado == 1){
@@ -436,13 +462,6 @@ void EditorPantalla::on_mas_clicked()
         int y = items[this->current_id]->pos().y();
         int x1 = x/24 +1;
         int y1 = -y/24;
-        if (vigas[current_id].get_tam() == 6){
-            vaciarCeldas(x1,y1,6);
-             celdas[std::make_pair((x1+3),y1)] = current_id;
-        } else {
-            vaciarCeldas(x1,y1,3);
-            celdas[std::make_pair((x1+1),y1)] = current_id;
-        }
         vigas[current_id].aumentarAngulo(5);
         items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() - 5);
@@ -456,15 +475,6 @@ void EditorPantalla::on_menos_clicked()
     if (it2 != vigas.end()){
         int x = items[this->current_id]->pos().x();
         int y = items[this->current_id]->pos().y();
-        int x1 = (x/24) +1;
-        int y1 = -y/24;
-        if (vigas[current_id].get_tam() == 6){
-            vaciarCeldas(x1,y1,6);
-            this->celdas[std::make_pair(x1+3,y)] = this->current_id;
-        } else {
-            vaciarCeldas(x1,y1,3);
-            this->celdas[std::make_pair(x1+1,y)] = this->current_id;
-        }
         vigas[current_id].aumentarAngulo(-5);
         items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() + 5);
@@ -547,4 +557,53 @@ void EditorPantalla::on_ok_clicked()
 void EditorPantalla::on_remove_clicked()
 {
     removeItem();
+}
+
+void EditorPantalla::on_up_clicked()
+{
+    items[current_id]->moveBy(0,-5);
+    std::map<int, editorWorm>::iterator it;
+    it = this->worms.find(current_id);
+    if (it != worms.end()){
+        worms[current_id].addPos(0,5);
+    } else {
+        vigas[current_id].addPos(0,5);
+    }
+
+}
+
+void EditorPantalla::on_left_clicked()
+{
+    items[current_id]->moveBy(-5,0);
+    std::map<int, editorWorm>::iterator it;
+    it = this->worms.find(current_id);
+    if (it != worms.end()){
+        worms[current_id].addPos(-5,0);
+    } else {
+        vigas[current_id].addPos(-5,0);
+    }
+}
+
+void EditorPantalla::on_right_clicked()
+{
+    items[current_id]->moveBy(5,0);
+    std::map<int, editorWorm>::iterator it;
+    it = this->worms.find(current_id);
+    if (it != worms.end()){
+        worms[current_id].addPos(5,0);
+    } else {
+        vigas[current_id].addPos(5,0);
+    }
+}
+
+void EditorPantalla::on_down_clicked()
+{
+    items[current_id]->moveBy(0,5);
+    std::map<int, editorWorm>::iterator it;
+    it = this->worms.find(current_id);
+    if (it != worms.end()){
+        worms[current_id].addPos(0,-5);
+    } else {
+        vigas[current_id].addPos(0,-5);
+    }
 }

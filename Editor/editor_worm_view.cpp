@@ -5,16 +5,27 @@
 #include <QDebug>
 
 
-Worm_View::Worm_View(QObject *parent) :
+Worm_View::Worm_View(int id,QObject *parent) :
     QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap(ROOT_PATH"/images/wormwait.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png"); // Load the sprite image QPixmap
+    this->id = id;
 }
 
 Worm_View::~Worm_View()
 {
     delete spriteImage;
+}
+
+void Worm_View::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    emit wormSelect(id);
+}
+
+void Worm_View::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    //emit wormSetPos();
 }
 
 

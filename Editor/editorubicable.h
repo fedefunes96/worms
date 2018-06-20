@@ -18,6 +18,8 @@ public:
     int getY();
 
     void setPos(int x, int y);
+
+    void addPos(int x, int y);
 };
 
 #endif // EDITORUBICABLE_H
