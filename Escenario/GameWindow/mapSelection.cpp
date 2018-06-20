@@ -6,6 +6,7 @@
 #include "waitRoom.h"
 #include <QPushButton>
 #include <iostream>
+#include <QMessageBox>
 
 MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
     QDialog(parent),
@@ -62,6 +63,10 @@ void MapSelection::connectControler(Controler *controler)
 
 void MapSelection::on_pushButton_clicked()
 {
+    if(ui->listWidget->count()==0){
+        QMessageBox::information(this,"Error","There are no rooms in list.");
+        return;
+    }
     std::string name = ui->listWidget->currentItem()->text().toUtf8().constData();
     protocol->sendSelectRoom(name);
     this->wait->setShowWindow(true);

@@ -1,10 +1,13 @@
 #include "player.h"
 #include <QDebug>
+
+
 Player::Player()
 {
     this->it=0;
     this->wormActive=nullptr;
 }
+
 /*
 Player::~Player()
 {
@@ -17,6 +20,15 @@ Player::~Player()
 void Player::addWorm(Worm_View *worm)
 {
     this->worms_list.push_back(worm);
+}
+
+void Player::setColor(QString color){
+    this->color = color;
+}
+
+QString Player::getColor()
+{
+    return this->color;
 }
 
 void Player::setId(int id)
@@ -93,6 +105,14 @@ void Player::fireWeapon(int type)
 
 
 
+int Player::getPoints()
+{
+    int result=0;
+    for (unsigned int var = 0; var < this->worms_list.size(); ++var) {
+        result += (this->worms_list[var]->getHealth());
+    }
+    return result;
+}
 
 
 std::vector<Worm_View*> Player::getWormsAlive()

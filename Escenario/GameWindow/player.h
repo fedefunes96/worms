@@ -6,6 +6,7 @@
 #include "weapon.h"
 #include <QGraphicsScene>
 #include <QList>
+#include <QString>
 
 
 
@@ -38,6 +39,9 @@ public:
     void setActive(bool active);
     std::vector<Worm_View *> getWormsAlive();
     void setWormActive(Worm_View *worm);
+    QString getColor();
+    void setColor(QString color);
+    int getPoints();
 private:
     std::vector<Worm_View*> worms_list;
     int id;
@@ -45,6 +49,7 @@ private:
     Worm_View* wormActive;
     bool isactive;
     unsigned int it;
+    QString color;
 
 };
 

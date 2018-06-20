@@ -14,22 +14,16 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->game->addCamera(this->window->getCamera());
 
     this->myTurn=false;
+    createColorList();
     this->myPlayer = new Player();
     this->myPlayer->setId(idply);
+    this->myPlayer->setColor(getColor(idply));
+    this->players_list.append(this->myPlayer);
     this->game->setPlayerActive(this->myPlayer);
     this->window->addPlayer(this->myPlayer);
-
     this->deadItemCollector = new QTimer();
     this->deadItemCollector->start(10);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
-    this->color_list.append("red");
-    this->color_list.append("yellow");
-    this->color_list.append("blue");
-    this->color_list.append("green");
-    this->color_list.append("orange");
-    this->color_list.append("purple");
-    this->color_list.append("cyan");
-    this->color_list.append("darkBlue");
     this->window->setRefocusEnable(false);
 
 }
@@ -69,6 +63,48 @@ void GameClass::setPotBar(int pot)
 }
 
 
+QString GameClass::getColor(int id_player)
+{
+    while((id_player) >= this->color_list.size()){
+        id_player -= this->color_list.size();
+    }
+    return this->color_list[id_player];
+}
+
+void GameClass::createColorList()
+{
+    this->color_list.append("blue");
+    this->color_list.append("yellow");
+    this->color_list.append("red");
+    this->color_list.append("purple");
+    this->color_list.append("cyan");
+    this->color_list.append("green");
+    this->color_list.append("orange");
+    this->color_list.append("darkBlue");
+    this->color_list.append("white");
+    this->color_list.append("black");
+    this->color_list.append("darkRed");
+    this->color_list.append("magenta");
+    this->color_list.append("darkGreen");
+    this->color_list.append("gray");
+    this->color_list.append("darkGray");
+    this->color_list.append("darkCyan");
+    this->color_list.append("darkYellow");
+    this->color_list.append("darkMagenta");
+    this->color_list.append("lightGray");
+}
+
+
+Player* GameClass::getPlayerInList(int id_player)
+{
+    for (int var = 0; var < this->players_list.size(); ++var) {
+        if(id_player==(this->players_list[var]->getId())){
+            return this->players_list[var];
+        }
+    }
+    return nullptr;
+}
+
 void GameClass::recvWormHealth(int id,int health)
 {
     Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),id);
@@ -79,16 +115,22 @@ void GameClass::recvWormHealth(int id,int health)
 void GameClass::attachWorm(int type,int id_player,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
-        Worm_View *worm = new Worm_View(this,this->color_list[id_player]);
+        Worm_View *worm = new Worm_View(this,getColor(id_player));
         qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
         worm->setHealth(health);
         worm->setId(id);
         worm->setIdObj(type);
         this->game->add_Item(worm,-100,-100); // -100 pos invalida, luego al recibir su pos lo ubico..
-        if(id_player==this->myPlayer->getId()){
-            qDebug()<<"es mi Worm";
-            this->myPlayer->addWorm(worm);
+
+        Player *player = getPlayerInList(id_player);
+        if(player==nullptr){
+            //no tengo player..
+            player= new Player();
+            player->setId(id_player);
+            player->setColor(getColor(id_player));
+            this->players_list.append(player);
         }
+        player->addWorm(worm);
     }
 }
 

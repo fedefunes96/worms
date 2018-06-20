@@ -145,3 +145,10 @@ void GameWindow::on_refocus_clicked()
     ui->graphicsView->setFreeMove(false);
     ui->refocus->setEnabled(false);
 }
+
+
+
+
+//void GameWindow::showPlayerList(QList<Player*> playerList){
+
+//}

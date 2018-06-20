@@ -50,15 +50,23 @@ void RoomCreator::closeEvent(QCloseEvent *event)
 
 void RoomCreator::on_pushButton_clicked()
 {
+    if(ui->listWidget->count()==0){
+        QMessageBox::information(this,"Error","There are no maps in list.");
+        return;
+    }
     std::string nombre = ui->lineEdit->text().toUtf8().constData();
     std::string mapName = ui->listWidget->currentItem()->text().toUtf8().constData();
     if(nombre.size()==0){
         QMessageBox::information(this,"Invalid Input","Write a name valid for the room's name.");
     }else{
-        std::cout << "nombre:"<<nombre << " mapName:" <<mapName <<std::endl;
+        protocol->sendCreateRoom(nombre,mapName);
+        //int could = protocol->recvCouldJoinRoom();
+        //if(could==/*algo*/){
+//            QMessageBox::information(this,"Error","Another room has the same name, choose another one.");
+//            return;
+//        }
         this->wait->setShowWindow(true);
         this->closeX=false;
-        protocol->sendCreateRoom(nombre,mapName);
         this->close();
     }
 

@@ -37,6 +37,7 @@ private:
     Player* myPlayer;
     bool myTurn;
     QList<QString> color_list;
+    QList<Player*> players_list;
     QTimer *deadItemCollector;
     void attachWorm(int type, int id_player, int id, int health);
     void updateItem(int type=999, int id=999, int posX=0, int posY=0, int angle=0);
@@ -46,6 +47,9 @@ private:
     backgrounMusic *b;
     void recvWormHealth(int id, int health);
     void throwProjectile(int type, int id, int posX, int posY, int angle, std::string &path);
+    void createColorList();
+    QString getColor(int id_player);
+    Player *getPlayerInList(int id_player);
 };
 
 #endif // GAMECLASS_H

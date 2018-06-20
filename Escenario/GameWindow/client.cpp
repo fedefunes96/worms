@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
         if(!wait.getShowWindow()){
             continue;
         }
+        qDebug()<<"PASEEEEEEEEEEE";
         wait.exec();
 
         EventHandler *filter = new EventHandler(&a,&game,&protocol);
