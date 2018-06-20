@@ -20,6 +20,7 @@ class Worm_View: public QObject, public MovableItem
     Q_OBJECT
 public:
     Worm_View();
+    //virtual ~Worm_View();
     Worm_View(QObject* parent, QString color);
     bool isMoving();
     bool isAlive();
@@ -38,6 +39,9 @@ public:
     bool isSelect();
     void setSelect(bool cond);
     void setAlive(bool alive);
+    virtual int getX() override;
+    virtual int getY() override;
+    virtual QRectF areaRect() override;
 
     std::pair<int,int> getDirWeapon();
 
@@ -48,6 +52,7 @@ public:
     void setClickDir(int x, int y);
     void setColor(std::string &color);
     void setStatus(int last_on_ground, int dir);
+
 private slots:
     void runSpriteWeapon();
 

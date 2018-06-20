@@ -1,4 +1,4 @@
-#ifndef GAMECLASS_H
+﻿#ifndef GAMECLASS_H
 #define GAMECLASS_H
 #include "game_view.h"
 #include <QObject>
@@ -6,10 +6,8 @@
 #include "gamewindow.h"
 #include <QTimer>
 #include <QList>
-#include <vector>
-#include "backgrounMusic.h"
-#include "generalSounds.h"
 #include "waitRoom.h"
+#include "backgrounMusic.h"
 
 
 class GameClass : public QObject
@@ -17,7 +15,7 @@ class GameClass : public QObject
     Q_OBJECT
 public:
     GameClass(QRect screen,int w,int h,int idply);
-    ~GameClass();
+
 
     Player* getPlayer();
     Game_View* getGameView();
@@ -54,15 +52,7 @@ private:
     void removeItem(int type, int id);
 
     GameWindow *window;
-
-    backgrounMusic* backGround;
-    std::vector<generalSounds*> fall;
-    std::vector<generalSounds*> fire;
-    std::vector<generalSounds*>jumps;
-    std::vector<generalSounds*>select;
-    std::vector<generalSounds*>weaponSelect;
-    generalSounds* explocion;
-
+    backgrounMusic *b;
 
     void recvWormHealth(int id, int health);
     void throwProjectile(int type, int id, int posX, int posY, int angle, std::string &path);

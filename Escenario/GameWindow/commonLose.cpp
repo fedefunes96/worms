@@ -7,13 +7,13 @@ commonLose::commonLose(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("You Lose");
-    b = new backgrounMusic("/resources/sounds/BackgroundMusic/Total Distortion You Are Dead.wav");
-    QPixmap img = QPixmap(ROOT_PATH"/resources/images/LoseScreen.gif");
+    //b = new backgrounMusic("../../sounds/BackgroundMusic/Worms World Party Soundtrack - Hell.wav");
+    QPixmap img = QPixmap("../../images/LoseScreen.gif");
     ui->label->setPixmap(img);
 }
 
 commonLose::~commonLose()
 {
     delete ui;
-    delete b;
+    //delete b;
 }

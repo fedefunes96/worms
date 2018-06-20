@@ -39,6 +39,25 @@ Worm_View::Worm_View()
 {
 }
 
+/*
+
+Worm_View::~Worm_View()
+{
+    if(this->spriteImage){
+        delete(this->spriteImage);
+    }
+    if(this->timer){
+        delete(this->timer);
+    }
+    if(this->target){
+        delete(this->target);
+    }
+    if(this->labelVida){
+        delete(this->labelVida);
+    }
+}
+*/
+
 Worm_View::Worm_View(QObject *parent, QString color) :
     QObject(parent), MovableItem()
 {
@@ -247,6 +266,22 @@ void Worm_View::setStatus(int on_ground, int dir)
         //this->jumping=false;
         qDebug()<<"volar o caer";
         this->last_on_ground=on_ground;
+        if(this->jumping){
+            qDebug()<<"estaba saltando";
+        }else{
+            qDebug()<<"me cai..";
+            delete(this->spriteImage);
+            this->currentFrame=0;
+            aux = new QPixmap(ROOT_PATH"/resources/images/wfall.png");
+            if(this->angle==0){
+                rm.scale(-1,1);
+            }else{
+                rm.scale(1,1);
+            }
+            this->spriteImage = new QPixmap(aux->transformed(rm));
+            delete(aux);
+            aux = nullptr;
+        }
         if(dir==static_cast<int>(MoveDirection::LEFT)){
             //rotar a izq
             this->angle=-180;
@@ -378,6 +413,21 @@ void Worm_View::setAlive(bool alive)
     this->alive = alive;
 }
 
+int Worm_View::getX()
+{
+    return this->x();
+}
+
+int Worm_View::getY()
+{
+    return this->y();
+}
+
+QRectF Worm_View::areaRect()
+{
+    return this->boundingRect();
+}
+
 void Worm_View::setClickDir(int x, int y)
 {/////////////////CHEQUEAR LO QUE DA EL CLICK DEL TELETRANSPORTAR
     this->clickTarget.first=x;
@@ -390,7 +440,7 @@ std::pair<int, int> Worm_View::getDirWeapon()
     if(!this->targetClick){
         dir.first=this->target->boundingRect().width();  //tam target x. =150
         //qDebug()<<"ancho target"<<dir.first;
-        //qDebug()<<this->currentDir.first<<this->currentDir.second;
+        //qDebug()<<"worm a disparar posX"<<this->currentDir.first<<"posY:"<<this->currentDir.second;
         float aux = (tan( this->targetAngle * 3.1416 / 180 ))*dir.first;
         dir.second = abs(aux);
         //qDebug()<<"nadsjksda"<<dir.second;
@@ -402,9 +452,10 @@ std::pair<int, int> Worm_View::getDirWeapon()
         }else if(this->targetAngle>0 && this->targetAngle<=90){
             dir.second = -dir.second;
         }
-        int w = this->scene()->width();
+        int h = this->scene()->height();
+        //qDebug()<<"ancho scene:"<<h;
         dir.first = dir.first + this->currentDir.first;
-        dir.second = w - this->currentDir.second + dir.second;
+        dir.second = h - this->currentDir.second + dir.second;
         //qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
     }else{
         return this->clickTarget;
@@ -446,6 +497,7 @@ void Worm_View::setPosition(int x, int y)
     int height = this->boundingRect().height();
 
     setPos(x-width/2,y-height/2);
+    //qDebug()<<"coloque worm en X:"<<x-width/2<<"Y:"<<y-height/2;
     setDir(x-width/2,y-height/2);
     this->lastDir.first=this->currentDir.first;
     this->lastDir.second=this->currentDir.second;
@@ -495,7 +547,9 @@ void Worm_View::moveTo(int angle, int posx,int posy)
 
 void Worm_View::removeMovable()
 {
-    delete(this->spriteImage);
+    if(this->spriteImage){
+        delete(this->spriteImage);
+    }
     this->currentFrame=0;
     this->spriteImage = new QPixmap(ROOT_PATH"/resources/images/grave.png");
     this->alive=false;

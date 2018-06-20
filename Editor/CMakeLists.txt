@@ -27,3 +27,4 @@ add_executable(Editor ${SOURCE})
 # Use the Widgets module from Qt 5
 target_link_libraries(Editor Qt5::Widgets)
 target_link_libraries(Editor ${YAML_CPP_LIBS} ${PROJECT_LINK_LIBS})
+install(TARGETS Editor DESTINATION bin)

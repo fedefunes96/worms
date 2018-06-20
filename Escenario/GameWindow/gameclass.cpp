@@ -2,7 +2,7 @@
 #include "girder_view.h"
 #include <QDebug>
 #include "projectile.h"
-#include <stdlib.h>
+
 #include <QColor>
 #include <QCoreApplication>
 
@@ -35,66 +35,11 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->refreshScreen = new QTimer();
     connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
     this->refreshScreen->start(50);
-
-     backGround = new backgrounMusic("/resources/sounds/BackgroundMusic/Soundtrack.wav");
-     explocion = new generalSounds("/resources/sounds/English/Explosion.wav");
-     generalSounds *fall1 = new generalSounds("/resources/sounds/English/fall/BUNGEE.WAV");
-     this->fall.push_back(fall1);
-     generalSounds *fall2 = new generalSounds("/resources/sounds/English/fall/DROP.WAV");
-     this->fall.push_back(fall2);
-     generalSounds *fall3 = new generalSounds("/resources/sounds/English/fall/NOOO.WAV");
-     this->fall.push_back(fall3);
-     generalSounds *fall4 = new generalSounds("/resources/sounds/English/fall/UH-OH.WAV");
-     this->fall.push_back(fall4);
-
-     generalSounds *fire1 = new generalSounds("/resources/sounds/English/fire/DRAGONPUNCH.WAV");
-     this->fire.push_back(fire1);
-     generalSounds *fire2 = new generalSounds("/resources/sounds/English/fire/FIRE.WAV");
-     this->fire.push_back(fire2);
-     generalSounds *fire3 = new generalSounds("/resources/sounds/English/fire/FIREBALL.WAV");
-     this->fire.push_back(fire3);
-
-     generalSounds *jump1 = new generalSounds("/resources/sounds/English/jump/JUMP1.WAV");
-     this->jumps.push_back(jump1);
-     generalSounds *jump2 = new generalSounds("/resources/sounds/English/jump/WOBBLE.WAV");
-     this->jumps.push_back(jump2);
-
-     generalSounds *select1 = new generalSounds("/resources/sounds/English/select/HELLO.WAV");
-     this->select.push_back(select1);
-     generalSounds *select2 = new generalSounds("/resources/sounds/English/select/YESSIR.WAV");
-     this->select.push_back(select2);
-
-     generalSounds *weaponSelect1 = new generalSounds("/resources/sounds/English/weaponSelect/COLLECT.WAV");
-     this->weaponSelect.push_back(weaponSelect1);
-     generalSounds *weaponSelect2 = new generalSounds("/resources/sounds/English/weaponSelect/LAUGH.WAV");
-     this->weaponSelect.push_back(weaponSelect2);
-}
-
-GameClass::~GameClass()
-{
-    delete backGround;
-    delete this->explocion;
-    for (auto &x : this->fire){
-        delete x;
-    }
-    for (auto &x : this->fall){
-        delete x;
-    }
-    for (auto &x : this->jumps){
-        delete x;
-    }
-    for (auto &x : this->select){
-        delete x;
-    }
-    for (auto &x : this->weaponSelect){
-        delete x;
-    }
 }
 
 Camera* GameClass::getCamera()
 {
     return this->game->getCamera();
-
 }
 
 void GameClass::connectWaitRoom(WaitRoom *wait){
@@ -103,9 +48,10 @@ void GameClass::connectWaitRoom(WaitRoom *wait){
 
 void GameClass::showWindow()
 {
-    qDebug()<<"SHOOOOOOOOOOOOOWWWWWWWWWWW";
+    //qDebug()<<"SHOOOOOOOOOOOOOWWWWWWWWWWW";
     std::string path(ROOT_PATH"/resources/images/intro2.jpg");
     this->window->showMaximized();
+    b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/FFI - Victory.wav");
     this->game->setBackground(path);
 }
 
@@ -138,6 +84,8 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
         Worm_View *worm = new Worm_View(this,this->color_list[id_player]);
+        //QRectF rect = worm->boundingRect();
+        //qDebug()<<"asd"<<rect.x();
         qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
         worm->setHealth(health);
         worm->setId(id);
@@ -152,9 +100,22 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    if(this->game->getHeight()<posY || this->game->getWidth() < posX){
-        return;
+    //qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
+    //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
+    /*if((this->game->getHeight()<posY || this->game->getWidth() < posX) &&
+            (type==static_cast<int>(TypeObj::WORM) ||
+             type==static_cast<int>(TypeObj::SMALL_GIRDER) ||
+             type==static_cast<int>(TypeObj::LARGE_GIRDER)) ){
+        if(this->game->getHeight()<posY){
+            //qDebug()<<"aumento Y";
+            this->game->resizeScene(this->game->getWidth(),posY*10);
+        }
+        if(this->game->getWidth()<posX){
+            //qDebug()<<"aumento X";
+            this->game->resizeScene(posX*4,this->game->getHeight());
+        }
     }
+    */
     if(type==static_cast<int>(TypeObj::WORM)){
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
@@ -185,7 +146,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
         std::string path(ROOT_PATH"/resources/images/misil.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::GREEN_GRENADE_M)){
-        std::string path(ROOT_PATH"/resources/granade.png");
+        std::string path(ROOT_PATH"/resources/images/granade.png");
         this->throwProjectile(type,id,posX,posY,angle,path);
     }else if(type==static_cast<int>(TypeObj::MORTAR_M)){
         std::string path(ROOT_PATH"/resources/images/mortar.png");
@@ -215,6 +176,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 
 void GameClass::throwProjectile(int type,int id,int posX,int posY,int angle,std::string &path)
 {
+    qDebug()<<"PROYECTIL ------> X:"<<posX<<"Y:"<<posY;
     if(this->game->containsItem(type,id)){
         Items* item = this->game->getItem(type,id);
         MovableItem *i = static_cast<MovableItem*>(item);
@@ -279,8 +241,6 @@ std::vector<int> GameClass::fireWeapon()
         //puedo disparar el arma...
         qDebug()<<"arma a disparar ------->"<<idWeapon;
         this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
-        int id = rand() % this->fire.size();
-        this->fire[id]->play();
 
         std::pair<int,int> pos = this->myPlayer->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
@@ -395,7 +355,6 @@ void GameClass::checkQueueEvent(QList<int> list)
     }else if(cmd==static_cast<int>(Commands::WINNER)){
         // hay ganador y es el id pasado
         qDebug()<<"winner leido!";
-        this->backGround->stop();
         this->myPlayer->setActive(false);
         this->myTurn=false;
         this->window->close();
@@ -432,6 +391,7 @@ void GameClass::checkRound(QList<int> list){
     this->window->startTimerRound(40);
     qDebug()<<"actual player id:"<<list[1];
     qDebug()<<"actual worm id:"<<list[2];
+    qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();
 
     Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
@@ -462,8 +422,7 @@ void GameClass::checkRound(QList<int> list){
 
     this->myPlayer->setWormActive(worm);
     qDebug()<<"setee worm activo id:"<<worm->getId();
-    int id = rand() % this->select.size();
-    this->select[id]->play();
+
 
 }
 

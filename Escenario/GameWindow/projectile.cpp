@@ -11,10 +11,17 @@ Projectile::Projectile():MovableItem()
     this->alive=true;
 }
 
+/*
 Projectile::~Projectile()
 {
-
+    if(this->timer){
+        delete(this->timer);
+    }
+    if(this->spriteImage){
+        delete(this->spriteImage);
+    }
 }
+*/
 
 void Projectile::nextFameImpact()
 {
@@ -125,4 +132,19 @@ void Projectile::setSpriteBullet(std::string &path){
 bool Projectile::isMoving()
 {
     return this->moving;
+}
+
+int Projectile::getX()
+{
+    return this->x();
+}
+
+int Projectile::getY()
+{
+    return this->y();
+}
+
+QRectF Projectile::areaRect()
+{
+    return this->boundingRect();
 }

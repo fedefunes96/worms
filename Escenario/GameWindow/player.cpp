@@ -5,6 +5,14 @@ Player::Player()
     this->it=0;
     this->wormActive=nullptr;
 }
+/*
+Player::~Player()
+{
+    for (int var = 0; var < this->listWeapons.size(); ++var) {
+        delete(this->listWeapons[var]);
+    }
+}
+*/
 
 void Player::addWorm(Worm_View *worm)
 {

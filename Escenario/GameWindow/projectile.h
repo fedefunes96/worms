@@ -11,7 +11,7 @@ class Projectile : public QObject,public MovableItem
     Q_OBJECT
 public:
     Projectile();
-    ~Projectile();
+    //~Projectile();
     void moveTo(int angle, int posx,int posy);
     bool isMovable();
     bool isAlive();
@@ -24,6 +24,9 @@ public:
     void explote();
     void setSpriteBullet(std::string &path);
     bool isMoving();
+    virtual int getX() override;
+    virtual int getY() override;
+    virtual QRectF areaRect() override;
 
 private slots:
     void nextFameImpact();

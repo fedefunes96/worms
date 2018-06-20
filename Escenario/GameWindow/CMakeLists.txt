@@ -24,3 +24,4 @@ file(GLOB SOURCE *.cpp *.ui)
 add_executable(GameWindow ${SOURCE})
 # Use the Widgets module from Qt 5
 target_link_libraries(GameWindow Qt5::Widgets Qt5::Multimedia)
+install(TARGETS GameWindow DESTINATION bin)

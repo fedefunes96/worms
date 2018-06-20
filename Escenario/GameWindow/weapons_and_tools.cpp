@@ -39,7 +39,16 @@ Weapons_and_Tools::Weapons_and_Tools(QWidget *parent,Player* player) :
     if(!this->player->canFire(static_cast<int>(WeaponsIds::TELEPORTATION))){
         ui->teleport->setEnabled(false);
     }
-
+    ui->banana->setIcon(QIcon(ROOT_PATH"/resources/images/banana.1.png"));
+    ui->bat->setIcon(QIcon(ROOT_PATH"/resources/images/baseball.1.png"));
+    ui->bazooka->setIcon(QIcon(ROOT_PATH"/resources/images/bazooka.1.png"));
+    ui->dinamite->setIcon(QIcon(ROOT_PATH"/resources/images/dynamite.1.png"));
+    ui->fragGranade->setIcon(QIcon(ROOT_PATH"/resources/images/cluster.1.png"));
+    ui->granade->setIcon(QIcon(ROOT_PATH"/resources/images/grenade.1.png"));
+    ui->holyGranade->setIcon(QIcon(ROOT_PATH"/resources/images/hgrenade.1.png"));
+    ui->misil->setIcon(QIcon(ROOT_PATH"/resources/images/airstrke.1.png"));
+    ui->morter->setIcon(QIcon(ROOT_PATH"/resources/images/mortar.1.png"));
+    ui->teleport->setIcon(QIcon(ROOT_PATH"/resources/images/teleport.1.png"));
 }
 
 Player* Weapons_and_Tools::getPlayer(){

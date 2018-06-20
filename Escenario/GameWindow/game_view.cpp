@@ -19,19 +19,33 @@ Game_View::Game_View(QRect screen,int w,int h)
 
     this->scene->setSceneRect(0,0,w,h); //tam escenario
 
-
     //this->camera = new Camera(this->scene,screen.width(),screen.height());
-}
-
-Game_View::~Game_View()
-{
-
 }
 
 
 void Game_View::addCamera(Camera *camera)
 {
     this->camera = camera;
+}
+
+void Game_View::resizeScene(int w, int h)
+{
+    if(h>this->scene->height()){
+        std::vector<Items*>::iterator it;
+        for ( it = this->items_list.begin(); it!=this->items_list.end();it++){
+            Items* item = static_cast<Items*>(*it);
+            int posx = item->getX();
+            int posy = item->getY();
+            QRectF rect = item->areaRect();
+            posx = posx +(rect.width()/2);
+            posy = posy + (rect.height()/2);
+            qDebug()<<"----< posX"<<posx<<"posY:"<<posy;
+            item->setPosition(posx,h-posy);
+        }
+    }
+
+    QRectF rect = this->scene->sceneRect();
+    this->scene->setSceneRect(rect.x(),rect.y(),w,h);
 }
 
 
@@ -212,7 +226,7 @@ void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
             continue;
         }else if(item->getId()==id && item->getIdObj()==type){
             //item->moveTo(posX,posY,angle);
-            if(item->x()==-130 && item->y()==10070){//temporal para setear el escenario
+            if(item->x()==-130){//temporal para setear el escenario
                 qDebug()<<posX<<posY;
                 item->setPosition(posX,this->scene->height()-posY);
                 return;

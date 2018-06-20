@@ -10,7 +10,7 @@ generalSounds::generalSounds()
 generalSounds::generalSounds(const QString &relativePath)
 {
     this->player = new QMediaPlayer();
-    player->setMedia(QUrl::fromUserInput(ROOT_PATH+relativePath));
+    player->setMedia(QUrl::fromUserInput(QFileInfo(relativePath).absoluteFilePath()));
 }
 
 generalSounds::~generalSounds()

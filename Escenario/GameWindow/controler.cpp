@@ -32,6 +32,7 @@ void Controler::run()
             //list.push_back(id);
             //emit eventCreated(list);
             emit playerId(id);
+            qDebug()<<"id player recibido en controler"<<id;
             continue;
         }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
             qDebug()<<"attach usable id";

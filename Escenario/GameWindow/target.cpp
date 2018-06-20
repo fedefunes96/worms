@@ -8,6 +8,13 @@ Target::Target():QGraphicsItem()
     this->spriteImage = new QPixmap(ROOT_PATH"/resources/images/target.png");
     this->currentFrame=0;
 }
+/*
+Target::~Target()
+{
+    if(this->spriteImage){
+        delete(this->spriteImage);
+    }
+}*/
 
 
 

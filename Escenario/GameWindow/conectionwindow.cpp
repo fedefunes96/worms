@@ -10,6 +10,7 @@ ConectionWindow::ConectionWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->closeX=true;
+    this->setWindowTitle("Start Connection");
 }
 
 ConectionWindow::~ConectionWindow()

@@ -22,11 +22,9 @@ private:
     Camera* camera;
     std::vector<Player*> players_list;
     std::vector<Items*> items_list;
-
 public:
     Game_View();
     Game_View(QRect screen, int w, int h);
-    ~Game_View();
     void update_view();
     void add_Item(QGraphicsItem *item, int posx, int posy);
     void del_Item(Items *item);
@@ -51,6 +49,7 @@ public:
     int getHeight();
     Worm_View* getWormActive2();
     void addCamera(Camera *camera);
+    void resizeScene(int w, int h);
 };
 
 #endif // GAME_VIEW_H

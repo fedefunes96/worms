@@ -28,7 +28,6 @@
 #include "finalscreen.h"
 #include "conectionwindow.h"
 
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -56,14 +55,14 @@ int main(int argc, char *argv[])
     map.connectControler(&controler);
     room.connectControler(&controler);
     wait.connectControler(&controler);
-    controler.start();
 
     Window c(&map,&room,&protocol,&wait);
 
     c.connectControler(&controler);
+    controler.start();
     c.exec();
 
-    GameClass game(rect,10000,10000,c.getId());
+    GameClass game(rect,50000,50000,c.getId());
     game.connectWaitRoom(&wait);
     game.connectController(&controler);
 

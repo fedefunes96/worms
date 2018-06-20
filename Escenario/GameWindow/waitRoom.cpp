@@ -48,6 +48,8 @@ void WaitRoom::connectControler(Controler *controler)
 void WaitRoom::on_pushButton_clicked()
 {
     this->protocol->sendExitRoom();
+    emit closeGame();
+    this->close();
 }
 
 void WaitRoom::setShowWindow(bool show){

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui multimedia
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -41,7 +41,9 @@ SOURCES +=\
     generalSounds.cpp \
     commonWin.cpp \
     commonLose.cpp \
-    backgrounMusic.cpp
+    backgrounMusic.cpp \
+    conectionwindow.cpp \
+    finalscreen.cpp
 
 HEADERS  += \
     game_view.h \
@@ -69,7 +71,9 @@ HEADERS  += \
     generalSounds.h \
     commonWin.h \
     commonLose.h \
-    backgrounMusic.h
+    backgrounMusic.h \
+    conectionwindow.h \
+    finalscreen.h
 
 FORMS    += \
     weapons_and_tools.ui \
@@ -79,4 +83,6 @@ FORMS    += \
     waitRoom.ui \
     window.ui \
     commonWin.ui \
-    commonLose.ui
+    commonLose.ui \
+    conectionwindow.ui \
+    finalscreen.ui

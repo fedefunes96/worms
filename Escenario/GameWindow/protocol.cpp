@@ -572,12 +572,13 @@ void Protocol::recvWindSpeed(int32_t* speed)
     int32_t aux;
     int8_t sign;
     int mult;
+    conexion.recibir((char*)&aux,4);
+    std::cout << "##### en protocolo wind speed:" << ntohl(aux) << std::endl;
     conexion.recibir((char*)&sign,1);
     mult = (sign==1) ? 1 : -1;
-    std::cout << "val mult:" << mult << std::endl;
-    conexion.recibir((char*)&aux,4);
     *speed = ntohl(aux)*mult;
-    std::cout << "##### en protocolo wind speed:" << ntohl(aux) << std::endl;
+    std::cout << "val mult:" << mult << std::endl;
+
 
 }
 

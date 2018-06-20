@@ -27,7 +27,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/airstrke.1.png</normaloff>../../images/airstrke.1.png</iconset>
+     <normaloff>ROOT_PATH+/resources/images/airstrke.1.png</normaloff>ROOT_PATH+/resources/images/airstrke.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -53,7 +53,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/baseball.1.png</normaloff>../../images/baseball.1.png</iconset>
+     <normaloff>ROOT_PATH+/resources/images/baseball.1.png</normaloff>ROOT_PATH+/resources/images/baseball.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -76,7 +76,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/banana.1.png</normaloff>../../images/banana.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/banana.1.png</normaloff>ROOT_PATH/resources/images/banana.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -99,7 +99,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/dynamite.1.png</normaloff>../../images/dynamite.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/dynamite.1.png</normaloff>ROOT_PATH/resources/images/dynamite.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -122,7 +122,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/cluster.1.png</normaloff>../../images/cluster.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/cluster.1.png</normaloff>ROOT_PATH/resources/images/cluster.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -145,7 +145,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/grenade.1.png</normaloff>../../images/grenade.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/grenade.1.png</normaloff>ROOT_PATH/resources/images/grenade.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -168,7 +168,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/bazooka.1.png</normaloff>../../images/bazooka.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/bazooka.1.png</normaloff>ROOT_PATH/resources/images/bazooka.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -191,7 +191,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/mortar.1.png</normaloff>../../images/mortar.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/mortar.1.png</normaloff>ROOT_PATH/resources/images/mortar.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -214,7 +214,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/teleport.1.png</normaloff>../../images/teleport.1.png</iconset>
+     <normaloff>ROOT_PATH+/resources/images/teleport.1.png</normaloff>ROOT_PATH/resources/images/teleport.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -237,7 +237,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../../images/hgrenade.1.png</normaloff>../../images/hgrenade.1.png</iconset>
+     <normaloff>ROOT_PATH/resources/images/hgrenade.1.png</normaloff>ROOT_PATH/resources/images/hgrenade.1.png</iconset>
    </property>
    <property name="iconSize">
     <size>

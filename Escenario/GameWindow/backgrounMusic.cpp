@@ -9,7 +9,7 @@ backgrounMusic::backgrounMusic()
 backgrounMusic::backgrounMusic(const QString &relativePath)
 {
     this->list = new QMediaPlaylist();
-    list->addMedia(QUrl::fromUserInput(ROOT_PATH+relativePath));
+    list->addMedia(QUrl::fromUserInput(QFileInfo(relativePath).absoluteFilePath()));
     list->setPlaybackMode(QMediaPlaylist::Loop);
     this->player = new QMediaPlayer();
     player->setPlaylist(list);

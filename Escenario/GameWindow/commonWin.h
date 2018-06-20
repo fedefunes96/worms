@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QDialog>
-#include "backgrounMusic.h"
+//#include "backgrounMusic.h"
 
 namespace Ui {
 class commonWIn;
@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::commonWIn *ui;
-    backgrounMusic *b;
+    //backgrounMusic *b;
 };
 
 #endif // COMMONWIN_H

@@ -19,6 +19,8 @@ GameWindow::GameWindow(QWidget *parent) :
     connect(this->timerRound,&QTimer::timeout,this,&GameWindow::stepTimer);
     ui->refocus->setEnabled(false);
     this->setWindowState(this->windowState() | Qt::WindowMaximized);
+    //ui->powerBar->setMaximum(1000);
+    //ui->powerBar->setMinimum(0);
 
 }
 
@@ -53,7 +55,10 @@ Camera* GameWindow::getCamera()
 GameWindow::~GameWindow()
 {
     delete ui;
+    //delete(this->timer);
+    //delete(this->timerRound);
 }
+
 
 void GameWindow::addPlayer(Player *player)
 {
