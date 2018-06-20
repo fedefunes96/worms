@@ -224,6 +224,11 @@ void Worm::move_step(float32 time_step) {
 	this->last_on_ground = this->is_on_ground();
 }
 
+void Worm::set_position(const b2Vec2& pos) {
+	this->last_position = pos;
+	this->stage.set_position(this, pos);
+}
+
 void Worm::set_angle(float angle) {
 	this->angle_for_mov = angle;
 }

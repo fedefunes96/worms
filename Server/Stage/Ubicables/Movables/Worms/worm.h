@@ -110,6 +110,7 @@ public:
 	bool is_sliding();
 	void set_angle(float angle);
 	void set_velocity(b2Vec2 velocity);
+	void set_position(const b2Vec2& pos);
 
 	const MoveDirection& get_facing_direction();
 

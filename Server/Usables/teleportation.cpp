@@ -13,7 +13,8 @@ void Teleportation::action(Worm* worm
 
 	printf("Using Teleportation\n");
 
-	this->stage.set_position(worm, dest_pos);
+	//this->stage.set_position(worm, dest_pos);
+	worm->set_position(dest_pos);
 }
 
 int Teleportation::get_id() {
