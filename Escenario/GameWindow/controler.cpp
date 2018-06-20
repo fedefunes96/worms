@@ -11,6 +11,7 @@ Controler::Controler(Protocol *protocol)
 
 void Controler::stopController()
 {
+    this->protocol->sendExitRoom();
     this->terminate();
 }
 

@@ -54,6 +54,7 @@ void GameClass::showWindow()
 void GameClass::connectController(Controler *controler)
 {
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
+    connect(this->window,SIGNAL(closeGame()),controler,SLOT(stopController()));
 }
 
 

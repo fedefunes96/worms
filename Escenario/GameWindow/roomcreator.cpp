@@ -17,9 +17,6 @@ RoomCreator::RoomCreator(WaitRoom *wait, Protocol* protocol, QWidget *parent) :
 
 RoomCreator::~RoomCreator()
 {
-    for (auto line : lines){
-        delete line;
-    }
     delete ui;
 }
 
@@ -30,12 +27,6 @@ void RoomCreator::recvMaps(QList<std::string> list)
         std::cout<<"nombre:"<<list[i]<<std::endl;
         QString name = QString::fromStdString(list[i]);
         ui->listWidget->addItem(name);
-        //QLineEdit *line = new QLineEdit(this);
-        //line->move(i*100,40);
-        //line->show();
-        //lines.push_back(line);
-        //button *b = new button(protocol,this,list[i],line,i*100,0);
-        //buttons.push_back(b);
     }
 }
 

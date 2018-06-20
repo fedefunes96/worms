@@ -30,6 +30,9 @@ public:
     void setWindParm(int min, int max);
     void setWind(int speed);
     void setRefocusEnable(bool enable);
+    void closeEvent(QCloseEvent *event);
+signals:
+    void closeGame();
 private slots:
     void on_pushButton_clicked();
 

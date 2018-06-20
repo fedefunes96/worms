@@ -25,6 +25,11 @@ GameWindow::GameWindow(QWidget *parent) :
 }
 
 
+void GameWindow::closeEvent(QCloseEvent *event)
+{
+    emit closeGame();
+}
+
 
 void GameWindow::refreshBox()
 {
