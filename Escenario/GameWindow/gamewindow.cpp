@@ -68,6 +68,10 @@ GameWindow::~GameWindow()
 void GameWindow::addPlayer(Player *player)
 {
     this->playerActive = player;
+    QString id;
+    id.setNum(player->getId());
+    QString name= "Player ";
+    ui->nameThisPlayer->setText(name+id);
 }
 
 void GameWindow::on_pushButton_clicked()
@@ -149,6 +153,40 @@ void GameWindow::on_refocus_clicked()
 
 
 
-//void GameWindow::showPlayerList(QList<Player*> playerList){
+void GameWindow::showPlayerList(QList<Player*> playerList)
+{
+    ui->playerListPoints->clear();
+    for (int var = 0; var < playerList.size(); ++var) {
+        QString num;
+        num.setNum(playerList[var]->getPoints());
+        num = "   --> points:"+num;
+        QString name= "Player ";
+        QString id;
+        id.setNum(playerList[var]->getId());
+        name = name + id;
+        QListWidgetItem *item = new QListWidgetItem();
+        item->setText(name + num);
+        item->setBackgroundColor(QColor(playerList[var]->getColor()));
+        ui->playerListPoints->addItem(item);
+    }
+}
 
-//}
+
+/*
+    for (int i = 0; i < cant; ++i){
+        std::cout<<"nombre:"<<list[i]<<std::endl;
+        QString name = QString::fromStdString(list[i]);
+        ui->listWidget->addItem(name);
+    }
+
+*/
+
+
+
+
+
+
+
+
+
+

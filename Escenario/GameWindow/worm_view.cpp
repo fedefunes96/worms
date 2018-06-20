@@ -354,21 +354,17 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
-        QString color;
-        color += "QLabel {color : ";
-        color += this->color;
-        color += "; }";
-        labelVida->setStyleSheet(color);
+        QColor clr(this->color);
+        this->labelVida->setStyleSheet("color: #" + QString::number(clr.rgb(), 16));
         labelset=true;
         scene()->addWidget(labelVida);
+        this->labelVida->setVisible(true);
     }
     QString aux;
     aux.setNum(this->health);
     labelVida->setText(aux);
     labelVida->setGeometry(x()+22,y()-10,30,20);
-    if(x()<-40){
-        labelVida->setVisible(false);
-    }
+    qDebug()<<"posicion del Label x:"<<labelVida->x() << "y:" <<labelVida->y();
 
     if(!this->target){
         this->target = new Target();

@@ -31,6 +31,7 @@ public:
     void setWind(int speed);
     void setRefocusEnable(bool enable);
     void closeEvent(QCloseEvent *event);
+    void showPlayerList(QList<Player *> playerList);
 signals:
     void closeGame();
 private slots:

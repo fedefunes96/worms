@@ -65,9 +65,10 @@ void GameClass::setPotBar(int pot)
 
 QString GameClass::getColor(int id_player)
 {
-    while((id_player) >= this->color_list.size()){
+    while(id_player>= this->color_list.size()){
         id_player -= this->color_list.size();
     }
+    qDebug()<<"COLOOOOOOOOOOOOOOOOOOOOOR PLAYER ID:"<<id_player;
     return this->color_list[id_player];
 }
 
@@ -80,18 +81,17 @@ void GameClass::createColorList()
     this->color_list.append("cyan");
     this->color_list.append("green");
     this->color_list.append("orange");
-    this->color_list.append("darkBlue");
-    this->color_list.append("white");
-    this->color_list.append("black");
     this->color_list.append("darkRed");
-    this->color_list.append("magenta");
-    this->color_list.append("darkGreen");
-    this->color_list.append("gray");
     this->color_list.append("darkGray");
+    this->color_list.append("white");
+    this->color_list.append("darkBlue");
+    this->color_list.append("magenta");
+    //this->color_list.append("darkGreen"); //// ESTE TIENE ERROR
+    this->color_list.append("gray");
     this->color_list.append("darkCyan");
-    this->color_list.append("darkYellow");
+    //this->color_list.append("darkYellow");  //// ESTE TIENE ERROR
     this->color_list.append("darkMagenta");
-    this->color_list.append("lightGray");
+    this->color_list.append("lightGray"); // pos 10
 }
 
 
@@ -350,6 +350,7 @@ void GameClass::checkDeadItem()
 
 void GameClass::checkQueueEvent(QList<int> list)
 {
+    this->window->showPlayerList(this->players_list);
     int cmd = list[0];
     if(cmd== static_cast<int>(Commands::GAME_END)){
        //terminar juego
