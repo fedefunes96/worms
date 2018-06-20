@@ -32,9 +32,6 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->color_list.append("darkBlue");
     this->window->setRefocusEnable(false);
 
-    this->refreshScreen = new QTimer();
-    connect(this->refreshScreen,&QTimer::timeout,this,&GameClass::updateScreen);
-    this->refreshScreen->start(50);
 }
 
 Camera* GameClass::getCamera()
@@ -48,7 +45,6 @@ void GameClass::connectWaitRoom(WaitRoom *wait){
 
 void GameClass::showWindow()
 {
-    //qDebug()<<"SHOOOOOOOOOOOOOWWWWWWWWWWW";
     std::string path(ROOT_PATH"/resources/images/intro2.jpg");
     this->window->showMaximized();
     b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/FFI - Victory.wav");
@@ -58,7 +54,6 @@ void GameClass::showWindow()
 void GameClass::connectController(Controler *controler)
 {
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
-    //connect(controler,SIGNAL(startGame()),this,SLOT(showWindow()));
 }
 
 
@@ -84,8 +79,6 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
         Worm_View *worm = new Worm_View(this,this->color_list[id_player]);
-        //QRectF rect = worm->boundingRect();
-        //qDebug()<<"asd"<<rect.x();
         qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
         worm->setHealth(health);
         worm->setId(id);
@@ -100,22 +93,19 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    //qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
-    //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
-    /*if((this->game->getHeight()<posY || this->game->getWidth() < posX) &&
-            (type==static_cast<int>(TypeObj::WORM) ||
-             type==static_cast<int>(TypeObj::SMALL_GIRDER) ||
-             type==static_cast<int>(TypeObj::LARGE_GIRDER)) ){
+    qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
+    qDebug()<<"posX:"<<posX<<"posY:"<<posY;
+    if((this->game->getHeight()<posY || this->game->getWidth() < posX) ){
         if(this->game->getHeight()<posY){
-            //qDebug()<<"aumento Y";
+            qDebug()<<"aumento Y";
             this->game->resizeScene(this->game->getWidth(),posY*10);
         }
         if(this->game->getWidth()<posX){
-            //qDebug()<<"aumento X";
+            qDebug()<<"aumento X";
             this->game->resizeScene(posX*4,this->game->getHeight());
         }
     }
-    */
+
     if(type==static_cast<int>(TypeObj::WORM)){
         if(this->game->containsItem(type,id)){
             //contiene al worm --> lo muevo
@@ -217,12 +207,6 @@ Game_View *GameClass::getGameView()
 }
 
 
-Worm_View* GameClass::getWormActive()
-{
-    return this->game->getWormActive();
-}
-
-
 std::vector<int> GameClass::fireWeapon()
 {
     std::vector<int> vect;
@@ -231,17 +215,12 @@ std::vector<int> GameClass::fireWeapon()
             qDebug()<<"nullptr el worm";
         }
         int idWeapon = this->myPlayer->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
-        //int angle = this->game->getWormActive()->getTargetAngle();
         if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
-            qDebug()<<"entreeeeeeee";
-            qDebug()<<idWeapon;
-            qDebug()<<"id worm:"<<this->game->getWormActive()->getId();
             return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
         qDebug()<<"arma a disparar ------->"<<idWeapon;
-        this->myPlayer->fireWeapon(idWeapon); // genero bullet y disparo ... esto me tendria que devolver un id del bullet??
-
+        this->myPlayer->fireWeapon(idWeapon);
         std::pair<int,int> pos = this->myPlayer->getWormActive()->getDirWeapon();
         qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
         int time = this->myPlayer->getWormActive()->getTimeWeapon();
@@ -262,7 +241,6 @@ std::vector<int> GameClass::fireWeapon()
     }
     return vect;
 }
-
 
 
 bool GameClass::isMyTurn(){
@@ -380,7 +358,7 @@ void GameClass::setStatusWorm(QList<int> list)
 {
     Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),list[1]);
     if(!item){
-        qDebug()<<"no deberia suceder esto en estatus";
+        qDebug()<<"no deberia suceder esto en status";
         return;
     }
     Worm_View *worm = static_cast<Worm_View*>(item);
@@ -389,9 +367,9 @@ void GameClass::setStatusWorm(QList<int> list)
 
 void GameClass::checkRound(QList<int> list){
     this->window->startTimerRound(40);
-    qDebug()<<"actual player id:"<<list[1];
-    qDebug()<<"actual worm id:"<<list[2];
-    qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();
+    //qDebug()<<"actual player id:"<<list[1];
+    //qDebug()<<"actual worm id:"<<list[2];
+    //qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();
 
     Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
@@ -408,6 +386,7 @@ void GameClass::checkRound(QList<int> list){
         if(worm2!=nullptr){
             qDebug()<<"entre";
             worm2->setSelect(false);
+            worm2->loadSpriteWeapon(-1);
         }
         this->myPlayer->setWormActive(nullptr);
         return;
@@ -419,24 +398,8 @@ void GameClass::checkRound(QList<int> list){
     this->setPotBar(0);
     this->window->setButtonEnable(true);
     this->myPlayer->setActive(true);
-
     this->myPlayer->setWormActive(worm);
-    qDebug()<<"setee worm activo id:"<<worm->getId();
-
-
 }
-
-
-
-
-
-
-void GameClass::updateScreen()
-{
-    QGraphicsScene *scene = this->game->getScene();
-    scene->update(scene->sceneRect()); // para refrescar la pantalla
-}
-
 
 
 

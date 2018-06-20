@@ -44,8 +44,7 @@ void Projectile::moveTo(int angle, int posx, int posy)
     //qDebug()<<"mover misil";
     int width = this->boundingRect().width();
     int height = this->boundingRect().height();
-    QGraphicsScene* sc = this->scene();
-    setPos(posx-width/2,sc->height()-posy-height/2);
+    setPos(posx-width/2,-posy-height/2);
     setTransform(QTransform().translate(30, 30).rotate(angle).translate(-30, -30));
 }
 

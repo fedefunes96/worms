@@ -30,62 +30,67 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    qRegisterMetaType<QList<std::string>>("QList<std::string>");
+    bool gameOpen=true;
+    while(gameOpen){
+        QApplication a(argc, argv);
+        qRegisterMetaType<QList<std::string>>("QList<std::string>");
 
-    QRect rect = a.desktop()->screenGeometry();
+        QRect rect = a.desktop()->screenGeometry();
 
-    ConectionWindow mainWindow;
-    mainWindow.exec();
+        ConectionWindow mainWindow;
+        mainWindow.exec();
 
-    if(mainWindow.closeWithX()){
-        return 0;
+        if(mainWindow.closeWithX()){
+            gameOpen=false;
+            continue;
+        }
+
+        Socket client = mainWindow.getSocket();
+
+        Protocol protocol(client);
+
+        Controler controler(&protocol);
+
+        WaitRoom wait(&protocol);
+        MapSelection map(&wait,&protocol);
+        RoomCreator room(&wait,&protocol);
+        FinalScreen finalScreen(&a);
+        map.connectControler(&controler);
+        room.connectControler(&controler);
+        wait.connectControler(&controler);
+
+        Window c(&map,&room,&protocol,&wait);
+
+        c.connectControler(&controler);
+        controler.start();
+        c.exec();
+
+        GameClass game(rect,500,500,c.getId());
+        game.connectWaitRoom(&wait);
+        game.connectController(&controler);
+
+        finalScreen.connectGame(&game);
+
+        if(c.closeWithX()){
+            controler.terminate();
+            continue;
+        }
+
+        if(!wait.getShowWindow()){
+            continue;
+        }
+        wait.exec();
+
+        EventHandler *filter = new EventHandler(&a,&game,&protocol);
+        a.installEventFilter(filter);
+
+
+        if(wait.closeWithX()){
+            continue;
+        }
+        a.exec();//solucionar esto para cerrar el juego
     }
-
-    Socket client = mainWindow.getSocket();
-
-    Protocol protocol(client);
-
-    Controler controler(&protocol);
-
-    WaitRoom wait(&protocol);
-    MapSelection map(&wait,&protocol);
-    RoomCreator room(&wait,&protocol);
-    FinalScreen finalScreen(&a);
-    map.connectControler(&controler);
-    room.connectControler(&controler);
-    wait.connectControler(&controler);
-
-    Window c(&map,&room,&protocol,&wait);
-
-    c.connectControler(&controler);
-    controler.start();
-    c.exec();
-
-    GameClass game(rect,50000,50000,c.getId());
-    game.connectWaitRoom(&wait);
-    game.connectController(&controler);
-
-    finalScreen.connectGame(&game);
-
-    if(c.closeWithX()){
-        controler.terminate();
-        return 0;
-    }
-
-    if(!wait.getShowWindow()){
-        return 0;
-    }
-    wait.exec();
-
-    EventHandler *filter = new EventHandler(&a,&game,&protocol);
-    a.installEventFilter(filter);
-
-
-    if(wait.closeWithX()){
-        return 0;
-    }
-    return a.exec();//solucionar esto para cerrar el juego
+    return 0;
 }
 
 

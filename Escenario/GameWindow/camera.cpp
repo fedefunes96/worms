@@ -6,7 +6,6 @@ Camera::Camera(QWidget *parent):QGraphicsView(parent)
     //setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-
     timer = new QTimer();
     timer->start(1);
     this->playerActive = nullptr;
@@ -24,8 +23,8 @@ void Camera::resizeEvent(QResizeEvent *event)
 {
     qDebug() << event->size();
     QGraphicsView::resizeEvent(event);
-    horizontalScrollBar()->setValue(500);
-    verticalScrollBar()->setValue(this->scene()->height());
+    horizontalScrollBar()->setValue(0);
+    verticalScrollBar()->setValue(0);
 }
 
 
@@ -37,7 +36,7 @@ void Camera::mousePressEvent(QMouseEvent *event)
     if(this->playerActive->isActive()){
         Worm_View* worm = this->playerActive->getWormActive();
         worm->setClickDir(event->x()+horizontalScrollBar()->value(),
-                          this->scene()->height()-(event->y()+verticalScrollBar()->value()));
+                          -(event->y()+verticalScrollBar()->value()));
         emit mouseClick();
     }
 }
@@ -73,16 +72,16 @@ void Camera::followObject()
     }
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 7 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 9 );
     }else if(item->x() < horizontalScrollBar()->value()+200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 7 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 9 );
     }
 
 
     if(item->y() > verticalScrollBar()->value()+200 && item->y()>verticalScrollBar()->value()+this->height()-200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + 7 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() + 9 );
     }else if(item->y() < verticalScrollBar()->value()+200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() - 7 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() - 9 );
     }
 
 }
@@ -90,25 +89,25 @@ void Camera::followObject()
 void Camera::moveRightCam()
 {
     this->freeMove=true;
-    horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 10 );
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 15 );
 }
 
 void Camera::moveLeftCam()
 {
     this->freeMove=true;
-    horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 10 );
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 15 );
 }
 
 void Camera::moveUpCam()
 {
     this->freeMove=true;
-    verticalScrollBar()->setValue( verticalScrollBar()->value() - 10 );
+    verticalScrollBar()->setValue( verticalScrollBar()->value() - 15 );
 }
 
 void Camera::moveDownCam()
 {
     this->freeMove=true;
-    verticalScrollBar()->setValue( verticalScrollBar()->value() + 10 );
+    verticalScrollBar()->setValue( verticalScrollBar()->value() + 15 );
 }
 
 

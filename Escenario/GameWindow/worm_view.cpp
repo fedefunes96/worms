@@ -452,10 +452,9 @@ std::pair<int, int> Worm_View::getDirWeapon()
         }else if(this->targetAngle>0 && this->targetAngle<=90){
             dir.second = -dir.second;
         }
-        int h = this->scene()->height();
         //qDebug()<<"ancho scene:"<<h;
         dir.first = dir.first + this->currentDir.first;
-        dir.second = h - this->currentDir.second + dir.second;
+        dir.second =  -this->currentDir.second + dir.second;
         //qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
     }else{
         return this->clickTarget;
@@ -508,9 +507,8 @@ void Worm_View::setDestDir(int x, int y)
 {
     int width = this->boundingRect().width();
     int height = this->boundingRect().height();
-    QGraphicsScene* sc = scene();
     this->destDir.first = x-width/2;
-    this->destDir.second = sc->height()-y-height/2;
+    this->destDir.second = -y-height/2;
 }
 
 void Worm_View::nextFrame(){
@@ -535,11 +533,10 @@ void Worm_View::moveTo(int angle, int posx,int posy)
     }
     //this->moving=true;
     //checkAngle(angle);
-    QGraphicsScene* sc = scene();
     this->lastDir.first=this->currentDir.first;
     this->lastDir.second=this->currentDir.second;
     //qDebug()<<"SETEE LASTDIR";
-    this->setPosition(posx,sc->height()-posy);
+    this->setPosition(posx,-posy);
     nextFrame();
     //qDebug()<<"momving dir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
 	return;
@@ -669,7 +666,6 @@ void Worm_View::loadSpriteWeapon(int val)
         timer->setInterval(35);
         path1 =ROOT_PATH"/resources/images/wbsblnk.png";
         loadSprite(path1);
-        this->targetVis=true;
         break;
     case static_cast<int>(WeaponsIds::BANANA):
     	currentFrame=0;

@@ -1,6 +1,7 @@
 #ifndef GAME_VIEW_H
 #define GAME_VIEW_H
 
+#include <QObject>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -14,40 +15,37 @@
 #include "player.h"
 #include "items.h"
 #include <vector>
+#include <QTimer>
 
-class Game_View
+class Game_View: public QObject
 {
 private:
     QGraphicsScene* scene;
     Camera* camera;
     std::vector<Player*> players_list;
     std::vector<Items*> items_list;
+    QTimer *timerUpdate;
+
+private slots:
+    void update_view();
+
 public:
     Game_View();
     Game_View(QRect screen, int w, int h);
-    void update_view();
     void add_Item(QGraphicsItem *item, int posx, int posy);
-    void del_Item(Items *item);
     void setBackground(std::string& path);
     QGraphicsItem *itemAt(int posx,int posy);
     Camera *getCamera();
-    Worm_View *getWormActive();   // esto no se si tiene sentido...
-
-    void centerScreen(QRect rect);
-    void maximizateScreen();
-    void minimizateScreen();
     void addWidget(QWidget *widget);
 
     void moveObjTo(int type, int id, int posX, int posY, int angle);
     void addItemToFollow(MovableItem *item);
-    bool containsItem(Items *item);
     bool containsItem(int8_t id_typ, int32_t id);
     Items *getItem(int8_t id_type, int32_t id);
     QGraphicsScene *getScene();
     void setPlayerActive(Player *player);
     int getWidth();
     int getHeight();
-    Worm_View* getWormActive2();
     void addCamera(Camera *camera);
     void resizeScene(int w, int h);
 };
