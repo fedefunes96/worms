@@ -15,7 +15,6 @@
 #include "editorviga.h"
 #include <QDropEvent>
 #include <vector>
-#include "scene.h"
 
 namespace Ui {
 class EditorPantalla;
