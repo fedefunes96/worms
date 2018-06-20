@@ -58,7 +58,7 @@ void Game::initialize_game(const std::string& stage_file) {
 	std::vector<Worm*> worms_to_attach;
 	//std::string map = "../yaml/basico.yaml";
 	std::string map = stage_file;
-	std::string config =  "../yaml/config.yaml";
+	std::string config =  std::string(ROOT_PATH)+"/config/config.yaml";
 	
 	int waterLvl = Parser::waterLvl(config);
 	float airMin = Parser::airMinSpeed(config);

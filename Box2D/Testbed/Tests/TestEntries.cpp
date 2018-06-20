@@ -57,11 +57,9 @@
 #include "VaryingRestitution.h"
 #include "VerticalStack.h"
 #include "Web.h"
-#include "TestGirder.h"
 
 TestEntry g_testEntries[] =
 {
-	{"Test Girder", TestGirder::Create},
 	{"Time of Impact", TimeOfImpact::Create},
 	{"Ray-Cast", RayCast::Create},
 	{"One-Sided Platform", OneSidedPlatform::Create},

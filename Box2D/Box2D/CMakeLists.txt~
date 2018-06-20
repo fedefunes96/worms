@@ -155,13 +155,13 @@ endif()
 
 if(BOX2D_INSTALL)
 	# install headers
-	#install(FILES ${BOX2D_General_HDRS} DESTINATION include/Box2D)
-	#install(FILES ${BOX2D_Collision_HDRS} DESTINATION include/Box2D/Collision)
-	#install(FILES ${BOX2D_Shapes_HDRS} DESTINATION include/Box2D/Collision/Shapes)
-	#install(FILES ${BOX2D_Common_HDRS} DESTINATION include/Box2D/Common)
-	#install(FILES ${BOX2D_Dynamics_HDRS} DESTINATION include/Box2D/Dynamics)
-	#install(FILES ${BOX2D_Contacts_HDRS} DESTINATION include/Box2D/Dynamics/Contacts)
-	#install(FILES ${BOX2D_Joints_HDRS} DESTINATION include/Box2D/Dynamics/Joints)
+	install(FILES ${BOX2D_General_HDRS} DESTINATION include/Box2D)
+	install(FILES ${BOX2D_Collision_HDRS} DESTINATION include/Box2D/Collision)
+	install(FILES ${BOX2D_Shapes_HDRS} DESTINATION include/Box2D/Collision/Shapes)
+	install(FILES ${BOX2D_Common_HDRS} DESTINATION include/Box2D/Common)
+	install(FILES ${BOX2D_Dynamics_HDRS} DESTINATION include/Box2D/Dynamics)
+	install(FILES ${BOX2D_Contacts_HDRS} DESTINATION include/Box2D/Dynamics/Contacts)
+	install(FILES ${BOX2D_Joints_HDRS} DESTINATION include/Box2D/Dynamics/Joints)
 
 	# install libraries
 	if(BOX2D_BUILD_SHARED)
@@ -172,6 +172,6 @@ if(BOX2D_INSTALL)
 	endif()
 
 	# install build system hooks for third-party apps
-	#install(EXPORT Box2D-targets DESTINATION lib/Box2D)
-	#install(FILES Box2DConfig.cmake DESTINATION lib/Box2D)
+	install(EXPORT Box2D-targets DESTINATION lib/Box2D)
+	install(FILES Box2DConfig.cmake DESTINATION lib/Box2D)
 endif(BOX2D_INSTALL)

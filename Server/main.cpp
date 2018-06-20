@@ -15,26 +15,30 @@
 #include "counter.h"
 #include "event_queue.h"
 
-#define CANT_PLAYERS 50
+#define CANT_PLAYERS 100
 #define TERMINAR_SERVIDOR "q"
+#define PARAM_SERVER 1
 
 int main(int argc, char* argv[]) {
-	Server server("7777", 50);
+	if (argc == PARAM_SERVER + 1) {		
+		Server server(std::string(argv[1]), CANT_PLAYERS);
 
-	bool esperar_quit = true;
+		bool esperar_quit = true;
 
-	std::thread t(&Server::start, &server);
+		std::thread t(&Server::start, &server);
 
-	while(esperar_quit) {
-		std::string input;
-		std::cin >> input;
+		while(esperar_quit) {
+			std::string input;
+			std::cin >> input;
 
-		if (!input.compare("q")) {
-			server.interrupt_server();
-			esperar_quit = false;
+			if (!input.compare("q")) {
+				server.interrupt_server();
+				esperar_quit = false;
+			}
 		}
+
+		t.join();	
 	}
 
-	t.join();	
 	return 0;
 }
