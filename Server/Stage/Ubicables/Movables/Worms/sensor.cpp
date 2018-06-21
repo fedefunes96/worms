@@ -78,10 +78,12 @@ void Sensor::start_contacting(b2Contact* contact) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(true);
 		this->worm.set_velocity(b2Vec2(0, 0));
+		printf("Viga para deslizar (1)\n");
 	} else if (0 <= fabs(angle_min) && fabs(angle_min) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
 		this->worm.set_angle(angle_min);
+		printf("Viga para no deslizar (1)\n");
 	}		
 
 	/*girder_colisions
@@ -138,10 +140,12 @@ void Sensor::stop_contacting(b2Contact* contact) {
 		this->worm.set_gravity(DEFAULT_GRAVITY);
 		this->worm.set_slide(true);
 		this->worm.set_velocity(b2Vec2(0, 0));
+		printf("Viga para deslizar (2)\n");
 	} else if (0 <= fabs(angle_min) && fabs(angle_min) < b2_pi/4) {
 		this->worm.set_gravity(b2Vec2(0, 0));
 		this->worm.set_slide(false);
 		this->worm.set_angle(angle_min);
+		printf("Viga para no deslizar (2)\n");
 	} 
 
 	if (this->object_count == 0) {

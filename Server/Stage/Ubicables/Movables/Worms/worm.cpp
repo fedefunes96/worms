@@ -206,7 +206,6 @@ void Worm::move_step(float32 time_step) {
 
 		if (this->jump_cooldown == 0 && !this->should_slide && this->should_jump) {
 			this->body->SetLinearVelocity(b2Vec2(0, 0));
-			printf("Velocity: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
 			this->body->ApplyLinearImpulse(this->actual_velocity, this->body->GetWorldCenter());
 			//this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
 			//this->should_jump = false;
