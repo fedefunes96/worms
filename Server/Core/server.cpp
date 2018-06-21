@@ -315,7 +315,7 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 			event_queues.push_back(queue);
 		}
 
-		//std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		printf("Launching game\n");
 
 		Game *game = new Game(stage_file 

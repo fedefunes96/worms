@@ -25,6 +25,7 @@ void WaitRoom::plysInRoom(int cant)
 void WaitRoom::startGameView()
 {
     // iniciar el juego  la vista
+    qDebug()<<"inicie la vista";
     emit startView();
     this->closeX=false;
     this->close();
@@ -36,12 +37,13 @@ void WaitRoom::closeEvent(QCloseEvent *event)
     if(this->closeX){
         emit closeGame();
     }
+    this->close();
 }
 
 void WaitRoom::connectControler(Controler *controler)
 {
-    connect(controler,SIGNAL(playersInRoom(int)),this,SLOT(plysInRoom(int)));
-    connect(controler,SIGNAL(startGame()),this,SLOT(startGameView()));
+    connect(controler,SIGNAL(playersInRoom(int)),this,SLOT(plysInRoom(int)),Qt::QueuedConnection);
+    connect(controler,SIGNAL(startGame()),this,SLOT(startGameView()),Qt::QueuedConnection);
     connect(this,SIGNAL(closeGame()),controler,SLOT(stopController()));
 }
 

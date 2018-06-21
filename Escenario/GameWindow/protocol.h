@@ -124,6 +124,7 @@ public:
 
     void recvWindParamt(int32_t *min, int32_t *max);
     void recvWindSpeed(int32_t *speed);
+    std::string recvBackground();
 };
 
 #endif // PROTOCOL_H

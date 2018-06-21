@@ -145,7 +145,7 @@ void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
         }
         if(this->game->getWidth()<posX){
             qDebug()<<"aumento X";
-            this->game->resizeScene(posX*4,this->game->getHeight());
+            this->game->resizeScene(posX*10,this->game->getHeight());
         }
     }
 

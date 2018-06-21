@@ -260,7 +260,6 @@ void Worm_View::setStatus(int on_ground, int dir)
         }else if(dir==static_cast<int>(MoveDirection::NONE)){
             // dejar de moverme
             if(this->last_on_ground==0){
-                this->fall->play();
                 ///////////// ACA VA EL SONIDO PARA CUANDO EL WORM CAE AL PISO...
             }
             if(this->jumping){
@@ -278,6 +277,7 @@ void Worm_View::setStatus(int on_ground, int dir)
         }
     }else{
         // esta en aire
+        qDebug()<<"last dir:"<<this->last_dir;
         if(dir==static_cast<int>(MoveDirection::LEFT) || dir==static_cast<int>(MoveDirection::RIGHT)){
             if(this->jumping){
                 //rotar imagen
@@ -317,6 +317,7 @@ void Worm_View::setStatus(int on_ground, int dir)
             }
         }else if(this->last_dir==static_cast<int>(MoveDirection::LEFT) || this->last_dir==static_cast<int>(MoveDirection::RIGHT)){
             //me estoy cayendo ...
+            this->fall->play();
             qDebug()<<"me estoy cayendo.....";
             delete(this->spriteImage);
             this->currentFrame=0;
@@ -330,7 +331,10 @@ void Worm_View::setStatus(int on_ground, int dir)
             delete(aux);
             aux = nullptr;
         }else if(dir==static_cast<int>(MoveDirection::NONE) && this->jumping==false){
-            if(isFalling()){
+            if(this->last_dir==static_cast<int>(MoveDirection::JUMP_BACK) ||
+                    this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW)){
+                // estaba saltando no hacer nada...
+            }else if(isFalling()){
                 //me caigo solo o por golpe
                 delete(this->spriteImage);
                 this->currentFrame=0;

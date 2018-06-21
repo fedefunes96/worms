@@ -25,6 +25,7 @@ void Window::on_pushButton_clicked()
     this->closeX=false;
     this->protocol->sendCreateRoom();
     this->close();
+    this->room->setExecute(true);
     this->room->exec();
 }
 
@@ -33,6 +34,7 @@ void Window::on_pushButton_2_clicked()
     this->closeX=false;
     this->protocol->sendJoinRoom();
     this->close();
+    this->map->setExecute(true);
     this->map->exec();
 }
 

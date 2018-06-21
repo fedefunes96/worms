@@ -12,7 +12,7 @@ int Weapon::getAmmo()
 
 void Weapon::fire()
 {
-    if(this->idObj==static_cast<int>(idWeapon::TELEPORTATION)){
+    if(this->idObj==9){
         //sonido particular teletrasnportar
         this->tele->play();
     }else{

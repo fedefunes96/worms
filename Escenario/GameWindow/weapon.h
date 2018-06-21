@@ -3,20 +3,6 @@
 
 #include "generalSounds.h"
 
-
-enum class idWeapon : uint8_t {
-    BAZOOKA = 0,
-    MORTAR,
-    GREEN_GRENADE,
-    RED_GRENADE,
-    BANANA,
-    HOLY_GRENADE,
-    DYNAMITE,
-    BASEBALL_BAT,
-    AERIAL_ATTACK,
-    TELEPORTATION
-};
-
 class Weapon
 {
 public:
@@ -31,7 +17,6 @@ protected:
     int ammo;
     generalSounds* tele;
     generalSounds* fireSound;
-    //faltarian los 3 path para los sprites? --> mejora
 };
 
 #endif

@@ -13,11 +13,17 @@ RoomCreator::RoomCreator(WaitRoom *wait, Protocol* protocol, QWidget *parent) :
     this->protocol = protocol;
     this->wait = wait;
     this->setWindowTitle("Worms Armageddon - Creador sala");
+    this->isExec=false;
 }
 
 RoomCreator::~RoomCreator()
 {
     delete ui;
+}
+
+void RoomCreator::setExecute(bool enable)
+{
+    this->isExec=enable;
 }
 
 void RoomCreator::recvMaps(QList<std::string> list)
@@ -34,15 +40,34 @@ void RoomCreator::recvMaps(QList<std::string> list)
 
 void RoomCreator::connectControler(Controler *controler)
 {
+    connect(controler,SIGNAL(joinR(int)),this,SLOT(couldCreate(int)),Qt::QueuedConnection);
     connect(controler,SIGNAL(recvMap(QList<std::string>)),this,SLOT(recvMaps(QList<std::string>)));
     connect(this,SIGNAL(closeGame()),controler,SLOT(stopController()));
+}
+
+
+void RoomCreator::couldCreate(int could)
+{
+    if(!isExec){
+        return;
+    }
+    if(could!=0){
+        //pude crear
+        this->wait->setShowWindow(true);
+        this->closeX=false;
+        this->close();
+    }else{
+        QMessageBox::information(this,"Error","Another room has the same name, choose another one.");
+    }
 }
 
 
 
 void RoomCreator::closeEvent(QCloseEvent *event)
 {
+    qDebug()<<"entre al cerar room creator";
     if(this->closeX){
+        qDebug()<<"no quiero que se muestre mas nada";
         this->wait->setShowWindow(false);
         emit closeGame();
     }
@@ -60,14 +85,7 @@ void RoomCreator::on_pushButton_clicked()
         QMessageBox::information(this,"Invalid Input","Write a name valid for the room's name.");
     }else{
         protocol->sendCreateRoom(nombre,mapName);
-        //int could = protocol->recvCouldJoinRoom();
-        //if(could==/*algo*/){
-//            QMessageBox::information(this,"Error","Another room has the same name, choose another one.");
-//            return;
-//        }
-        this->wait->setShowWindow(true);
-        this->closeX=false;
-        this->close();
+        //this->couldCreate(1);
     }
 
 }

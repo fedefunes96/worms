@@ -63,7 +63,7 @@ void Controler::run()
             list.push_back(id_player);
             list.push_back(id);
             list.push_back(health);
-            qDebug()<<"id:"<<id<<"vida"<<health;
+            //qDebug()<<"id:"<<id<<"vida"<<health;
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::REMOVE)){
@@ -116,7 +116,7 @@ void Controler::run()
             int32_t speed;
             this->protocol->recvWindSpeed(&speed);
             list.push_back(speed);
-            qDebug()<<"---------------->wind speed"<<speed;
+            //qDebug()<<"---------------->wind speed"<<speed;
             emit eventCreated(list);
             continue;
         }else if(cmd==static_cast<int>(Commands::WINNER)){
@@ -162,6 +162,8 @@ void Controler::run()
             emit playersInRoom(cant);
         } else if (cmd==static_cast<int>(Commands::START_GAME)){
             qDebug()<<" se inicia el juego !!!!!!!!!!!!!!!!!!!!!!111@@#@#@~@@#";
+            std::string nameBack = this->protocol->recvBackground();
+            std::cout <<"nombre background" << nameBack <<std::endl;
         	//pasarselo a wait room
             emit startGame();
         }

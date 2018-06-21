@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 {
     bool gameOpen=true;
     while(gameOpen){
+        qDebug()<<"Inicio TODO";
         QApplication a(argc, argv);
         qRegisterMetaType<QList<std::string>>("QList<std::string>");
 
@@ -65,18 +66,23 @@ int main(int argc, char *argv[])
         controler.start();
         c.exec();
 
+        if(c.closeWithX()){
+            controler.terminate();
+            qDebug()<<"CERRAR!!!!";
+            continue;
+        }
+
         GameClass game(rect,500,500,c.getId());
         game.connectWaitRoom(&wait);
         game.connectController(&controler);
 
         finalScreen.connectGame(&game);
 
-        if(c.closeWithX()){
-            controler.terminate();
-            continue;
-        }
 
         if(!wait.getShowWindow()){
+            //controler.terminate();
+            qDebug()<<"quiero cerrar todo";
+            a.quit();
             continue;
         }
         qDebug()<<"PASEEEEEEEEEEE";

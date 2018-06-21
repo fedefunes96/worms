@@ -105,7 +105,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
                 return;
             }
             //qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
-            this->power=10;
+            this->power=1;
             this->game->getCamera()->setFreeMove(false);
             break;
         }
@@ -390,7 +390,7 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 this->game->setPotBar(this->power);
                 if(this->power<100){
                     //qDebug()<< "power:"<<this->power;
-                    this->power+=10;
+                    this->power+=3;
                 }
                 break;
             }
@@ -413,7 +413,12 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                         vect[0]==static_cast<int>(UsableIds::HOLY_GRENADE)||
                         vect[0]==static_cast<int>(UsableIds::MORTAR)||
                         vect[0]==static_cast<int>(UsableIds::RED_GRENADE)){
-                    vect2.push_back(this->power);
+                    if(this->power>100){
+                        vect2.push_back(100);
+                    }else{
+                        vect2.push_back(this->power);
+                    }
+
                 }
                 if(vect.size()==4){
                     vect2.push_back(vect[3]);

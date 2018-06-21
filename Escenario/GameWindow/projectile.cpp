@@ -9,7 +9,7 @@ Projectile::Projectile():MovableItem()
     this->spriteImage = nullptr;
     timer = new QTimer();   // Create a timer for sprite animation
     this->alive=true;
-    this->explocion = new generalSounds(ROOT_PATH"/resources/sounds/English/Big Explosion Sound FX.mp3");
+    //this->explotionSound = new generalSounds(ROOT_PATH"/resources/sounds/English/Big Explosion Sound FX.mp3");
 }
 
 /*
@@ -79,7 +79,7 @@ void Projectile::explote()
     //setPos(x()-30,y());
     currentFrame=0;
     connect(timer, &QTimer::timeout, this, &Projectile::nextFameImpact);
-    this->explocion->play();
+    //this->explotionSound->play();
     ///////////////////// ACA PONER SONIDO EXPLOSION
 }
 

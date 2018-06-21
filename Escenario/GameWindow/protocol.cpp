@@ -724,4 +724,23 @@ void Protocol::sendExitRoom()
 }
 
 
+std::string Protocol::recvBackground()
+{
+    char buff[BYTES_RECEIVE+1];
+    int8_t tam;
+    conexion.recibir((char*)&tam,1);
+    std::string name;
+    while (tam > BYTES_RECEIVE){
+        conexion.recibir(buff,BYTES_RECEIVE);
+        name.append(buff,BYTES_RECEIVE);
+        tam -= BYTES_RECEIVE;
+    }
+    conexion.recibir(buff,tam);
+    name.append(buff,tam);
+    std::cout << "nombre background "<<name << std::endl;
+    return name;
+}
+
+
+
 

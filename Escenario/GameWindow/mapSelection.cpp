@@ -17,6 +17,12 @@ MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
     this->setWindowTitle("Worms Armageddon - Seleccion de sala");
     this->wait = wait;
     this->closeX=true;
+    isExec=false;
+}
+
+void MapSelection::setExecute(bool enable)
+{
+    this->isExec=enable;
 }
 
 MapSelection::~MapSelection()
@@ -38,7 +44,13 @@ void MapSelection::recvRooms(QList<std::string> list)
 
 void MapSelection::goWaitRoom(int cant)
 {
+    if(!isExec){
+        return;
+    }
+    qDebug()<<"en Map Selection pude conectarme con"<<cant;
     if (cant>0){
+        this->wait->setShowWindow(true);
+        this->closeX=false;
         this->close();
     } else {
         qDebug()<<"no se conecto";
@@ -56,12 +68,17 @@ void MapSelection::closeEvent(QCloseEvent *event)
 
 void MapSelection::connectControler(Controler *controler)
 {
-    connect(controler,SIGNAL(joinR(int)),this,SLOT(goWaitRoom(int)));
-    connect(controler,SIGNAL(recvMap(QList<std::string>)),this,SLOT(recvRooms(QList<std::string>)));
+    connect(controler,SIGNAL(joinR(int)),this,SLOT(goWaitRoom(int)),Qt::QueuedConnection);
+    connect(controler,SIGNAL(recvMap(QList<std::string>)),this,SLOT(recvRooms(QList<std::string>)),Qt::QueuedConnection);
     connect(this,SIGNAL(closeGame()),controler,SLOT(stopController()));
 }
 
 void MapSelection::on_pushButton_clicked()
+{
+
+}
+
+void MapSelection::on_pushButton_released()
 {
     if(ui->listWidget->count()==0){
         QMessageBox::information(this,"Error","There are no rooms in list.");
@@ -69,7 +86,4 @@ void MapSelection::on_pushButton_clicked()
     }
     std::string name = ui->listWidget->currentItem()->text().toUtf8().constData();
     protocol->sendSelectRoom(name);
-    this->wait->setShowWindow(true);
-    this->closeX=false;
-    this->close();
 }

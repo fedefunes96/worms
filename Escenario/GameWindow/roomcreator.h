@@ -23,9 +23,11 @@ public:
     void connectControler(Controler *controler);
 
     void closeEvent(QCloseEvent *event);
+    void setExecute(bool enable);
 public slots:
     void recvMaps(QList<std::string> list);
 
+    void couldCreate(int could);
 private slots:
     void on_pushButton_clicked();
 
@@ -39,6 +41,7 @@ private:
     std::vector<button*> buttons;
     std::vector<QLineEdit*> lines;
     bool closeX;
+    bool isExec;
 };
 
 #endif // ROOMCREATOR_H
