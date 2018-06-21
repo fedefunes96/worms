@@ -51,6 +51,8 @@ Worm::Worm(Game& game
 	this->dead = true;
 	this->jump_cooldown = 0;
 	this->should_slide = false;
+	this->should_jump = false;
+	this->last_should_jump = false;
 	this->angle_for_mov = 0.0;
 
 	this->last_on_ground = false;
@@ -93,9 +95,9 @@ void Worm::start_moving(MoveDirection mdirect) {
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
 	this->move_direction = mdirect;
-
-	if (/*this->is_on_ground() && */!this->jump_cooldown /*&& !this->should_slide*/) {
-
+	//Don't move while jump cooldown or
+	//i need to jump
+	//if (!this->jump_cooldown && !this->should_jump && !this->should_slide && this->is_on_ground()) {
 		switch (this->move_direction) {
 			case MoveDirection::RIGHT: {
 				this->actual_velocity.Set(mov_speed*cos(angle_for_mov), mov_speed*sin(angle_for_mov));
@@ -108,49 +110,57 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}	
 			case MoveDirection::JUMP_FORW: {
-				if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
-					this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
-				if (this->is_on_ground() && !this->should_slide) {
-					this->actual_velocity.Set(0, 0);
-					this->body->SetLinearVelocity(this->actual_velocity);
-					b2Vec2 impulse_speed;
+				//if (this->is_on_ground() && !this->should_slide) {
+					/*this->actual_velocity.Set(0, 0);
+					this->body->SetLinearVelocity(this->actual_velocity);*/
+					//b2Vec2 impulse_speed;
 
 					if(this->facing_direction == MoveDirection::LEFT) {
-						impulse_speed.Set(-forw_jump_speed.first, forw_jump_speed.second);
+						this->actual_velocity.Set(-forw_jump_speed.first, forw_jump_speed.second);
+						//impulse_speed.Set(-forw_jump_speed.first, forw_jump_speed.second);
 					}
 					else if (this->facing_direction == MoveDirection::RIGHT) {
-						impulse_speed.Set(forw_jump_speed.first, forw_jump_speed.second);
+						this->actual_velocity.Set(forw_jump_speed.first, forw_jump_speed.second);
+						//impulse_speed.Set(forw_jump_speed.first, forw_jump_speed.second);
 					}
-					this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
+
+					this->should_jump = true;
+					/*this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
 					this->jump_cooldown = JUMP_COOLDOWN;
-				}
+					this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);*/
+				//}
 				break;
 			}
 			case MoveDirection::JUMP_BACK: {
-				if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
-					this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
-				if (this->is_on_ground() && !this->should_slide) {
-					this->actual_velocity.Set(0, 0);	
-					this->body->SetLinearVelocity(this->actual_velocity);
-					b2Vec2 impulse_speed;
+				//if (this->is_on_ground() && !this->should_slide) {		
+					/*this->actual_velocity.Set(0, 0);	
+					this->body->SetLinearVelocity(this->actual_velocity);*/
+					//b2Vec2 impulse_speed;
 
 					if(this->facing_direction == MoveDirection::LEFT) {
-						impulse_speed.Set(back_jump_speed.first, back_jump_speed.second);
+						this->actual_velocity.Set(back_jump_speed.first, back_jump_speed.second);
+						//impulse_speed.Set(back_jump_speed.first, back_jump_speed.second);
 					}
 					else if (this->facing_direction == MoveDirection::RIGHT) {
-						impulse_speed.Set(-back_jump_speed.first, back_jump_speed.second);
+						this->actual_velocity.Set(-back_jump_speed.first, back_jump_speed.second);
+						//impulse_speed.Set(-back_jump_speed.first, back_jump_speed.second);
 					}
-					this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
-					this->jump_cooldown = JUMP_COOLDOWN;		
-				}	
+
+					this->should_jump = true;
+					/*this->body->ApplyLinearImpulse(impulse_speed, this->body->GetWorldCenter());
+					this->jump_cooldown = JUMP_COOLDOWN;	
+					this->game.notify_worm_status(this->get_id(), this->is_on_ground(), this->move_direction);*/	
+				//}	
 				break;
 			}										
 			case MoveDirection::NONE: {
+				printf("NOT MOVING\n");
 				this->actual_velocity.Set(0, 0);
+				this->should_jump = false;
 				break;
 			}
 		}
-	}
+	//}
 }
 
 const MoveDirection& Worm::get_facing_direction() {
@@ -184,18 +194,23 @@ void Worm::move_step(float32 time_step) {
 	std::lock_guard<std::mutex> lock(this->direction_m);
 
 	b2Vec2 actual_position = this->body->GetPosition();
-	/*if (this->jump_cooldown > 0) {
-		this->jump_cooldown--;
-	} else {
-		//this->body->SetLinearVelocity(this->actual_velocity);
-	}*/
-	
-	if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground())
+
+	if (this->last_direction != this->move_direction || this->last_on_ground != this->is_on_ground()) {
 		this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
+	}
 
 	if (this->is_on_ground()) {
-		if (this->jump_cooldown == 0 && !this->should_slide) {
+		if (this->jump_cooldown == 0 && !this->should_slide && !this->should_jump) {
 			this->body->SetLinearVelocity(this->actual_velocity);
+		}
+
+		if (this->jump_cooldown == 0 && !this->should_slide && this->should_jump) {
+			this->body->SetLinearVelocity(b2Vec2(0, 0));
+			printf("Velocity: %0.1f %0.1f\n", this->actual_velocity.x, this->actual_velocity.y);
+			this->body->ApplyLinearImpulse(this->actual_velocity, this->body->GetWorldCenter());
+			//this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
+			//this->should_jump = false;
+			this->jump_cooldown = JUMP_COOLDOWN;
 		}
 
 		float fall_height = last_position.y - actual_position.y;
@@ -214,6 +229,8 @@ void Worm::move_step(float32 time_step) {
 		//Get the highest position for fall dmg
 		if (actual_position.y > last_position.y)
 			this->last_position = actual_position;
+
+		//this->last_should_jump = this->should_jump;
 	}
 
 	if(this->jump_cooldown > 0) {
@@ -309,8 +326,8 @@ void Worm::create_myself(b2World& world) {
 	//Add more sensor to move from borders (BUG)
 	this->sensor_for_jump.add_at_position(body
 										, b2Vec2(0, -height)
-										, longitude*0.95
-										, height*0.2);
+										, longitude*0.6
+										, height*0.1);
 
 	this->last_on_ground = this->is_on_ground();
 	this->last_direction = MoveDirection::NONE;	

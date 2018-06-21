@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include "ubicable.h"
+#include <unordered_map>
 
 class Worm;
 
@@ -10,6 +11,7 @@ class Sensor : public Ubicable {
 private:
 	Worm& worm;
 	int object_count;
+	std::unordered_map<int, float> girder_colisions;
 
 public:
 	Sensor(Worm& worm);

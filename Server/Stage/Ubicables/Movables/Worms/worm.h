@@ -50,6 +50,8 @@ private:
 	int jump_cooldown;
 	bool dead;
 	bool should_slide;
+	bool should_jump;
+	bool last_should_jump;
 	bool sliding;
 	bool last_on_ground;
 	MoveDirection last_direction;
