@@ -78,6 +78,7 @@ void Projectile::explote()
     //setPos(x()-30,y());
     currentFrame=0;
     connect(timer, &QTimer::timeout, this, &Projectile::nextFameImpact);
+    ///////////////////// ACA PONER SONIDO EXPLOSION
 }
 
 void Projectile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

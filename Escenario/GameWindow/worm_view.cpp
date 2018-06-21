@@ -168,8 +168,12 @@ void Worm_View::setStatus(int on_ground, int dir)
             qDebug()<<"set izq";
             if(this->last_dir!=static_cast<int>(MoveDirection::LEFT)){
                 qDebug()<<"set izq2";
-                setAngle(-180);
-                this->last_dir=dir;
+                if(this->last_dir==static_cast<int>(MoveDirection::JUMP_BACK) ||
+                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW)){
+                    setAngle(-180);
+                }else if(this->angle!=-180){
+                    setAngle(-180);
+                }
             }else if(this->weapon!=-1){
                 qDebug()<<"Dejo de Cargar el arma...";
                 setAngle(-180);
@@ -187,7 +191,12 @@ void Worm_View::setStatus(int on_ground, int dir)
             qDebug()<<"set der";
             if(this->last_dir!=static_cast<int>(MoveDirection::RIGHT)){
                 qDebug()<<"set der2";
-                setAngle(0);
+                if(this->last_dir==static_cast<int>(MoveDirection::JUMP_BACK) ||
+                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW)){
+                    setAngle(0);
+                }else if(this->angle!=0){
+                    setAngle(0);
+                }
                 this->last_dir=dir;
             }else if(this->weapon!=-1){
                 qDebug()<<"Dejo de Cargar el arma...";
@@ -218,6 +227,7 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_dir=dir;
             this->last_on_ground=on_ground;
             this->moving=true;
+            ////////////////////// ACAAAA SONIDO SALTO HACIA ADELANTE = ATRAS
         }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
             //saltar
             this->targetVis=false;
@@ -241,10 +251,13 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_dir=dir;
             this->last_on_ground=on_ground;
             this->moving=true;
+            ////////////////////// ACAAAA SONIDO SALTO HACIA ATRAS = ADELANTE
         }else if(dir==static_cast<int>(MoveDirection::NONE)){
             // dejar de moverme
+            if(this->last_on_ground==0){
+                ///////////// ACA VA EL SONIDO PARA CUANDO EL WORM CAE AL PISO...
+            }
             if(this->jumping){
-                qDebug()<<"toque piso con dir none y sigue saltando...";
                 return;
             }
             qDebug()<<"deje de moverme";
@@ -296,8 +309,51 @@ void Worm_View::setStatus(int on_ground, int dir)
                     this->targetAngle=this->angle;
                 }
             }
+        }else if(this->last_dir==static_cast<int>(MoveDirection::LEFT) || this->last_dir==static_cast<int>(MoveDirection::RIGHT)){
+            //me estoy cayendo ...
+            qDebug()<<"me estoy cayendo.....";
+            delete(this->spriteImage);
+            this->currentFrame=0;
+            aux = new QPixmap(ROOT_PATH"/resources/images/wfall.png");
+            if(this->angle==0){
+                rm.scale(-1,1);
+            }else{
+                rm.scale(1,1);
+            }
+            this->spriteImage = new QPixmap(aux->transformed(rm));
+            delete(aux);
+            aux = nullptr;
+        }else if(dir==static_cast<int>(MoveDirection::NONE) && this->jumping==false){
+            if(isFalling()){
+                //me caigo solo o por golpe
+                delete(this->spriteImage);
+                this->currentFrame=0;
+                aux = new QPixmap(ROOT_PATH"/resources/images/wfall.png");
+                if(this->angle==0){
+                    rm.scale(-1,1);
+                }else{
+                    rm.scale(1,1);
+                }
+                this->spriteImage = new QPixmap(aux->transformed(rm));
+                delete(aux);
+                aux = nullptr;
+            }else{
+                //sali volando
+                delete(this->spriteImage);
+                this->currentFrame=0;
+                aux = new QPixmap(ROOT_PATH"/resources/images/wfly.png");
+                if(this->angle==0){
+                    rm.scale(-1,1);
+                }else{
+                    rm.scale(1,1);
+                }
+                this->spriteImage = new QPixmap(aux->transformed(rm));
+                delete(aux);
+                aux = nullptr;
+            }
         }
         this->jumping=false;
+        this->last_on_ground=on_ground;
     }
 
 }
@@ -410,7 +466,7 @@ QRectF Worm_View::areaRect()
 }
 
 void Worm_View::setClickDir(int x, int y)
-{/////////////////CHEQUEAR LO QUE DA EL CLICK DEL TELETRANSPORTAR
+{
     this->clickTarget.first=x;
     this->clickTarget.second=y;
 }
@@ -537,6 +593,7 @@ void Worm_View::removeMovable()
     if(this->labelVida!=nullptr){
         this->labelVida->setVisible(false);
     }
+    ///////////////////////////////////// ACA PONER SONIDO DE MUERTE DEL WORM ...
 }
 
 int Worm_View::getHealth()

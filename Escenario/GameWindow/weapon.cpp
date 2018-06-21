@@ -12,6 +12,11 @@ int Weapon::getAmmo()
 
 void Weapon::fire()
 {
+    if(this->idObj==static_cast<int>(idWeapon::TELEPORTATION)){
+        //sonido particular teletrasnportar
+    }else{
+        //sonido general para armas..
+    }
     this->ammo--;
 }
 
