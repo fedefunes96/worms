@@ -136,8 +136,8 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 
 void GameClass::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
-    qDebug()<<"posX:"<<posX<<"posY:"<<posY;
+    //qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
+    //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
     if((this->game->getHeight()<posY || this->game->getWidth() < posX) ){
         if(this->game->getHeight()<posY){
             qDebug()<<"aumento Y";
