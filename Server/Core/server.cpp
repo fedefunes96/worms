@@ -15,10 +15,6 @@
 #include <dirent.h>
 #include "parser.h"
 
-/*#ifndef ROOT_PATH
-#define ROOT_PATH "."
-#endif*/
-
 Server::Server(const std::string& port, int cant_users)
  : skt(port, cant_users) {
  	active_server = false;
@@ -191,7 +187,6 @@ std::vector<std::string> Server::get_maps() {
 	}
 
 	return std::move(map_names);	
-	//return this->maps;
 }
 
 void Server::create_room(const int id, const std::string name, const std::string stage_file) {
@@ -215,11 +210,11 @@ void Server::create_room(const int id, const std::string name, const std::string
 
 		this->rooms.emplace(name, std::move(room));
 
-		/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(true));
-		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));	*/	
+		std::shared_ptr<Event> event_join(new EventCouldJoinRoom(true));
+		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));		
 	} else {
-		/*std::shared_ptr<Event> event_join(new EventCouldJoinRoom(False));
-		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));	*/			
+		std::shared_ptr<Event> event_join(new EventCouldJoinRoom(false));
+		this->players.at(id)->get_event_queue()->add_event(std::move(event_join));				
 	}
 }
 
@@ -303,8 +298,9 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 
 		std::vector<Player*> players_for_game;
 		std::vector<EventQueue*> event_queues;
-
-		std::shared_ptr<Event> event(new EventStartGame());
+		std::string background = Parser::loadBackground(stage_file);
+		
+		std::shared_ptr<Event> event(new EventStartGame(background));
 
 		for (int i = 0; i < (int) ids.size(); i++) {
 			//Player* a = this->players.at(i).get();

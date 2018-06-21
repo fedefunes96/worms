@@ -26,7 +26,7 @@ public:
     void sendDisconnect();
     void sendCouldJoinRoom(int8_t id);
     void sendPlayersInRoom(int8_t size);
-    void sendStartGame();
+    void sendStartGame(const std::string& background);
     void sendRooms(const std::vector<std::string>& rooms_name);
     void sendMaps(const std::vector<std::string>&maps);
     void sendWindParams(float min, float max);

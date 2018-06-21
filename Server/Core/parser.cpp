@@ -245,7 +245,7 @@ float Parser::airMaxSpeed(std::string &file)
 }
 
 
-std::string Parser::loadBackground(std::string& file){
+std::string Parser::loadBackground(const std::string& file){
     YAML::Node config = YAML::LoadFile(file);
     std::string background = config["Background"].as<std::string>();
     return background;

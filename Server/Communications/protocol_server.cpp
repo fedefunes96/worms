@@ -173,10 +173,11 @@ void ProtocolServer::sendPlayersInRoom(int8_t size) {
     this->send_char(size);
 }
 
-void ProtocolServer::sendStartGame() {
+void ProtocolServer::sendStartGame(const std::string& background) {
     Commands cmd = Commands::START_GAME;  
 
     this->send_cmd(cmd);
+    this->send_string(background);
 }
 
 void ProtocolServer::sendWindParams(float min, float max) {

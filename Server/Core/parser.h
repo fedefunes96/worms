@@ -31,7 +31,7 @@ public:
 
     static float airMaxSpeed(std::string& file);
 
-    static std::string loadBackground(std::string& file);
+    static std::string loadBackground(const std::string& file);
 	
 };
 
