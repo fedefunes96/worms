@@ -1,6 +1,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include "generalSounds.h"
+
 
 enum class idWeapon : uint8_t {
     BAZOOKA = 0,
@@ -27,6 +29,8 @@ public:
 protected:
     int idObj;
     int ammo;
+    generalSounds* tele;
+    generalSounds* fireSound;
     //faltarian los 3 path para los sprites? --> mejora
 };
 

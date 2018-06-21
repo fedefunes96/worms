@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "gameclass.h"
 #include <QApplication>
+#include "backgrounMusic.h"
 
 namespace Ui {
 class FinalScreen;
@@ -26,6 +27,7 @@ private:
     void setLoser();
     Ui::FinalScreen *ui;
     QApplication *app;
+    backgrounMusic* b;
 };
 
 #endif // FINALSCREEN_H

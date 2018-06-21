@@ -95,6 +95,9 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->last_on_ground=1;
     this->last_dir=0;
     this->jumping=false;
+    this->fall = new generalSounds(ROOT_PATH"/resources/sounds/English/fall/NOOO.WAV");
+    this->jump =  new generalSounds(ROOT_PATH"/resources/sounds/English/jump/JUMP1.WAV");
+    this->muerte = new generalSounds(ROOT_PATH"/resources/sounds/English/BYEBYE.WAV");
 
 }
 
@@ -227,6 +230,7 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_dir=dir;
             this->last_on_ground=on_ground;
             this->moving=true;
+            this->jump->play();
             ////////////////////// ACAAAA SONIDO SALTO HACIA ADELANTE = ATRAS
         }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
             //saltar
@@ -251,10 +255,12 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_dir=dir;
             this->last_on_ground=on_ground;
             this->moving=true;
+            this->jump->play();
             ////////////////////// ACAAAA SONIDO SALTO HACIA ATRAS = ADELANTE
         }else if(dir==static_cast<int>(MoveDirection::NONE)){
             // dejar de moverme
             if(this->last_on_ground==0){
+                this->fall->play();
                 ///////////// ACA VA EL SONIDO PARA CUANDO EL WORM CAE AL PISO...
             }
             if(this->jumping){
@@ -593,6 +599,7 @@ void Worm_View::removeMovable()
     if(this->labelVida!=nullptr){
         this->labelVida->setVisible(false);
     }
+    this->muerte->play();
     ///////////////////////////////////// ACA PONER SONIDO DE MUERTE DEL WORM ...
 }
 

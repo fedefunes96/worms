@@ -5,6 +5,7 @@
 #include "movable.h"
 #include <QTimer>
 #include <QPainter>
+#include "generalSounds.h"
 
 class Projectile : public QObject,public MovableItem
 {
@@ -36,6 +37,7 @@ private:
     QRectF boundingRect() const;
 
 
+    generalSounds* explocion;
     int currentFrame;
     QTimer *timer;      // Timer for turning images into QPixmap
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite

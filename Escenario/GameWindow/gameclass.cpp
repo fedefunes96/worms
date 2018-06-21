@@ -41,7 +41,7 @@ void GameClass::showWindow()
 {
     std::string path(ROOT_PATH"/resources/images/intro2.jpg");
     this->window->showMaximized();
-    b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/FFI - Victory.wav");
+    b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/Soundtrack.wav");
     this->game->setBackground(path);
 }
 
@@ -380,6 +380,7 @@ void GameClass::checkQueueEvent(QList<int> list)
         this->myPlayer->setActive(false);
         this->myTurn=false;
         this->window->close();
+        b->stop();
         if(list[1]==this->myPlayer->getId()){
             emit isWinner(true);
         }else{
