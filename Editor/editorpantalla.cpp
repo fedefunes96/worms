@@ -26,7 +26,7 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     this->scene = new QGraphicsScene(this);
     ui->graphicsView->setScene(scene);
     this->scene->setSceneRect(0,-yscene,xscene,yscene);
-    std::string name = ROOT_PATH"/resources/images/fondo.png";
+    std::string name = "fondo.png";
     this->setBacGround(name);
     this->id = 0;
     ui->wormOpt->hide();
@@ -186,7 +186,10 @@ void EditorPantalla::loadWeapons()
 
 void EditorPantalla::setBacGround(std::string &name)
 {
-    this->bakcground = QString::fromStdString(name);
+    std::string backgroun = ROOT_PATH;
+    backgroun += "/resources/images/";
+    backgroun += name;
+    this->bakcground = QString::fromStdString(backgroun);
     scene->setBackgroundBrush(QBrush(QImage(bakcground)));
 }
 
@@ -246,12 +249,10 @@ void EditorPantalla::on_agregarVigaChica_clicked()
 
 int EditorPantalla::agregar_gusano(int x, int y)
 {
-    int celdaX = x/24;
-    int celdaY = -y/24+1;
     if (true){
         Worm_View *worm = new Worm_View(id);
-        int xn = celdaX*24 - worm->boundingRect().center().toPoint().x();
-        int yn = -celdaY*24 - worm->boundingRect().center().toPoint().y();
+        int xn = x - worm->boundingRect().center().toPoint().x();
+        int yn = y - worm->boundingRect().center().toPoint().y();
         connect(worm,SIGNAL(wormSelect(int)),this,SLOT(wormSelect(int)));
         connect(worm,SIGNAL(wormSetPos()),this,SLOT(wormSetPos()));
         scene->addItem(worm);
@@ -296,15 +297,16 @@ int EditorPantalla::add_small_girder(int x, int y)
 {
     editor_viga_view *viga = new editor_viga_view(id);
     int xn = x - viga->boundingRect().center().toPoint().x();
+    int yn = y - viga->boundingRect().center().toPoint().y();
     scene->addItem(viga);
-    viga->setPos(xn,y);
+    viga->setPos(xn,yn);
     this->items[id] = viga;
     connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
     connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
     viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
     this->vigas.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id++),
-                    std::forward_as_tuple(xn,-y,6));
+                    std::forward_as_tuple(x,-y,3));
     return (id-1);
 }
 
@@ -312,15 +314,16 @@ int EditorPantalla::add_big_girder(int x, int y)
 {
     editor_viga_grande_view *viga = new editor_viga_grande_view (id);
     int xn = x - viga->boundingRect().center().toPoint().x();
+    int yn = y - viga->boundingRect().center().toPoint().y();
     scene->addItem(viga);
-    viga->setPos(xn,y);
+    viga->setPos(xn,yn);
     this->items[id] = viga;
     connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
     connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
     viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
     this->vigas.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id++),
-                    std::forward_as_tuple(xn,-y,6));
+                    std::forward_as_tuple(x,-y,6));
     return (id-1);
 }
 
@@ -497,7 +500,7 @@ void EditorPantalla::on_saveAs_clicked()
             }
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
-            std::string background = this->bakcground.toStdString();
+            std::string background = "fondo.png";
             commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
             QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));
@@ -524,7 +527,7 @@ void EditorPantalla::on_pushButton_clicked()
             }
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
-            std::string background = this->bakcground.toStdString();
+            std::string background = "fondo.png";
             commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
             QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));

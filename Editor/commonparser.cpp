@@ -193,6 +193,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
         out << x;
         out << y;
         out << worm.second.getVida();
+        x = worm.second.getX();
+        y = worm.second.getY();
+        out << x;
+        out << y;
         out <<YAML::EndSeq;
     }
     out <<YAML::EndSeq;
@@ -210,6 +214,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
             out<<y;
             out<<viga.second.get_angulo();
             out<<tam;
+            x = viga.second.getX();
+            y = viga.second.getY();
+            out << x;
+            out << y;
             out<<YAML::EndSeq;
         }
     }
@@ -228,6 +236,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
             out<<y;
             out<<viga.second.get_angulo();
             out<<tam;
+            x = viga.second.getX();
+            y = viga.second.getY();
+            out << x;
+            out << y;
             out<<YAML::EndSeq;
         }
     }
@@ -259,8 +271,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Small Girder"]){
             for (YAML::iterator it = config["Small Girder"].begin(); it != config["Small Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = girder[0].as<int>()*140/6;
-                int y = girder[1].as<int>()*140/6;
+                int x = girder[4].as<int>();
+                int y = girder[5].as<int>();
                 y = -y;
                 float angulo = girder[2].as<float>();
                 int id;
@@ -275,8 +287,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Big Girder"]){
             for (YAML::iterator it = config["Big Girder"].begin(); it != config["Big Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
-                int x = (girder[0].as<int>()+1)*140/6;
-                int y = girder[1].as<int>()*140/6;
+                int x = (girder[4].as<int>());
+                int y = girder[5].as<int>();
                 y = -y;
                 float angulo = girder[2].as<float>();
                 int id;
@@ -291,8 +303,8 @@ void commonParser::load(EditorPantalla *editor, std::string &file)
         if (config["Worm"]){
             for (YAML::iterator it = config["Worm"].begin(); it != config["Worm"].end(); ++it){
                 const YAML::Node& worm = *it;
-                int x = worm[0].as<int>()*140/6;
-                int y = worm[1].as<int>()*140/6;
+                int x = worm[3].as<int>();
+                int y = worm[4].as<int>();
                 y = -y;
                 int id = editor->add_worm(x,y);
                 int vida = worm[2].as<int>();
