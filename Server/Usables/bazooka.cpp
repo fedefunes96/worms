@@ -46,7 +46,7 @@ void Bazooka::action(Worm* worm
 	*/
 	//printf("Angle: %0.6f\n", angle);
 	//b2Vec2 where(from_pos.x + longitude*cos(angle), from_pos.y + height*sin(angle));
-	float velocity_f = this->velocity * (float(params[0])/100.0);
+	float velocity_f = this->velocity * TRANSF_POT_VAR(float(params[0]))/100.0;
 
 	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 

@@ -40,7 +40,7 @@ void Mortar::action(Worm* worm
 
 	float32 angle = atan2(normalized_dest.y, normalized_dest.x);
 
-	float velocity_f = this->velocity * (float(params[0])/100.0);
+	float velocity_f = this->velocity * TRANSF_POT_VAR(float(params[0]))/100.0;
 
 	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 

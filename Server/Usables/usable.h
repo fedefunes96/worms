@@ -8,6 +8,7 @@
 class Worm;
 
 #define INFINITY_AMMO -1
+#define TRANSF_POT_VAR(x) (39.0*x/99.0 + 60.0/99.0)
 
 class Usable {
 protected:
