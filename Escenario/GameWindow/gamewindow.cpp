@@ -25,7 +25,11 @@ GameWindow::GameWindow(QWidget *parent) :
     ui->downCamera->setIcon(QIcon(ROOT_PATH"/resources/images/down.png"));
     ui->leftCamera->setIcon(QIcon(ROOT_PATH"/resources/images/left.png"));
     ui->rightCamera->setIcon(QIcon(ROOT_PATH"/resources/images/right.png"));
-
+    this->setButtonTime(ui->time1,false);
+    this->setButtonTime(ui->time2,false);
+    this->setButtonTime(ui->time3,false);
+    this->setButtonTime(ui->time4,false);
+    this->setButtonTime(ui->time5,false);
 }
 
 
@@ -88,6 +92,14 @@ void GameWindow::on_pushButton_clicked()
     this->menuWeapons->setAttribute(Qt::WA_DeleteOnClose);
     this->menuWeapons->exec();
     this->menuWeapons=nullptr;
+    Worm_View *worm = this->playerActive->getWormActive();
+    if(worm==nullptr){
+        return;
+    }
+    if(!worm->isWeaponCtD()){
+        return;
+    }
+    this->setButtomsTime(worm->getTimeWeapon());
 }
 
 void GameWindow::setButtonEnable(bool enable)
@@ -209,3 +221,99 @@ void GameWindow::on_rightCamera_clicked()
     ui->graphicsView->moveRightCam();
     ui->refocus->setEnabled(true);
 }
+
+void GameWindow::on_time1_clicked()
+{
+    this->setButtomsTime(1);
+}
+
+void GameWindow::on_time2_clicked()
+{
+    this->setButtomsTime(2);
+}
+
+void GameWindow::on_time3_clicked()
+{
+    this->setButtomsTime(3);
+}
+
+void GameWindow::on_time4_clicked()
+{
+    this->setButtomsTime(4);
+}
+
+void GameWindow::on_time5_clicked()
+{
+    this->setButtomsTime(5);
+}
+
+
+
+
+void GameWindow::setButtomsTime(int time)
+{
+    Worm_View *worm = this->playerActive->getWormActive();
+    if(worm==nullptr || !worm->isWeaponCtD()){
+        return;
+    }
+    this->setButtonTime(ui->time1,false);
+    this->setButtonTime(ui->time2,false);
+    this->setButtonTime(ui->time3,false);
+    this->setButtonTime(ui->time4,false);
+    this->setButtonTime(ui->time5,false);
+    if(time==1){
+        this->setButtonTime(ui->time1,true);
+    }else if(time==2){
+        this->setButtonTime(ui->time2,true);
+    }else if(time==3){
+        this->setButtonTime(ui->time3,true);
+    }else if(time==4){
+        this->setButtonTime(ui->time4,true);
+    }else{
+        this->setButtonTime(ui->time5,true);
+    }
+    worm->setTimeWeapon(time);
+}
+
+
+
+
+
+
+
+
+void GameWindow::setButtonTime(QPushButton *button,bool enable)
+{
+    if(enable){
+        QPalette pal = button->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::red));
+        button->setAutoFillBackground(true);
+        button->setPalette(pal);
+        button->update();
+    }else{
+        QPalette pal = button->palette();
+        pal.setColor(QPalette::Button, QColor(Qt::white));
+        button->setAutoFillBackground(true);
+        button->setPalette(pal);
+        button->update();
+    }
+}
+
+
+
+
+
+
+
+
+/*
+QPalette pal = button->palette();
+pal.setColor(QPalette::Button, QColor(Qt::blue));
+button->setAutoFillBackground(true);
+button->setPalette(pal);
+button->update();*/
+
+
+
+
+

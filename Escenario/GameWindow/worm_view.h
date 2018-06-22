@@ -53,6 +53,7 @@ public:
     void setColor(std::string &color);
     void setStatus(int last_on_ground, int dir);
 
+    bool isWeaponCtD();
 private slots:
     void runSpriteWeapon();
 
@@ -76,7 +77,7 @@ private:
 
     generalSounds* jump;
     generalSounds* fall;
-    generalSounds* muerte;
+    generalSounds* wormDeath;
 
     // innecesarios creo... ////////////////////////////
     int count;

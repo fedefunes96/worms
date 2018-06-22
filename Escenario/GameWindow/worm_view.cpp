@@ -97,7 +97,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->jumping=false;
     this->fall = new generalSounds(ROOT_PATH"/resources/sounds/English/fall/NOOO.WAV");
     this->jump =  new generalSounds(ROOT_PATH"/resources/sounds/English/jump/JUMP1.WAV");
-    this->muerte = new generalSounds(ROOT_PATH"/resources/sounds/English/BYEBYE.WAV");
+    this->wormDeath = new generalSounds(ROOT_PATH"/resources/sounds/English/BYEBYE.WAV");
 
 }
 
@@ -451,6 +451,11 @@ int Worm_View::getWeaponId()
     return this->weapon;
 }
 
+bool Worm_View::isWeaponCtD()
+{
+    return this->weaponCountDwn;
+}
+
 bool Worm_View::isSelect()
 {
    return this->selected;
@@ -613,7 +618,7 @@ void Worm_View::removeMovable()
     if(this->labelVida!=nullptr){
         this->labelVida->setVisible(false);
     }
-    this->muerte->play();
+    this->wormDeath->play();
     ///////////////////////////////////// ACA PONER SONIDO DE MUERTE DEL WORM ...
 }
 

@@ -49,6 +49,16 @@ private slots:
 
     void on_rightCamera_clicked();
 
+    void on_time1_clicked();
+
+    void on_time2_clicked();
+
+    void on_time3_clicked();
+
+    void on_time4_clicked();
+
+    void on_time5_clicked();
+
 private:
     Ui::GameWindow *ui;
     Game_View *gameScene;
@@ -58,6 +68,8 @@ private:
     QTimer *timerRound;
     int time;
     int timeToReach;
+    void setButtomsTime(int time);
+    void setButtonTime(QPushButton *button, bool enable);
 };
 
 #endif // GAMEWINDOW_H

@@ -5,6 +5,7 @@
 
 #include "protocol.h"
 #include "girder_view.h"
+#include <QMessageBox>
 
 EventHandler::EventHandler(QObject *parent) : QObject(parent)
 {
@@ -236,7 +237,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
+            if(!worm->isWeaponCtD()){
+                return;
+            }
             worm->setTimeWeapon(1);
+            //QMessageBox::information("Set weapon countdown","Countdown = 1.");
             break;
         }
         case Qt::Key_2:
@@ -252,7 +257,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
+            if(!worm->isWeaponCtD()){
+                return;
+            }
             worm->setTimeWeapon(2);
+            //QMessageBox::information(this,"Set weapon countdown","Countdown = 2.");
             break;
 
         }
@@ -269,7 +278,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
+            if(!worm->isWeaponCtD()){
+                return;
+            }
             worm->setTimeWeapon(3);
+            //QMessageBox::information(this,"Set weapon countdown","Countdown = 3.");
             break;
 
         }
@@ -286,7 +299,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
+            if(!worm->isWeaponCtD()){
+                return;
+            }
             worm->setTimeWeapon(4);
+            //QMessageBox::information(this,"Set weapon countdown","Countdown = 4.");
             break;
 
         }
@@ -303,7 +320,11 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             if(worm==nullptr){
                 return;
             }
+            if(!worm->isWeaponCtD()){
+                return;
+            }
             worm->setTimeWeapon(5);
+            //QMessageBox::information(this,"Set weapon countdown","Countdown = 5.");
             break;
         }
 
