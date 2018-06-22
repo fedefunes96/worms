@@ -22,8 +22,8 @@ DelayedThrowable::DelayedThrowable(Stage& stage
 		, velocity
 		, radius
 		, restitution
-		, max_pushback
 		, max_dmg
+		, max_pushback
 		, radius_expl)
 	, counter(time) {
 		this->conversor = 0;

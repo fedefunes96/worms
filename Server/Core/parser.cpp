@@ -21,7 +21,7 @@ enum Weapons{
     GREEN_GRENADE = 2,
     RED_GRENADE = 3,
     BANANA = 4,
-    HLOY_GRENADE = 5,
+    HOLY_GRENADE = 5,
     DYNAMITE = 6,
     BASEBALL_BAT = 7,
     AIR_ATTACK = 8,
@@ -171,7 +171,7 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
                     max_dmg,max_push,rad_expl);
     			usables.push_back(us);
              }
-             if (id == HLOY_GRENADE)
+             if (id == HOLY_GRENADE)
              {
              	float vel = config["HolyGrenade"][0].as<float>();
                 float rad = config["HolyGrenade"][1].as<float>();

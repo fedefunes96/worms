@@ -45,6 +45,7 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			}
 			
 			((Worm*) ubicable)->receive_explosion(impulseMag * blastDir);
+			printf("Radius: %0.1f Distance: %0.1f Maxdmg: %0.1f\n", radius, distance, max_dmg);
 			((Worm*) ubicable)->receive_dmg(max_dmg - (distance * max_dmg/radius));
 		}
 		//applyBlastImpulse(body, center, bodyCom, blastPower );
