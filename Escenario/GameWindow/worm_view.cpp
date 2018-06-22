@@ -85,6 +85,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->target=nullptr;
     this->targetClick =false;
     this->moving = false;
+    this->showSelected=nullptr;
 
     setAngle(0);
     this->selected=false;
@@ -98,6 +99,7 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->fall = new generalSounds(ROOT_PATH"/resources/sounds/English/fall/NOOO.WAV");
     this->jump =  new generalSounds(ROOT_PATH"/resources/sounds/English/jump/JUMP1.WAV");
     this->wormDeath = new generalSounds(ROOT_PATH"/resources/sounds/English/BYEBYE.WAV");
+    this->showlabelSelect=false;
 
 }
 
@@ -412,6 +414,17 @@ bool Worm_View::isFlying()
 
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+
+    if(this->showSelected==nullptr){
+        this->showSelected = new QLabel();
+        this->showSelected->setAttribute(Qt::WA_TranslucentBackground);
+        this->showSelected->setPixmap(QPixmap(ROOT_PATH"/resources/images/selected.png"));
+        scene()->addWidget(showSelected);
+    }
+
+    this->showSelected->setGeometry(x()+5,y()-40,56,41);
+    this->showSelected->setVisible(this->showlabelSelect);
+
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
@@ -426,6 +439,7 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     labelVida->setText(aux);
     labelVida->setGeometry(x()+22,y()-10,30,20);
     //qDebug()<<"posicion del Label x:"<<labelVida->x() << "y:" <<labelVida->y();
+
 
     if(!this->target){
         this->target = new Target();
@@ -468,6 +482,7 @@ void Worm_View::setSelect(bool cond)
         this->moving=false;
         this->targetVis=false;
     }
+    this->showlabelSelect = cond;
 }
 
 void Worm_View::setAlive(bool alive)

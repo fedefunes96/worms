@@ -64,6 +64,8 @@ private:
     void checkAngle(int angle);
 
     QLabel* labelVida;
+    QLabel* showSelected;
+    bool showlabelSelect;
     int health;
     bool labelset;
     std::pair<int,int> currentDir;
