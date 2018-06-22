@@ -34,6 +34,8 @@ void Camera::resizeEvent(QResizeEvent *event)
 void Camera::mousePressEvent(QMouseEvent *event)
 {
     if(this->playerActive->isActive()){
+        qDebug()<<"--------click mouse x:"<<event->x()<<"y:"<<event->y();
+        qDebug()<<"mouse click x:"<<event->x()+horizontalScrollBar()->value()<<"y:"<<-(event->y()+verticalScrollBar()->value());
         Worm_View* worm = this->playerActive->getWormActive();
         worm->setClickDir(event->x()+horizontalScrollBar()->value(),
                           -(event->y()+verticalScrollBar()->value()));

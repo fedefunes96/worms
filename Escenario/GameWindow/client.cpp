@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        GameClass game(rect,500,500,c.getId());
+        GameClass game(rect,10,10,c.getId());
         game.connectWaitRoom(&wait);
         game.connectController(&controler);
 
