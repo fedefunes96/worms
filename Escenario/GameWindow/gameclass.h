@@ -25,6 +25,7 @@ public:
     void setStatusWorm(QList<int> list);
     void setPotBar(int pot);
     void connectWaitRoom(WaitRoom *wait);
+    void setRefocus(bool enable);
 signals:
     void isWinner(bool iswinner);
 private slots:

@@ -108,6 +108,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             //qDebug()<<"aprete espacio!!!!!!!!!!!!!!!";
             this->power=1;
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
 
@@ -130,6 +131,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             this->protocol->sendMove(2);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             //qDebug()<< "id worm a mover:"<<worm->getId();
             break;
         }
@@ -150,6 +152,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             this->protocol->sendMove(1);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
         case Qt::Key_Up:
@@ -165,6 +168,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             worm->movTargetAngle(1);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
         case Qt::Key_Down:
@@ -180,6 +184,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             }
             worm->movTargetAngle(-1);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
 
@@ -201,6 +206,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(3);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
 
@@ -222,6 +228,7 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             //worm->setAngle(worm->getAngle());
             this->protocol->sendMove(4);
             this->game->getCamera()->setFreeMove(false);
+            this->game->setRefocus(false);
             break;
         }
 

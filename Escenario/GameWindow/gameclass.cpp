@@ -45,6 +45,11 @@ void GameClass::showWindow(QList<std::string> list)
     this->game->setBackground(path);
 }
 
+void GameClass::setRefocus(bool enable)
+{
+    this->window->setRefocusEnable(enable);
+}
+
 void GameClass::connectController(Controler *controler)
 {
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
