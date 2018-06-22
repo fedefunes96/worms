@@ -7,38 +7,8 @@ Weapons_and_Tools::Weapons_and_Tools(QWidget *parent,Player* player) :
     QDialog(parent),
     ui(new Ui::Weapons_and_Tools),
     player(player)
-{
+{   
     ui->setupUi(this);
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::AERIAL_ATTACK))){
-        ui->misil->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::BAZOOKA))){
-        ui->bazooka->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::BANANA))){
-        ui->banana->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::MORTAR))){
-        ui->morter->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::BASEBALL_BAT))){
-        ui->bat->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::DYNAMITE))){
-        ui->dinamite->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::GREEN_GRENADE))){
-        ui->granade->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::RED_GRENADE))){
-        ui->fragGranade->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::HOLY_GRENADE))){
-        ui->holyGranade->setEnabled(false);
-    }
-    if(!this->player->canFire(static_cast<int>(WeaponsIds::TELEPORTATION))){
-        ui->teleport->setEnabled(false);
-    }
 
 
     int ammo;
@@ -93,6 +63,49 @@ Weapons_and_Tools::Weapons_and_Tools(QWidget *parent,Player* player) :
     if(ammo!=-1){
         ui->ammoBan->setText(QString::number(ammo));
     }
+
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::AERIAL_ATTACK))){
+        ui->misil->setEnabled(false);
+        ui->ammoMisil->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BAZOOKA))){
+        ui->bazooka->setEnabled(false);
+        ui->ammoBaz->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BANANA))){
+        ui->banana->setEnabled(false);
+        ui->ammoBan->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::MORTAR))){
+        ui->morter->setEnabled(false);
+        ui->ammoMortar->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::BASEBALL_BAT))){
+        ui->bat->setEnabled(false);
+        ui->ammoBat->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::DYNAMITE))){
+        ui->dinamite->setEnabled(false);
+        ui->ammoDyn->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::GREEN_GRENADE))){
+        ui->granade->setEnabled(false);
+        ui->ammoG->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::RED_GRENADE))){
+        ui->fragGranade->setEnabled(false);
+        ui->ammoFrag->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::HOLY_GRENADE))){
+        ui->holyGranade->setEnabled(false);
+        ui->ammoHG->setText("");
+    }
+    if(!this->player->canFire(static_cast<int>(WeaponsIds::TELEPORTATION))){
+        ui->teleport->setEnabled(false);
+        ui->ammoTel->setText("");
+    }
+
+
 }
 
 Player* Weapons_and_Tools::getPlayer(){
