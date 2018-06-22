@@ -165,7 +165,9 @@ void Controler::run()
             std::string nameBack = this->protocol->recvBackground();
             std::cout <<"nombre background" << nameBack <<std::endl;
         	//pasarselo a wait room
-            emit startGame();
+            QList<std::string> nameback;
+            nameback.push_back(nameBack);
+            emit startGame(nameback);
         }
     }
 

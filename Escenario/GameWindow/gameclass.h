@@ -30,7 +30,7 @@ signals:
 private slots:
     void checkQueueEvent(QList<int> list);
     void checkDeadItem();
-    void showWindow();
+    void showWindow(QList<std::string> list);
 private:
     Game_View* game;
     Player* myPlayer;

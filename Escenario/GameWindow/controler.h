@@ -21,7 +21,7 @@ signals:
     void recvRomms(QList<std::string> list);
     void joinR(int cant);
     void playersInRoom(int cant);
-    void startGame();
+    void startGame(QList<std::string> list);
     void playerId(int id);
 private:
     Protocol *protocol;

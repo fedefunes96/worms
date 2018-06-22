@@ -34,12 +34,12 @@ Camera* GameClass::getCamera()
 }
 
 void GameClass::connectWaitRoom(WaitRoom *wait){
-    connect(wait,SIGNAL(startView()),this,SLOT(showWindow()));
+    connect(wait,SIGNAL(startView(QList<std::string>)),this,SLOT(showWindow(QList<std::string>)));
 }
 
-void GameClass::showWindow()
+void GameClass::showWindow(QList<std::string> list)
 {
-    std::string path(ROOT_PATH"/resources/images/intro2.jpg");
+    std::string path(ROOT_PATH"/resources/images/"+list[0]);
     this->window->showMaximized();
     b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/Soundtrack.wav");
     this->game->setBackground(path);
@@ -63,7 +63,6 @@ QString GameClass::getColor(int id_player)
     while(id_player>= this->color_list.size()){
         id_player -= this->color_list.size();
     }
-    qDebug()<<"COLOOOOOOOOOOOOOOOOOOOOOR PLAYER ID:"<<id_player;
     return this->color_list[id_player];
 }
 
@@ -111,7 +110,6 @@ void GameClass::attachWorm(int type,int id_player,int id, int health)
 {
     if(!this->game->containsItem(type,id)){
         Worm_View *worm = new Worm_View(this,getColor(id_player));
-        qDebug()<<"health"<<health<<"id"<<id<<"typ"<<type;
         worm->setHealth(health);
         worm->setId(id);
         worm->setIdObj(type);
@@ -346,6 +344,7 @@ void GameClass::checkDeadItem()
 void GameClass::checkQueueEvent(QList<int> list)
 {
     this->window->showPlayerList(this->players_list);
+    this->game->getCamera()->followObject();
     int cmd = list[0];
     if(cmd== static_cast<int>(Commands::GAME_END)){
        //terminar juego

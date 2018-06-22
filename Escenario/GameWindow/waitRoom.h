@@ -26,10 +26,10 @@ public:
     bool closeWithX();
 public slots:
     void plysInRoom(int cant);
-    void startGameView();
+    void startGameView(QList<std::string> list);
 
 signals:
-    void startView();
+    void startView(QList<std::string> list);
     void closeGame();
 private slots:
     void on_pushButton_clicked();

@@ -31,12 +31,13 @@ public:
     void moveUpCam();
     void moveDownCam();
     void setFreeMove(bool val);
+    void followObject();
 signals:
     void mouseClick();
 protected:
     void resizeEvent(QResizeEvent *event);
 private slots:
-    void followObject();
+    //void followObject();
 private:
     QTimer* timer;
     QGraphicsItem* item;

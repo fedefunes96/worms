@@ -1,5 +1,6 @@
 #include "waitRoom.h"
 #include "ui_waitRoom.h"
+#include <iostream>
 
 WaitRoom::WaitRoom(Protocol *protocol,QWidget *parent) :
     QDialog(parent),
@@ -22,11 +23,12 @@ void WaitRoom::plysInRoom(int cant)
     ui->jugadores->setText(QString::number(cant));
 }
 
-void WaitRoom::startGameView()
+void WaitRoom::startGameView(QList<std::string> list)
 {
     // iniciar el juego  la vista
     qDebug()<<"inicie la vista";
-    emit startView();
+    std::cout<<"el nombre del fondo pasado es:"<<list[0] <<std::endl;
+    emit startView(list);
     this->closeX=false;
     this->close();
 
@@ -43,7 +45,7 @@ void WaitRoom::closeEvent(QCloseEvent *event)
 void WaitRoom::connectControler(Controler *controler)
 {
     connect(controler,SIGNAL(playersInRoom(int)),this,SLOT(plysInRoom(int)),Qt::QueuedConnection);
-    connect(controler,SIGNAL(startGame()),this,SLOT(startGameView()),Qt::QueuedConnection);
+    connect(controler,SIGNAL(startGame(QList<std::string>)),this,SLOT(startGameView(QList<std::string>)),Qt::QueuedConnection);
     connect(this,SIGNAL(closeGame()),controler,SLOT(stopController()));
 }
 
