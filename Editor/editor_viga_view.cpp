@@ -20,11 +20,6 @@ void editor_viga_view::mousePressEvent(QGraphicsSceneMouseEvent *event)
     emit this->girderSelect(id);
 }
 
-void editor_viga_view::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    //emit this->girderSetPos();
-}
-
 
 void editor_viga_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

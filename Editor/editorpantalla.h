@@ -16,6 +16,13 @@
 #include <QDropEvent>
 #include <vector>
 
+enum class State : int8_t {
+   NOTHING = 0,
+   ADD_WORM,
+   ADD_BIG_GIRDER,
+   ADD_SMALL_GIRDER
+};
+
 namespace Ui {
 class EditorPantalla;
 }
@@ -52,11 +59,7 @@ public:
 public slots:
     void wormSelect(int id);
 
-    void wormSetPos();
-
     void girderSelect(int id);
-
-    void girderSetPos();
 
 private slots:
 
@@ -103,7 +106,7 @@ private:
     std::map<int, editorWorm> worms;
     std::map<int, editorViga> vigas;
     int id;
-    int estado;
+    State estado;
     QGraphicsScene * scene;
     int current_id;
     QString nombre;
@@ -117,12 +120,6 @@ private:
     bool checkWorms();
 
     void removeItem();
-
-    int agregar_gusano(int x, int y);
-
-    int agregar_viga_grande(int x, int y);
-
-    int agregar_viga_chica(int x, int y);
 };
 
 

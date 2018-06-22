@@ -19,11 +19,6 @@ void editor_viga_grande_view::mousePressEvent(QGraphicsSceneMouseEvent *event)
     emit this->girderSelect(id);
 }
 
-void editor_viga_grande_view::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    //emit this->girderSetPos();
-}
-
 void editor_viga_grande_view::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 144,19);

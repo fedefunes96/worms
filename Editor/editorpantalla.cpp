@@ -68,6 +68,7 @@ EditorPantalla::EditorPantalla(QWidget *parent) :
     ui->AgregarViga->setIcon(QIcon(ROOT_PATH"/resources/images/grdl4.png"));
     ui->moveOpt->hide();
     ui->cant->setValue(2);
+    estado = State::NOTHING;
 }
 
 EditorPantalla::~EditorPantalla()
@@ -129,7 +130,7 @@ void EditorPantalla::removeItem()
         delete items[current_id];
         items.erase(iter);
         current_id = -1;
-        estado = 0;
+        estado = State::NOTHING;
         ui->girderOpt->hide();
         ui->wormOpt->hide();
         ui->moveOpt->hide();
@@ -195,6 +196,11 @@ void EditorPantalla::setBacGround(std::string &name)
 
 void EditorPantalla::wormSelect(int id)
 {
+    std::map<int, QGraphicsItem*>::iterator iter;
+    iter = items.find(current_id);
+    if ( iter != items.end()){
+        items[current_id]->setOpacity(1);
+    }
     this->current_id = id;
     items[id]->setOpacity(0.5);
     ui->wormOpt->show();
@@ -203,27 +209,18 @@ void EditorPantalla::wormSelect(int id)
     ui->vidaGusano->setValue(worms[id].getVida());
 }
 
-void EditorPantalla::wormSetPos()
-{
-    int x = items[current_id]->scenePos().toPoint().x();
-    int y = items[current_id]->scenePos().toPoint().y();
-    this->worms[current_id].setPos(x,-y);
-}
-
 void EditorPantalla::girderSelect(int id)
 {
+    std::map<int, QGraphicsItem*>::iterator iter;
+    iter = items.find(current_id);
+    if ( iter != items.end()){
+        items[current_id]->setOpacity(1);
+    }
     this->current_id = id;
     items[id]->setOpacity(0.5);
     ui->wormOpt->hide();
     ui->moveOpt->show();
     ui->girderOpt->show();
-}
-
-void EditorPantalla::girderSetPos()
-{
-    int x = items[current_id]->scenePos().toPoint().x();
-    int y = items[current_id]->scenePos().toPoint().y();
-    this->vigas[current_id].setPos(x,-y);
 }
 
 void EditorPantalla::fileName(QString name)
@@ -234,41 +231,17 @@ void EditorPantalla::fileName(QString name)
 
 void EditorPantalla::on_agregarGusano_clicked()
 {
-    this->estado = 1;
+    this->estado = State::ADD_WORM;
 }
 
 void EditorPantalla::on_AgregarViga_clicked()
 {
-    this->estado = 2;
+    this->estado = State::ADD_BIG_GIRDER;
 }
 
 void EditorPantalla::on_agregarVigaChica_clicked()
 {
-    this->estado = 3;
-}
-
-int EditorPantalla::agregar_gusano(int x, int y)
-{
-    if (true){
-        Worm_View *worm = new Worm_View(id);
-        int xn = x - worm->boundingRect().center().toPoint().x();
-        int yn = y - worm->boundingRect().center().toPoint().y();
-        connect(worm,SIGNAL(wormSelect(int)),this,SLOT(wormSelect(int)));
-        connect(worm,SIGNAL(wormSetPos()),this,SLOT(wormSetPos()));
-        scene->addItem(worm);
-        worm->setPos(xn,yn);
-        worm->setFlag(QGraphicsItem::ItemIsSelectable,true);
-        this->items[id] = worm;
-        this->worms.emplace(std::piecewise_construct,
-                                    std::forward_as_tuple(id++),
-                                    std::forward_as_tuple(x,-y));
-
-        this->estado = 0;
-        return (id-1);
-    } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
-    }
-    return -1;
+    this->estado = State::ADD_SMALL_GIRDER;
 }
 
 void EditorPantalla::setVIdaWorm(int id, int vida)
@@ -282,7 +255,6 @@ int EditorPantalla::add_worm(int x, int y)
     int xn = x - worm->boundingRect().center().toPoint().x();
     int yn = y - worm->boundingRect().center().toPoint().y();
     connect(worm,SIGNAL(wormSelect(int)),this,SLOT(wormSelect(int)));
-    connect(worm,SIGNAL(wormSetPos()),this,SLOT(wormSetPos()));
     scene->addItem(worm);
     worm->setPos(xn,yn);
     worm->setFlag(QGraphicsItem::ItemIsSelectable,true);
@@ -290,6 +262,7 @@ int EditorPantalla::add_worm(int x, int y)
     this->worms.emplace(std::piecewise_construct,
                                 std::forward_as_tuple(id++),
                                 std::forward_as_tuple(x,-y));
+    estado = State::NOTHING;
     return (id-1);
 }
 
@@ -302,11 +275,11 @@ int EditorPantalla::add_small_girder(int x, int y)
     viga->setPos(xn,yn);
     this->items[id] = viga;
     connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
-    connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
     viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
     this->vigas.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id++),
                     std::forward_as_tuple(x,-y,3));
+    estado = State::NOTHING;
     return (id-1);
 }
 
@@ -319,60 +292,14 @@ int EditorPantalla::add_big_girder(int x, int y)
     viga->setPos(xn,yn);
     this->items[id] = viga;
     connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
-    connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
     viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
     this->vigas.emplace(std::piecewise_construct,
                     std::forward_as_tuple(id++),
                     std::forward_as_tuple(x,-y,6));
+    estado = State::NOTHING;
     return (id-1);
 }
 
-int EditorPantalla::agregar_viga_grande(int x, int y)
-{
-    if (true){
-        editor_viga_grande_view *viga = new editor_viga_grande_view (id);
-        int xn = x - viga->boundingRect().center().toPoint().x();
-        int yn = y - viga->boundingRect().center().toPoint().y();
-        scene->addItem(viga);
-        viga->setPos(xn,yn);
-        this->items[id] = viga;
-        connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
-        connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
-        viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
-        this->vigas.emplace(std::piecewise_construct,
-                        std::forward_as_tuple(id++),
-                        std::forward_as_tuple(x,-y,6));
-        this->estado = 0;
-        return (id-1);
-    } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
-    }
-    return -1;
-}
-
-int EditorPantalla::agregar_viga_chica(int x, int y)
-{
-    if (true){
-        editor_viga_view *viga = new editor_viga_view(id);
-        int xn = x - viga->boundingRect().center().toPoint().x();
-        int yn = y - viga->boundingRect().center().toPoint().y();
-        scene->addItem(viga);
-        viga->setPos(xn,yn);
-        this->items[id] = viga;
-        connect(viga,SIGNAL(girderSelect(int)),this,SLOT(girderSelect(int)));
-        connect(viga,SIGNAL(girderSetPos()),this,SLOT(girderSetPos()));
-        viga->setFlag(QGraphicsItem::ItemIsSelectable,true);
-        this->vigas.emplace(std::piecewise_construct,
-                        std::forward_as_tuple(id++),
-                        std::forward_as_tuple(x,-y,3));
-
-        this->estado = 0;
-        return (id-1);
-    } else {
-        QMessageBox::information(this, tr("Error"), tr("celda ocupada."));
-    }
-    return -1;
-}
 
 void EditorPantalla::agregar_arma(int id, int municion)
 {
@@ -417,12 +344,11 @@ void EditorPantalla::mousePressEvent(QMouseEvent *evento)
     int y = evento->pos().y();
     x += ui->graphicsView->horizontalScrollBar()->value();
     y += ui->graphicsView->verticalScrollBar()->value();
-    std::cout<<"x: "<<x<<" y: "<<y<<std::endl;
     if (x >= (xscene - 100)){
         xscene += 400 ;
         this->scene->setSceneRect(0,-yscene,xscene,yscene);
     }
-    if (estado == 0){
+    if (estado == State::NOTHING){
         ui->wormOpt->hide();
         ui->girderOpt->hide();
         ui->moveOpt->hide();
@@ -434,18 +360,18 @@ void EditorPantalla::mousePressEvent(QMouseEvent *evento)
         current_id = -1;
     }
 
-    if (estado == 1){
-        this->agregar_gusano(x,y);
+    if (estado == State::ADD_WORM){
+        this->add_worm(x,y);
         ui->agregarGusano->setChecked(false);
     }
 
-    if (estado == 2){
-        this->agregar_viga_grande(x,y);
+    if (estado == State::ADD_BIG_GIRDER){
+        this->add_big_girder(x,y);
         ui->AgregarViga->setChecked(false);
     }
 
-    if (estado == 3){
-        agregar_viga_chica(x,y);
+    if (estado == State::ADD_SMALL_GIRDER){
+        add_small_girder(x,y);
         ui->agregarVigaChica->setChecked(false);
     }
 
@@ -461,10 +387,6 @@ void EditorPantalla::on_mas_clicked()
     std::map<int, editorViga>::iterator it2;
     it2 = this->vigas.find(current_id);
     if (it2 != vigas.end()){
-        int x = items[this->current_id]->pos().x();
-        int y = items[this->current_id]->pos().y();
-        int x1 = x/24 +1;
-        int y1 = -y/24;
         vigas[current_id].aumentarAngulo(5);
         items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() - 5);
@@ -476,8 +398,6 @@ void EditorPantalla::on_menos_clicked()
     std::map<int, editorViga>::iterator it2;
     it2 = this->vigas.find(current_id);
     if (it2 != vigas.end()){
-        int x = items[this->current_id]->pos().x();
-        int y = items[this->current_id]->pos().y();
         vigas[current_id].aumentarAngulo(-5);
         items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() + 5);
@@ -503,10 +423,10 @@ void EditorPantalla::on_saveAs_clicked()
             std::string background = "fondo.png";
             commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
-            QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));
+            QMessageBox::information(this,tr("Error"),tr("There are worms with 0 health."));
         }
     } else {
-        QMessageBox::information(this,tr("Error"),tr("No hay suficientes gusanos en el escenario."));
+        QMessageBox::information(this,tr("Error"),tr("Not enough worms on scene."));
     }
 }
 
@@ -530,17 +450,17 @@ void EditorPantalla::on_pushButton_clicked()
             std::string background = "fondo.png";
             commonParser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
         } else {
-            QMessageBox::information(this,tr("Error"),tr("hay gusanos que tienen vida 0."));
+            QMessageBox::information(this,tr("Error"),tr("There are worms with 0 health."));
         }
     } else {
-        QMessageBox::information(this,tr("Error"),tr("No hay suficientes gusanos en el escenario."));
+        QMessageBox::information(this,tr("Error"),tr("Not enough worms on scene."));
     }
 }
 
 void EditorPantalla::on_pushButton_2_clicked()
 {
-    nombre = QFileDialog::getOpenFileName(this,tr("Open"),
-                                                    tr("Escenario *.yaml"));
+    nombre = QFileDialog::getOpenFileName(this,tr("Open"),"/home",
+                                                           tr("*.yaml"));
     if (nombre.isEmpty()){
         return;
     }
@@ -551,7 +471,7 @@ void EditorPantalla::on_ok_clicked()
 {
     int vida = ui->vidaGusano->text().toInt();
     if ( vida == 0){
-        QMessageBox::information(this,tr("Error"),tr("Vida indalida."));
+        QMessageBox::information(this,tr("Error"),tr("Invalid health."));
         return;
     }
     worms[current_id].setVida(vida);

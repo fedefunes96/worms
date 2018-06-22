@@ -6,6 +6,19 @@
 #include "editorusables.h"
 #include "editorpantalla.h"
 
+enum class UsableIds : int8_t {
+    BAZOOKA = 0,
+    MORTAR,
+    GREEN_GRENADE,
+    RED_GRENADE,
+    BANANA,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    AERIAL_ATTACK,
+    TELEPORTATION
+};
+
 namespace Ui {
 class editorSeleccionArmasHerramientas;
 }

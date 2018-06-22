@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <iostream>
 
+#define INFINITE_AMMO -1
+
 editorSeleccionArmasHerramientas::editorSeleccionArmasHerramientas(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::editorSeleccionArmasHerramientas)
@@ -32,6 +34,16 @@ editorSeleccionArmasHerramientas::editorSeleccionArmasHerramientas(QWidget *pare
     ui->bate->setPixmap(bate);
     ui->aereo->setPixmap(aereo);
     ui->tele->setPixmap(tele);
+    ui->BazookaIA->setCheckState(Qt::CheckState::Checked);
+    ui->municionMortero->setValue(10);
+    ui->GreenGrenadeIA->setCheckState(Qt::CheckState::Checked);
+    ui->municionGranadaR->setValue(10);
+    ui->municionBanana->setValue(5);
+    ui->municionGranadaS->setValue(2);
+    ui->municionDinamita->setValue(5);
+    ui->BatIA->setCheckState(Qt::CheckState::Checked);
+    ui->municionAereo->setValue(2);
+    ui->TeleIA->setCheckState(Qt::CheckState::Checked);
 }
 
 editorSeleccionArmasHerramientas::~editorSeleccionArmasHerramientas()
@@ -42,35 +54,76 @@ editorSeleccionArmasHerramientas::~editorSeleccionArmasHerramientas()
 void editorSeleccionArmasHerramientas::pasarMap(EditorPantalla *editor, std::map<int, editorUsables> &usables){
     this->editor = editor;
     for (auto item : usables){
-        if (item.first == 0){
+        int ammo = item.second.getAmmo();
+        if (item.first == (int)UsableIds::BAZOOKA){
             ui->Bazookka->setChecked(true);
+            if (ammo > 0){
+                ui->municionBazooka->setValue(ammo);
+                ui->BazookaIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 1){
+        if (item.first == (int)UsableIds::MORTAR){
             ui->Mortero->setChecked(true);
+            if (ammo > 0){
+                ui->municionMortero->setValue(ammo);
+                ui->MortaIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 2){
+        if (item.first == (int)UsableIds::GREEN_GRENADE){
             ui->GranadaV->setChecked(true);
+            if (ammo > 0){
+                ui->municionGranadaV->setValue(ammo);
+                ui->GreenGrenadeIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 3){
+        if (item.first == (int)UsableIds::RED_GRENADE){
             ui->GranadaR->setChecked(true);
+            if (ammo > 0){
+                ui->municionGranadaR->setValue(ammo);
+                ui->RedGrenadeIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 4){
+        if (item.first == (int)UsableIds::BANANA){
             ui->Banana->setChecked(true);
+            if (ammo > 0){
+                ui->municionBanana->setValue(ammo);
+                ui->BananaIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 5){
+        if (item.first == (int)UsableIds::HOLY_GRENADE){
             ui->GranadaS->setChecked(true);
+            if (ammo > 0){
+                ui->municionGranadaS->setValue(ammo);
+                ui->HGrenadeIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 6){
+        if (item.first == (int)UsableIds::DYNAMITE){
             ui->Dinamita->setChecked(true);
+            if (ammo > 0){
+                ui->municionDinamita->setValue(ammo);
+                ui->DynamiteIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 7){
+        if (item.first == (int)UsableIds::BASEBALL_BAT){
             ui->Bate->setChecked(true);
+            if (ammo > 0){
+                ui->municionBate->setValue(ammo);
+                ui->BatIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 8){
+        if (item.first == (int)UsableIds::AERIAL_ATTACK){
             ui->Aereo->setChecked(true);
+            if (ammo > 0){
+                ui->municionAereo->setValue(ammo);
+                ui->AIrIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
-        if (item.first == 9){
+        if (item.first == (int)UsableIds::TELEPORTATION){
             ui->Teletransportador->setChecked(true);
+            if (ammo > 0){
+                ui->municionTeletransportador->setValue(ammo);
+                ui->TeleIA->setCheckState(Qt::CheckState::Unchecked);
+            }
         }
     }
 }
@@ -80,7 +133,7 @@ void editorSeleccionArmasHerramientas::on_Bazookka_clicked()
 {
     if (ui->Bazookka->checkState() == Qt::Checked){
         int municion = ui->municionBazooka->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->BazookaIA->checkState() == Qt::Unchecked)){
             ui->Bazookka->setChecked(false);
             mensaje_error();
         }
@@ -91,7 +144,7 @@ void editorSeleccionArmasHerramientas::on_Mortero_clicked()
 {
     if (ui->Mortero->checkState() == Qt::Checked){
         int municion = ui->municionMortero->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->MortaIA->checkState() == Qt::Unchecked)){
             ui->Mortero->setChecked(false);
             mensaje_error();
         }
@@ -102,7 +155,7 @@ void editorSeleccionArmasHerramientas::on_GranadaV_clicked()
 {
     if (ui->GranadaV->checkState() == Qt::Checked){
         int municion = ui->municionGranadaV->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->GreenGrenadeIA->checkState() == Qt::Unchecked)){
             ui->GranadaV->setChecked(false);
             mensaje_error();
         }
@@ -113,7 +166,7 @@ void editorSeleccionArmasHerramientas::on_GranadaR_clicked()
 {
     if (ui->GranadaR->checkState() == Qt::Checked){
         int municion = ui->municionGranadaR->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->RedGrenadeIA->checkState() == Qt::Unchecked)){
             ui->GranadaR->setChecked(false);
             mensaje_error();
         }
@@ -124,7 +177,7 @@ void editorSeleccionArmasHerramientas::on_Banana_clicked()
 {
     if (ui->Banana->checkState() == Qt::Checked){
         int municion = ui->municionBanana->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->BananaIA->checkState() == Qt::Unchecked)){
             ui->Banana->setChecked(false);
             mensaje_error();
         }
@@ -135,7 +188,7 @@ void editorSeleccionArmasHerramientas::on_GranadaS_clicked()
 {
     if (ui->GranadaS->checkState() == Qt::Checked){
         int municion = ui->municionGranadaS->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->HGrenadeIA->checkState() == Qt::Unchecked)){
             ui->GranadaS->setChecked(false);
             mensaje_error();
         }
@@ -146,7 +199,7 @@ void editorSeleccionArmasHerramientas::on_Dinamita_clicked()
 {
     if (ui->Dinamita->checkState() == Qt::Checked){
         int municion = ui->municionDinamita->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->DynamiteIA->checkState() == Qt::Unchecked)){
             ui->Dinamita->setChecked(false);
             mensaje_error();
         }
@@ -157,7 +210,7 @@ void editorSeleccionArmasHerramientas::on_Bate_clicked()
 {
     if (ui->Dinamita->checkState() == Qt::Checked){
         int municion = ui->municionBate->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->BatIA->checkState() == Qt::Unchecked)){
             ui->Bate->setChecked(false);
             mensaje_error();
         }
@@ -168,7 +221,7 @@ void editorSeleccionArmasHerramientas::on_Aereo_clicked()
 {
     if (ui->Aereo->checkState() == Qt::Checked){
         int municion = ui->municionAereo->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->AIrIA->checkState() == Qt::Unchecked)){
             ui->Aereo->setChecked(false);
             mensaje_error();
         }
@@ -179,7 +232,7 @@ void editorSeleccionArmasHerramientas::on_Teletransportador_clicked()
 {
     if (ui->Teletransportador->checkState() == Qt::Checked){
         int municion = ui->municionTeletransportador->text().toInt();
-        if (municion == 0){
+        if (municion == 0 && (ui->TeleIA->checkState() == Qt::Unchecked)){
             ui->Teletransportador->setChecked(false);
             mensaje_error();
         }
@@ -189,61 +242,101 @@ void editorSeleccionArmasHerramientas::on_Teletransportador_clicked()
 void editorSeleccionArmasHerramientas::on_buttonBox_accepted()
 {
     if (ui->Bazookka->checkState() == Qt::Unchecked){
-        editor->remove_weapon(0);
+        editor->remove_weapon((int)UsableIds::BAZOOKA);
     } else {
-        editor->agregar_arma(0,ui->municionBazooka->text().toInt());
+        if (ui->BazookaIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::BAZOOKA,ui->municionBazooka->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::BAZOOKA,INFINITE_AMMO);
+        }
     }
     if (ui->Mortero->checkState() == Qt::Unchecked){
-        editor->remove_weapon(1);
+        editor->remove_weapon((int)UsableIds::MORTAR);
     } else {
-        editor->agregar_arma(1,ui->municionMortero->text().toInt());
+        if (ui->MortaIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::MORTAR,ui->municionMortero->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::MORTAR,INFINITE_AMMO);
+        }
     }
     if (ui->GranadaV->checkState() == Qt::Unchecked){
-        editor->remove_weapon(2);
+        editor->remove_weapon((int)UsableIds::GREEN_GRENADE);
     } else {
-        editor->agregar_arma(2,ui->municionGranadaV->text().toInt());
+        if (ui->GreenGrenadeIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::GREEN_GRENADE,ui->municionGranadaV->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::GREEN_GRENADE,INFINITE_AMMO);
+        }
     }
     if (ui->GranadaR->checkState() == Qt::Unchecked){
-        editor->remove_weapon(3);
+        editor->remove_weapon((int)UsableIds::RED_GRENADE);
     } else {
-        editor->agregar_arma(3,ui->municionGranadaR->text().toInt());
+        if (ui->RedGrenadeIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::RED_GRENADE,ui->municionGranadaR->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::RED_GRENADE,INFINITE_AMMO);
+        }
     }
     if (ui->Banana->checkState() == Qt::Unchecked){
-        editor->remove_weapon(4);
+        editor->remove_weapon((int)UsableIds::BANANA);
     } else {
-        editor->agregar_arma(4,ui->municionBanana->text().toInt());
+        if (ui->BananaIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::BANANA,ui->municionBanana->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::BANANA,INFINITE_AMMO);
+        }
     }
     if (ui->GranadaS->checkState() == Qt::Unchecked){
-        editor->remove_weapon(5);
+        editor->remove_weapon((int)UsableIds::HOLY_GRENADE);
     } else{
-        editor->agregar_arma(5,ui->municionGranadaS->text().toInt());
+        if (ui->HGrenadeIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::HOLY_GRENADE,ui->municionGranadaS->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::HOLY_GRENADE,INFINITE_AMMO);
+        }
     }
     if (ui->Dinamita->checkState() == Qt::Unchecked){
-        editor->remove_weapon(6);
+        editor->remove_weapon((int)UsableIds::DYNAMITE);
     } else {
-        editor->agregar_arma(6,ui->municionDinamita->text().toInt());
+        if (ui->DynamiteIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::DYNAMITE,ui->municionDinamita->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::DYNAMITE,INFINITE_AMMO);
+        }
     }
     if (ui->Bate->checkState() == Qt::Unchecked){
-        editor->remove_weapon(7);
+        editor->remove_weapon((int)UsableIds::BASEBALL_BAT);
     } else {
-        editor->agregar_arma(7,ui->municionBate->text().toInt());
+        if (ui->BatIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::BASEBALL_BAT,ui->municionBate->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::BASEBALL_BAT,INFINITE_AMMO);
+        }
     }
     if (ui->Aereo->checkState() == Qt::Unchecked){
-        editor->remove_weapon(8);
+        editor->remove_weapon((int)UsableIds::AERIAL_ATTACK);
     } else {
-        editor->agregar_arma(8,ui->municionAereo->text().toInt());
+        if (ui->AIrIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::AERIAL_ATTACK,ui->municionAereo->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::AERIAL_ATTACK,INFINITE_AMMO);
+        }
     }
     if (ui->Teletransportador->checkState() == Qt::Unchecked){
-        editor->remove_weapon(9);
+        editor->remove_weapon((int)UsableIds::TELEPORTATION);
     } else {
-        editor->agregar_arma(9,ui->municionTeletransportador->text().toInt());
+        if (ui->TeleIA->checkState() == Qt::Unchecked){
+            editor->agregar_arma((int)UsableIds::TELEPORTATION,ui->municionTeletransportador->text().toInt());
+        } else {
+            editor->agregar_arma((int)UsableIds::TELEPORTATION,INFINITE_AMMO);
+        }
     }
     editor->loadWeapons();
 }
 
 void editorSeleccionArmasHerramientas::mensaje_error()
 {
-    QMessageBox::information(this,tr("Error"),tr("Munivion invalida."));
+    QMessageBox::information(this,tr("Error"),tr("Invalid ammunition."));
 }
 
 

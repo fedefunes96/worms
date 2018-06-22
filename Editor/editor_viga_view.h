@@ -17,14 +17,10 @@ public:
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-
     QRectF boundingRect() const;
 
 signals:
     void girderSelect(int id);
-
-    void girderSetPos();
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

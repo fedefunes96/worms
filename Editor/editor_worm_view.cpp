@@ -23,11 +23,6 @@ void Worm_View::mousePressEvent(QGraphicsSceneMouseEvent *event)
     emit wormSelect(id);
 }
 
-void Worm_View::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    //emit wormSetPos();
-}
-
 
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {

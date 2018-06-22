@@ -19,14 +19,10 @@ public:
 
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
-
     QRectF boundingRect() const;
 
 signals:
     void wormSelect(int id);
-
-    void wormSetPos();
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

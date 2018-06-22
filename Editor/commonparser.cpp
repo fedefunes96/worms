@@ -179,6 +179,7 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
                         std::map<int, editorWorm> &worms, std::map<int, editorViga> &vigas,
                         unsigned int cant, std::string &backgrund)
 {
+    float height = 0;
     YAML::Emitter out;
     out << YAML::BeginMap; 
     out<<YAML::Key<<"Cantidad";
@@ -188,8 +189,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     for (auto &worm : worms){
         out <<YAML::Flow;
         out << YAML::BeginSeq;
-        int x = worm.second.getX()*6/140;
-        int y = ceil(worm.second.getY()*6/140);
+        float x = (worm.second.getX()*6)/140.0;
+        float y = (worm.second.getY()*6)/140.0;
         out << x;
         out << y;
         out << worm.second.getVida();
@@ -205,8 +206,11 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     out <<YAML::BeginSeq;
     for (auto &viga : vigas){
         int tam = viga.second.get_tam();
-        float x = viga.second.getX()*6/140;
-        float y = floor(viga.second.getY()*6/140);
+        float x = (viga.second.getX()*6)/140.0;
+        float y = (viga.second.getY()*6)/140.0;
+        if (height < y){
+            height = y;
+        }
         if (tam == 3){
             out<<YAML::Flow;
             out<<YAML::BeginSeq;
@@ -227,8 +231,8 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
     out <<YAML::BeginSeq;
     for (auto &viga : vigas){
         int tam = viga.second.get_tam();
-        float x = viga.second.getX()*6/140;
-        float y = floor(viga.second.getY()*6/140);
+        float x = (viga.second.getX()*6)/140.0;
+        float y = (viga.second.getY()*6)/140.0;
         if (tam == 6){
             out<<YAML::Flow;
             out<<YAML::BeginSeq;
@@ -258,6 +262,10 @@ void commonParser::save(std::string &nombre, std::map<int, editorUsables> &usabl
 
     out<<YAML::Key<<"Background";
     out<<backgrund;
+
+    height += 10;
+    out<<YAML::Key<<"Air Strike";
+    out<<height;
 
     out <<YAML::EndMap;
     commonArchivo archivo = commonArchivo(nombre,std::fstream::out);
