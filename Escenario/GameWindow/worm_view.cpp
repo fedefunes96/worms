@@ -172,11 +172,16 @@ void Worm_View::setStatus(int on_ground, int dir)
             if(this->last_dir!=static_cast<int>(MoveDirection::LEFT)){
                 qDebug()<<"set izq2";
                 if(this->last_dir==static_cast<int>(MoveDirection::JUMP_BACK) ||
-                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW)){
+                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW) ||
+                   this->last_on_ground==0){
+                    this->moving=false;
                     setAngle(-180);
                 }else if(this->angle!=-180){
+                    this->moving=false;
                     setAngle(-180);
                 }
+            }else if(this->last_on_ground==0){
+                setAngle(-180);
             }else if(this->weapon!=-1){
                 qDebug()<<"Dejo de Cargar el arma...";
                 setAngle(-180);
@@ -195,12 +200,17 @@ void Worm_View::setStatus(int on_ground, int dir)
             if(this->last_dir!=static_cast<int>(MoveDirection::RIGHT)){
                 qDebug()<<"set der2";
                 if(this->last_dir==static_cast<int>(MoveDirection::JUMP_BACK) ||
-                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW)){
+                   this->last_dir==static_cast<int>(MoveDirection::JUMP_FORW) ||
+                        this->last_on_ground==0){
+                    this->moving=false;
                     setAngle(0);
                 }else if(this->angle!=0){
+                    this->moving=false;
                     setAngle(0);
                 }
                 this->last_dir=dir;
+            }else if(this->last_on_ground==0){
+                setAngle(0);
             }else if(this->weapon!=-1){
                 qDebug()<<"Dejo de Cargar el arma...";
                 setAngle(0);
