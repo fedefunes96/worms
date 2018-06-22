@@ -32,6 +32,25 @@ GameWindow::GameWindow(QWidget *parent) :
     this->setButtonTime(ui->time3,false);
     this->setButtonTime(ui->time4,false);
     this->setButtonTime(ui->time5,false);
+    this->setButtomsCountDownHidden(true);
+    ui->powerBar->setHidden(true);
+}
+
+
+void GameWindow::setPowerBarHidden(bool enable)
+{
+    ui->powerBar->setHidden(enable);
+    ui->PowerLabel->setHidden(enable);
+}
+
+void GameWindow::setButtomsCountDownHidden(bool enable)
+{
+    ui->time1->setHidden(enable);
+    ui->time2->setHidden(enable);
+    ui->time3->setHidden(enable);
+    ui->time4->setHidden(enable);
+    ui->time5->setHidden(enable);
+    ui->weaponCountDownLabel->setHidden(enable);
 }
 
 
@@ -98,9 +117,20 @@ void GameWindow::on_pushButton_clicked()
     if(worm==nullptr){
         return;
     }
+    int idw = worm->getWeaponId();
+    if(idw==static_cast<int>(WeaponsIds::AERIAL_ATTACK) ||
+       idw==static_cast<int>(WeaponsIds::BASEBALL_BAT) ||
+       idw==static_cast<int>(WeaponsIds::DYNAMITE) ||
+       idw==static_cast<int>(WeaponsIds::TELEPORTATION)){
+        this->setPowerBarHidden(true);
+    }else{
+        this->setPowerBarHidden(false);
+    }
     if(!worm->isWeaponCtD()){
+        this->setButtomsCountDownHidden(true);
         return;
     }
+    this->setButtomsCountDownHidden(false);
     this->setButtomsTime(worm->getTimeWeapon());
 }
 
@@ -265,8 +295,10 @@ void GameWindow::setButtomsTime(int time)
 {
     Worm_View *worm = this->playerActive->getWormActive();
     if(worm==nullptr || !worm->isWeaponCtD()){
+        this->setButtomsCountDownHidden(true);
         return;
     }
+    this->setButtomsCountDownHidden(false);
     this->setButtonTime(ui->time1,false);
     this->setButtonTime(ui->time2,false);
     this->setButtonTime(ui->time3,false);
@@ -313,16 +345,6 @@ void GameWindow::setButtonTime(QPushButton *button,bool enable)
 
 
 
-
-
-
-
-/*
-QPalette pal = button->palette();
-pal.setColor(QPalette::Button, QColor(Qt::blue));
-button->setAutoFillBackground(true);
-button->setPalette(pal);
-button->update();*/
 
 
 

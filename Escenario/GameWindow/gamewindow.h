@@ -9,6 +9,8 @@
 #include "player.h"
 #include <QTimer>
 
+
+
 namespace Ui {
 class GameWindow;
 }
@@ -33,6 +35,7 @@ public:
     void closeEvent(QCloseEvent *event);
     void showPlayerList(QList<Player *> playerList);
     void showActualPlayer(int id);
+
 signals:
     void closeGame();
 private slots:
@@ -61,6 +64,8 @@ private slots:
     void on_time5_clicked();
 
 private:
+    void setButtomsCountDownHidden(bool enable);
+    void setPowerBarHidden(bool enable);
     Ui::GameWindow *ui;
     Game_View *gameScene;
     Weapons_and_Tools *menuWeapons;

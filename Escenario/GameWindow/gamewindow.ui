@@ -866,7 +866,7 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="PowerLabel">
                <property name="text">
                 <string>Power</string>
                </property>
@@ -920,7 +920,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QLabel" name="label_8">
+            <widget class="QLabel" name="weaponCountDownLabel">
              <property name="text">
               <string>Weapon countdown</string>
              </property>

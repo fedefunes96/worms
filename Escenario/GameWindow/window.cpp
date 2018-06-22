@@ -13,6 +13,10 @@ Window::Window(MapSelection *map, RoomCreator *room, Protocol *protocol, WaitRoo
     this->setWindowTitle("Worms Armageddon");
     this->wait = wait;
     this->closeX=true;
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
+    ui->imageBack->setPixmap(img);
+    ui->imageBack->setScaledContents(true);
+
 }
 
 Window::~Window()

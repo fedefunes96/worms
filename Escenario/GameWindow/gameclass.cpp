@@ -417,7 +417,6 @@ void GameClass::checkRound(QList<int> list){
 
     Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
-    worm->setSelect(true);
     this->game->addItemToFollow(worm);
 
     if(this->myPlayer->getId() != list[1]){
@@ -438,6 +437,7 @@ void GameClass::checkRound(QList<int> list){
     qDebug()<<"es mi turno";
     qDebug()<<"idworm:"<<list[2];
 
+    worm->setSelect(true);
     this->myTurn=true;
     this->setPotBar(0);
     this->window->setButtonEnable(true);

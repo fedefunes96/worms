@@ -721,6 +721,7 @@ void Worm_View::runSpriteWeapon()
 void Worm_View::loadSpriteWeapon(int val)
 {
     this->targetVis = false;
+    this->weaponCountDwn=false;
     if(this->isMoving()){
         qDebug()<<"se esta moviendo al cargar el arma";
         return;
