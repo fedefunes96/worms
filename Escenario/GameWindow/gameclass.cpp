@@ -52,11 +52,6 @@ void GameClass::connectController(Controler *controler)
 }
 
 
-void GameClass::setRefocus(bool enable)
-{
-    this->window->setRefocusEnable(enable);
-}
-
 void GameClass::setPotBar(int pot)
 {
     this->window->setBar(pot);

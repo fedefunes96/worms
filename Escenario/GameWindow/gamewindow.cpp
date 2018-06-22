@@ -21,6 +21,10 @@ GameWindow::GameWindow(QWidget *parent) :
     this->setWindowState(this->windowState() | Qt::WindowMaximized);
     //ui->powerBar->setMaximum(1000);
     //ui->powerBar->setMinimum(0);
+    ui->upCamera->setIcon(QIcon(ROOT_PATH"/resources/images/up.png"));
+    ui->downCamera->setIcon(QIcon(ROOT_PATH"/resources/images/down.png"));
+    ui->leftCamera->setIcon(QIcon(ROOT_PATH"/resources/images/left.png"));
+    ui->rightCamera->setIcon(QIcon(ROOT_PATH"/resources/images/right.png"));
 
 }
 
@@ -172,14 +176,6 @@ void GameWindow::showPlayerList(QList<Player*> playerList)
 }
 
 
-/*
-    for (int i = 0; i < cant; ++i){
-        std::cout<<"nombre:"<<list[i]<<std::endl;
-        QString name = QString::fromStdString(list[i]);
-        ui->listWidget->addItem(name);
-    }
-
-*/
 
 
 
@@ -190,3 +186,26 @@ void GameWindow::showPlayerList(QList<Player*> playerList)
 
 
 
+void GameWindow::on_downCamera_clicked()
+{
+    ui->graphicsView->moveDownCam();
+    ui->refocus->setEnabled(true);
+}
+
+void GameWindow::on_leftCamera_clicked()
+{
+    ui->graphicsView->moveLeftCam();
+    ui->refocus->setEnabled(true);
+}
+
+void GameWindow::on_upCamera_clicked()
+{
+    ui->graphicsView->moveUpCam();
+    ui->refocus->setEnabled(true);
+}
+
+void GameWindow::on_rightCamera_clicked()
+{
+    ui->graphicsView->moveRightCam();
+    ui->refocus->setEnabled(true);
+}

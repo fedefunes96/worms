@@ -24,7 +24,6 @@ public:
     void connectController(Controler *controler);
     void setStatusWorm(QList<int> list);
     void setPotBar(int pot);
-    void setRefocus(bool enable);
     void connectWaitRoom(WaitRoom *wait);
 signals:
     void isWinner(bool iswinner);

@@ -307,35 +307,6 @@ void EventHandler::keyPressEvent(QKeyEvent *k_event)
             break;
         }
 
-        case Qt::Key_D:
-        {
-            //mover camara a derecha
-            this->game->getCamera()->moveRightCam();
-            this->game->setRefocus(true);
-            break;
-        }
-        case Qt::Key_A:
-        {
-            //mover camara a izq
-            this->game->getCamera()->moveLeftCam();
-            this->game->setRefocus(true);
-            break;
-        }
-        case Qt::Key_W:
-        {
-            //mover camara arriba
-            this->game->getCamera()->moveUpCam();
-            this->game->setRefocus(true);
-            break;
-        }
-        case Qt::Key_S:
-        {
-            //mover camara abajo
-            this->game->getCamera()->moveDownCam();
-            this->game->setRefocus(true);
-            break;
-        }
-
         default:
         {
             qDebug() << "Unhandled"; //sin definir aun

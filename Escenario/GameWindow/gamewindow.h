@@ -41,6 +41,14 @@ private slots:
     void stepTimer();
     void on_refocus_clicked();
 
+    void on_downCamera_clicked();
+
+    void on_leftCamera_clicked();
+
+    void on_upCamera_clicked();
+
+    void on_rightCamera_clicked();
+
 private:
     Ui::GameWindow *ui;
     Game_View *gameScene;
