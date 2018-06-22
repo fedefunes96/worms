@@ -42,6 +42,7 @@ public:
     QString getColor();
     void setColor(QString color);
     int getPoints();
+    int getAmmo(int id);
 private:
     std::vector<Worm_View*> worms_list;
     int id;

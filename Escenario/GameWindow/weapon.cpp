@@ -12,14 +12,16 @@ int Weapon::getAmmo()
 
 void Weapon::fire()
 {
-    if(this->idObj==9){
+    if(this->idObj==9){ //usar el enum..
         //sonido particular teletrasnportar
         this->tele->play();
     }else{
         //sonido general para armas..
         this->fireSound->play();
     }
-    this->ammo--;
+    if(this->ammo!=-1){
+        this->ammo--;
+    }
 }
 
 

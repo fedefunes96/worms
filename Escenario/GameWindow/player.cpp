@@ -69,11 +69,7 @@ void Player::addWeapon(int type,int ammo)
 {
     Weapon* weapon = new Weapon();
     weapon->setIdObj(type);
-    if(ammo<0){
-        weapon->setAmmo(9999);
-    }else{
-       weapon->setAmmo(ammo);
-    }
+    weapon->setAmmo(ammo);
     this->listWeapons.append(weapon);
 }
 
@@ -83,11 +79,29 @@ bool Player::canFire(int type)
     while(Iter.hasNext())
     {
         Weapon* w =Iter.next();
-        if(type==w->getIdObj() && w->getAmmo()>0){
-            return true;
+        if(type==w->getIdObj()){
+            if(w->getAmmo()>0){
+                return true;
+            }else if(w->getAmmo()==-1){
+                return true;
+            }
         }
     }
     return false;
+}
+
+
+int Player::getAmmo(int id)
+{
+    QListIterator<Weapon*> Iter(this->listWeapons);
+    while(Iter.hasNext())
+    {
+        Weapon* w =Iter.next();
+        if(id==w->getIdObj()){
+            return w->getAmmo();
+        }
+    }
+    return 0;
 }
 
 void Player::fireWeapon(int type)
@@ -96,7 +110,7 @@ void Player::fireWeapon(int type)
     while(Iter.hasNext())
     {
         Weapon* w =Iter.next();
-        if(type==w->getIdObj() && w->getAmmo()>0){
+        if(type==w->getIdObj() && (w->getAmmo()>0 || w->getAmmo()==-1) ){
             w->fire();
             return;
         }

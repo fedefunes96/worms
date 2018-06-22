@@ -39,16 +39,60 @@ Weapons_and_Tools::Weapons_and_Tools(QWidget *parent,Player* player) :
     if(!this->player->canFire(static_cast<int>(WeaponsIds::TELEPORTATION))){
         ui->teleport->setEnabled(false);
     }
+
+
+    int ammo;
+
     ui->banana->setIcon(QIcon(ROOT_PATH"/resources/images/banana.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::BANANA)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->bat->setIcon(QIcon(ROOT_PATH"/resources/images/baseball.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::BASEBALL_BAT)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->bazooka->setIcon(QIcon(ROOT_PATH"/resources/images/bazooka.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::BAZOOKA)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->dinamite->setIcon(QIcon(ROOT_PATH"/resources/images/dynamite.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::DYNAMITE)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->fragGranade->setIcon(QIcon(ROOT_PATH"/resources/images/cluster.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::RED_GRENADE)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->granade->setIcon(QIcon(ROOT_PATH"/resources/images/grenade.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::GREEN_GRENADE)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->holyGranade->setIcon(QIcon(ROOT_PATH"/resources/images/hgrenade.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::HOLY_GRENADE)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->misil->setIcon(QIcon(ROOT_PATH"/resources/images/airstrke.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::AERIAL_ATTACK)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->morter->setIcon(QIcon(ROOT_PATH"/resources/images/mortar.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::MORTAR)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
     ui->teleport->setIcon(QIcon(ROOT_PATH"/resources/images/teleport.1.png"));
+    ammo = (this->player->getAmmo(static_cast<int>(WeaponsIds::TELEPORTATION)));
+    if(ammo!=-1){
+        ui->ammoBan->setText(QString::number(ammo));
+    }
 }
 
 Player* Weapons_and_Tools::getPlayer(){
