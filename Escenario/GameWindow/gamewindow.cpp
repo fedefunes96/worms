@@ -1,6 +1,8 @@
 #include "gamewindow.h"
 #include "ui_gamewindow.h"
 
+#include <QMessageBox>
+
 
 GameWindow::GameWindow(QWidget *parent) :
     QDialog(parent),
@@ -107,6 +109,15 @@ void GameWindow::setButtonEnable(bool enable)
     this->ui->pushButton->setEnabled(enable);
 }
 
+
+void GameWindow::showActualPlayer(int id)
+{
+    QString name= "Player ";
+    QString idP;
+    idP.setNum(id);
+    name = name + idP;
+    QMessageBox::information(this,"Actual player","Actual player is:" + name);
+}
 
 void GameWindow::setBar(int pot)
 {

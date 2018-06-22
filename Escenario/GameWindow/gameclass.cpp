@@ -407,6 +407,7 @@ void GameClass::setStatusWorm(QList<int> list)
 
 void GameClass::checkRound(QList<int> list){
     this->window->startTimerRound(40);
+    this->window->showActualPlayer(list[1]);
     //qDebug()<<"actual player id:"<<list[1];
     //qDebug()<<"actual worm id:"<<list[2];
     //qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();

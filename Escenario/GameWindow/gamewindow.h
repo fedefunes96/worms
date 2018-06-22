@@ -32,6 +32,7 @@ public:
     void setRefocusEnable(bool enable);
     void closeEvent(QCloseEvent *event);
     void showPlayerList(QList<Player *> playerList);
+    void showActualPlayer(int id);
 signals:
     void closeGame();
 private slots:
