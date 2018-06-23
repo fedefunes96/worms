@@ -12,7 +12,7 @@ RoomCreator::RoomCreator(WaitRoom *wait, Protocol* protocol, QWidget *parent) :
     ui->setupUi(this);
     this->protocol = protocol;
     this->wait = wait;
-    this->setWindowTitle("Worms Armageddon - Creador sala");
+    this->setWindowTitle("Worms Armageddon - Room creator");
     this->isExec=false;
     QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
     ui->imageBack->setScaledContents(true);

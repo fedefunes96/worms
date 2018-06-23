@@ -36,7 +36,7 @@ void ConectionWindow::on_pushButton_clicked()
         Socket client(ip,port);
         this->list.push_back(std::move(client));
     }catch (SocketException& e){
-         QMessageBox::information(this,"Server Error","Could not connect to the server specifeid. Try again.");
+         QMessageBox::information(this,"Server Error","Could not connect to the server specified. Try again.");
          return;
     }
     this->closeX=false;

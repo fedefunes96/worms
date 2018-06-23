@@ -14,7 +14,7 @@ MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
 {
     this->protocol = protocol;  
     ui->setupUi(this);
-    this->setWindowTitle("Worms Armageddon - Seleccion de sala");
+    this->setWindowTitle("Worms Armageddon - Room selector");
     this->wait = wait;
     this->closeX=true;
     isExec=false;
