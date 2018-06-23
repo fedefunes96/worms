@@ -11,6 +11,11 @@ WaitRoom::WaitRoom(Protocol *protocol,QWidget *parent) :
     this->setWindowTitle("Worms Armageddon - Sala de espera");
     this->showW=false;
     this->closeX=true;
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
+    ui->imageBack->setScaledContents(true);
+    ui->imageBack->setPixmap(img);
+    ui->label->setStyleSheet("QLabel { background-color : white}");
+    ui->jugadores->setStyleSheet("QLabel { background-color : white}");
 }
 
 WaitRoom::~WaitRoom()

@@ -11,6 +11,11 @@ ConectionWindow::ConectionWindow(QWidget *parent) :
     ui->setupUi(this);
     this->closeX=true;
     this->setWindowTitle("Start Connection");
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
+    ui->label->setStyleSheet("QLabel { background-color : white}");
+    ui->label_2->setStyleSheet("QLabel { background-color : white}");
+    ui->imageBack->setScaledContents(true);
+    ui->imageBack->setPixmap(img);
 }
 
 ConectionWindow::~ConectionWindow()

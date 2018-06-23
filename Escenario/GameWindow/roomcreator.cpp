@@ -14,6 +14,11 @@ RoomCreator::RoomCreator(WaitRoom *wait, Protocol* protocol, QWidget *parent) :
     this->wait = wait;
     this->setWindowTitle("Worms Armageddon - Creador sala");
     this->isExec=false;
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
+    ui->imageBack->setScaledContents(true);
+    ui->imageBack->setPixmap(img);
+    ui->label->setStyleSheet("QLabel { background-color : white}");
+    ui->label_2->setStyleSheet("QLabel { background-color : white}");
 }
 
 RoomCreator::~RoomCreator()

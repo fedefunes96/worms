@@ -18,6 +18,10 @@ MapSelection::MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent) :
     this->wait = wait;
     this->closeX=true;
     isExec=false;
+    QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
+    ui->imageBack->setScaledContents(true);
+    ui->imageBack->setPixmap(img);
+    ui->label->setStyleSheet("QLabel { background-color : white}");
 }
 
 void MapSelection::setExecute(bool enable)
