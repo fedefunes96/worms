@@ -1,4 +1,5 @@
 #include "editorviga.h"
+#include <iostream>
 
 #define pi 3.141592
 

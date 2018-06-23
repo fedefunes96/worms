@@ -27,35 +27,35 @@ LIBS += -lyaml-cpp
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    editorpantalla.cpp \
     editorubicable.cpp \
     editorworm.cpp \
     editorviga.cpp \
     editorusables.cpp \
-    editorseleccionarmasherramientas.cpp \
     editor_worm_view.cpp \
     editor_viga_view.cpp \
     commonarchivo.cpp \
-    commonparser.cpp \
     editorBacgroun.cpp \
     editor_viga_grande_view.cpp \
-    scene.cpp
+    scene.cpp \
+    parser.cpp \
+    utilselection.cpp \
+    mapeditor.cpp
 
 HEADERS += \
         mainwindow.h \
-    editorpantalla.h \
     editorubicable.h \
     editorworm.h \
     editorviga.h \
     editorusables.h \
-    editorseleccionarmasherramientas.h \
     editor_worm_view.h \
     editor_viga_view.h \
     commonarchivo.h \
-    commonparser.h \
     editorBacgroun.h \
     editor_viga_grande_view.h \
-    scene.h
+    scene.h \
+    parser.h \
+    utilselection.h \
+    mapeditor.h
 
 FORMS += \
         mainwindow.ui \

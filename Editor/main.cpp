@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "commonparser.h"
+#include "parser.h"
 
 int main(int argc, char *argv[])
 {

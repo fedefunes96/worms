@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "editorpantalla.h"
+#include "mapeditor.h"
 #include <QFileDialog>
 #include <QString>
 
@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::on_pushButton_clicked(){
-    EditorPantalla pantalla2;
+    MapEditor pantalla2;
     pantalla2.setModal(true);
     pantalla2.exec();
 }
@@ -26,12 +26,12 @@ void MainWindow::on_pushButton_clicked(){
 
 void MainWindow::on_load_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),"/home",
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),ROOT_PATH"/resources/maps",
                                                     tr("*.yaml"));
     if (fileName.isEmpty()){
         return;
     }
-    EditorPantalla pantalla2;
+    MapEditor pantalla2;
     pantalla2.setModal(true);
     pantalla2.fileName(fileName);
     pantalla2.exec();
