@@ -80,32 +80,15 @@ void Throwable::delete_myself(b2World& world) {
 	world.DestroyBody(this->body);
 }
 
-/*void Throwable::start_contacting(Ubicable* ubicable) {
-	ubicable->colision(*this);
-}*/
 //Whatever i hit, i must explode
 void Throwable::start_contacting(b2Contact* contact) {
 	if (!this->dead)
 		this->explode();
-	//printf("Contact %0.1f %0.1f\n", this->body->GetPosition().x, this->body->GetPosition().y);
 }
 
 void Throwable::stop_contacting(b2Contact* contact) {
 	//Do nothing
 }
-
-//Whatever i hit, i must explode
-/*void Throwable::colision(Girder& girder) {
-	this->explode();
-}
-
-void Throwable::colision(Worm& worm) {
-	this->explode();
-}
-
-void Throwable::colision(Throwable& throwable) {
-	this->explode();
-}*/
 
 int Throwable::get_id() {
 	return this->id_obj;
@@ -148,37 +131,6 @@ bool Throwable::should_collide_with(Girder* girder) {
 	return true;
 }
 
-//bool Throwable::should_collide_with(Worm* worm) {
-	//if (worm->get_id() == this->owner->get_id() && !stop_collide_owner) {
-		/*QueryCallback queryCallback;
-		b2AABB aabb;
-		aabb.lowerBound = pos - b2Vec2(this->radius, this->radius);
-		aabb.upperBound = pos + b2Vec2(this->radius, this->radius);
-		this->stage.get_world().QueryAABB(&queryCallback, aabb);
-		  
-		if (queryCallback.foundBodies.size() > 0)	
-			return false;*/
-	//}
-
-	/*if (!this->stop_collide_owner) {
-		QueryCallback queryCallback;
-		b2AABB aabb;
-
-		b2Vec2 pos = this->body->GetPosition();
-
-		aabb.lowerBound = pos - b2Vec2(this->radius, this->radius);
-		aabb.upperBound = pos + b2Vec2(this->radius, this->radius);
-		this->stage.get_world().QueryAABB(&queryCallback, aabb);
-
-		if (queryCallback.foundBodies.size() - 1 > 0)	{
-			//printf("Inside worm: %d\n", (int) queryCallback.foundBodies.size());
-			return false;	
-		} else {
-			printf("Stop colliding worm\n");
-			this->stop_collide_owner = true;
-			return true;
-		}
-	}*/
 bool Throwable::should_collide_with(Worm* worm) {
 	if (worm->get_id() == this->owner->get_id() && !this->stop_collide_owner) {
 		QueryCallback queryCallback;
@@ -215,4 +167,8 @@ bool Throwable::should_collide_with(Sensor* sensor) {
 bool Throwable::should_collide_with(Throwable* throwable) {
 	//Don't collide with other throwables
 	return false;
+}
+
+bool Throwable::is_explosive() {
+	return true;
 }

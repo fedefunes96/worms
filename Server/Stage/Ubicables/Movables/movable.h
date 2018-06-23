@@ -58,6 +58,7 @@ public:
 	virtual b2Body* get_body() = 0;
 	virtual bool im_dead() = 0;
 	virtual bool is_affected_by_wind() = 0;
+	virtual bool is_explosive() = 0;
 
 	virtual bool should_collide_with(Ubicable* ubicable) = 0;
 	

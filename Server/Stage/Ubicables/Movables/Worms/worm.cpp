@@ -251,26 +251,6 @@ void Worm::set_angle(float angle) {
 }
 
 void Worm::pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) {
-	/*b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);*/
-
-	//printf("X: %0.1f Y: %0.1f\n", worldManifold.normal.x, worldManifold.normal.y);
-	
-	/*b2Vec2 a = b2Mul(b2Mat22((desiredSlopeAngle - 90.0) * (b2_pi / 180.0)), b2Vec2(0.0, 1.0));
-	b2Vec2 b = b2Vec2(-a.x, a.y);
-
-	b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
-
-	this->should_slide = (b2Dot(a, worldManifold.normal) < 0.0) || (b2Dot(b,  worldManifold.normal) < 0.0);
-
-	if(this->should_slide) {
-		this->set_gravity(DEFAULT_GRAVITY);
-		printf("Angle contact: %0.2f\n", b2Dot(a, worldManifold.normal));
-		printf("Angle contact: %0.2f\n", b2Dot(b, worldManifold.normal));
-	} else {
-		this->set_gravity(b2Vec2(0.0, 0.0));
-	}*/
 }
 
 bool Worm::is_on_ground() {
@@ -339,47 +319,13 @@ void Worm::delete_myself(b2World& world) {
 	world.DestroyBody(this->body);
 }
 
-/*void Worm::start_contacting(Ubicable* ubicable) {
-	ubicable->colision(*this);
-}*/
-
 void Worm::start_contacting(b2Contact* contact) {
-	/*b2WorldManifold worldManifold;
-	contact->GetWorldManifold(&worldManifold);
 
-	float angle = atan2(worldManifold.normal.y, worldManifold.normal.x) - b2_pi/2;
-
-	angle_for_mov = angle;
-
-	if (b2_pi/4 <= fabs(angle_for_mov) &&  fabs(angle_for_mov) < b2_pi/2) {
-		this->set_gravity(DEFAULT_GRAVITY);
-		this->should_slide = true;
-	} else if (0 <= fabs(angle_for_mov) && fabs(angle_for_mov) < b2_pi/4) {
-		this->set_gravity(b2Vec2(0, 0));
-		this->should_slide = false;
-	} else {
-		this->set_gravity(DEFAULT_GRAVITY);
-		this->should_slide = false;
-	}*/
-	//printf("angle: %0.1f\n", angle * 180/b2_pi);
 }
 
 void Worm::stop_contacting(b2Contact* contact) {
-	/*this->set_gravity(DEFAULT_GRAVITY);
-	this->should_slide = false;*/
-}
 
-/*void Worm::colision(Girder& girder) {
-	//Do nothing
 }
-
-void Worm::colision(Worm& worm) {
-	//Do nothing
-}
-
-void Worm::colision(Throwable& throwable) {
-	//Do nothing
-}*/
 
 b2Body* Worm::get_body() {
 	return this->body;
@@ -418,4 +364,8 @@ bool Worm::should_collide_with(Throwable* throwable) {
 
 bool Worm::should_collide_with(Sensor* sensor) {
 	return true;
+}
+
+bool Worm::is_explosive() {
+	return false;
 }

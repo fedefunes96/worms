@@ -43,9 +43,7 @@ public:
 	virtual bool should_collide_with(Sensor* sensor) override;
 
 	virtual void pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) override {};
-	/*virtual void colision(Girder& girder) override;
-	virtual void colision(Worm& worm) override;	
-	virtual void colision(Throwable& throwable) override;*/
+
 	virtual int get_id() override;
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;

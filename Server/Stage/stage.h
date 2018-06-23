@@ -58,6 +58,7 @@ private:
 	void remove_deads();
 	void create_objects();
 	void create_objects_mov();
+	bool no_explosives_in_map();
 
 	void pre_initialize();
 	void nothing_moving();

@@ -146,19 +146,9 @@ void Stage::draw() {
 
  			float angle = b->GetAngle();
 
- 			//Movable* movable = (Movable*) b->GetUserData();
-
- 			//Touched water
- 			//if (pos.y < this->game.get_water_level()) {
-
- 			/*if ((*it)->get_type().compare("Worm") == 0)
- 				printf("angle %0.1f\n", angle);*/
-
  			if (pos.y < this->water.get_water_level()) {
  				(*it)->force_death();
  			}
-
- 			//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
 
  			std::shared_ptr<Event> event_pos(new EventPosition((*it)->get_type()
 														, (*it)->get_id()
@@ -173,14 +163,12 @@ void Stage::draw() {
 				this->event_queues[i]->add_event(event_pos);
 			}
 
- 			//if (b->IsAwake())
  			cant_objects_moving++;
- 			//movable->move_step();
 
  			++it;
   		}
 
-  		if (cant_objects_moving == 0)
+  		if (cant_objects_moving == 0 && this->no_explosives_in_map())
   			this->nothing_moving();
 
   		this->remove_deads();
@@ -191,6 +179,20 @@ void Stage::draw() {
 	}
 
 	printf("End of world draw\n");
+}
+
+bool Stage::no_explosives_in_map() {
+	std::lock_guard<std::mutex> lock(this->movable_m);
+
+	std::vector<std::shared_ptr<Movable>>::iterator it = this->movables.begin();
+
+	while (it != this->movables.end()) {
+		if ((*it)->is_explosive())
+			return false;
+		++it;
+	}		
+
+	return true;
 }
 
 void Stage::step() {
