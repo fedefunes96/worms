@@ -33,27 +33,19 @@ void Camera::resizeEvent(QResizeEvent *event)
 
 
 void Camera::mousePressEvent(QMouseEvent *event)
-{
-    QGraphicsItem *item = this->itemAt(event->x(),-(event->y()+verticalScrollBar()->value()));
-    Girder_View *girder = dynamic_cast<Girder_View*>(item);
-    if(!girder){
-        qDebug()<<"no es girder";
-    }else{
-        qDebug()<<"es girder";
-    }
-
+{   
     if(this->playerActive->isActive()){
         int diff =((-verticalScrollBar()->value()) - (this->height()-13-4));
 
-        qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
-        qDebug()<<"scroll minimo y:"<<-this->height()+13+4;
-        qDebug()<<"diferencia"<<diff;
+        //qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
+        //qDebug()<<"scroll minimo y:"<<-this->height()+13+4;
+        //qDebug()<<"diferencia"<<diff;
 
         Worm_View* worm = this->playerActive->getWormActive();
         worm->setClickDir(event->x()+horizontalScrollBar()->value(),
                           (this->height()-event->y()+diff));
-        qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
-        qDebug()<<"lo que guardo x:"<<event->x()+horizontalScrollBar()->value()<<"y:"<<(this->height()-event->y()+diff);
+        //qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
+        //qDebug()<<"lo que guardo x:"<<event->x()+horizontalScrollBar()->value()<<"y:"<<(this->height()-event->y()+diff);
         emit mouseClick();
     }
 }
@@ -89,16 +81,16 @@ void Camera::followObject()
     }
 
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 9 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 5 );
     }else if(item->x() < horizontalScrollBar()->value()+200){
-        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 9 );
+        horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 5 );
     }
 
 
     if(item->y() > verticalScrollBar()->value()+200 && item->y()>verticalScrollBar()->value()+this->height()-200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() + 9 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() + 5 );
     }else if(item->y() < verticalScrollBar()->value()+200){
-        verticalScrollBar()->setValue( verticalScrollBar()->value() - 9 );
+        verticalScrollBar()->setValue( verticalScrollBar()->value() - 5 );
     }
 
 }
@@ -106,27 +98,25 @@ void Camera::followObject()
 void Camera::moveRightCam()
 {
     this->freeMove=true;
-    horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 15 );
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 30 );
 }
 
 void Camera::moveLeftCam()
 {
     this->freeMove=true;
-    horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 15 );
+    horizontalScrollBar()->setValue( horizontalScrollBar()->value() - 30 );
 }
 
 void Camera::moveUpCam()
 {
     this->freeMove=true;
-    verticalScrollBar()->setValue( verticalScrollBar()->value() - 15 );
-    qDebug()<<"valor hscrrol:"<<horizontalScrollBar()->value()<<"vscroll:"<<verticalScrollBar()->value();
+    verticalScrollBar()->setValue( verticalScrollBar()->value() - 30 );
 }
 
 void Camera::moveDownCam()
 {
     this->freeMove=true;
-    verticalScrollBar()->setValue( verticalScrollBar()->value() + 15 );
-    qDebug()<<"valor hscrrol:"<<horizontalScrollBar()->value()<<"vscroll:"<<verticalScrollBar()->value();
+    verticalScrollBar()->setValue( verticalScrollBar()->value() + 30 );
 }
 
 

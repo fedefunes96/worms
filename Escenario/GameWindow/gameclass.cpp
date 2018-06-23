@@ -25,6 +25,7 @@ GameClass::GameClass(QRect screen,int w,int h,int idply)
     this->deadItemCollector->start(10);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
     this->window->setRefocusEnable(false);
+    this->lastP=nullptr;
 
 }
 
@@ -415,34 +416,38 @@ void GameClass::checkRound(QList<int> list){
     //qDebug()<<"actual worm id:"<<list[2];
     //qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();
 
+    if(this->lastP!=nullptr){
+        Worm_View *w = this->lastP->getWormActive();
+        if(w!=nullptr){
+            w->setSelect(false);
+        }
+    }
+
+    this->lastP=this->getPlayerInList(list[1]);
     Items* i = this->game->getItem(static_cast<int>(TypeObj::WORM),list[2]);
     Worm_View* worm = static_cast<Worm_View*>(i);
+    worm->setSelect(true);
+    this->lastP->setWormActive(worm);
     this->game->addItemToFollow(worm);
 
     if(this->myPlayer->getId() != list[1]){
-        qDebug()<<"NO es mi turno";
         this->setPotBar(0);
         this->myTurn=false;
         this->window->setButtonEnable(false);
         this->myPlayer->setActive(false);
         Worm_View* worm2 = this->myPlayer->getWormActive();
         if(worm2!=nullptr){
-            qDebug()<<"entre";
             worm2->setSelect(false);
             worm2->loadSpriteWeapon(-1);
         }
         this->myPlayer->setWormActive(nullptr);
         return;
     }
-    qDebug()<<"es mi turno";
-    qDebug()<<"idworm:"<<list[2];
-
-    worm->setSelect(true);
     this->myTurn=true;
     this->setPotBar(0);
     this->window->setButtonEnable(true);
     this->myPlayer->setActive(true);
-    this->myPlayer->setWormActive(worm);
+    //this->myPlayer->setWormActive(worm);
 }
 
 

@@ -50,6 +50,7 @@ private:
     void createColorList();
     QString getColor(int id_player);
     Player *getPlayerInList(int id_player);
+    Player *lastP;
 };
 
 #endif // GAMECLASS_H
