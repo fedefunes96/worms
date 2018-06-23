@@ -28,6 +28,7 @@ void Game_View::addCamera(Camera *camera)
 
 void Game_View::resizeScene(int w, int h)
 {
+    qDebug()<<"screen w:"<<w<<"h"<<h;
     this->scene->setSceneRect(0,-h,w,h);
 }
 
@@ -137,7 +138,7 @@ void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
         }else if(item->getId()==id && item->getIdObj()==type){
             //item->moveTo(posX,posY,angle);
             if(item->x()==-130){//temporal para setear el escenario
-                qDebug()<<posX<<posY;
+                qDebug()<<"coloque worm x:"<<posX<<"y:"<<posY;
                 item->setPosition(posX,this->scene->height()-posY); ///////// aca tambien deberia cambiarlo...
                 return;
             }
