@@ -37,6 +37,7 @@ public:
     void showActualPlayer(int id);
 
     void setWinner(bool haswinner);
+    void cleanWeaponInfoView();
 private slots:
     void on_pushButton_clicked();
 

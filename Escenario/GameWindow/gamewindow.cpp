@@ -39,6 +39,17 @@ GameWindow::GameWindow(QApplication *app, QWidget *parent) :
 }
 
 
+void GameWindow::cleanWeaponInfoView(){
+    ui->powerBar->setHidden(true);
+    ui->PowerLabel->setHidden(true);
+    ui->time1->setHidden(true);
+    ui->time2->setHidden(true);
+    ui->time3->setHidden(true);
+    ui->time4->setHidden(true);
+    ui->time5->setHidden(true);
+    ui->weaponCountDownLabel->setHidden(true);
+}
+
 void GameWindow::setPowerBarHidden(bool enable)
 {
     ui->powerBar->setHidden(enable);

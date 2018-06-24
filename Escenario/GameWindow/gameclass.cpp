@@ -360,6 +360,7 @@ void GameClass::checkDeadItem()
 void GameClass::checkQueueEvent(QList<int> list)
 {
     this->window->showPlayerList(this->players_list);
+    this->window->cleanWeaponInfoView();
     this->game->getCamera()->followObject();
     int cmd = list[0];
     if(cmd== static_cast<int>(Commands::GAME_END)){
