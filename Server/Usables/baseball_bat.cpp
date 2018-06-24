@@ -26,7 +26,6 @@ void BaseballBat::action(Worm* worm
 	//Query pos and do dmg in Area
 	QueryCallback queryCallback;
 	b2AABB aabb;
-	//int sign;
 
 	float longitude = worm->get_longitude();
 	float height = worm->get_height();
@@ -44,10 +43,6 @@ void BaseballBat::action(Worm* worm
 		}
 		default: break;
 	}
-
-	//Area of a worm in front of me
-	/*aabb.lowerBound = from_pos - b2Vec2(0.5*longitude*sign, 2*height);
-	aabb.upperBound = from_pos - b2Vec2(4*longitude*sign, -2*height);*/
 
 	this->stage.get_world().QueryAABB(&queryCallback, aabb);
 
