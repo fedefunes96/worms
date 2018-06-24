@@ -13,7 +13,7 @@ project (Worms)
 add_subdirectory(Box2D)
 add_subdirectory(Server)
 add_subdirectory(Editor)
-add_subdirectory(Escenario/GameWindow)
+add_subdirectory(Client)
 
 file(COPY "resources" DESTINATION ${PATH})
 file(COPY "config" DESTINATION ${PATH})
