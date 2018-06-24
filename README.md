@@ -1,11 +1,6 @@
 ﻿# Tareas
 - Modelo servidor
-- 1) Comprobar funcionamiento de salas
-- 2) Pulir 3 armas restantes
-- 3) Agregar parseo de yaml, tanto server como game
-- 4) Completar protocolo server -> cliente
-- 5) Manejar desconexiones
-- 6) Manera optima de deslizar 45º
+- 1) Cambiar recv_char -> recv_cmd en Player.cpp
 
 - Modelo cliente/ Escenario
 - 1) Re acomodar protocolo nuevo
