@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 			std::string input;
 			std::cin >> input;
 
-			if (!input.compare("q")) {
+			if (!input.compare("q") || !input.compare("Q")) {
 				server.interrupt_server();
 				esperar_quit = false;
 			}

@@ -39,7 +39,7 @@ Server::Server(const std::string& port, int cant_users)
 
     	map_name.replace(pos, map_name.length(), "");
 
-        std::cout << "names " << map_name << " - " << s << std::endl;
+        //std::cout << "names " << map_name << " - " << s << std::endl;
         this->maps.emplace(map_name, res + "/" + s);
     }
 
