@@ -1,6 +1,6 @@
 #include "throwable.h"
 #include "delayed_throwable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 DelayedThrowable::DelayedThrowable(Stage& stage
 	, Worm* owner

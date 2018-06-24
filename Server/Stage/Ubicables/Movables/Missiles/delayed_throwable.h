@@ -2,7 +2,7 @@
 #define DELAYED_THROWABLE_H
 
 #include "throwable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 #define SECOND_IN_MILLISECOND 1000
 

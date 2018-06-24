@@ -1,8 +1,10 @@
 #ifndef EXPLOTION_H
 #define EXPLOTION_H
 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "stage.h"
+
+#define MAX_PUSHBACK 6.0
 
 class Explosion {
 public:

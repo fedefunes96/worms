@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8.12)
-project (Worms)
+project (Server)
 
 set (PROJECT_LINK_LIBS Box2D.a yaml-cpp)
-link_directories( ${PATH}/lib )
+#link_directories( ${PATH}/lib )
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/Stage")
@@ -39,6 +39,6 @@ file(GLOB SOURCES "*.cpp"
 #"../Escenario/GameWindow/socket.cpp"
 #"../Escenario/GameWindow/protocol.cpp")
 
-add_executable(Worms ${SOURCES} )
-target_link_libraries(Worms ${PROJECT_LINK_LIBS})
-install(TARGETS Worms DESTINATION bin)
+add_executable(Server ${SOURCES} )
+target_link_libraries(Server ${PROJECT_LINK_LIBS})
+install(TARGETS Server DESTINATION bin)

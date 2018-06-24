@@ -9,6 +9,8 @@
 #include <string>
 #include "common_socket_exception.h"
 #include "server.h"
+#include "event_show_rooms.h"
+#include "event_show_maps.h"
 
 Player::Player(Server& server, Socket socket, const int id) 
 	: server(server)
@@ -70,7 +72,7 @@ void Player::play() {
 	this->can_attack = true;
 	this->set_receive(true);
 
-	this->counter.set_time(40);
+	this->counter.set_time(TIME_TURN);
 
 	printf("Starts turn of 40 secs\n");
 
@@ -94,16 +96,12 @@ void Player::run() {
 void Player::game_loop() {
 	try {
 		while (this->connected) {	
-			//std::cout << "antes de recibir"  << std::endl;
 			Commands cmd = static_cast<Commands>(this->protocol.recv_char());
 
-			//std::cout << "comando recibido:" << static_cast<int>(cmd) << std::endl;
 			if (cmd == Commands::MOVE) {
 				int dir = 0;
 
 				this->protocol.recvMove(&dir);
-
-				//std::cout << "movimiento recibido:" << dir << std::endl;
 
 				if (!this->should_i_receive())
 					continue;
@@ -113,7 +111,6 @@ void Player::game_loop() {
 				//Should check if worm exists
 				std::lock_guard<std::mutex> lock(this->worms_m);
 				this->worms.at(this->get_actual_worm())->start_moving(mdir);
-
 			} else if (cmd == Commands::ATTACK) {
 				int id_usable = 0;
 				int posx = 0;
@@ -133,51 +130,60 @@ void Player::game_loop() {
 
  				b2Vec2 dest(posx, posy);
  
-				this->counter.set_time(3);
+				this->counter.set_time(TIME_AFTER_ATTACK);
 
 				printf("Usable id %d\n", id_usable);
  
  				std::lock_guard<std::mutex> lock(this->worms_m);
  				this->worms.at(this->get_actual_worm())->use(this->usables.at(id_usable), dest, std::move(params));
-
 			} else if (cmd == Commands::SHOW_ROOMS) {
 				std::vector<std::string> rooms_name = this->server.get_rooms();
-				
-				this->protocol.sendRooms(rooms_name);
 
+				if (!this->should_i_receive())
+					continue;
+
+				//this->protocol.sendRooms(rooms_name);
+
+				std::shared_ptr<Event> event(new EventShowRooms(std::move(rooms_name)));
+				this->event_queue.add_event(std::move(event));
 			} else if (cmd == Commands::JOIN_ROOM) {
 				std::string room_name;
 
 				this->protocol.recvRoom(room_name);
 
+				if (!this->should_i_receive())
+					continue;
+
 				this->server.join_room(this->get_id(), room_name);
-			
 			} else if (cmd == Commands::CREATE_ROOM) {
 				std::string room_name;
 				std::string stage_file;
 
 				this->protocol.recvCreateRoom(room_name, stage_file);
 
-				this->server.create_room(this->get_id(), room_name, stage_file);
+				if (!this->should_i_receive())
+					continue;
 
+				this->server.create_room(this->get_id(), room_name, stage_file);
 			} else if (cmd == Commands::MAP_LIST) {
+				if (!this->should_i_receive())
+					continue;
+
 				std::vector<std::string> maps = this->server.get_maps();
 
-				this->protocol.sendMaps(maps);
-
+				//this->protocol.sendMaps(maps);
+				std::shared_ptr<Event> event(new EventShowMaps(std::move(maps)));
+				this->event_queue.add_event(std::move(event));
 			} else if (cmd == Commands::EXIT_ROOM) {
-				this->server.exit_room(this->get_id());
+				if (!this->should_i_receive())
+					continue;
 
+				this->server.exit_room(this->get_id());
 			} else {
 				//Player's cheating
 				//Disconnect him
 				this->disconnected_player();
 			}
-
-			if (!this->should_i_receive())
-				continue;
-			//std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
 		}
 	} catch(SocketException& e) {
 			//Played disconnected
@@ -219,8 +225,6 @@ void Player::process_events() {
 }
 
 void Player::disconnected_player() {
-	//Remove each of his worms
-	//std::lock_guard<std::mutex> lock(this->worms_m);
 	this->set_receive(false);
 		
 	if (this->is_in_game()) {
@@ -235,11 +239,10 @@ void Player::disconnected_player() {
 			printf("Killing worm id: %d\n", it->second->get_id());
 			it->second->force_death();
 
-			//it = this->worms.erase(it);
-
 			++it;
 		}
 	}
+
 	this->connected = false;
 }
 
@@ -263,15 +266,13 @@ void Player::shutdown() {
 	this->socket.desconectar();
 	this->in_game = false;
 }
+
 void Player::attach_worm(std::shared_ptr<Worm> worm) {
 	this->worms_ids.push_back(worm->get_id());
-
-	printf("Sending Worm id: %d %d %d\n", id, worm->get_id(), worm->get_health());
 	this->worms.emplace(worm->get_id(), worm);
 }
 
 void Player::attach_usable(std::unique_ptr<Usable> usable) {
-	printf("Sending Usable id: %d %d\n", usable->get_id(), usable->get_ammo());
 	this->usables.emplace(usable->get_id(), std::move(usable));
 }
 
@@ -280,45 +281,16 @@ int Player::get_id() {
 }
 
 bool Player::lost() {
-	//std::lock_guard<std::mutex> lock(this->worms_m);
-	std::unordered_map<int, std::shared_ptr<Worm>>::iterator it2;
+	for (auto it = this->worms.begin(); it != this->worms.end(); ++it) {
+		printf("Checking worms alive id: %d %d\n", this->id, it->second->get_id());
 
-	it2 = this->worms.begin();
-	int ie = 0;
-	int iee = 0;
-
-	if (it2 != this->worms.end()) {
-		ie++;
-		++it2;
-	}	
-
-	for (auto it3 = this->worms.begin(); it3 != this->worms.end(); ++it3) {
-		iee++;
-		printf("Checking worms alive id: %d %d\n", this->id, it3->second->get_id());
-		if(!it3->second->im_dead()) {
+		if(!it->second->im_dead()) {
 			printf("Worm alive %d\n", this->id);
 			return false;
 		}		
 	}
 
-	printf("Cant worms: %d %d %d\n", ie, iee, (int) this->worms.size());
-
-	/*std::unordered_map<int, std::shared_ptr<Worm>>::iterator it;
-
-	it = this->worms.begin();
-
-	if (it != this->worms.end()) {
-		printf("Checking worms alive id: %d %d\n", this->id, it->second->get_id());
-		if(!it->second->im_dead()) {
-			printf("Worm alive %d\n", this->id);
-			return false;
-		}
-
-		++it;
-	}	*/
-
 	return true;
-	//return this->worms.size() == 0;
 }
 
 bool Player::is_disconnected() {

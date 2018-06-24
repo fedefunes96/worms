@@ -5,7 +5,7 @@
 #include <utility>
 #include "usable.h"
 #include "movable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "stage.h"
 #include <mutex>
 #include <string>
@@ -51,7 +51,6 @@ private:
 	bool dead;
 	bool should_slide;
 	bool should_jump;
-	bool last_should_jump;
 	bool sliding;
 	bool last_on_ground;
 	MoveDirection last_direction;
@@ -87,7 +86,7 @@ public:
 	virtual bool is_explosive() override;
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself(b2World& world) override;
-	//virtual void start_contacting(Ubicable* ubicable) override;
+
 	virtual void start_contacting(b2Contact* contact) override;
 	virtual void stop_contacting(b2Contact* contact) override;
 
@@ -97,9 +96,6 @@ public:
 	virtual bool should_collide_with(Worm* worm) override;
 	virtual bool should_collide_with(Throwable* throwable) override;
 	virtual bool should_collide_with(Sensor* sensor) override;
-	/*virtual void colision(Girder& girder) override;
-	virtual void colision(Worm& worm) override;	
-	virtual void colision(Throwable& throwable) override;*/
 
 	virtual void pre_solve_contact(b2Contact* contact, const b2Manifold* oldManifold) override;
 

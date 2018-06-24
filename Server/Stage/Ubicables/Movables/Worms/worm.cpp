@@ -3,7 +3,7 @@
 #include <utility>
 #include "movable.h"
 #include "stage.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <string>
 #include "sensor.h"
 #include "game.h"
@@ -52,7 +52,6 @@ Worm::Worm(Game& game
 	this->jump_cooldown = 0;
 	this->should_slide = false;
 	this->should_jump = false;
-	this->last_should_jump = false;
 	this->angle_for_mov = 0.0;
 
 	this->last_on_ground = false;

@@ -1,6 +1,6 @@
 #include "baseball_bat.h"
 #include "usable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "worm.h"
 #include "query_callback.h"
 
@@ -21,25 +21,33 @@ void BaseballBat::action(Worm* worm
 
 	b2Body* b = worm->get_body();
 
-	b2Vec2 from_pos = b->GetPosition();
+	b2Vec2 from_pos = b->GetWorldCenter();
 
 	//Query pos and do dmg in Area
 	QueryCallback queryCallback;
 	b2AABB aabb;
-	int sign;
+	//int sign;
 
 	float longitude = worm->get_longitude();
 	float height = worm->get_height();
 
 	switch (worm->get_facing_direction()) {
-		case MoveDirection::RIGHT: sign = -1; break;
-		case MoveDirection::LEFT: sign = 1; break;
+		case MoveDirection::RIGHT: {
+			aabb.lowerBound = from_pos + b2Vec2(0.5*longitude, -height);
+			aabb.upperBound = from_pos + b2Vec2(2*longitude, height);
+			break;
+		}
+		case MoveDirection::LEFT: {
+			aabb.lowerBound = from_pos - b2Vec2(2*longitude, height);
+			aabb.upperBound = from_pos - b2Vec2(0.5*longitude, -height);			
+			break;
+		}
 		default: break;
 	}
 
-	//Area of a worm in front of me (half of me)
-	aabb.lowerBound = from_pos - b2Vec2(0.5*longitude*sign, height);
-	aabb.upperBound = from_pos - b2Vec2(2*longitude*sign, -height);
+	//Area of a worm in front of me
+	/*aabb.lowerBound = from_pos - b2Vec2(0.5*longitude*sign, 2*height);
+	aabb.upperBound = from_pos - b2Vec2(4*longitude*sign, -2*height);*/
 
 	this->stage.get_world().QueryAABB(&queryCallback, aabb);
 
@@ -47,10 +55,6 @@ void BaseballBat::action(Worm* worm
 		b2Body* body = queryCallback.foundBodies[i];
 		b2Vec2 bodyCom = body->GetWorldCenter();
 	      
-		//ignore bodies outside the bat range
-		//if ((bodyCom - pos).Length() >= radius) {
-		//	continue;	
-
 		Ubicable* ubicable = (Ubicable*) body->GetUserData();
 
 		if (ubicable->get_type().compare("Worm")==0) {

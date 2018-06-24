@@ -2,7 +2,7 @@
 #include "wind.h"
 #include <stdlib.h>
 #include <time.h> 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <iostream>
 
 Wind::Wind(const float min_wind_speed, const float max_wind_speed){

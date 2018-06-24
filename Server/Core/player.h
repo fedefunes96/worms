@@ -13,6 +13,9 @@
 
 class Server;
 
+#define TIME_TURN 40
+#define TIME_AFTER_ATTACK 3
+
 class Player : public Thread {
 private:
 	int id;

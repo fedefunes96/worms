@@ -56,7 +56,6 @@ void Game::initialize_game(const std::string& stage_file) {
 
 	//Reserve a list with a reference to worms & usables
 	std::vector<Worm*> worms_to_attach;
-	//std::string map = "../yaml/basico.yaml";
 	std::string map = stage_file;
 	std::string config =  std::string(ROOT_PATH)+"/config/config.yaml";
 	

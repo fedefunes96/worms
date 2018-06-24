@@ -1,7 +1,7 @@
 #ifndef MOVABLE_H
 #define MOVABLE_H
 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <string>
 #include "ubicable.h"
 
@@ -18,7 +18,6 @@ private:
 	b2Vec2 gravity = DEFAULT_GRAVITY;
 	b2Vec2 last_pos;
 public:
-	//virtual void start_contacting(Ubicable* ubicable) = 0;
 	virtual void start_contacting(b2Contact* contact) = 0;
 	virtual void stop_contacting(b2Contact* contact) = 0;
 	virtual void create_myself(b2World& world) = 0;	
@@ -45,10 +44,6 @@ public:
 	b2Vec2& get_gravity() {
 		return this->gravity;
 	}
-
-	/*virtual void colision(Girder& girder) = 0;
-	virtual void colision(Worm& worm) = 0;	
-	virtual void colision(Throwable& throwable) = 0;*/
 
 	virtual std::string get_type() = 0;
 	virtual int get_id() = 0;

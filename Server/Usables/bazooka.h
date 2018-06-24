@@ -2,7 +2,7 @@
 #define BAZOOKA_H
 
 #include "usable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "worm.h"
 
 #define BAZOOKA_ID 0

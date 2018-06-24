@@ -19,7 +19,6 @@ private:
 	std::unordered_map<int, std::unique_ptr<Player>> players;
 	std::unordered_map<std::string, Room> rooms;
 	std::vector<std::unique_ptr<Game>> games;
-	//std::vector<std::string> maps;
 	std::unordered_map<std::string, std::string> maps;
 
 	std::mutex room_m;

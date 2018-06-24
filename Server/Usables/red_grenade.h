@@ -2,7 +2,7 @@
 #define RED_GRENADE_H
 
 #include "usable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "worm.h"
 
 #define RED_GRENADE_ID 3

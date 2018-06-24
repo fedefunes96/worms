@@ -2,7 +2,7 @@
 #define BASEBALL_BAT_H
 
 #include "usable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "worm.h"
 
 #define BASEBALL_BAT_ID 7

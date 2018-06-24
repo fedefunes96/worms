@@ -31,7 +31,7 @@ public:
 	virtual std::string get_type() override;
 	virtual void create_myself(b2World& world) override;
 	virtual void delete_myself(b2World& world) override;
-	//virtual void start_contacting(Ubicable* ubicable) override;
+
 	virtual void start_contacting(b2Contact* contact) override;
 	virtual void stop_contacting(b2Contact* contact) override;
 
@@ -48,8 +48,6 @@ public:
 	virtual b2Body* get_body() override;
 	virtual bool im_dead() override;
 	virtual void force_death() override;
-
-	//Girder(Girder&&);
 };
 
 #endif

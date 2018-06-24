@@ -1,19 +1,5 @@
 #include <iostream>
-#include "stage.h"
-//#include "movable.h"
-//#include "static.h"
-#include "girder.h"
-#include "throwable.h"
-#include <Box2D/Box2D.h>
-#include <chrono>
-#include <thread>
-#include "contact_listener.h"
-#include "game.h"
-#include "socket.h"
-#include "protocol.h"
 #include "server.h"
-#include "counter.h"
-#include "event_queue.h"
 
 #define CANT_PLAYERS 100
 #define TERMINAR_SERVIDOR "q"

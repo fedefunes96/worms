@@ -44,7 +44,6 @@ Server::Server(const std::string& port, int cant_users)
     }
 
     closedir(dirp); 
- 	//this->maps.emplace("asd","../yaml/basico.yaml");
 }
 
 void Server::end_user(std::unique_ptr<Player> player) {
@@ -57,9 +56,7 @@ void Server::end_user(std::unique_ptr<Player> player) {
 }
 
 void Server::end_game(std::unique_ptr<Game> game) {
-	//printf("Destroying game bef\n");
 	game->join();
-	//printf("Destroying game\n");
 }
 
 void Server::check_active_users() {
@@ -203,7 +200,6 @@ void Server::create_room(const int id, const std::string name, const std::string
 	if (it == this->rooms.end()) {
 		//Read stage file and get ammount of players
 		int ammount_players = Parser::cantidad(maps.at(stage_file));
-		//Room room(*this, name, stage_file, ammount_players);
 		Room room(*this, name, maps.at(stage_file), ammount_players);
 
 		room.add_player(id);
@@ -303,7 +299,6 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 		std::shared_ptr<Event> event(new EventStartGame(background));
 
 		for (int i = 0; i < (int) ids.size(); i++) {
-			//Player* a = this->players.at(i).get();
 			printf("id :%i\n",ids[i]);
 			Player* player = this->players.at(ids[i]).get();
 			player->set_in_game(true);

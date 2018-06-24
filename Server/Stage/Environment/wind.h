@@ -2,7 +2,7 @@
 #define WIND_H
 
 #include "movable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 #define MIN_WIND_SPEED 0.1
 #define MAX_WIND_SPEED 1.0

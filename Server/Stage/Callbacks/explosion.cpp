@@ -1,6 +1,6 @@
 #include "explosion.h"
 #include "stage.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "query_callback.h"
 #include "worm.h"
 
@@ -21,7 +21,6 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			continue;
 		}
 		
-		//Change this later
 		Ubicable* ubicable = (Ubicable*) body->GetUserData();
 
 		if (ubicable->get_type().compare("Worm")==0) {
@@ -37,29 +36,13 @@ Explosion::Explosion(Stage& stage, const b2Vec2& pos, const float radius, const 
 			float blastPower = 1.0;
 			float impulseMag = blastPower * invDistance * invDistance;
 
-			//((Worm*) ubicable)->set_slide(true);
-			//body->ApplyLinearImpulse(impulseMag * blastDir, bodyCom);
-			//Down cast	
-			if (impulseMag > 6.0) {
-				impulseMag = 6.0;
+			if (impulseMag > MAX_PUSHBACK) {
+				impulseMag = MAX_PUSHBACK;
 			}
 			
 			((Worm*) ubicable)->receive_explosion(impulseMag * blastDir);
 			printf("Radius: %0.1f Distance: %0.1f Maxdmg: %0.1f\n", radius, distance, max_dmg);
 			((Worm*) ubicable)->receive_dmg(max_dmg - (distance * max_dmg/radius));
 		}
-		//applyBlastImpulse(body, center, bodyCom, blastPower );
 	}
-
-	/* (int i = 0; i < numRays; i++) {
-	float angle = (i / (float)numRays) * 360 * DEGTORAD;
-	b2Vec2 rayDir( sinf(angle), cosf(angle) );
-	b2Vec2 rayEnd = center + blastRadius * rayDir;
-  
-	//check what this ray hits
-	RayCastClosestCallback callback;//basic callback to record body and hit point
-	m_world->RayCast(&callback, center, rayEnd);
-	if ( callback.m_body ) 
-		applyBlastImpulse(callback.body, center, callback.point, (m_blastPower / (float)numRays));
-	}*/
 }

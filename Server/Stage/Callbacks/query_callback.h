@@ -1,7 +1,7 @@
 #ifndef QUERY_CALLBACK_H
 #define QUERY_CALLBACK_H
 
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <vector>
 
 class QueryCallback : public b2QueryCallback {

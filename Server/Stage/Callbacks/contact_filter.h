@@ -2,7 +2,7 @@
 #define CONTACT_FILTER_H
 
 #include "ubicable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 
 class ContactFilter : public b2ContactFilter {
 public:

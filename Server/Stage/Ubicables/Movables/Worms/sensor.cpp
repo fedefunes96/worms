@@ -1,6 +1,6 @@
 #include "sensor.h"
 #include "ubicable.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include "worm.h"
 
 Sensor::Sensor(Worm& worm)
@@ -17,8 +17,6 @@ void Sensor::add_at_position(b2Body* body, b2Vec2 pos, float longitude, float he
 	fixture_def.shape = &(body_shape);
 	fixture_def.density = 0.1;
 	
-    //fixture_def.isSensor = true;
-
     b2Fixture* sensor = body->CreateFixture(&fixture_def);
 
     sensor->SetUserData(this);	
@@ -30,7 +28,7 @@ int Sensor::get_number_colisions() {
 
 std::string Sensor::get_type() {
 	//This object doesn't exist in the stage
-	return "";
+	return "Sensor";
 }
 
 int Sensor::get_id() {

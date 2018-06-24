@@ -1,5 +1,5 @@
 #include "stage.h"
-#include <Box2D/Box2D.h>
+#include "Box2D/Box2D.h"
 #include <thread>
 #include "ubicable.h"
 #include "contact_listener.h"
@@ -43,7 +43,6 @@ void Stage::remove_deads() {
 	while (it != this->movables.end()) {
 		if ((*it)->im_dead()) {
 			(*it)->delete_myself(this->world);
-			//this->game.notify_removal((*it).get());
 
 			std::shared_ptr<Event> event(new EventRemove((*it)->get_type()
 														, (*it)->get_id()));
@@ -79,7 +78,6 @@ void Stage::insert(std::shared_ptr<Movable> movable) {
 void Stage::create_objects() {
 	std::lock_guard<std::mutex> lock(this->ubicable_m);
 
-	//std::vector<Ubicable*>::iterator it = this->to_create.begin();
 	std::vector<std::unique_ptr<Ubicable>>::iterator it = this->to_create.begin();
 
 	while (it != this->to_create.end()) {
@@ -96,7 +94,6 @@ void Stage::create_objects() {
 void Stage::create_objects_mov() {
 	std::lock_guard<std::mutex> lock(this->movable_m);
 
-	//std::vector<Ubicable*>::iterator it = this->to_create.begin();
 	std::vector<std::shared_ptr<Movable>>::iterator it = this->to_create_mov.begin();
 
 	while (it != this->to_create_mov.end()) {
@@ -236,7 +233,6 @@ void Stage::pre_initialize() {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
 
- 		//this->game.notify_position((*it).get(), pos.x, pos.y, angle);
  		std::cout << (*it)->get_type() << (*it)->get_id() << std::endl;
  		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
 													, (*it)->get_id()
@@ -260,8 +256,6 @@ void Stage::pre_initialize() {
 
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
-
- 		//this->game.notify_position((*it_mov).get(), pos.x, pos.y, angle);
 
  		std::shared_ptr<Event> event(new EventPosition((*it_mov)->get_type()
 													, (*it_mov)->get_id()
