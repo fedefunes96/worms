@@ -12,12 +12,11 @@ class Projectile : public QObject,public MovableItem
     Q_OBJECT
 public:
     Projectile();
-    //~Projectile();
+    ~Projectile();
     void moveTo(int angle, int posx,int posy);
     bool isMovable();
     bool isAlive();
     void setPosition(int x, int y);
-    void fire();
     void removeMovable();
     bool isSelect();
     void setSelect(bool cond);
@@ -39,10 +38,8 @@ private:
 
     generalSounds* explotionSound;
     int currentFrame;
-    QTimer *timer;      // Timer for turning images into QPixmap
-    QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
-
-
+    QTimer *timer;
+    QPixmap *spriteImage;
 };
 
 #endif // PROJECTILE_H

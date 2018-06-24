@@ -39,8 +39,6 @@ Worm_View::Worm_View()
 {
 }
 
-/*
-
 Worm_View::~Worm_View()
 {
     if(this->spriteImage){
@@ -55,30 +53,32 @@ Worm_View::~Worm_View()
     if(this->labelVida){
         delete(this->labelVida);
     }
+    if(this->showSelected!=nullptr){
+        delete(this->showSelected);
+    }
+    delete(this->fall);
+    delete(this->jump);
+    delete(this->wormDeath);
 }
-*/
+
 
 Worm_View::Worm_View(QObject *parent, QString color) :
     QObject(parent), MovableItem()
 {
-
-    this->last_on_ground=true; //default
-    this->weapon=-1; //wormwait
+    this->last_on_ground=true;
+    this->weapon=-1;
     this->weaponCountDwn=false;
     setIdObj(0);
     setFlag(QGraphicsItem::ItemIsSelectable);
     currentFrame = 0;
-    //this->timer=nullptr;
-    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png"); // Load the sprite image QPixmap
-    this->timer = new QTimer();   // Create a timer for sprite animation
-    this->timer->start(1);   // Run the sprite on the signal generation with a frequency of 25 ms
+    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png");
+    this->timer = new QTimer();
+    this->timer->start(1);
     currentDir.first = 0;
     currentDir.second = 0;
     this->health=0;
     destDir = currentDir;
-    count=0;
-    alive=true; // check this after recvDamage()
-
+    alive=true;
     this->labelVida=nullptr;
     this->labelset=false;
     this->targetVis=false;
@@ -86,11 +86,9 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->targetClick =false;
     this->moving = false;
     this->showSelected=nullptr;
-
     setAngle(0);
     this->selected=false;
     this->countDown=0;
-    //qDebug()<<"color en worm"<<color;
     this->color = color;
     this->countFrame=0;
     this->last_on_ground=1;
@@ -120,7 +118,6 @@ bool Worm_View::isAlive()
 
 
 void Worm_View::movTargetAngle(int dir){
-    //qDebug()<<"anguloooooooo: "<<this->targetAngle;
     if((this->targetAngle==-90 && dir==1) || (this->targetAngle==-270 && dir==-1) || (this->targetAngle==90 && dir==-1)){
         return;
     }
@@ -148,12 +145,6 @@ void Worm_View::setHealth(int vida)
 {
     this->health = vida;
 }
-
-
-
-
-
-
 
 
 void Worm_View::setStatus(int on_ground, int dir)
@@ -243,7 +234,6 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_on_ground=on_ground;
             this->moving=true;
             this->jump->play();
-            ////////////////////// ACAAAA SONIDO SALTO HACIA ADELANTE = ATRAS
         }else if(dir==static_cast<int>(MoveDirection::JUMP_FORW) && this->last_dir!=dir){
             //saltar
             this->targetVis=false;
@@ -268,12 +258,8 @@ void Worm_View::setStatus(int on_ground, int dir)
             this->last_on_ground=on_ground;
             this->moving=true;
             this->jump->play();
-            ////////////////////// ACAAAA SONIDO SALTO HACIA ATRAS = ADELANTE
         }else if(dir==static_cast<int>(MoveDirection::NONE)){
             // dejar de moverme
-            if(this->last_on_ground==0){
-                ///////////// ACA VA EL SONIDO PARA CUANDO EL WORM CAE AL PISO...
-            }
             if(this->jumping){
                 return;
             }
@@ -380,11 +366,6 @@ void Worm_View::setStatus(int on_ground, int dir)
 
 }
 
-
-
-
-
-
 bool Worm_View::isFalling()
 {
     return (this->lastDir.second < this->currentDir.second);
@@ -395,36 +376,16 @@ bool Worm_View::isFlying()
     return (this->lastDir.second > this->currentDir.second);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
     if(this->showSelected==nullptr){
         this->showSelected = new QLabel();
         this->showSelected->setAttribute(Qt::WA_TranslucentBackground);
         this->showSelected->setPixmap(QPixmap(ROOT_PATH"/resources/images/selected.png"));
         scene()->addWidget(showSelected);
     }
-
     this->showSelected->setGeometry(x()+5,y()-40,56,41);
     this->showSelected->setVisible(this->showlabelSelect);
-
     if(!labelset){
         labelVida = new QLabel();
         labelVida->setAttribute(Qt::WA_TranslucentBackground);
@@ -438,9 +399,6 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     aux.setNum(this->health);
     labelVida->setText(aux);
     labelVida->setGeometry(x()+22,y()-10,30,20);
-    //qDebug()<<"posicion del Label x:"<<labelVida->x() << "y:" <<labelVida->y();
-
-
     if(!this->target){
         this->target = new Target();
         this->scene()->addItem(this->target);
@@ -456,7 +414,7 @@ void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 QRectF Worm_View::boundingRect() const
 {
-    return QRectF(0,0,60,60);//tamaño del worm
+    return QRectF(0,0,60,60);
 }
 
 
@@ -515,12 +473,9 @@ std::pair<int, int> Worm_View::getDirWeapon()
 {
     std::pair<int,int> dir;
     if(!this->targetClick){
-        dir.first=this->target->boundingRect().width();  //tam target x. =150
-        //qDebug()<<"ancho target"<<dir.first;
-        //qDebug()<<"worm a disparar posX"<<this->currentDir.first<<"posY:"<<this->currentDir.second;
+        dir.first=this->target->boundingRect().width();
         float aux = (tan( this->targetAngle * 3.1416 / 180 ))*dir.first;
         dir.second = abs(aux);
-        //qDebug()<<"nadsjksda"<<dir.second;
         if(this->targetAngle<-90 && this->targetAngle>=-270){
             dir.first = -dir.first;
             if(this->targetAngle<-180){
@@ -529,10 +484,8 @@ std::pair<int, int> Worm_View::getDirWeapon()
         }else if(this->targetAngle>0 && this->targetAngle<=90){
             dir.second = -dir.second;
         }
-        //qDebug()<<"ancho scene:"<<h;
         dir.first = dir.first + this->currentDir.first;
         dir.second =  -this->currentDir.second + dir.second;
-        //qDebug()<<"dir x:"<<dir.first<<" dir y:"<<dir.second<<"angle"<<-this->targetAngle;
     }else{
         return this->clickTarget;
     }
@@ -571,13 +524,10 @@ void Worm_View::setPosition(int x, int y)
 {
     int width = this->boundingRect().width();
     int height = this->boundingRect().height();
-
     setPos(x-width/2,y-height/2);
-    //qDebug()<<"coloque worm en X:"<<x-width/2<<"Y:"<<y-height/2;
     setDir(x-width/2,y-height/2);
     this->lastDir.first=this->currentDir.first;
     this->lastDir.second=this->currentDir.second;
-    //qDebug()<<"posx:"<<x-width/2<<"posy"<<y-height/2;
 }
 
 void Worm_View::setDestDir(int x, int y)
@@ -598,24 +548,15 @@ void Worm_View::nextFrame(){
 }
 
 void Worm_View::moveTo(int angle, int posx,int posy)
-{
-    //qDebug()<<"muevo worm...";
+{   
     setDestDir(posx,posy);
-    //qDebug()<<"idworm:"<<this->id<<"currentDir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
-    //qDebug()<<"idworm:"<<this->id<<"destDir x:"<<this->destDir.first<<"y:"<<this->destDir.second;
-    //qDebug()<<"posx:"<<posx<<"posy:"<<posy;
     if(this->currentDir==this->destDir){
-        //qDebug()<<"es la misma dir";
         return;
     }
-    //this->moving=true;
-    //checkAngle(angle);
     this->lastDir.first=this->currentDir.first;
     this->lastDir.second=this->currentDir.second;
-    //qDebug()<<"SETEE LASTDIR";
     this->setPosition(posx,-posy);
     nextFrame();
-    //qDebug()<<"momving dir x:"<<this->currentDir.first<<"y:"<<this->currentDir.second;
 	return;
 }
 
@@ -638,7 +579,6 @@ void Worm_View::removeMovable()
         this->showSelected->setVisible(false);
     }
     this->wormDeath->play();
-    ///////////////////////////////////// ACA PONER SONIDO DE MUERTE DEL WORM ...
 }
 
 int Worm_View::getHealth()
@@ -692,10 +632,6 @@ void Worm_View::stepSprite(){
     }
     this->update(0,0,60,60);
 }
-
-
-
-
 
 
 
@@ -821,15 +757,10 @@ void Worm_View::loadSpriteWeapon(int val)
         path1 =ROOT_PATH"/resources/images/wwalk.png";
         loadSprite(path1);
     	return;
-        //break;
     }
     this->loadingWeapon = true;
     connect(timer, &QTimer::timeout, this, &Worm_View::runSpriteWeapon);
 }
-
-
-
-
 
 void Worm_View::loadSprite(QString& path_L)
 {
@@ -848,26 +779,7 @@ void Worm_View::loadSprite(QString& path_L)
     delete(pix);
 }
 
-
-
-
-
-
-
-
-
 void Worm_View::setTarget()
 {
     this->target->setTarget(this->x(),this->y(),this->targetAngle);
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -16,6 +16,7 @@ class GameClass : public QObject
     Q_OBJECT
 public:
     GameClass(QApplication *app);
+    ~GameClass();
     Player* getPlayer();
     Game_View* getGameView();
     std::vector<int> fireWeapon();

@@ -30,14 +30,10 @@ void WaitRoom::plysInRoom(int cant)
 
 void WaitRoom::startGameView(QList<std::string> list)
 {
-    // iniciar el juego  la vista
-    qDebug()<<"inicie la vista";
-    std::cout<<"el nombre del fondo pasado es:"<<list[0] <<std::endl;
     emit startView(list);
     this->exit=false;
     this->closeX=false;
     this->close();
-
 }
 
 

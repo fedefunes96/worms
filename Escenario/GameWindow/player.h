@@ -27,7 +27,7 @@ class Player
 {
 public:
     Player();
-    //~Player();
+    ~Player();
     void addWorm(Worm_View*worm);
     void setId(int id);
     int getId();

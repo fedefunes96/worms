@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include "protocol.h"
-#include "button.h"
 #include <QLineEdit>
 #include <QDialog>
 #include "controler.h"
@@ -38,7 +37,6 @@ private:
     Ui::RoomCreator *ui;
     Protocol* protocol;
     WaitRoom* wait;
-    std::vector<button*> buttons;
     std::vector<QLineEdit*> lines;
     bool closeX;
     bool isExec;

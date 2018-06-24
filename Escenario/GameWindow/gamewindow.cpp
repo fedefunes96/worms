@@ -12,7 +12,7 @@ GameWindow::GameWindow(QApplication *app, QWidget *parent) :
     ui->setupUi(this);
     this->playerActive=nullptr;
     this->timer = new QTimer();
-    this->timer->start(500);// no hace falta chequear tan seguido...
+    this->timer->start(500);
     connect(this->timer,&QTimer::timeout,this,&GameWindow::refreshBox);
     this->setWindowTitle("Worms Armageddon");
     this->time=0;
@@ -22,8 +22,6 @@ GameWindow::GameWindow(QApplication *app, QWidget *parent) :
     connect(this->timerRound,&QTimer::timeout,this,&GameWindow::stepTimer);
     ui->refocus->setEnabled(false);
     this->setWindowState(this->windowState() | Qt::WindowMaximized);
-    //ui->powerBar->setMaximum(1000);
-    //ui->powerBar->setMinimum(0);
     ui->upCamera->setIcon(QIcon(ROOT_PATH"/resources/images/up.png"));
     ui->downCamera->setIcon(QIcon(ROOT_PATH"/resources/images/down.png"));
     ui->leftCamera->setIcon(QIcon(ROOT_PATH"/resources/images/left.png"));
@@ -107,8 +105,8 @@ Camera* GameWindow::getCamera()
 GameWindow::~GameWindow()
 {
     delete ui;
-    //delete(this->timer);
-    //delete(this->timerRound);
+    delete(this->timer);
+    delete(this->timerRound);
 }
 
 

@@ -35,12 +35,9 @@ SOURCES +=\
     roomcreator.cpp \
     mapSelection.cpp \
     client.cpp \
-    button.cpp \
     waitRoom.cpp \
     window.cpp \
     generalSounds.cpp \
-    commonWin.cpp \
-    commonLose.cpp \
     backgrounMusic.cpp \
     conectionwindow.cpp \
     finalscreen.cpp
@@ -65,12 +62,9 @@ HEADERS  += \
     gamewindow.h \
     roomcreator.h \
     mapSelection.h \
-    button.h \
     waitRoom.h \
     window.h \
     generalSounds.h \
-    commonWin.h \
-    commonLose.h \
     backgrounMusic.h \
     conectionwindow.h \
     finalscreen.h
@@ -82,7 +76,5 @@ FORMS    += \
     mapSelection.ui \
     waitRoom.ui \
     window.ui \
-    commonWin.ui \
-    commonLose.ui \
     conectionwindow.ui \
     finalscreen.ui

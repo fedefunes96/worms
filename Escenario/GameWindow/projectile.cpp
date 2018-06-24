@@ -7,12 +7,12 @@ Projectile::Projectile():MovableItem()
 {
     currentFrame=0;
     this->spriteImage = nullptr;
-    timer = new QTimer();   // Create a timer for sprite animation
+    timer = new QTimer();
     this->alive=true;
     this->explotionSound = new generalSounds(ROOT_PATH"/resources/sounds/English/Explosion.wav");
 }
 
-/*
+
 Projectile::~Projectile()
 {
     if(this->timer){
@@ -21,15 +21,15 @@ Projectile::~Projectile()
     if(this->spriteImage){
         delete(this->spriteImage);
     }
+    delete(this->explotionSound);
 }
-*/
+
 
 void Projectile::nextFameImpact()
 {
     currentFrame += 60;
     if(currentFrame >= spriteImage->height())
     {
-        //qDebug()<<"TERMINE DE EXPLOTAR";
         timer->disconnect();
         timer->stop();
         this->alive=false;
@@ -42,7 +42,6 @@ void Projectile::nextFameImpact()
 
 void Projectile::moveTo(int angle, int posx, int posy)
 {
-    //qDebug()<<"mover misil";
     int width = this->boundingRect().width();
     int height = this->boundingRect().height();
     setPos(posx-width/2,-posy-height/2);
@@ -71,16 +70,12 @@ void Projectile::setPosition(int x, int y)
 
 void Projectile::explote()
 {
-
-    // hacer que el timer sea singleshoot para hacer la animacion de la explosion...
     timer->start(30);
     delete(this->spriteImage);
     spriteImage = new QPixmap(ROOT_PATH"/resources/images/shothit.png");
-    //setPos(x()-30,y());
     currentFrame=0;
     connect(timer, &QTimer::timeout, this, &Projectile::nextFameImpact);
     this->explotionSound->play();
-    ///////////////////// ACA PONER SONIDO EXPLOSION
 }
 
 void Projectile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -97,17 +92,8 @@ QRectF Projectile::boundingRect() const
    return QRectF(0,0,60,60);
 }
 
-
-
-void Projectile::fire()
-{
-    //timer->disconnect();
-    //connect(timer, &QTimer::timeout, this, &MisilBazooka::move);
-}
-
 void Projectile::removeMovable()
 {
-    //this->setVisible(vis);
     this->explote();
 }
 

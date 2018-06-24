@@ -19,7 +19,7 @@ class Target :public QObject, public QGraphicsItem
     Q_OBJECT
 public:
     Target();
-    //virtual ~Target();
+    ~Target();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
 

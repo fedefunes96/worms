@@ -11,7 +11,6 @@ Controler::Controler(Protocol *protocol)
 
 void Controler::stopController()
 {
-    //this->protocol->sendExitRoom();
     this->terminate();
 }
 
@@ -30,8 +29,6 @@ void Controler::run()
             qDebug()<<"attach player id";
             int8_t id;
             this->protocol->recvPlayerId(&id);
-            //list.push_back(id);
-            //emit eventCreated(list);
             emit playerId(id);
             qDebug()<<"id player recibido en controler"<<id;
             continue;

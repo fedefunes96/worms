@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QDialog>
 #include "protocol.h"
-#include "button.h"
 #include <vector>
 #include <QThread>
 #include "controler.h"
@@ -36,7 +35,6 @@ private slots:
 private:
     Ui::MapSelection *ui;
     Protocol* protocol;
-    std::vector<button*> buttons;
     WaitRoom* wait;
     void adjustView();
     bool closeX;

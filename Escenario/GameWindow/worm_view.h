@@ -20,7 +20,7 @@ class Worm_View: public QObject, public MovableItem
     Q_OBJECT
 public:
     Worm_View();
-    //virtual ~Worm_View();
+    ~Worm_View();
     Worm_View(QObject* parent, QString color);
     bool isMoving();
     bool isAlive();

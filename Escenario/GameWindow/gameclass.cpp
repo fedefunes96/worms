@@ -2,7 +2,6 @@
 #include "girder_view.h"
 #include <QDebug>
 #include "projectile.h"
-
 #include <QColor>
 #include <QCoreApplication>
 
@@ -11,36 +10,39 @@ GameClass::GameClass(QApplication *app)
     this->app = app;
 }
 
+GameClass::~GameClass()
+{
+    delete(this->deadItemCollector);
+    for (int var = 0; var < this->players_list.size(); ++var) {
+        delete(this->players_list[var]);
+    }
+    delete(this->window);
+    delete(this->game);
+
+}
+
 void GameClass::setIdPlayer(int id)
 {
     if(!this->players_list.empty()){
         return;
     }
-
     this->window = new GameWindow(this->app);
     this->game = new Game_View(10,10);
     this->window->addGameScene(this->game);
     this->game->addCamera(this->window->getCamera());
-
     this->myTurn=false;
     createColorList();
-
     this->myPlayer = new Player();
     this->myPlayer->setId(id);
     this->myPlayer->setColor(getColor(id));
     this->players_list.append(this->myPlayer);
     this->game->setPlayerActive(this->myPlayer);
     this->window->addPlayer(this->myPlayer);
-
     this->deadItemCollector = new QTimer();
     this->deadItemCollector->start(10);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
     this->window->setRefocusEnable(false);
     this->lastP=nullptr;
-    qDebug()<<"termine";
-
-
-
 }
 
 Camera* GameClass::getCamera()

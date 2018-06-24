@@ -31,6 +31,12 @@ Weapon::Weapon()
     this->fireSound = new generalSounds(ROOT_PATH"/resources/sounds/English/fire/FIRE.WAV");
 }
 
+Weapon::~Weapon()
+{
+    delete(this->tele);
+    delete(this->fireSound);
+}
+
 void Weapon::setIdObj(int type)
 {
     this->idObj = type;

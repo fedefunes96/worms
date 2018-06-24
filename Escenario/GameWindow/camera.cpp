@@ -4,12 +4,14 @@
 
 Camera::Camera(QWidget *parent):QGraphicsView(parent)
 {
-    //setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
     timer = new QTimer();
     timer->start(1);
     this->playerActive = nullptr;
+}
+
+Camera::~Camera()
+{
+    delete(this->timer);
 }
 
 
@@ -28,24 +30,13 @@ void Camera::resizeEvent(QResizeEvent *event)
     verticalScrollBar()->setValue(0);
 }
 
-
-
-
-
 void Camera::mousePressEvent(QMouseEvent *event)
 {   
     if(this->playerActive->isActive()){
         int diff =((-verticalScrollBar()->value()) - (this->height()-13-4));
-
-        //qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
-        //qDebug()<<"scroll minimo y:"<<-this->height()+13+4;
-        //qDebug()<<"diferencia"<<diff;
-
         Worm_View* worm = this->playerActive->getWormActive();
         worm->setClickDir(event->x()+horizontalScrollBar()->value(),
                           (this->height()-event->y()+diff));
-        //qDebug()<<"mouse click x:"<<event->x()<<"y:"<<event->y();
-        //qDebug()<<"lo que guardo x:"<<event->x()+horizontalScrollBar()->value()<<"y:"<<(this->height()-event->y()+diff);
         emit mouseClick();
     }
 }
@@ -75,11 +66,9 @@ void Camera::followObject()
             this->itemsToFollow.pop();
             return;
         }
-    }else {
-        // aca tengo que seguir al worm que este activo...
+    }else{
         return;
     }
-
     if(item->x() > horizontalScrollBar()->value()+200 && item->x()>horizontalScrollBar()->value()+this->width()-200){
         horizontalScrollBar()->setValue( horizontalScrollBar()->value() + 5 );
     }else if(item->x() < horizontalScrollBar()->value()+200){

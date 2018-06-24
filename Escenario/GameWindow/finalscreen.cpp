@@ -8,11 +8,14 @@ FinalScreen::FinalScreen(QApplication *app,QWidget *parent) :
     this->app=app;
     ui->setupUi(this);
     this->setWindowTitle("End game");
+    b=nullptr;
 }
 
 FinalScreen::~FinalScreen()
 {
-    //delete b;
+    if(b!=nullptr){
+        //delete(b);
+    }
     delete ui;
 }
 

@@ -10,16 +10,20 @@ Game_View::Game_View()
 {
 }
 
+Game_View::~Game_View()
+{
+    delete(this->scene);
+    delete(this->timerUpdate);
+}
+
 Game_View::Game_View(int w,int h)
 {
     this->scene = new QGraphicsScene();
-    this->scene->setSceneRect(0,-h,w,h); //tam escenario
+    this->scene->setSceneRect(0,-h,w,h);
     this->timerUpdate = new QTimer();
     connect(this->timerUpdate,&QTimer::timeout,this,&Game_View::update_view);
     this->timerUpdate->start(10);
-
 }
-
 
 void Game_View::addCamera(Camera *camera)
 {
@@ -87,9 +91,6 @@ Items* Game_View::getItem(int8_t id_type, int32_t id)
 
 void Game_View::setBackground(std::string &path)
 {
-    //set the background image.
-    //this->scene->setBackgroundBrush(QBrush(QImage(path.c_str())));
-    //QImage small = jpgImage->scaled(inputWidth, inputHeight,Qt::KeepAspectRatio);
     QImage* image = new QImage(path.c_str());
     this->scene->setBackgroundBrush(QBrush(image->scaled(this->camera->width(),this->camera->height(),Qt::KeepAspectRatio)));
 }
@@ -100,8 +101,6 @@ Camera *Game_View::getCamera()
     return this->camera;
 }
 
-
-
 QGraphicsItem *Game_View::itemAt(int posx,int posy) // no se si se usa ...
 {
     if(this->camera->itemAt(posx,posy) == 0){
@@ -111,13 +110,12 @@ QGraphicsItem *Game_View::itemAt(int posx,int posy) // no se si se usa ...
 }
 
 
-
 void Game_View::setPlayerActive(Player* player){
     this->camera->setPlayerActive(player);
 }
 
 
-void Game_View::addWidget(QWidget* widget)  // creo que no se usa mas ...
+void Game_View::addWidget(QWidget* widget)
 {
     this->scene->addWidget(widget);
     widget->setGeometry(100,100,widget->width(),widget->height());
@@ -125,21 +123,17 @@ void Game_View::addWidget(QWidget* widget)  // creo que no se usa mas ...
 
 void Game_View::moveObjTo(int type ,int id, int posX, int posY, int angle)
 {
-
     QList<QGraphicsItem*> list_items = this->scene->items();
-
     QList<QGraphicsItem*>::iterator it;
     for (it=list_items.begin();it!=list_items.end();it++)
     {
-
         MovableItem* item =dynamic_cast<MovableItem*>(*it);
         if(!item){// no es movible
             continue;
         }else if(item->getId()==id && item->getIdObj()==type){
-            //item->moveTo(posX,posY,angle);
-            if(item->x()==-130){//temporal para setear el escenario
+            if(item->x()==-130){
                 qDebug()<<"coloque worm x:"<<posX<<"y:"<<posY;
-                item->setPosition(posX,this->scene->height()-posY); ///////// aca tambien deberia cambiarlo...
+                item->setPosition(posX,this->scene->height()-posY);
                 return;
             }
             item->moveTo(angle,posX,posY);

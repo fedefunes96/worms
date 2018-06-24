@@ -31,13 +31,13 @@ private slots:
 
 public:
     Game_View();
+    ~Game_View();
     Game_View(int w, int h);
     void add_Item(QGraphicsItem *item, int posx, int posy);
     void setBackground(std::string& path);
     QGraphicsItem *itemAt(int posx,int posy);
     Camera *getCamera();
     void addWidget(QWidget *widget);
-
     void moveObjTo(int type, int id, int posX, int posY, int angle);
     void addItemToFollow(MovableItem *item);
     bool containsItem(int8_t id_typ, int32_t id);

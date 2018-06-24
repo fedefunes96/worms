@@ -19,6 +19,7 @@ class Camera : public QGraphicsView
     Q_OBJECT
 public:
     Camera(QWidget *parent = 0 );
+    ~Camera();
     void addItemToFollow(MovableItem *item);
     void setPlayerActive(Player* player);
     void mousePressEvent(QMouseEvent *event);

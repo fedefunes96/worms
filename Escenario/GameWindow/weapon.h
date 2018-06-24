@@ -7,6 +7,7 @@ class Weapon
 {
 public:
     Weapon();
+    ~Weapon();
     void setIdObj(int type);
     int getIdObj();
     void setAmmo(int ammo);
