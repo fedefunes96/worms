@@ -14,7 +14,10 @@ MainWindow::MainWindow(QWidget *parent) :
     bkg = bkg.scaled(this->size(), Qt::IgnoreAspectRatio);
     QPalette palette;
     palette.setBrush(QPalette::Background,bkg);
+    palette.setColor(ui->label->foregroundRole(),Qt::green);
     this->setPalette(palette);
+    QSize size(500,350);
+    this->setMaximumSize(size);
 
 }
 
