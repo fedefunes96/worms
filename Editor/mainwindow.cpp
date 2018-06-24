@@ -10,6 +10,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Map editor");
+    QPixmap bkg(ROOT_PATH"/resources/images/backGround.jpeg");
+    bkg = bkg.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background,bkg);
+    this->setPalette(palette);
+
 }
 
 MainWindow::~MainWindow()
