@@ -4,10 +4,11 @@
 #include <QMessageBox>
 
 
-GameWindow::GameWindow(QWidget *parent) :
+GameWindow::GameWindow(QApplication *app, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GameWindow)
 {
+    this->app = app;
     ui->setupUi(this);
     this->playerActive=nullptr;
     this->timer = new QTimer();
@@ -34,6 +35,7 @@ GameWindow::GameWindow(QWidget *parent) :
     this->setButtonTime(ui->time5,false);
     this->setButtomsCountDownHidden(true);
     ui->powerBar->setHidden(true);
+    this->hasWinner=false;
 }
 
 
@@ -53,10 +55,15 @@ void GameWindow::setButtomsCountDownHidden(bool enable)
     ui->weaponCountDownLabel->setHidden(enable);
 }
 
+void GameWindow::setWinner(bool haswinner){
+    this->hasWinner=haswinner;
+}
 
 void GameWindow::closeEvent(QCloseEvent *event)
 {
-    emit closeGame();
+    if(!this->hasWinner){
+        this->app->exit();
+    }
 }
 
 

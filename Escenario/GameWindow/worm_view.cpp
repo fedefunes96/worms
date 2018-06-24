@@ -633,6 +633,10 @@ void Worm_View::removeMovable()
     if(this->labelVida!=nullptr){
         this->labelVida->setVisible(false);
     }
+    this->showlabelSelect=false;
+    if(this->showSelected!=nullptr){
+        this->showSelected->setVisible(false);
+    }
     this->wormDeath->play();
     ///////////////////////////////////// ACA PONER SONIDO DE MUERTE DEL WORM ...
 }

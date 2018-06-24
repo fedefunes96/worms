@@ -20,25 +20,23 @@ public:
     ~WaitRoom();
 
     void connectControler(Controler *controler);
-    void setShowWindow(bool show);
-    bool getShowWindow();
-    void closeEvent(QCloseEvent *event);
     bool closeWithX();
+    bool isExitRoom();
+    void cleanCond();
 public slots:
     void plysInRoom(int cant);
     void startGameView(QList<std::string> list);
 
 signals:
     void startView(QList<std::string> list);
-    void closeGame();
 private slots:
     void on_pushButton_clicked();
 
 private:
     Ui::WaitRoom *ui;
     Protocol *protocol;
-    bool showW;
     bool closeX;
+    bool exit;
 };
 
 #endif // WAITROOM_H

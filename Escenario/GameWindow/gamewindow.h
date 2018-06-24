@@ -8,7 +8,7 @@
 #include "weapons_and_tools.h"
 #include "player.h"
 #include <QTimer>
-
+#include <QApplication>
 
 
 namespace Ui {
@@ -20,7 +20,7 @@ class GameWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit GameWindow(QWidget *parent = 0);
+    explicit GameWindow(QApplication *app,QWidget *parent = 0);
     ~GameWindow();
 
     void addPlayer(Player *player);
@@ -36,8 +36,7 @@ public:
     void showPlayerList(QList<Player *> playerList);
     void showActualPlayer(int id);
 
-signals:
-    void closeGame();
+    void setWinner(bool haswinner);
 private slots:
     void on_pushButton_clicked();
 
@@ -76,6 +75,8 @@ private:
     int timeToReach;
     void setButtomsTime(int time);
     void setButtonTime(QPushButton *button, bool enable);
+    QApplication *app;
+    bool hasWinner;
 };
 
 #endif // GAMEWINDOW_H

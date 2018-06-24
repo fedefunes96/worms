@@ -394,6 +394,9 @@ void EventHandler::keyReleaseEvent(QKeyEvent *k_event)
                 break;
             }
             if(this->game->isMyTurn()){
+                if(this->game->getPlayer()->getWormActive()==nullptr){
+                    return;
+                }
                 int idWeapon = this->game->getPlayer()->getWormActive()->getWeaponId();
                 if(idWeapon==static_cast<int>(UsableIds::TELEPORTATION)||
                         idWeapon==static_cast<int>(UsableIds::AERIAL_ATTACK)){

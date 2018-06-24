@@ -17,13 +17,16 @@ class Window : public QDialog
     Q_OBJECT
 
 public:
-    Window(MapSelection *map,RoomCreator *room,Protocol* protocol,WaitRoom *wait,QWidget *parent = 0);
+    Window(Protocol* protocol,QWidget *parent = 0);
     ~Window();
 
     int getId();
     void connectControler(Controler *controler);
     void closeEvent(QCloseEvent *event);
     bool closeWithX();
+    bool isSelectRoom();
+    bool iscreateRoom();
+    void cleanCond();
 signals:
     void closeGame();
 public slots:
@@ -41,6 +44,9 @@ private:
     WaitRoom *wait;
     int id;
     bool closeX;
+    bool createRoom;
+    bool selectRoom;
+
 };
 
 #endif // WINDOW_H

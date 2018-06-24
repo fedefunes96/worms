@@ -6,26 +6,40 @@
 #include <QColor>
 #include <QCoreApplication>
 
-GameClass::GameClass(QRect screen,int w,int h,int idply)
+GameClass::GameClass(QApplication *app)
 {
-    this->window = new GameWindow();
-    this->game = new Game_View(screen,w,h);
+    this->app = app;
+}
+
+void GameClass::setIdPlayer(int id)
+{
+    if(!this->players_list.empty()){
+        return;
+    }
+
+    this->window = new GameWindow(this->app);
+    this->game = new Game_View(10,10);
     this->window->addGameScene(this->game);
     this->game->addCamera(this->window->getCamera());
 
     this->myTurn=false;
     createColorList();
+
     this->myPlayer = new Player();
-    this->myPlayer->setId(idply);
-    this->myPlayer->setColor(getColor(idply));
+    this->myPlayer->setId(id);
+    this->myPlayer->setColor(getColor(id));
     this->players_list.append(this->myPlayer);
     this->game->setPlayerActive(this->myPlayer);
     this->window->addPlayer(this->myPlayer);
+
     this->deadItemCollector = new QTimer();
     this->deadItemCollector->start(10);
     connect(this->deadItemCollector,&QTimer::timeout,this,&GameClass::checkDeadItem);
     this->window->setRefocusEnable(false);
     this->lastP=nullptr;
+    qDebug()<<"termine";
+
+
 
 }
 
@@ -54,7 +68,6 @@ void GameClass::setRefocus(bool enable)
 void GameClass::connectController(Controler *controler)
 {
     connect(controler,SIGNAL(eventCreated(QList<int>)),this,SLOT(checkQueueEvent(QList<int>)));
-    connect(this->window,SIGNAL(closeGame()),controler,SLOT(stopController()));
 }
 
 
@@ -305,11 +318,8 @@ void GameClass::removeItem(int type,int id)
 
 void GameClass::checkDeadItem()
 {
-
     QGraphicsScene *scene = this->game->getScene();
-
     QList<QGraphicsItem*> list_items = scene->items();
-
     QList<QGraphicsItem*>::iterator it;
     for (it=list_items.begin();it!=list_items.end();it++)
     {
@@ -379,6 +389,7 @@ void GameClass::checkQueueEvent(QList<int> list)
         qDebug()<<"winner leido!";
         this->myPlayer->setActive(false);
         this->myTurn=false;
+        this->window->setWinner(true);
         this->window->close();
         b->stop();
         if(list[1]==this->myPlayer->getId()){

@@ -19,22 +19,20 @@ class MapSelection : public QDialog
     Q_OBJECT
 
 public:
-    explicit MapSelection(WaitRoom* wait,Protocol* protocol, QWidget *parent = nullptr);
+    MapSelection(Protocol* protocol, QWidget *parent = nullptr);
     ~MapSelection();
 
     void connectControler(Controler *controler);
-    void closeEvent(QCloseEvent *event);
     void setExecute(bool enable);
+    void askRooms();
+    bool isCallBack();
+    bool closeWithX();
+    void cleanCond();
 private slots:
     void recvRooms(QList<std::string> list);
     void goWaitRoom(int cant);
-    void on_pushButton_clicked();
-
     void on_pushButton_released();
-
-signals:
-    void closeGame();
-
+    void on_pushButton_2_released();
 private:
     Ui::MapSelection *ui;
     Protocol* protocol;
@@ -43,6 +41,7 @@ private:
     void adjustView();
     bool closeX;
     bool isExec;
+    bool back;
 };
 
 #endif // MAPSELECTION_H

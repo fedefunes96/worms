@@ -2,22 +2,19 @@
 #include "ui_window.h"
 
 
-Window::Window(MapSelection *map, RoomCreator *room, Protocol *protocol, WaitRoom *wait, QWidget *parent) :
+Window::Window(Protocol *protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Window)
 {
     ui->setupUi(this);
-    this->map = map;
-    this->room = room;
     this->protocol = protocol;
     this->setWindowTitle("Worms Armageddon");
-    this->wait = wait;
     this->closeX=true;
     QPixmap img = QPixmap(ROOT_PATH"/resources/images/window.png");
     ui->imageBack->setScaledContents(true);
     ui->imageBack->setPixmap(img);
-    //ui->imageBack->setScaledContents(true);
-
+    this->selectRoom=false;
+    this->createRoom=false;
 }
 
 Window::~Window()
@@ -27,20 +24,47 @@ Window::~Window()
 
 void Window::on_pushButton_clicked()
 {
+    this->createRoom=true;
+    this->closeX=false;
+    this->close();
+    return;
+    //////////////////////
     this->closeX=false;
     this->protocol->sendCreateRoom();
     this->close();
-    this->room->setExecute(true);
-    this->room->exec();
+   // this->room->setExecute(true);
+ //   this->room->exec();
 }
+
+void Window::cleanCond(){
+    this->selectRoom=false;
+    this->createRoom=false;
+    this->closeX=true;
+}
+
+bool Window::isSelectRoom()
+{
+    return this->selectRoom;
+}
+
+bool Window::iscreateRoom()
+{
+    return this->createRoom;
+}
+
 
 void Window::on_pushButton_2_clicked()
 {
+    this->selectRoom=true;
+    this->closeX=false;
+    this->close();
+    return;
+    ////////////////////
     this->closeX=false;
     this->protocol->sendJoinRoom();
     this->close();
-    this->map->setExecute(true);
-    this->map->exec();
+    //this->map->setExecute(true);
+    //this->map->exec();
 }
 
 void Window::setId(int id)
@@ -63,6 +87,7 @@ int Window::getId()
 
 void Window::closeEvent(QCloseEvent *event)
 {
+    qDebug()<<"fiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiin";
     if(this->closeX){
         qDebug()<<"entre al cerrar window";
         emit closeGame();

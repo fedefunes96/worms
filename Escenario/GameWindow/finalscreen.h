@@ -27,7 +27,7 @@ private:
     void setLoser();
     Ui::FinalScreen *ui;
     QApplication *app;
-    //backgrounMusic* b;
+    backgrounMusic* b;
 };
 
 #endif // FINALSCREEN_H

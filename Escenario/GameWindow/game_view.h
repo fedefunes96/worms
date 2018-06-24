@@ -31,7 +31,7 @@ private slots:
 
 public:
     Game_View();
-    Game_View(QRect screen, int w, int h);
+    Game_View(int w, int h);
     void add_Item(QGraphicsItem *item, int posx, int posy);
     void setBackground(std::string& path);
     QGraphicsItem *itemAt(int posx,int posy);

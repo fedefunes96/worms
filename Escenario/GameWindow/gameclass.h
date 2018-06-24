@@ -8,13 +8,14 @@
 #include <QList>
 #include "waitRoom.h"
 #include "backgrounMusic.h"
+#include <QApplication>
 
 
 class GameClass : public QObject
 {
     Q_OBJECT
 public:
-    GameClass(QRect screen,int w,int h,int idply);
+    GameClass(QApplication *app);
     Player* getPlayer();
     Game_View* getGameView();
     std::vector<int> fireWeapon();
@@ -26,6 +27,7 @@ public:
     void setPotBar(int pot);
     void connectWaitRoom(WaitRoom *wait);
     void setRefocus(bool enable);
+    void setIdPlayer(int id);
 signals:
     void isWinner(bool iswinner);
 private slots:
@@ -51,6 +53,7 @@ private:
     QString getColor(int id_player);
     Player *getPlayerInList(int id_player);
     Player *lastP;
+    QApplication *app;
 };
 
 #endif // GAMECLASS_H

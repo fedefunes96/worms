@@ -10,7 +10,7 @@ Game_View::Game_View()
 {
 }
 
-Game_View::Game_View(QRect screen,int w,int h)
+Game_View::Game_View(int w,int h)
 {
     this->scene = new QGraphicsScene();
     this->scene->setSceneRect(0,-h,w,h); //tam escenario
