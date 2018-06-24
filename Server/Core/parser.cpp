@@ -205,7 +205,7 @@ void Parser::loadWeapon(std::string &file,std::string &cfg,Stage& stage,std::vec
              	float vel = config["AirAttack"][0].as<float>();
                 float rad =config["AirAttack"][1].as<float>();
                 float max_dmg = config["AirAttack"][2].as<float>();
-                float from = config["AirAttack"][3].as<float>();
+                float from = editor["Air Strike"].as<float>();
                 float max_push = config["AirAttack"][4].as<float>();
                 float rad_expl = config["AirAttack"][5].as<float>();
     			AerialAttack *us = new AerialAttack(stage,ammo, vel,rad,max_dmg,
