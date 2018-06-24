@@ -62,7 +62,9 @@ void MapSelection::goWaitRoom(int cant)
         this->closeX=false;
         this->close();
     } else {
-        qDebug()<<"no se conecto";
+        QMessageBox::information(this,"Error","That room is not available anymore.");
+        QListWidgetItem *item = ui->listWidget->takeItem(ui->listWidget->currentIndex().row());
+        delete(item);
     }
 }
 
