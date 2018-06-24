@@ -4,6 +4,7 @@ project (Server)
 set (PROJECT_LINK_LIBS Box2D yaml-cpp)
 link_directories( ${PATH}/lib )
 
+include_directories("../Box2D")
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/Stage")
 include_directories("${PROJECT_SOURCE_DIR}/Stage/Callbacks")
