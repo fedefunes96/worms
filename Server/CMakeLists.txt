@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 project (Server)
 
-set (PROJECT_LINK_LIBS Box2D.a yaml-cpp)
+set (PROJECT_LINK_LIBS Box2D yaml-cpp)
 link_directories( ${PATH}/lib )
 
 include_directories("${PROJECT_SOURCE_DIR}")
@@ -19,7 +19,7 @@ include_directories("${PROJECT_SOURCE_DIR}/Usables")
 include_directories("../Common")
 #include_directories( ../Escenario/GameWindow )
 
-set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -pthread -pedantic -lyaml-cpp")
+set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -pthread -pedantic")
 
 add_compile_options(-std=c++11 -pthread)
 
