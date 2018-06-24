@@ -241,14 +241,14 @@
           <item>
            <widget class="QPushButton" name="mas">
             <property name="text">
-             <string>+</string>
+             <string>Rotate +5°</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="menos">
             <property name="text">
-             <string>-</string>
+             <string>Rotate -5°</string>
             </property>
            </widget>
           </item>
