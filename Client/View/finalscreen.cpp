@@ -39,7 +39,7 @@ void FinalScreen::setLoser(){
     QFont f("Arial",22,QFont::Bold);
     ui->text->setFont(f);
     QPixmap img = QPixmap(ROOT_PATH"/resources/images/LoseScreen.gif");
-    b = new backgrounMusic(ROOT_PATH"/resources/BackgroundMusic/Total Distortion You Are Dead.wav");
+    b = new backgrounMusic(ROOT_PATH"/resources/sounds/BackgroundMusic/Total Distortion You Are Dead.wav");
     ui->imageBackground->setPixmap(img);
     ui->imageBackground->setScaledContents(true);
     this->exec();
