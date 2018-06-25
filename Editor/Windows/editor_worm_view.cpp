@@ -34,5 +34,5 @@ void Worm_View::paint(QPainter *painter,
 
 QRectF Worm_View::boundingRect() const
 {
-    return QRectF(0,0,50,50);
+    return QRectF(0,0,40,43);
 }

@@ -151,6 +151,9 @@ private:
 
     //remueve el item que esta selecionado
     void removeItem();
+
+    //chquea que los gusanos no colicionen al momento de guardar
+    bool checkColicion();
 };
 
 #endif

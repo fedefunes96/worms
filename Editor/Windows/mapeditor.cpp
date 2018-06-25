@@ -425,6 +425,14 @@ void MapEditor::on_saveAs_clicked()
     if (ui->cant->text().toInt()!= 0){
         this->cantidad = ui->cant->text().toInt();
     }
+
+    bool colicion = this->checkColicion();
+    if (colicion){
+    	QMessageBox::information(this,tr("Error"),
+                tr("There are worms colliding."));
+    	return;
+    }
+
     if (this->cantidad <= worms.size()){
         if (this->checkWorms()){
             nombre = QFileDialog::getSaveFileName(this,
@@ -454,6 +462,14 @@ void MapEditor::on_pushButton_clicked()
     if (ui->cant->text().toInt()!= 0){
         this->cantidad = ui->cant->text().toInt();
     }
+
+    bool colicion = this->checkColicion();
+    if (colicion){
+    	QMessageBox::information(this,tr("Error"),
+                tr("There are worms colliding."));
+    	return;
+    }
+
     if (this->cantidad <= worms.size()){
         if (this->checkWorms()){
             if (nombre.isEmpty()){
@@ -553,4 +569,16 @@ void MapEditor::on_down_clicked()
     } else {
         vigas[current_id].addPos(0,-5);
     }
+}
+
+
+bool MapEditor::checkColicion(){
+	for (auto &worm : worms){
+		QList<QGraphicsItem*> colicion;
+		colicion = items[worm.first]->collidingItems(Qt::IntersectsItemBoundingRect);
+		if (!colicion.isEmpty()){
+			return true;
+		}
+	}
+	return false;
 }
