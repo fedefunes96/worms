@@ -16,14 +16,6 @@ public:
 
     ~commonArchivo();
 
-    void leer_linea(std::string &buf);
-
-    void leer_linea(std::string &buf, char delim);
-
-    char leer_caracter();
-
-    bool eof();
-
     void operator<<(std::string &buf);
 
     void operator<<(const char *buf);

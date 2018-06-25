@@ -11,11 +11,19 @@ private:
 
 public:
     editorViga();
+
     editorViga(int posX, int posY, int tam);
+
     ~editorViga(){}
+
+    //Aumenta el angulo de la Viga
     void aumentarAngulo(int angulo);
+
+    //Retorna el angulo actual de la Viga
     float get_angulo();
+
+    //Retorna el tamaño de la viga
     int get_tam();
 };
 
-#endif // EDITORVIGA_H
+#endif

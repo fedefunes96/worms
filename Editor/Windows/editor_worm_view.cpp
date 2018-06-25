@@ -9,7 +9,7 @@ Worm_View::Worm_View(int id,QObject *parent) :
     QObject(parent), QGraphicsItem()
 {
     currentFrame = 0;
-    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png"); // Load the sprite image QPixmap
+    spriteImage = new QPixmap(ROOT_PATH"/resources/images/wormwait.png");
     this->id = id;
 }
 
@@ -24,15 +24,9 @@ void Worm_View::mousePressEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-void Worm_View::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Worm_View::paint(QPainter *painter, 
+    const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    /* In the graphic renderer we draw the sprite
-     * The first two arguments - is the X and Y coordinates of where to put QPixmap
-     * The third argument - a pointer to QPixmap
-     * 4 and 5 of the arguments - The coordinates in the image QPixmap, where the image is displayed
-     * By setting the X coordinate with the variable currentFrame we would like to move the camera on the sprite
-     * and the last two arguments - the width and height of the displayed area, that is, the frame
-     * */
     painter->drawPixmap(0,0, *spriteImage, 0, currentFrame, 60,60);
     Q_UNUSED(option);
     Q_UNUSED(widget);

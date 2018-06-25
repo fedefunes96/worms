@@ -16,17 +16,21 @@ public:
 
     ~editor_viga_grande_view();
 
+    //Captura el evento de mousse Precionado para luego mandar un signal
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 
+    //Retorna el rectangulo qu limita la imagen
     QRectF boundingRect() const;
 
 signals:
+    //Señal de que se ha selecionado la viga
     void girderSelect(int id);
 
 private:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
-    int currentFrame;   // Coordinates X, which starts the next frame of the sprite
+    void paint(QPainter *painter, 
+        const QStyleOptionGraphicsItem *option, QWidget *widget);
+    QPixmap *spriteImage;   
+    int currentFrame;   
     int id;
 };
 #endif

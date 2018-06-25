@@ -16,12 +16,14 @@ public:
     ~MainWindow();
 
 private slots:
+	//Accion del boton NewMap
     void on_pushButton_clicked();
 
+    //Accion del boton LoadMap
     void on_load_clicked();
 
 private:
     Ui::MainWindow *ui;
 };
 
-#endif // MAINWINDOW_H
+#endif 

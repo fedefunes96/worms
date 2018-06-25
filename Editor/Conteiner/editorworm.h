@@ -10,9 +10,15 @@ private:
 
 public:
     editorWorm();
+
     editorWorm(int posX, int posY);
+
     ~editorWorm(){}
+
+    //Retorna la Vida del Gusano
     int getVida();
+
+    //Cambia la vida del Gusano
     void setVida(int vida);
 };
 

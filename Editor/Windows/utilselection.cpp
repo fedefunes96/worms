@@ -51,7 +51,8 @@ UtilSelection::~UtilSelection()
     delete ui;
 }
 
-void UtilSelection::pasarMap(MapEditor *editor, std::map<int, editorUsables> &usables){
+void UtilSelection::pasarMap(MapEditor *editor, 
+    std::map<int, editorUsables> &usables){
     this->editor = editor;
     for (auto item : usables){
         int ammo = item.second.getAmmo();
@@ -155,7 +156,8 @@ void UtilSelection::on_GranadaV_clicked()
 {
     if (ui->GranadaV->checkState() == Qt::Checked){
         int municion = ui->municionGranadaV->text().toInt();
-        if (municion == 0 && (ui->GreenGrenadeIA->checkState() == Qt::Unchecked)){
+        if (municion == 0 && 
+            (ui->GreenGrenadeIA->checkState() == Qt::Unchecked)){
             ui->GranadaV->setChecked(false);
             mensaje_error();
         }
@@ -166,7 +168,8 @@ void UtilSelection::on_GranadaR_clicked()
 {
     if (ui->GranadaR->checkState() == Qt::Checked){
         int municion = ui->municionGranadaR->text().toInt();
-        if (municion == 0 && (ui->RedGrenadeIA->checkState() == Qt::Unchecked)){
+        if (municion == 0 && 
+            (ui->RedGrenadeIA->checkState() == Qt::Unchecked)){
             ui->GranadaR->setChecked(false);
             mensaje_error();
         }
@@ -245,7 +248,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::BAZOOKA);
     } else {
         if (ui->BazookaIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::BAZOOKA,ui->municionBazooka->text().toInt());
+            editor->agregar_arma((int)UsableIds::BAZOOKA,
+                ui->municionBazooka->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::BAZOOKA,INFINITE_AMMO);
         }
@@ -254,7 +258,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::MORTAR);
     } else {
         if (ui->MortaIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::MORTAR,ui->municionMortero->text().toInt());
+            editor->agregar_arma((int)UsableIds::MORTAR,
+                ui->municionMortero->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::MORTAR,INFINITE_AMMO);
         }
@@ -263,7 +268,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::GREEN_GRENADE);
     } else {
         if (ui->GreenGrenadeIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::GREEN_GRENADE,ui->municionGranadaV->text().toInt());
+            editor->agregar_arma((int)UsableIds::GREEN_GRENADE,
+                ui->municionGranadaV->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::GREEN_GRENADE,INFINITE_AMMO);
         }
@@ -272,7 +278,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::RED_GRENADE);
     } else {
         if (ui->RedGrenadeIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::RED_GRENADE,ui->municionGranadaR->text().toInt());
+            editor->agregar_arma((int)UsableIds::RED_GRENADE,
+                ui->municionGranadaR->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::RED_GRENADE,INFINITE_AMMO);
         }
@@ -281,7 +288,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::BANANA);
     } else {
         if (ui->BananaIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::BANANA,ui->municionBanana->text().toInt());
+            editor->agregar_arma((int)UsableIds::BANANA,
+                ui->municionBanana->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::BANANA,INFINITE_AMMO);
         }
@@ -290,7 +298,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::HOLY_GRENADE);
     } else{
         if (ui->HGrenadeIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::HOLY_GRENADE,ui->municionGranadaS->text().toInt());
+            editor->agregar_arma((int)UsableIds::HOLY_GRENADE,
+                ui->municionGranadaS->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::HOLY_GRENADE,INFINITE_AMMO);
         }
@@ -299,7 +308,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::DYNAMITE);
     } else {
         if (ui->DynamiteIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::DYNAMITE,ui->municionDinamita->text().toInt());
+            editor->agregar_arma((int)UsableIds::DYNAMITE,
+                ui->municionDinamita->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::DYNAMITE,INFINITE_AMMO);
         }
@@ -308,7 +318,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::BASEBALL_BAT);
     } else {
         if (ui->BatIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::BASEBALL_BAT,ui->municionBate->text().toInt());
+            editor->agregar_arma((int)UsableIds::BASEBALL_BAT,
+                ui->municionBate->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::BASEBALL_BAT,INFINITE_AMMO);
         }
@@ -317,7 +328,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::AERIAL_ATTACK);
     } else {
         if (ui->AIrIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::AERIAL_ATTACK,ui->municionAereo->text().toInt());
+            editor->agregar_arma((int)UsableIds::AERIAL_ATTACK,
+                ui->municionAereo->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::AERIAL_ATTACK,INFINITE_AMMO);
         }
@@ -326,7 +338,8 @@ void UtilSelection::on_buttonBox_accepted()
         editor->remove_weapon((int)UsableIds::TELEPORTATION);
     } else {
         if (ui->TeleIA->checkState() == Qt::Unchecked){
-            editor->agregar_arma((int)UsableIds::TELEPORTATION,ui->municionTeletransportador->text().toInt());
+            editor->agregar_arma((int)UsableIds::TELEPORTATION,
+                ui->municionTeletransportador->text().toInt());
         } else {
             editor->agregar_arma((int)UsableIds::TELEPORTATION,INFINITE_AMMO);
         }

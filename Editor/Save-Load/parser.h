@@ -16,12 +16,13 @@ public:
     Parser();
     ~Parser(){}
 
-    static void saveConfig();
-
+    //Guarda la configuracion del mapa en el cual se esta trabajando
     static void save(std::string &nombre,std::map<int,editorUsables> &usables,
                         std::map<int, editorWorm> &worms,
-                        std::map<int, editorViga> &vigas,unsigned int cant,std::string &backgrund);
+                        std::map<int, editorViga> &vigas,unsigned int cant,
+                        std::string &backgrund);
 
+    //Carga la configuracion del mapa en el Editor
     static void load(MapEditor *editor, std::string& file);
 
 private:

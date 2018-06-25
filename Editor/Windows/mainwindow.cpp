@@ -34,8 +34,8 @@ void MainWindow::on_pushButton_clicked(){
 
 void MainWindow::on_load_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),ROOT_PATH"/resources/maps",
-                                                    tr("*.yaml"));
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open"),
+        ROOT_PATH"/resources/maps", tr("*.yaml"));
     if (fileName.isEmpty()){
         return;
     }

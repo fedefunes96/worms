@@ -12,7 +12,8 @@ public:
     editorUsables(int municiones);
     ~editorUsables(){}
 
+    //Retorna la municion del Usable
     int getAmmo();
 };
 
-#endif // EDITORUSABLES_H
+#endif 

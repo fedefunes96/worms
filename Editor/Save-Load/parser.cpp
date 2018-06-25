@@ -9,174 +9,16 @@
 #include <yaml-cpp/yaml.h>
 #include <math.h>
 
-#define angle_rad 0
-#define longitudW 1
-#define alto 1
-#define densidad 1
-#define restitucion 0
-#define velocidad 0.2
-#define velocidadSaltoAX 1
-#define velocidadSaltoAY 0.5
-#define velocidadSaltoRX 0.2
-#define velocidadSaltoRY 1.2
-#define alturaSinDanio 2
-#define alturaGirder 0.4
 #define pi 3.141592
-#define velVMin 0.2
-#define velVMax 10
-#define dmgXM 1
-#define dmgMax 25
 
 Parser::Parser()
 {
 
 }
 
-void Parser::saveConfig()
-{
-    YAML::Emitter out;
-    out << YAML::BeginMap;
-    out <<YAML::Key<<"Water";
-    out<<0;
-
-    out <<YAML::Key<<"Wind";
-    out << YAML::BeginSeq;
-    out<<velVMin;
-    out<<velVMax;
-    out <<YAML::EndSeq;
-
-    out <<YAML::Key<<"Worm";
-    out <<YAML::BeginSeq;
-    out << angle_rad;
-    //total health
-    out << longitudW;
-    out << alto;
-    out <<restitucion;
-    out<<velocidad;
-    out << velocidadSaltoAX;
-    out <<velocidadSaltoAY;
-    out << velocidadSaltoRX;
-    out <<velocidadSaltoRY;
-    out<<alturaSinDanio;
-    out<<dmgXM;
-    out <<dmgMax;
-    out <<YAML::EndSeq;
-
-    out <<YAML::Key<<"Small Girder";
-    out << YAML::BeginSeq;
-    out<<alturaGirder;
-    out<<1.5;
-    out <<YAML::EndSeq;
-
-    out <<YAML::Key<<"Large Girder";
-    out << YAML::BeginSeq;
-    out<<alturaGirder;
-    out<<3;
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"Bazooka";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<50;//max dmg
-    out<<2;//pusback
-    out<<2;//exp rad
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"Mortar";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<50;//max dmg
-    out<<2;//pusback
-    out<<2;//exp rad
-    out<<6;//cant frag
-    out<<5;//V frag
-    out<<1;//rad frag
-    out<<10;//max dm frag
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"GreenGrenade";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<0.5;//restitution
-    out<<30;//max dmg
-    out<<2;//pusback
-    out<<2;//exp rad
-    out <<YAML::EndSeq;
-
-
-    out<<YAML::Key<<"RedGrenade";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<0.5;//restitution
-    out<<30;//max dmg
-    out<<2;//pusback
-    out<<2;//exp rad
-    out<<6;//cant frag
-    out<<5;//V frag
-    out<<1;//rad frag
-    out<<10;//max dm frag
-    out <<YAML::EndSeq;
-
-
-    out<<YAML::Key<<"Banana";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<1;//restitution
-    out<<70;//max dmg
-    out<<2;//pusback
-    out<<4;//exp rad
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"HolyGrenade";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<0.5;//restitution
-    out<<110;//max dmg
-    out<<2;//pusback
-    out<<8;//exp rad
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"Dynimite";
-    out<<YAML::BeginSeq;
-    out<<1;//rad
-    out<<0;//restitution
-    out<<50;//max dmg
-    out<<2;//pusback
-    out<<4;//exp rad
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"Bate";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<10;//dmg
-    out <<YAML::EndSeq;
-
-    out<<YAML::Key<<"AirAttack";
-    out<<YAML::BeginSeq;
-    out<<10;//V
-    out<<2;//rad
-    out<<40;//max dmg
-    out<<420;//from create
-    out<<2;//pusback
-    out<<2;//exp rad
-    out <<YAML::EndSeq;
-
-    out <<YAML::EndMap;
-
-
-    std::string nombre = "config.yaml";
-    commonArchivo archivo = commonArchivo(nombre,std::fstream::out);
-    archivo<<out.c_str();
-}
-
 void Parser::save(std::string &nombre, std::map<int, editorUsables> &usables,
-                        std::map<int, editorWorm> &worms, std::map<int, editorViga> &vigas,
+                        std::map<int, editorWorm> &worms, 
+                        std::map<int, editorViga> &vigas,
                         unsigned int cant, std::string &backgrund)
 {
     float height = 0;
@@ -277,7 +119,8 @@ void Parser::load(MapEditor *editor, std::string &file)
     try{
         YAML::Node config = YAML::LoadFile(file);
         if (config["Small Girder"]){
-            for (YAML::iterator it = config["Small Girder"].begin(); it != config["Small Girder"].end(); ++it){
+            for (YAML::iterator it = config["Small Girder"].begin(); 
+                it != config["Small Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
                 int x = girder[4].as<int>();
                 int y = girder[5].as<int>();
@@ -292,7 +135,8 @@ void Parser::load(MapEditor *editor, std::string &file)
             }
         }
         if (config["Big Girder"]){
-            for (YAML::iterator it = config["Big Girder"].begin(); it != config["Big Girder"].end(); ++it){
+            for (YAML::iterator it = config["Big Girder"].begin(); 
+                it != config["Big Girder"].end(); ++it){
                 const YAML::Node& girder = *it;
                 int x = (girder[4].as<int>());
                 int y = girder[5].as<int>();
@@ -307,7 +151,8 @@ void Parser::load(MapEditor *editor, std::string &file)
             }
         }
         if (config["Worm"]){
-            for (YAML::iterator it = config["Worm"].begin(); it != config["Worm"].end(); ++it){
+            for (YAML::iterator it = config["Worm"].begin(); 
+                it != config["Worm"].end(); ++it){
                 const YAML::Node& worm = *it;
                 int x = worm[3].as<int>();
                 int y = worm[4].as<int>();
@@ -318,7 +163,8 @@ void Parser::load(MapEditor *editor, std::string &file)
             }
         }
         if (config["Usable"]){
-             for (YAML::iterator it = config["Usable"].begin(); it != config["Usable"].end(); ++it){
+             for (YAML::iterator it = config["Usable"].begin(); 
+                it != config["Usable"].end(); ++it){
                  const YAML::Node& usable = *it;
                  int id = usable[0].as<int>();
                  int ammo = usable[1].as<int>();

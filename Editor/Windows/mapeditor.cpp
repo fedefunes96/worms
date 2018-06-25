@@ -33,39 +33,52 @@ MapEditor::MapEditor(QWidget *parent) :
     ui->girderOpt->hide();
     this->current_id = -1;
     QPixmap bazooka = QPixmap(ROOT_PATH"/resources/images/Bazooka.png");
-    bazooka = bazooka.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    bazooka = bazooka.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->bazooka->setPixmap(bazooka);
     QPixmap mortero = QPixmap(ROOT_PATH"/resources/images/Mortar.png");
-    mortero = mortero.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    mortero = mortero.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->mortero->setPixmap(mortero);
     QPixmap granadaV = QPixmap(ROOT_PATH"/resources/images/W4_Grenade.png");
-    granadaV = granadaV.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    granadaV = granadaV.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->granadaV->setPixmap(granadaV);
     QPixmap granadaR = QPixmap(ROOT_PATH"/resources/images/Redgrenade.png");
-    granadaR = granadaR.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    granadaR = granadaR.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->granadaR->setPixmap(granadaR);
     QPixmap banana = QPixmap(ROOT_PATH"/resources/images/Bananabomb.png");
-    banana = banana.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    banana = banana.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->banana->setPixmap(banana);
     QPixmap granadaS = QPixmap(ROOT_PATH"/resources/images/Holy_Grenade.png");
-    granadaS = granadaS.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    granadaS = granadaS.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->granadaS->setPixmap(granadaS);
     QPixmap dinamita = QPixmap(ROOT_PATH"/resources/images/W4_Dynamite.png");
-    dinamita = dinamita.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    dinamita = dinamita.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->dinamita->setPixmap(dinamita);
     QPixmap bate = QPixmap(ROOT_PATH"/resources/images/Baseballbat.png");
-    bate = bate.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    bate = bate.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->bate->setPixmap(bate);
     QPixmap aereo = QPixmap(ROOT_PATH"/resources/images/W4_Airstrike.png");
-    aereo = aereo.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    aereo = aereo.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->aereo->setPixmap(aereo);
     QPixmap tele = QPixmap(ROOT_PATH"/resources/images/IconTeleport.png");
-    tele = tele.scaled(60,60,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    tele = tele.scaled(60,60,Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
     ui->teletransportador->setPixmap(tele);
     loadWeapons();
-    ui->agregarGusano->setIcon(QIcon(ROOT_PATH"/resources/images/wormwait.png"));
-    ui->agregarVigaChica->setIcon(QIcon(ROOT_PATH"/resources/images/grds4.png"));
-    ui->AgregarViga->setIcon(QIcon(ROOT_PATH"/resources/images/grdl4.png"));
+    ui->agregarGusano->setIcon(QIcon(
+        ROOT_PATH"/resources/images/wormwait.png"));
+    ui->agregarVigaChica->setIcon(QIcon(
+        ROOT_PATH"/resources/images/grds4.png"));
+    ui->AgregarViga->setIcon(QIcon(
+        ROOT_PATH"/resources/images/grdl4.png"));
     ui->moveOpt->hide();
     ui->cant->setValue(2);
     estado = State::NOTHING;
@@ -388,7 +401,8 @@ void MapEditor::on_mas_clicked()
     it2 = this->vigas.find(current_id);
     if (it2 != vigas.end()){
         vigas[current_id].aumentarAngulo(5);
-        items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
+        items[current_id]->setTransformOriginPoint(
+            items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() - 5);
     }
 }
@@ -399,7 +413,8 @@ void MapEditor::on_menos_clicked()
     it2 = this->vigas.find(current_id);
     if (it2 != vigas.end()){
         vigas[current_id].aumentarAngulo(-5);
-        items[current_id]->setTransformOriginPoint(items[current_id]->boundingRect().center());
+        items[current_id]->setTransformOriginPoint(
+            items[current_id]->boundingRect().center());
         items[current_id]->setRotation(items[current_id]->rotation() + 5);
 
     }
@@ -415,19 +430,22 @@ void MapEditor::on_saveAs_clicked()
             nombre = QFileDialog::getSaveFileName(this,
                                                tr("Save "),
                                                ROOT_PATH"/resources/maps",
-                                               tr(".yaml"));
+                                               tr("*.yaml"));
             if (nombre.isEmpty()){
                 return;
             }
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
             std::string background = "fondo.png";
-            Parser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
+            Parser::save(name,this->usables,this->worms,
+                this->vigas, cantidad,background);
         } else {
-            QMessageBox::information(this,tr("Error"),tr("There are worms with 0 health."));
+            QMessageBox::information(this,tr("Error"),
+                tr("There are worms with 0 health."));
         }
     } else {
-        QMessageBox::information(this,tr("Error"),tr("Not enough worms on scene."));
+        QMessageBox::information(this,tr("Error"),
+            tr("Not enough worms on scene."));
     }
 }
 
@@ -450,19 +468,23 @@ void MapEditor::on_pushButton_clicked()
             this->setWindowTitle(nombre);
             std::string name = nombre.toUtf8().constData();
             std::string background = "fondo.png";
-            Parser::save(name,this->usables,this->worms,this->vigas, cantidad,background);
+            Parser::save(name,this->usables,this->worms,
+                this->vigas, cantidad,background);
         } else {
-            QMessageBox::information(this,tr("Error"),tr("There are worms with 0 health."));
+            QMessageBox::information(this,tr("Error"),
+                tr("There are worms with 0 health."));
         }
     } else {
-        QMessageBox::information(this,tr("Error"),tr("Not enough worms on scene."));
+        QMessageBox::information(this,tr("Error"),
+            tr("Not enough worms on scene."));
     }
 }
 
 void MapEditor::on_pushButton_2_clicked()
 {
-    nombre = QFileDialog::getOpenFileName(this,tr("Open"),ROOT_PATH"/resources/maps",
-                                          tr("*.yaml"));
+    nombre = QFileDialog::getOpenFileName(this,tr("Open"),
+        ROOT_PATH"/resources/maps",
+         tr("*.yaml"));
     if (nombre.isEmpty()){
         return;
     }
