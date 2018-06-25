@@ -217,7 +217,6 @@ void ProtocolServer::sendMaps(const std::vector<std::string>&maps) {
 
     this->send_char(size);
     for (int i = 0; i < (int) maps.size(); i++) {
-        printf("%s\n",maps[i].c_str());
         this->send_string(maps[i]);
     } 
 }

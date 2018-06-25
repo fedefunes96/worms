@@ -24,8 +24,6 @@ void GreenGrenade::action(Worm* worm
 	, const b2Vec2& dest_pos
 	, const std::vector<int> params) {
 
-	printf("Using GreenGrenade\n");
-
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();
@@ -39,8 +37,6 @@ void GreenGrenade::action(Worm* worm
 	b2Vec2 vec_velocity(velocity_f * cos(angle), velocity_f * sin(angle));
 
 	int time = params[1];
-
-	printf("Time setted: %d\n", time);
 
 	GreenGrenadeMissile* missile = new GreenGrenadeMissile(this->stage
 												, worm

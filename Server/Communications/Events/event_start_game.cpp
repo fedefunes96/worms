@@ -7,6 +7,5 @@ EventStartGame::EventStartGame(const std::string background)
  : background(background) {}
 
 void EventStartGame::process(Player& player, ProtocolServer& protocol) {
-	printf("Se envio empezar juego\n");
 	protocol.sendStartGame(this->background);
 }

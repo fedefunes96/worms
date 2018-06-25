@@ -153,7 +153,6 @@ void Worm::start_moving(MoveDirection mdirect) {
 				break;
 			}										
 			case MoveDirection::NONE: {
-				printf("NOT MOVING\n");
 				this->actual_velocity.Set(0, 0);
 				this->should_jump = false;
 				break;
@@ -204,7 +203,6 @@ void Worm::move_step(float32 time_step) {
 		}
 
 		if (this->jump_cooldown == 0 && !this->should_slide && this->should_jump) {
-			printf("Jumping\n");
 			this->body->SetLinearVelocity(b2Vec2(0, 0));
 			this->body->ApplyLinearImpulse(this->actual_velocity, this->body->GetWorldCenter());
 			//this->game.notify_worm_status(this->get_id(),this->is_on_ground(),this->move_direction);
@@ -219,8 +217,6 @@ void Worm::move_step(float32 time_step) {
 				this->receive_dmg(max_height_dmg);
 			else
 				this->receive_dmg(fall_height);
-
-			printf("Fallheight: %0.1f - MinHeigh: %0.1f\n", fall_height, min_height_for_dmg);
 		}	
 
 		this->last_position = actual_position;	
@@ -331,8 +327,6 @@ b2Body* Worm::get_body() {
 }
 
 bool Worm::im_dead() {
-	if(this->dead)
-		printf("Im dead %d\n", id_obj);
 	return this->dead;
 }
 

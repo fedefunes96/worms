@@ -24,7 +24,6 @@ Player::Player(Server& server, Socket socket, const int id)
 	this->id_actual_worm = 0;
 	this->can_attack = false;
 
-	printf("Sending player id: %d\n", id);
 	this->protocol.sendPlayerId(id);
 
 	this->event_t = std::thread(&Player::process_events, this);
@@ -74,11 +73,7 @@ void Player::play() {
 
 	this->counter.set_time(TIME_TURN);
 
-	printf("Starts turn of 40 secs\n");
-
 	this->counter.start_counting();
-
-	printf("Ends turn of 40 secs\n");
 
 	this->set_receive(false);
 	//Stop his worm from moving
@@ -131,8 +126,6 @@ void Player::game_loop() {
  				b2Vec2 dest(posx, posy);
  
 				this->counter.set_time(TIME_AFTER_ATTACK);
-
-				printf("Usable id %d\n", id_usable);
  
  				std::lock_guard<std::mutex> lock(this->worms_m);
  				this->worms.at(this->get_actual_worm())->use(this->usables.at(id_usable), dest, std::move(params));
@@ -236,7 +229,6 @@ void Player::disconnected_player() {
 		it = this->worms.begin();
 
 		while (it != this->worms.end()) {
-			printf("Killing worm id: %d\n", it->second->get_id());
 			it->second->force_death();
 
 			++it;
@@ -282,10 +274,7 @@ int Player::get_id() {
 
 bool Player::lost() {
 	for (auto it = this->worms.begin(); it != this->worms.end(); ++it) {
-		printf("Checking worms alive id: %d %d\n", this->id, it->second->get_id());
-
 		if(!it->second->im_dead()) {
-			printf("Worm alive %d\n", this->id);
 			return false;
 		}		
 	}

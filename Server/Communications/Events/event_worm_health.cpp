@@ -8,7 +8,6 @@ EventWormHealth::EventWormHealth(const int id, const int health)
 	: id(id), health(health) {}
 
 void EventWormHealth::process(Player& player, ProtocolServer& protocol) {
-	printf("Sending new health: %d %d\n", id, health);
 	protocol.sendWormHealth(id, health);
 
 	if (player.should_i_receive() && id == player.get_actual_worm()) {

@@ -55,8 +55,6 @@ void RedGrenadeMissile::create_fragments() {
 
 	float32 dist = ((3/4*b2_pi)-(b2_pi/4));
 
-	printf("Creating fragment %d\n", this->ammount_fragments);
-
 	for (int i = 1; i <= this->ammount_fragments; i++) {
 		float32 angle = dist * i/this->ammount_fragments + b2_pi/4;
 

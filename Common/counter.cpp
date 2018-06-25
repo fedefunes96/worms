@@ -23,8 +23,6 @@ void Counter::start_counting() {
 		std::lock_guard<std::mutex> lock(this->m_count);
 
 		this->count--;
-
-		printf("Counting %d\n", this->count);
 	}
 }
 

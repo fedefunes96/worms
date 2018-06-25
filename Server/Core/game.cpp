@@ -42,7 +42,6 @@ Game::Game(const std::string& stage_file
 }
 
 void Game::start_game() {
-	printf("Creating threads\n");
 	this->stage_t = std::thread(&Stage::draw, &this->stage);
 
 	this->game_loop();
@@ -207,18 +206,15 @@ void Game::end_game(Game_status game_status) {
 	this->is_over = true;
 	this->stage.stop_drawing();
 	this->stage_t.join();
-	printf("Game ended\n");
 }
 
 Game_status Game::check_for_winner() {
 	int cant_players_alive = 0;
 
 	for (int i = 0; i < (int) this->players.size(); i++) {
-		printf("Checking player: %d\n", this->players[i]->get_id());
 		if (!this->players[i]->lost()) {
 			cant_players_alive++;
 		}
-		printf("End checking player: %d\n", this->players[i]->get_id());
 	}
 
 	if (cant_players_alive == 1) {
@@ -239,8 +235,6 @@ void Game::new_player() {
 }
 
 Game_status Game::round_over() {
-
-	printf("Round is over!\n");
 
 	Game_status game_status = check_for_winner();
 

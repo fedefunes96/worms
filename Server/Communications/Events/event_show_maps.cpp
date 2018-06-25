@@ -7,6 +7,5 @@ EventShowMaps::EventShowMaps(const std::vector<std::string> maps)
  : maps(std::move(maps)) {}
 
 void EventShowMaps::process(Player& player, ProtocolServer& protocol) {
-	printf("Se enviaron los mapas\n");
 	protocol.sendMaps(maps);
 }

@@ -174,8 +174,6 @@ void Stage::draw() {
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(TIME_STEP_MS));
 	}
-
-	printf("End of world draw\n");
 }
 
 bool Stage::no_explosives_in_map() {
@@ -233,7 +231,6 @@ void Stage::pre_initialize() {
  		b2Vec2 pos = b->GetWorldCenter();
  		float angle = b->GetAngle();
 
- 		std::cout << (*it)->get_type() << (*it)->get_id() << std::endl;
  		std::shared_ptr<Event> event(new EventPosition((*it)->get_type()
 													, (*it)->get_id()
  													, pos.x

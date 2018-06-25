@@ -8,6 +8,5 @@ EventPlayersInRoom::EventPlayersInRoom(const int size)
 	: size(size) {}
 
 void EventPlayersInRoom::process(Player& player, ProtocolServer& protocol) {
-	printf("size %i\n",size );
 	protocol.sendPlayersInRoom(size);
 }

@@ -68,7 +68,6 @@ void Server::check_active_users() {
 
 	while (it != this->players.end()) {
 		if (it->second->is_disconnected() && !it->second->is_in_game()) {
-			printf("Player disconnected, removing from room\n");
 			this->exit_room(it->first);
 			this->end_user(std::move(it->second));
 			it = this->players.erase(it);
@@ -263,9 +262,7 @@ void Server::exit_room(const int id) {
 
 			//No players left in the room
 			//Remove it
-			printf("Player removed\n");
 			if (it->second.get_players_ids().size() == 0) {
-				printf("Remove empty room\n");
 				this->rooms.erase(it);
 			} else {			
 				std::vector<int> ids = it->second.get_players_ids();
@@ -284,7 +281,6 @@ void Server::exit_room(const int id) {
 
 void Server::start_new_game(std::vector<int> ids, const std::string& name, const std::string stage_file) {
 	std::lock_guard<std::mutex> lock(this->disconnect_m);
-	printf("start new game\n");
 	std::unordered_map<std::string, Room>::iterator it;
 
 	it = this->rooms.find(name);
@@ -299,7 +295,6 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 		std::shared_ptr<Event> event(new EventStartGame(background));
 
 		for (int i = 0; i < (int) ids.size(); i++) {
-			printf("id :%i\n",ids[i]);
 			Player* player = this->players.at(ids[i]).get();
 			player->set_in_game(true);
 			player->set_receive(false);
@@ -311,7 +306,6 @@ void Server::start_new_game(std::vector<int> ids, const std::string& name, const
 		}
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
-		printf("Launching game\n");
 
 		Game *game = new Game(stage_file 
 			, std::move(players_for_game)

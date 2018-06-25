@@ -6,7 +6,6 @@
 EventDisconnect::EventDisconnect() {}
 
 void EventDisconnect::process(Player& player, ProtocolServer& protocol) {
-	printf("Sending disconnect\n");
 	protocol.sendDisconnect();
 	player.shutdown();
 }

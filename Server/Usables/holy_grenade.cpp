@@ -24,8 +24,6 @@ void HolyGrenade::action(Worm* worm
 	, const b2Vec2& dest_pos
 	, const std::vector<int> params) {
 
-	printf("Using Holygrenade\n");
-
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();

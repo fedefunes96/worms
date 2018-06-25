@@ -7,6 +7,5 @@ EventWindSpeed::EventWindSpeed(const float speed)
 	: speed(speed) {}
 
 void EventWindSpeed::process(Player& player, ProtocolServer& protocol) {
-	printf("Sending Wind %0.1f\n", speed);
 	protocol.sendWindSpeed(speed);
 }

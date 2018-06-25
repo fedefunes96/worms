@@ -32,8 +32,6 @@ void RedGrenade::action(Worm* worm
 	, const b2Vec2& dest_pos
 	, const std::vector<int> params) {
 
-	printf("Using Redgrenade\n");
-
 	b2Body* b = worm->get_body();
 
 	b2Vec2 from_pos = b->GetPosition();
@@ -48,7 +46,6 @@ void RedGrenade::action(Worm* worm
 
 	int time = params[1];
 
-	printf("Time setted: %d\n", time);
 
 	RedGrenadeMissile* missile = new RedGrenadeMissile(this->stage
 												, worm
