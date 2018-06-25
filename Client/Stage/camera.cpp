@@ -1,6 +1,7 @@
 #include "camera.h"
 #include <QDebug>
 #include "girder_view.h"
+#include <QMessageBox>
 
 Camera::Camera(QWidget *parent):QGraphicsView(parent)
 {
@@ -32,8 +33,18 @@ void Camera::resizeEvent(QResizeEvent *event)
 void Camera::mousePressEvent(QMouseEvent *event)
 {   
     if(this->playerActive->isActive()){
+    	Worm_View* worm = this->playerActive->getWormActive();
+    	int idWeapon = worm->getWeaponId();
+    	if(idWeapon!=9 && idWeapon!=8){//si no es teleport ni airattack
+    		return;
+    	}
+    	QGraphicsItem *item = this->itemAt(event->x(),event->y());
+    	Girder_View *g = dynamic_cast<Girder_View*>(item);
+    	if(g && idWeapon==9){
+       		QMessageBox::information(this,"Error","Can not teleport there.");
+       		return;	
+	    }
         int diff =((-verticalScrollBar()->value()) - (this->height()-13-4));
-        Worm_View* worm = this->playerActive->getWormActive();
         worm->setClickDir(event->x()+horizontalScrollBar()->value(),
                           (this->height()-event->y()+diff));
         emit mouseClick();
