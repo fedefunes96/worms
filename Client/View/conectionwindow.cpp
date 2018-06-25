@@ -39,7 +39,6 @@ void ConectionWindow::on_pushButton_clicked()
          QMessageBox::information(this,"Server Error","Could not connect to the server specified. Try again.");
          return;
     }
-    qDebug()<<"creee la conexioooooooooooon";
     this->closeX=false;
     this->close();
 }

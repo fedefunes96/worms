@@ -101,12 +101,10 @@ void Game::createColorList()
     this->color_list.append("white");
     this->color_list.append("darkBlue");
     this->color_list.append("magenta");
-    //this->color_list.append("darkGreen"); //// ESTE TIENE ERROR
     this->color_list.append("gray");
     this->color_list.append("darkCyan");
-    //this->color_list.append("darkYellow");  //// ESTE TIENE ERROR
     this->color_list.append("darkMagenta");
-    this->color_list.append("lightGray"); // pos 10
+    this->color_list.append("lightGray");
 }
 
 
@@ -150,40 +148,28 @@ void Game::attachWorm(int type,int id_player,int id, int health)
 
 void Game::updateItem(int type, int id, int posX, int posY, int angle)
 {
-    //qDebug()<<"scene X:"<<this->game->getWidth()<<"Y:"<<this->game->getHeight();
-    //qDebug()<<"posX:"<<posX<<"posY:"<<posY;
     if((this->game->getHeight()<posY || this->game->getWidth() < posX) ){
         if(this->game->getHeight()<posY){
-            qDebug()<<"aumento Y";
             this->game->resizeScene(this->game->getWidth(),posY*10);
         }
         if(this->game->getWidth()<posX){
-            qDebug()<<"aumento X";
             this->game->resizeScene(posX*10,this->game->getHeight());
         }
     }
 
     if(type==static_cast<int>(TypeObj::WORM)){
         if(this->game->containsItem(type,id)){
-            //contiene al worm --> lo muevo
-            //qDebug()<<"id:"<<id<<"move worm posX:"<<posX<<"posY" <<posY<<"angle"<<angle;
             this->game->moveObjTo(type,id,posX,posY,angle);
         }
     }else if(type==static_cast<int>(TypeObj::SMALL_GIRDER)){
-        //es girder
         if(!this->game->containsItem(type,id)){
-            //no contiene girder...
-            //qDebug()<<"no contiene girder";
             Girder_View* girder = new Girder_View(angle,70);
             girder->setId(id);
             girder->setIdObj(type);
             this->game->add_Item(girder,posX,posY);
         }
     }else if(type==static_cast<int>(TypeObj::LARGE_GIRDER)){
-        //es girder
         if(!this->game->containsItem(type,id)){
-            //no contiene girder...
-            //qDebug()<<"no contiene girder";
             Girder_View* girder = new Girder_View(angle,140);
             girder->setId(id);
             girder->setIdObj(type);
@@ -223,13 +209,11 @@ void Game::updateItem(int type, int id, int posX, int posY, int angle)
 
 void Game::throwProjectile(int type,int id,int posX,int posY,int angle,std::string &path)
 {
-    qDebug()<<"PROYECTIL ------> X:"<<posX<<"Y:"<<posY;
     if(this->game->containsItem(type,id)){
         Items* item = this->game->getItem(type,id);
         MovableItem *i = static_cast<MovableItem*>(item);
         i->moveTo(-angle,posX,posY);
     }else{
-        qDebug()<<"cree proyectil";
         Projectile *misil = new Projectile();
         misil->setIdObj(type);
         misil->setId(id);
@@ -246,9 +230,6 @@ void Game::updatePlayer(int type, int id, int ammo, Worm_View *worm)
 {
     if(type==2){
         this->myPlayer->addWeapon(id,ammo);
-    }else if(type==3){
-        this->myPlayer->setId(id);
-    }else if(type==6){ //ganador creo
     }
 }
 
@@ -268,18 +249,13 @@ std::vector<int> Game::fireWeapon()
 {
     std::vector<int> vect;
     if(isMyTurn()){
-        if(this->myPlayer->getWormActive()==nullptr){
-            qDebug()<<"nullptr el worm";
-        }
         int idWeapon = this->myPlayer->getWormActive()->getWeaponId(); //devuelvo id negativo si no tengo arma seleccionada
         if(idWeapon<0 && !this->myPlayer->canFire(idWeapon)){
             return vect; // lo devuelvo vacio
         }
         //puedo disparar el arma...
-        qDebug()<<"arma a disparar ------->"<<idWeapon;
         this->myPlayer->fireWeapon(idWeapon);
         std::pair<int,int> pos = this->myPlayer->getWormActive()->getDirWeapon();
-        qDebug()<<"miraX:"<<pos.first<<"miraY:"<<pos.second;
         int time = this->myPlayer->getWormActive()->getTimeWeapon();
         vect.push_back(idWeapon);
         vect.push_back(pos.first);
@@ -294,7 +270,6 @@ std::vector<int> Game::fireWeapon()
         this->window->setButtonEnable(false);
         this->myPlayer->getWormActive()->loadSpriteWeapon(-1);
         this->window->startTimerRound(3);
-
     }
     return vect;
 }
@@ -308,12 +283,6 @@ void Game::removeItem(int type,int id)
 {
     MovableItem* item = static_cast<MovableItem*>(this->game->getItem(type,id));
     item->removeMovable();
-    qDebug()<<"removi item id:"<<item->getId();
-    Projectile *p = dynamic_cast<Projectile*>(item);
-    if(p){
-        qDebug()<<"es proyectil";
-        return;
-    }
 }
 
 
@@ -333,12 +302,10 @@ void Game::checkDeadItem()
             if(itemMov->isMoving()){
                 if(!this->game->getCamera()->containsitemToFollow(itemMov)){
                     this->game->getCamera()->addItemToFollow(itemMov);
-                    qDebug()<<"agregue item"<<itemMov->getId();
                 }
             }else{
                 if(this->game->getCamera()->containsitemToFollow(itemMov)){
                     this->game->getCamera()->delItemToFollow(itemMov);
-                    qDebug()<<"borre item"<<itemMov->getId();
                 }
             }
 
@@ -347,10 +314,8 @@ void Game::checkDeadItem()
         if(!item){// no es movible
             continue;
         }else if(!item->isAlive()){
-            qDebug()<<"a remover proyectil type:"<<item->getIdObj()<<"id:"<<item->getId();
             scene->removeItem(item);
             //delete(item);
-            qDebug()<<"ELIMINE ELEMENTO MUERTO !!!!!!!!!!!!!";
         }
     }
 }
@@ -366,30 +331,21 @@ void Game::checkQueueEvent(QList<int> list)
     this->game->getCamera()->followObject();
     int cmd = list[0];
     if(cmd== static_cast<int>(Commands::GAME_END)){
-       //terminar juego
         this->myPlayer->setActive(false);
         this->myTurn=false;
     }else if(cmd==static_cast<int>(Commands::ATTACH_PLAYER_ID)){
-        // asignar id del jugador
         this->updatePlayer(cmd,list[1]);
     }else if(cmd==static_cast<int>(Commands::ATTACH_USABLE_ID)){
-        //agregar arma al player para que el worm pueda usar
         this->updatePlayer(cmd,list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::ACTUAL_PLAYER)){
-        //mensaje con el id del jugador en turno
         checkRound(list);
     }else if(cmd==static_cast<int>(Commands::ATTACH_WORM_ID)){
-        // id del worm y su vida ... inicialmente en pos invalida, luego se mueve al recibir update
         this->attachWorm(static_cast<int>(TypeObj::WORM),list[1],list[2],list[3]);
     }else if(cmd==static_cast<int>(Commands::REMOVE)){
-        // item a remover de la vista
         this->removeItem(list[1],list[2]);
     }else if(cmd==static_cast<int>(Commands::POSITION)){
-        // actual item position
         this->updateItem(list[1],list[2],list[3],list[4],list[5]);
     }else if(cmd==static_cast<int>(Commands::WINNER)){
-        // hay ganador y es el id pasado
-        qDebug()<<"winner leido!";
         this->myPlayer->setActive(false);
         this->myTurn=false;
         this->window->setWinner(true);
@@ -417,7 +373,6 @@ void Game::setStatusWorm(QList<int> list)
 {
     Items *item = this->game->getItem(static_cast<int>(TypeObj::WORM),list[1]);
     if(!item){
-        qDebug()<<"no deberia suceder esto en status";
         return;
     }
     Worm_View *worm = static_cast<Worm_View*>(item);
@@ -426,10 +381,6 @@ void Game::setStatusWorm(QList<int> list)
 
 void Game::checkRound(QList<int> list){
     this->window->startTimerRound(40);
-    //qDebug()<<"actual player id:"<<list[1];
-    //qDebug()<<"actual worm id:"<<list[2];
-    //qDebug()<<"idPLayer actual:"<<this->myPlayer->getId();
-
     if(this->lastP!=nullptr){
         Worm_View *w = this->lastP->getWormActive();
         if(w!=nullptr){
@@ -443,7 +394,6 @@ void Game::checkRound(QList<int> list){
     worm->setSelect(true);
     this->lastP->setWormActive(worm);
     this->game->addItemToFollow(worm);
-
     if(this->myPlayer->getId() != list[1]){
         this->setPotBar(0);
         this->myTurn=false;
@@ -461,15 +411,7 @@ void Game::checkRound(QList<int> list){
     this->setPotBar(0);
     this->window->setButtonEnable(true);
     this->myPlayer->setActive(true);
-    //this->myPlayer->setWormActive(worm);
 }
-
-
-
-
-
-
-
 
 
 

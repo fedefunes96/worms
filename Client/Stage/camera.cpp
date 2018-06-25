@@ -24,7 +24,6 @@ void Camera::addScene(QGraphicsScene *scene)
 
 void Camera::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << event->size();
     QGraphicsView::resizeEvent(event);
     horizontalScrollBar()->setValue(0);
     verticalScrollBar()->setValue(0);
