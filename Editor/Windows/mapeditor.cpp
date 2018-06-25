@@ -426,13 +426,6 @@ void MapEditor::on_saveAs_clicked()
         this->cantidad = ui->cant->text().toInt();
     }
 
-    bool colicion = this->checkColicion();
-    if (colicion){
-    	QMessageBox::information(this,tr("Error"),
-                tr("There are worms colliding."));
-    	return;
-    }
-
     if (this->cantidad <= worms.size()){
         if (this->checkWorms()){
             nombre = QFileDialog::getSaveFileName(this,
@@ -442,11 +435,7 @@ void MapEditor::on_saveAs_clicked()
             if (nombre.isEmpty()){
                 return;
             }
-            this->setWindowTitle(nombre);
-            std::string name = nombre.toUtf8().constData();
-            std::string background = "fondo.png";
-            Parser::save(name,this->usables,this->worms,
-                this->vigas, cantidad,background);
+            save();
         } else {
             QMessageBox::information(this,tr("Error"),
                 tr("There are worms with 0 health."));
@@ -463,13 +452,6 @@ void MapEditor::on_pushButton_clicked()
         this->cantidad = ui->cant->text().toInt();
     }
 
-    bool colicion = this->checkColicion();
-    if (colicion){
-    	QMessageBox::information(this,tr("Error"),
-                tr("There are worms colliding."));
-    	return;
-    }
-
     if (this->cantidad <= worms.size()){
         if (this->checkWorms()){
             if (nombre.isEmpty()){
@@ -481,11 +463,7 @@ void MapEditor::on_pushButton_clicked()
             if (nombre.isEmpty()){
                 return;
             }
-            this->setWindowTitle(nombre);
-            std::string name = nombre.toUtf8().constData();
-            std::string background = "fondo.png";
-            Parser::save(name,this->usables,this->worms,
-                this->vigas, cantidad,background);
+            save();
         } else {
             QMessageBox::information(this,tr("Error"),
                 tr("There are worms with 0 health."));
@@ -571,14 +549,10 @@ void MapEditor::on_down_clicked()
     }
 }
 
-
-bool MapEditor::checkColicion(){
-	for (auto &worm : worms){
-		QList<QGraphicsItem*> colicion;
-		colicion = items[worm.first]->collidingItems(Qt::IntersectsItemBoundingRect);
-		if (!colicion.isEmpty()){
-			return true;
-		}
-	}
-	return false;
+void MapEditor::save(){
+    this->setWindowTitle(nombre);
+    std::string name = nombre.toUtf8().constData();
+    std::string background = "fondo.png";
+    Parser::save(name,this->usables,this->worms,
+                this->vigas, cantidad,background);
 }
