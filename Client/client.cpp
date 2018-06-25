@@ -8,7 +8,7 @@
 #include <QDesktopWidget>
 #include <QLabel>
 #include <iostream>
-#include "protocol.h"
+#include "protocol_client.h"
 #include "player.h"
 #include "game.h"
 #include "controller.h"
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
             continue;
         }
         Socket client = mainWindow.getSocket();
-        Protocol protocol(client);
+        ProtocolClient protocol(client);
         Controller controler(&protocol);
         FinalScreen finalScreen(&a);
         WaitRoom wait(&protocol);

@@ -1,6 +1,6 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "protocol.h"
+#include "protocol_client.h"
 #include <QThread>
 #include <QDebug>
 #include <QTimer>
@@ -10,7 +10,7 @@ class Controller: public QThread
 {
     Q_OBJECT
 public:
-    Controller(Protocol* protocol);
+    Controller(ProtocolClient* protocol);
     void run();
 public slots:
     void stopController();
@@ -23,7 +23,7 @@ signals:
     void startGame(QList<std::string> list);
     void playerId(int id);
 private:
-    Protocol *protocol;
+    ProtocolClient *protocol;
 };
 
 #endif // CONTROLLER_H

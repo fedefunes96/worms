@@ -2,8 +2,6 @@
 #include <QDebug>
 #include <QGraphicsView>
 #include <QScrollBar>
-
-#include "protocol.h"
 #include "girder_view.h"
 #include <QMessageBox>
 
@@ -12,7 +10,7 @@ EventHandler::EventHandler(QObject *parent) : QObject(parent)
     this->keyPress=false;
 }
 
-EventHandler::EventHandler(QObject *parent, Game *game, Protocol* protocol) : QObject(parent), game(game), protocol(protocol)
+EventHandler::EventHandler(QObject *parent, Game *game, ProtocolClient* protocol) : QObject(parent), game(game), protocol(protocol)
 {
     this->worm_selected = nullptr;
     this->power=10;

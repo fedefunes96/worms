@@ -2,13 +2,11 @@
 #define EVENTHANDLER_H
 
 #include "stage.h"
-
 #include <QObject>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include "camera.h"
-
-#include "protocol.h"
+#include "protocol_client.h"
 #include "game.h"
 
 
@@ -17,7 +15,7 @@ class EventHandler : public QObject
     Q_OBJECT
 public:
     explicit EventHandler(QObject *parent = 0);
-    EventHandler(QObject *parent, Game *game, Protocol *protocol);
+    EventHandler(QObject *parent, Game *game, ProtocolClient *protocol);
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 private slots:
@@ -30,7 +28,7 @@ private:
     Worm_View* worm_selected;
     void keyReleaseEvent(QKeyEvent *k_event);
     bool keyPress;
-    Protocol* protocol;
+    ProtocolClient* protocol;
     int power;
 };
 

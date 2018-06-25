@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QDialog>
-#include "protocol.h"
+#include "protocol_client.h"
 #include <vector>
 #include <QThread>
 #include "controller.h"
@@ -18,7 +18,7 @@ class RoomSelector : public QDialog
     Q_OBJECT
 
 public:
-    RoomSelector(Protocol* protocol, QWidget *parent = nullptr);
+    RoomSelector(ProtocolClient* protocol, QWidget *parent = nullptr);
     ~RoomSelector();
 
     void connectControler(Controller *controler);
@@ -34,7 +34,7 @@ private slots:
     void on_pushButton_2_released();
 private:
     Ui::RoomSelector *ui;
-    Protocol* protocol;
+    ProtocolClient* protocol;
     WaitRoom* wait;
     void adjustView();
     bool closeX;

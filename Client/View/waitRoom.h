@@ -5,7 +5,7 @@
 #include <QDialog>
 #include "controller.h"
 #include "gamewindow.h"
-#include "protocol.h"
+#include "protocol_client.h"
 
 namespace Ui {
 class WaitRoom;
@@ -16,7 +16,7 @@ class WaitRoom : public QDialog
     Q_OBJECT
 
 public:
-    WaitRoom(Protocol *protocol,QWidget *parent = nullptr);
+    WaitRoom(ProtocolClient *protocol,QWidget *parent = nullptr);
     ~WaitRoom();
 
     void connectControler(Controller *controler);
@@ -34,7 +34,7 @@ private slots:
 
 private:
     Ui::WaitRoom *ui;
-    Protocol *protocol;
+    ProtocolClient *protocol;
     bool closeX;
     bool exit;
 };

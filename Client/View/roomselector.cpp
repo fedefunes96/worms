@@ -1,6 +1,5 @@
 #include "roomselector.h"
 #include "ui_roomselector.h"
-#include "protocol.h"
 #include <QCollator>
 #include <string>
 #include "waitRoom.h"
@@ -8,7 +7,7 @@
 #include <iostream>
 #include <QMessageBox>
 
-RoomSelector::RoomSelector(Protocol* protocol, QWidget *parent) :
+RoomSelector::RoomSelector(ProtocolClient* protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RoomSelector)
 {

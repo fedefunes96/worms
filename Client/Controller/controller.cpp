@@ -1,10 +1,9 @@
 #include "controller.h"
-
 #include <QTimer>
 #include "worm_view.h"
 #include <iostream>
 
-Controller::Controller(Protocol *protocol)
+Controller::Controller(ProtocolClient *protocol)
 {
     this->protocol = protocol;
 }

@@ -2,7 +2,7 @@
 #include "ui_waitRoom.h"
 #include <iostream>
 
-WaitRoom::WaitRoom(Protocol *protocol,QWidget *parent) :
+WaitRoom::WaitRoom(ProtocolClient *protocol,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WaitRoom)
 {

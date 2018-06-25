@@ -4,6 +4,7 @@ project(Client)
 link_directories(usr/local/lib)
 
 include_directories("${PROJECT_SOURCE_DIR}/Stage")
+include_directories("${PROJECT_SOURCE_DIR}/Communication")
 include_directories("${PROJECT_SOURCE_DIR}/Game")
 include_directories("${PROJECT_SOURCE_DIR}/Game/Event")
 include_directories("${PROJECT_SOURCE_DIR}/Game/Item")
@@ -17,11 +18,12 @@ include_directories("${PROJECT_SOURCE_DIR}/Controller")
 include_directories("${PROJECT_SOURCE_DIR}/Sound")
 include_directories("${PROJECT_SOURCE_DIR}/View")
 include_directories("${PROJECT_SOURCE_DIR}")
-#include_directories("../Common")
+include_directories("../Common")
 
 
 file(GLOB SOURCES *.cpp *.ui
 "*.cpp" 
+"Communication/*.cpp"
 "Stage/*.cpp"
 "Game/*.cpp"
 "Game/Event/*.cpp"
@@ -34,7 +36,8 @@ file(GLOB SOURCES *.cpp *.ui
 "Game/Weapon/*.cpp"
 "Controller/*.cpp"
 "Sound/*.cpp"
-"View/*.cpp")
+"View/*.cpp"
+"../Common/*.cpp")
 
 
 # Find includes in corresponding build directories
@@ -44,7 +47,7 @@ set(CMAKE_AUTOMOC ON)
 # Create code from a list of Qt designer ui files
 set(CMAKE_AUTOUIC ON)
 
-SET(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++0x")
+set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -pthread -pedantic")
 
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)

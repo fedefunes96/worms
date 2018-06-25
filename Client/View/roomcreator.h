@@ -2,7 +2,7 @@
 #define ROOMCREATOR_H
 
 #include <QWidget>
-#include "protocol.h"
+#include "protocol_client.h"
 #include <QLineEdit>
 #include <QDialog>
 #include "controller.h"
@@ -17,7 +17,7 @@ class RoomCreator : public QDialog
     Q_OBJECT
 
 public:
-    RoomCreator(Protocol* protocol,QWidget *parent = nullptr);
+    RoomCreator(ProtocolClient* protocol,QWidget *parent = nullptr);
     ~RoomCreator();
     void connectControler(Controller *controler);
     void setExecute(bool enable);
@@ -35,7 +35,7 @@ private slots:
 
 private:
     Ui::RoomCreator *ui;
-    Protocol* protocol;
+    ProtocolClient* protocol;
     WaitRoom* wait;
     std::vector<QLineEdit*> lines;
     bool closeX;

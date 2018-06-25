@@ -5,7 +5,7 @@
 #include <iostream>
 #include <QMessageBox>
 
-RoomCreator::RoomCreator(Protocol* protocol, QWidget *parent) :
+RoomCreator::RoomCreator(ProtocolClient* protocol, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RoomCreator)
 {
