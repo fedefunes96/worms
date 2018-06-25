@@ -21,6 +21,7 @@ generalSounds::~generalSounds()
 
 void generalSounds::play()
 {
+	player->setVolume(50);
     player->play();
     //qDebug() << player->errorString();
 }

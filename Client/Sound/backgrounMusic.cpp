@@ -13,6 +13,7 @@ backgrounMusic::backgrounMusic(const QString &relativePath)
     list->setPlaybackMode(QMediaPlaylist::Loop);
     this->player = new QMediaPlayer();
     player->setPlaylist(list);
+    player->setVolume(10);
     player->play();
 }
 
