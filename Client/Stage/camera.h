@@ -37,11 +37,8 @@ signals:
     void mouseClick();
 protected:
     void resizeEvent(QResizeEvent *event);
-private slots:
-    //void followObject();
 private:
     QTimer* timer;
-    QGraphicsItem* item;
     std::stack<MovableItem*> itemsToFollow;
     std::stack<MovableItem*> projectileToFollow;
     std::vector<MovableItem*> vectorItems;

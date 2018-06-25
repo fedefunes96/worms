@@ -37,7 +37,6 @@ void RoomCreator::recvMaps(QList<std::string> list)
     ui->listWidget->clear();
     int cant = list.size();
     for (int i = 0; i < cant; ++i){
-        std::cout<<"nombre:"<<list[i]<<std::endl;
         QString name = QString::fromStdString(list[i]);
         ui->listWidget->addItem(name);
     }

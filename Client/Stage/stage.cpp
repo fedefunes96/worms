@@ -32,7 +32,6 @@ void Stage::addCamera(Camera *camera)
 
 void Stage::resizeScene(int w, int h)
 {
-    qDebug()<<"screen w:"<<w<<"h"<<h;
     this->scene->setSceneRect(0,-h,w,h);
 }
 
@@ -101,11 +100,8 @@ Camera *Stage::getCamera()
     return this->camera;
 }
 
-QGraphicsItem *Stage::itemAt(int posx,int posy) // no se si se usa ...
+QGraphicsItem *Stage::itemAt(int posx,int posy)
 {
-    if(this->camera->itemAt(posx,posy) == 0){
-        qDebug()<<"cero";
-    }
     return this->camera->itemAt(posx,posy);
 }
 
@@ -132,7 +128,6 @@ void Stage::moveObjTo(int type ,int id, int posX, int posY, int angle)
             continue;
         }else if(item->getId()==id && item->getIdObj()==type){
             if(item->x()==-130){
-                qDebug()<<"coloque worm x:"<<posX<<"y:"<<posY;
                 item->setPosition(posX,this->scene->height()-posY);
                 return;
             }

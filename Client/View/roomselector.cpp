@@ -40,11 +40,9 @@ void RoomSelector::askRooms(){
 
 void RoomSelector::recvRooms(QList<std::string> list)
 {
-    qDebug()<<"recibi salas existentes";
     ui->listWidget->clear();
     int cant = list.size();
     for (int i = 0; i < cant; ++i){
-        std::cout<<"nombre:"<<list[i]<<std::endl;
         QString name = QString::fromStdString(list[i]);
         ui->listWidget->addItem(name);
     }
@@ -55,7 +53,6 @@ void RoomSelector::goWaitRoom(int cant)
     if(!isExec){
         return;
     }
-    qDebug()<<"en Map Selection pude conectarme con"<<cant;
     if (cant>0){
         this->back=false;
         this->closeX=false;

@@ -62,7 +62,6 @@ private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
     void checkAngle(int angle);
-
     QLabel* labelVida;
     QLabel* showSelected;
     bool showlabelSelect;
@@ -72,41 +71,16 @@ private:
     std::pair<int,int> destDir;
     std::pair<int,int> lastDir;
     int angle;
-    int speed;
     QTimer *timer;
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
     int currentFrame;   // Coordinates X, which starts the next frame of the sprite
-
     generalSounds* jump;
     generalSounds* fall;
     generalSounds* wormDeath;
-
-    // innecesarios creo... ////////////////////////////
-    int count;
-    int x1;
-    int x2;
-    int rep;
-    int rep2;
-    int desp;
-    bool movUP;
-    bool movR;
-    bool firstX;
-    int up;
-    int right;
-////////////////////////////////////////////
-
     void setSprite();
-    void setVarsMove(int x1, int x2, int rep, int rep2, bool movUP, bool movR);
     void setDestDir(int x, int y);
     void setDir(int x, int y);
-    void movObj();
-    void checkDelta();
-    void setVars(int cant1, int cant2, int up, int right, bool firsX);
-    void moveStep();
     void stepSprite();
-
-
-
     int weapon;
     void loadSprite(QString& path_L);
     Target* target;
@@ -119,10 +93,8 @@ private:
     int countDown;
     std::pair<int,int> clickTarget;
     QString color;
-    int countFrame;
     int last_on_ground;
     int last_dir;
-
     bool jumping;
     bool isFlying();
     bool isFalling();

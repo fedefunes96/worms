@@ -57,7 +57,6 @@ void Window::on_pushButton_2_clicked()
 
 void Window::setId(int id)
 {
-    qDebug()<<"setear id:"<<id;
     this->id = id;
 }
 
@@ -75,9 +74,7 @@ int Window::getId()
 
 void Window::closeEvent(QCloseEvent *event)
 {
-    qDebug()<<"fiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiin";
     if(this->closeX){
-        qDebug()<<"entre al cerrar window";
         emit closeGame();
     }
 }

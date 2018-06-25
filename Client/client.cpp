@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 {
     bool gameOpen=true;
     while(gameOpen){
-        qDebug()<<"Inicio TODO";
         QApplication a(argc, argv);
         qRegisterMetaType<QList<std::string>>("QList<std::string>");
         ConectionWindow mainWindow;

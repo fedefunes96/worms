@@ -22,7 +22,6 @@ class Stage: public QObject
 private:
     QGraphicsScene* scene;
     Camera* camera;
-    std::vector<Player*> players_list;
     std::vector<Items*> items_list;
     QTimer *timerUpdate;
 
