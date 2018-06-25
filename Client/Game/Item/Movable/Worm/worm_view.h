@@ -75,7 +75,6 @@ private:
     QPixmap *spriteImage;   // In this QPixmap object will be placed sprite
     int currentFrame;   // Coordinates X, which starts the next frame of the sprite
     generalSounds* jump;
-    generalSounds* fall;
     generalSounds* wormDeath;
     void setSprite();
     void setDestDir(int x, int y);

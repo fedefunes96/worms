@@ -56,7 +56,6 @@ Worm_View::~Worm_View()
     if(this->showSelected!=nullptr){
         delete(this->showSelected);
     }
-    delete(this->fall);
     delete(this->jump);
     delete(this->wormDeath);
 }
@@ -93,7 +92,6 @@ Worm_View::Worm_View(QObject *parent, QString color) :
     this->last_on_ground=1;
     this->last_dir=0;
     this->jumping=false;
-    this->fall = new generalSounds(ROOT_PATH"/resources/sounds/English/fall/NOOO.WAV");
     this->jump =  new generalSounds(ROOT_PATH"/resources/sounds/English/jump/JUMP1.WAV");
     this->wormDeath = new generalSounds(ROOT_PATH"/resources/sounds/English/BYEBYE.WAV");
     this->showlabelSelect=false;
@@ -170,6 +168,7 @@ void Worm_View::setStatus(int on_ground, int dir)
                     this->moving=false;
                     setAngle(-180);
                 }
+                this->last_dir=dir;
             }else if(this->last_on_ground==0){
                 setAngle(-180);
             }else if(this->weapon!=-1){
@@ -301,7 +300,6 @@ void Worm_View::setStatus(int on_ground, int dir)
             }
         }else if(this->last_dir==static_cast<int>(MoveDirection::LEFT) || this->last_dir==static_cast<int>(MoveDirection::RIGHT)){
             //me estoy cayendo ...
-            this->fall->play();
             delete(this->spriteImage);
             this->currentFrame=0;
             aux = new QPixmap(ROOT_PATH"/resources/images/wfall.png");
